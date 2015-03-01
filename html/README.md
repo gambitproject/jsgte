@@ -59,8 +59,23 @@ encapsulation.
 Possible reads:
 - http://www.adequatelygood.com/JavaScript-Module-Pattern-In-Depth.html
 
-
 ### HTML5/canvas versus SVG
 
+(copy from emails)
 
+### JS file hierarchy
 
+Q: how many subdirectory levels in the ./js/ directory?
+
+A: as few as possible, but we probably need to group our
+code into some directories here:
+
+- game tree `tree/`
+- strategic (matrix) form `strategic/`
+- GUI manipulation such as WYSIWIG input, maybe also
+  Undo/Redo that is common to both tree and matrix
+  `guiUtils/`
+- file load / store / export `fileIO/`
+- server communication `serverComm/`
+- user perferences configuration (fonts, linewidth, treedirection
+  etc.) `userPref/`
