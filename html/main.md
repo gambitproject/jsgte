@@ -5,8 +5,9 @@ page. These have the following parts:
 
 Top row:
 
-- left group, file IO: new game / load / save / export to
+- left group, file input/output: new game / load / save / export to
   PNG / export to FIG
+  (_want:_ further picture formats)
 
 - central arrows: Tree -> Players -> Infosets -> Moves ->
   Payoffs
@@ -15,8 +16,10 @@ Top row:
 
 - rightmost group: zoom and pan button (obsolete, will be
   handled by the browser), switch between fraction and
-  decimal (currently buggy, no SPOT = single point of
-  truth), settings
+  decimal (currently buggy because is not kept when
+  switching from Extensive to Strategic form,
+  no SPOT = single point of truth), settings (= user
+  preferences)
 
 Bottom row
 
@@ -38,3 +41,4 @@ Bottom row
   https://github.com/cpelissier/GTE-Extension
 
 - mode buttons for Infosets:
+
