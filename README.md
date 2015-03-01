@@ -1,2 +1,1 @@
-# jsgte
-JavaScript GTE
+# jsgte - JavaScript implementation of Game Theory Explorer
