@@ -31,7 +31,6 @@ which provides Asynchronous Module Definition that allows to
 load .js files only where needed.
 
 Alfonso wrote Mon, 26 Jan 2015 16:13:57 :
-
     For example, I found this one to be quite clear:
     http://www.sitepoint.com/understanding-requirejs-for-effective-javascript-module-loading/
     (ignore the "Managing the order of dependent files"
