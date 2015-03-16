@@ -45,7 +45,8 @@ page. These have the following parts:
     
     - under `Players`: player name change by clicking
       on the player text on the canvas, not the ad hoc created box
-      `Player 1 name`; adapt to 2-4 players; check what Christian did
+      `Player 1 name`; see https://github.com/gambitproject/gte/issues/30;
+      adapt to 2-4 players; check what Christian did
       at https://github.com/cpelissier/GTE-Extension
     
     - under `Infosets`:
