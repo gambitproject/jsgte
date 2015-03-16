@@ -11,7 +11,7 @@ proper level of the code.
 
 The deployment version will have a minified version, with
 comments and indentations removed and all .js files in a
-single file, which then posted on a suitable directory at
+single file, which is then posted in a suitable directory at
 http://www.gametheoryexplorer.org/
 
 The webpage in the current directory (or any corresponding
@@ -68,7 +68,8 @@ Possible reads:
 Q: how many subdirectory levels in the ./js/ directory?
 
 A: as few as possible, but we probably need to group our
-code into some directories here:
+code into some directories here. They contain documentation
+in respective README.md files as well. They are:
 
 - game tree `tree/`
 - strategic (matrix) form `strategic/`
