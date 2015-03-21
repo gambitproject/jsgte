@@ -77,6 +77,10 @@ in respective README.md files as well. They are:
   Undo/Redo that is common to both tree and matrix
   `guiUtils/`
 - file load / store / export `fileIO/`
-- server communication `serverComm/`
+- server communication
 - user perferences configuration (fonts, linewidth, treedirection
   etc.) `userPref/`
+
+Q: should `guiUtils/` also contain OUTPUT DISPLAY such as computed
+equilibria? Or should that be part of 
+`serverComm/`?
