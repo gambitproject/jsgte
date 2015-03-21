@@ -77,7 +77,7 @@ in respective README.md files as well. They are:
   Undo/Redo that is common to both tree and matrix
   `guiUtils/`
 - file load / store / export `fileIO/`
-- server communication
+- server communication `serverComm/` 
 - user perferences configuration (fonts, linewidth, treedirection
   etc.) `userPref/`
 
