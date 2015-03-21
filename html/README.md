@@ -83,4 +83,4 @@ in respective README.md files as well. They are:
 
 Q: should `guiUtils/` also contain OUTPUT DISPLAY such as computed
 equilibria? Or should that be part of 
-`serverComm/`?
+`serverComm/` or `strategic/` ?
