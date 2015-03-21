@@ -1,0 +1,5 @@
+git shortcut for adding (all files that exist for git,
+otherwise need  git add file) and committing at the same
+time:
+
+git commit -am "my commit message"
