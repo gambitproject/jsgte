@@ -6,16 +6,8 @@ This directory will contain the webpage for GTE as
 
 with JavaScript (JS) scripts in ./js/ and subdirectories.
 
-Documentation in .md files, which we store _here_ at the
+Documentation in .md files, which we store at the
 proper level of the code.  
-
-The deployment version will have a minified version, with
-comments and indentations removed and all .js files in a
-single file, which is then posted in a suitable directory at
-http://www.gametheoryexplorer.org/
-
-The webpage in the current directory (or any corresponding
-fork/copy) with non-minified .js files should work as well.
 
 ## JS issues
 
@@ -61,26 +53,5 @@ Possible reads:
 
 ### HTML5/canvas versus SVG
 
-(copy from emails)
+(still to copy from emails)
 
-### JS file hierarchy
-
-Q: how many subdirectory levels in the ./js/ directory?
-
-A: as few as possible, but we probably need to group our
-code into some directories here. They contain documentation
-in respective README.md files as well. They are:
-
-- game tree `tree/`
-- strategic (matrix) form `strategic/`
-- GUI manipulation such as WYSIWIG input, maybe also
-  Undo/Redo that is common to both tree and matrix
-  `guiUtils/`
-- file load / store / export `fileIO/`
-- server communication `serverComm/` 
-- user perferences configuration (fonts, linewidth, treedirection
-  etc.) `userPref/`
-
-Q: should `guiUtils/` also contain OUTPUT DISPLAY such as computed
-equilibria? Or should that be part of 
-`serverComm/` or `strategic/` ?
