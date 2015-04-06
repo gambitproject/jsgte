@@ -16,9 +16,10 @@ player with the node.
 This structure (in C) is described in the C program that I
 wrote at
 https://github.com/stengel/ecta2002/blob/master/treedef.h
-which specifies the `struct`s (essentially classes) node,
-iset, move, outcome. (The respective capitalized names
+which specifies the types (essentially classes, each defined
+as a `struct`) node, iset, move, outcome. (The respective capitalized names
 Node, Iset, Move, Outcome are pointers to these structures.)
+
 Example (I notice the overloading of "iset" and "outcome" for both field names and types which should not be the case):
     
     struct node
