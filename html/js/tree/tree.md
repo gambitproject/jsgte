@@ -2,7 +2,7 @@ The main **logical** objects for a game tree
 (to describe their function in the game) are
 - players
 - nodes
-- information sets (info set for short)
+- information sets (info set or iset for short)
 - moves
 - outcomes
 
