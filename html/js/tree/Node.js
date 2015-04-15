@@ -1,4 +1,4 @@
-var GAMBIT = (function (my) {
+GAMBIT.TREE = (function (parentModule) {
 	"use strict";
 
 	// Node constructor
@@ -12,8 +12,8 @@ var GAMBIT = (function (my) {
 		GAMBIT.canvas.circle(25);
 	};
     
-    // Add function to module
-    my.Node = Node;
+    // Add class to parent module
+    parentModule.Node = Node;
 
-    return my;
-}(GAMBIT || {})); // Add to GAMBIT module. If module does not exist, create it
+    return parentModule;
+}(GAMBIT.TREE)); // Add to GAMBIT.TREE sub-module
