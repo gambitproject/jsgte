@@ -6,9 +6,17 @@ GAMBIT.TREE = (function (parentModule) {
 		this.root = root;
 	}
 
-	// Function that draws the Game in the global canvas
-	Tree.prototype.draw = function () {
-		// TODO
+	// Function that draws the Game in the global canvas starting from param node
+	Tree.prototype.draw = function (node) {
+        // In case there is no arguments start from root
+        if (node === undefined) { node = this.root; }
+        
+		if (node.children != []) {
+            for (var i = 0; i < node.children.length; i++) {
+                this.draw(node.children[i]);
+            }
+            node.draw();
+        }
 	};
     
     // Add class to parent module
