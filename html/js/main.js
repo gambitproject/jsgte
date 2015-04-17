@@ -5,9 +5,13 @@
     GAMBIT.canvas = SVG('canvas').size(300, 300);
 
     // Create a tree and draw it
-    var tree = new GAMBIT.TREE.Tree(null);
+    var root = new GAMBIT.TREE.Node(null);
+    var tree = new GAMBIT.TREE.Tree(root);
+    
+    var node = new GAMBIT.TREE.Node(root);
+    var node1 = new GAMBIT.TREE.Node(root);
+
     // Create a node and draw it
-    var node = new GAMBIT.TREE.Node(false, null);
-    node.draw();
+    tree.draw();
     
 }());
