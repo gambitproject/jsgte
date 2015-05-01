@@ -6,5 +6,9 @@ var GAMBIT = (function () {
 	var GAMBIT = {};
 	GAMBIT.TREE = {};
 
+    GAMBIT.CONSTANTS = {
+      CIRCLE_SIZE: 25
+    };
+
     return GAMBIT;
 }());

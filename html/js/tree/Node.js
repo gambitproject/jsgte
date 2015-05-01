@@ -14,11 +14,12 @@ GAMBIT.TREE = (function (parentModule) {
             father.addChild(this);
             this.level = father.level + 1;
         }
+        this.y = this.level * 50;
     }
 
     // Function that draws the node in the global canvas
     Node.prototype.draw = function () {
-        GAMBIT.canvas.circle(25).y(this.level * 50).x(this.x);
+        GAMBIT.canvas.circle(GAMBIT.CONSTANTS.CIRCLE_SIZE).y(this.y).x(this.x);
         console.log("Drawing " + this.value + " at y " + this.level*50 + " and x " + this.x);
     };
 

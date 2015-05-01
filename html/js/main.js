@@ -15,8 +15,6 @@
     var node4 = new GAMBIT.TREE.Node(node3, "node4");
     var node5 = new GAMBIT.TREE.Node(node3, "node5");
 
-    console.log(tree.numberLeaves());
-
     tree.updatePositions();
     // Create a node and draw it
     tree.draw();
