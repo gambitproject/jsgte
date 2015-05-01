@@ -14,11 +14,17 @@ GAMBIT.TREE = (function (parentModule) {
         
 		if (!node.isLeaf()) {
             for (var i = 0; i < node.children.length; i++) {
+                this.drawLineBetweenNodes(node, node.children[i]);
                 this.draw(node.children[i]);
             }
         }
         node.draw();
 	};
+
+    Tree.prototype.drawLineBetweenNodes = function(node1, node2){
+        var circleRadius = GAMBIT.CONSTANTS.CIRCLE_SIZE/2;
+        GAMBIT.canvas.line(node1.x + circleRadius, node1.y + circleRadius, node2.x + circleRadius, node2.y +circleRadius).stroke({ width: 1 });
+    };
     
     // @return (int) the number of leaves (nodes without children) of the tree */
     Tree.prototype.numberLeaves = function () {
