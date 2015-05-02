@@ -69,8 +69,9 @@ GAMBIT.TREE = (function (parentModule) {
     };
     
     Tree.prototype.updateLeavesPositions = function (){
-        var widthPerNode = 300/this.leaves.length;
-        for (var i = 0; i < this.leaves.length; i++) {
+        var numberLeaves = this.numberLeaves();
+        var widthPerNode = 300/numberLeaves;
+        for (var i = 0; i < numberLeaves; i++) {
             this.leaves[i].x = (widthPerNode*i)+(widthPerNode/2);
         }
     };
