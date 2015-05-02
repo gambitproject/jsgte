@@ -58,7 +58,7 @@ GAMBIT.TREE = (function (parentModule) {
     };
 
     Tree.prototype.updatePositions = function () {
-        this.root.x = 300/2;
+        // this.root.x = 250/2-GAMBIT.CONSTANTS.CIRCLE_SIZE/2;
         
         this.updateLeavesPositions();
         this.recursiveUpdatePositions(this.root);
@@ -80,7 +80,7 @@ GAMBIT.TREE = (function (parentModule) {
         var numberLeaves = this.numberLeaves();
         var widthPerNode = 300/numberLeaves;
         for (var i = 0; i < numberLeaves; i++) {
-            this.leaves[i].x = (widthPerNode*i)+(widthPerNode/2);
+            this.leaves[i].x = (widthPerNode*i)+(widthPerNode/2)-GAMBIT.CONSTANTS.CIRCLE_SIZE/2;
         }
     };
 

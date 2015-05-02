@@ -19,7 +19,7 @@ GAMBIT.TREE = (function (parentModule) {
     // Function that draws the node in the global canvas
     Node.prototype.draw = function () {
         var thisNode = this;
-        GAMBIT.canvas.circle(GAMBIT.CONSTANTS.CIRCLE_SIZE)
+        var circle = GAMBIT.canvas.circle(GAMBIT.CONSTANTS.CIRCLE_SIZE)
             .y(this.y)
             .x(this.x)
             .mouseover(function() {
