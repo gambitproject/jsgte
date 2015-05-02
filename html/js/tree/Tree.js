@@ -7,15 +7,23 @@ GAMBIT.TREE = (function (parentModule) {
         this.positionsUpdated = false;
 	}
 
+    Tree.prototype.draw = function(argument){
+        if (!this.positionsUpdated) {
+            this.updatePositions();
+        }
+        GAMBIT.canvas.clear();
+        this.recursiveDraw();
+    };
+
 	// Function that draws the Game in the global canvas starting from param node
-	Tree.prototype.draw = function (node) {
+	Tree.prototype.recursiveDraw = function (node) {
         // In case there is no arguments start from root
         if (node === undefined) { node = this.root; }
         
 		if (!node.isLeaf()) {
             for (var i = 0; i < node.children.length; i++) {
                 this.drawLineBetweenNodes(node, node.children[i]);
-                this.draw(node.children[i]);
+                this.recursiveDraw(node.children[i]);
             }
         }
         node.draw();
@@ -74,6 +82,13 @@ GAMBIT.TREE = (function (parentModule) {
         for (var i = 0; i < numberLeaves; i++) {
             this.leaves[i].x = (widthPerNode*i)+(widthPerNode/2);
         }
+    };
+
+    Tree.prototype.addChildNodeTo = function(parentNode){
+        var newNode = new GAMBIT.TREE.Node(parentNode);
+        this.positionsUpdated = false;
+        this.draw();
+        return newNode;
     };
 
     // Add class to parent module
