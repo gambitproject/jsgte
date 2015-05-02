@@ -6,17 +6,17 @@
 
     // Create a tree and draw it
     var root = new GAMBIT.TREE.Node(null,"padre");
-    var tree = new GAMBIT.TREE.Tree(root);
+    GAMBIT.tree = new GAMBIT.TREE.Tree(root);
+    var node = GAMBIT.tree.addChildNodeTo(root);
+    var node1 = GAMBIT.tree.addChildNodeTo(root);
     
-    var node = new GAMBIT.TREE.Node(root, "node");
-    var node1 = new GAMBIT.TREE.Node(root, "node1");
-    var node2 = new GAMBIT.TREE.Node(node1, "node2");
-    var node3 = new GAMBIT.TREE.Node(node1, "node3");
-    var node4 = new GAMBIT.TREE.Node(node3, "node4");
-    var node5 = new GAMBIT.TREE.Node(node3, "node5");
+    var node2 = GAMBIT.tree.addChildNodeTo(node1);
+    var node3 = GAMBIT.tree.addChildNodeTo(node1);
+    var node4 = GAMBIT.tree.addChildNodeTo(node3);
+    var node5 = GAMBIT.tree.addChildNodeTo(node3);
 
-    tree.updatePositions();
+    GAMBIT.tree.updatePositions();
     // Create a node and draw it
-    tree.draw();
+    GAMBIT.tree.draw();
     
 }());

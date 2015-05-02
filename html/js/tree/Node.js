@@ -2,8 +2,7 @@ GAMBIT.TREE = (function (parentModule) {
     "use strict";
 
     // Node constructor
-    function Node(father, value) {
-        this.value = value;
+    function Node(father) {
         this.father = father;
         this.children = [];
         this.x = 0;
@@ -19,8 +18,20 @@ GAMBIT.TREE = (function (parentModule) {
 
     // Function that draws the node in the global canvas
     Node.prototype.draw = function () {
-        GAMBIT.canvas.circle(GAMBIT.CONSTANTS.CIRCLE_SIZE).y(this.y).x(this.x);
-        console.log("Drawing " + this.value + " at y " + this.level*50 + " and x " + this.x);
+        var thisNode = this;
+        GAMBIT.canvas.circle(GAMBIT.CONSTANTS.CIRCLE_SIZE)
+            .y(this.y)
+            .x(this.x)
+            .mouseover(function() {
+                this.fill({ color: '#f06' });
+            })
+            .mouseout(function() {
+                this.fill({ color: '#000' });
+            })
+            .click(function() {
+                GAMBIT.tree.addChildNodeTo(thisNode);
+            });
+        console.log("Drawing at y " + this.level*50 + " and x " + this.x);
     };
 
     // Function that adds child to node
