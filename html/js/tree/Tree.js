@@ -87,7 +87,6 @@ GAMBIT.TREE = (function (parentModule) {
     Tree.prototype.addChildNodeTo = function(parentNode){
         var newNode = new GAMBIT.TREE.Node(parentNode);
         this.positionsUpdated = false;
-        this.draw();
         return newNode;
     };
 
