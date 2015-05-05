@@ -79,25 +79,27 @@ GAMBIT.TREE = (function (parentModule) {
     Tree.prototype.updateLeavesPositions = function (){
         var numberLeaves = this.numberLeaves();
         var widthPerNode = GAMBIT.canvas.viewbox().width/numberLeaves;
-        // We start from the most right child so if we detect is going to be outside the viewport faster
-        for (var i = numberLeaves-1; i >= 0; i--) {
-            this.leaves[i].x = (widthPerNode*i)+(widthPerNode/2)-GAMBIT.CONSTANTS.CIRCLE_SIZE/2;
-            // TODO: check if it goes outside the box from the bottom
-            if ((this.leaves[i].x + GAMBIT.CONSTANTS.CIRCLE_SIZE) > GAMBIT.canvas.viewbox().width) {
-                this.zoomOut();
-                this.updateLeavesPositions();
+        if (widthPerNode < GAMBIT.CONSTANTS.CIRCLE_SIZE) {
+            this.zoomOut();
+            this.updateLeavesPositions();
+        } else {
+            for (var i = 0; i < numberLeaves; i++) {
+                this.leaves[i].x = (widthPerNode*i)+(widthPerNode/2)-GAMBIT.CONSTANTS.CIRCLE_SIZE/2;
             }
         }
     };
 
     Tree.prototype.addChildNodeTo = function(parentNode){
         var newNode = new GAMBIT.TREE.Node(parentNode);
+        if ((newNode.y + GAMBIT.CONSTANTS.CIRCLE_SIZE) > GAMBIT.canvas.viewbox().height) {
+            this.zoomOut();
+        }
         this.positionsUpdated = false;
         return newNode;
     };
 
     Tree.prototype.zoomOut = function(){
-        GAMBIT.canvas.viewbox(0, 0, GAMBIT.canvas.viewbox().width+20, GAMBIT.canvas.viewbox().width+20);
+        GAMBIT.canvas.viewbox(0, 0, GAMBIT.canvas.viewbox().width*1.5, GAMBIT.canvas.viewbox().height*1.5);
     };
 
     // Add class to parent module
