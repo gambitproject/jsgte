@@ -15,14 +15,20 @@
             <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
 
-        <div id="toolbar">
-
+        <div id="toolbar" class="full-width" style="background:green;">
+            <nav>
+                <ul>
+                    <li><a href="index.html" onclick="javascript:GAMBIT.tools.new();return false">New</a></li>
+                    <li><a href="/about/">Open</a></li>
+                </ul>
+            </nav>
         </div>
-        <div id="canvas">
+        <div id="canvas" style="background:blue;">
 
         </div>
         <script src="js/thirdparty/svg.min.js"></script>
         <script src="js/structure.js"></script>
+        <script src="js/guiutils/Tools.js"></script>
         <script src="js/tree/Tree.js"></script>
         <script src="js/tree/Node.js"></script>
         <script src="js/main.js"></script>

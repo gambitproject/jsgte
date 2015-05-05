@@ -4,7 +4,8 @@
 var GAMBIT = (function () {
 	"use strict";
 	var GAMBIT = {};
-	GAMBIT.TREE = {};
+    GAMBIT.UI = {};
+    GAMBIT.TREE = {};
 
     GAMBIT.CONSTANTS = {
       CIRCLE_SIZE: 25
