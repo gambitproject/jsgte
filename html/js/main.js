@@ -2,7 +2,7 @@
     "use strict";
     // Get global canvas and store it in GAMBIT
     // GAMBIT is initialized by the library
-    GAMBIT.canvas = SVG('canvas').size(300, 300).attr({'style': 'background: #fff'});
+    GAMBIT.canvas = SVG('canvas').size("100%", "100%").attr({'style': 'background: #fff'});
     GAMBIT.tools = new GAMBIT.UI.Tools();
 
     // // Create a tree and draw it
