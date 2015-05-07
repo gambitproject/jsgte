@@ -29,13 +29,17 @@ GAMBIT.TREE = (function (parentModule) {
                 this.fill({ color: '#000' });
             })
             .click(function() {
-                if (thisNode.children.length === 0) {
-                    // Always start with two nodes
+                if (GAMBIT.MODE_ADD){
+                    if (thisNode.children.length === 0) {
+                        // Always start with two nodes
+                        GAMBIT.tree.addChildNodeTo(thisNode);
+                    }
                     GAMBIT.tree.addChildNodeTo(thisNode);
+                    // Tell the tree to redraw itself
+                    GAMBIT.tree.draw();
+                } else {
+                    window.alert("Delete not implemented");
                 }
-                GAMBIT.tree.addChildNodeTo(thisNode);
-                // Tell the tree to redraw itself
-                GAMBIT.tree.draw();
             });
         console.log("Drawing at y " + this.level*50 + " and x " + this.x);
     };
