@@ -9,19 +9,29 @@
 
         <link rel="stylesheet" href="css/normalize.min.css">
         <link rel="stylesheet" href="css/main.css">
+        <!-- Load Font awesome for icons from their CDN -->
+        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
     </head>
     <body>
         <!--[if lt IE 8]>
             <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
 
-        <div id="toolbar" class="full-width" style="background:green;">
-            <nav>
-                <ul>
-                    <li><a href="#" onclick="javascript:GAMBIT.tools.new();return false">New</a></li>
-                    <li><a href="#">Open</a></li>
+        <div id="toolbar" class="full-width darker">
+            <div>
+                <img src="images/horiz8_small.png" class="left ml-10 vertical-centered">
+            </div>
+            <div>
+                <ul class="vertical-centered">
+                    <li><button class="button button--sacnite button--inverted" alt="Remove node" onclick="javascript:GAMBIT.tools.new();return false"><i class="fa fa-file"></i><span>+</span></button></li>
                 </ul>
-            </nav>
+            </div>
+            <div>
+                <ul class="vertical-centered">
+                    <li><button class="active button button--sacnite button--inverted" alt="Add child node"><i class="fa fa-plus-circle"></i><span>+</span></button></li>
+                    <li><button class="button button--sacnite button--inverted" alt="Remove node"><i class="fa fa-minus-circle"></i><span>+</span></button></li>
+                </ul>
+            </div>
         </div>
         <div id="canvas">
 

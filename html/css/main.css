@@ -64,9 +64,7 @@ html, body {
     height: 100%;
 }
 
-#toolbar {
-    height: 10%;
-}
+
 
 #canvas {
     height: 90%;
@@ -80,15 +78,38 @@ html, body {
     width: 100%;
 }
 
+.darker {
+    background: #e3e3e3;
+}
+
+a {
+    color: black;
+}
+
+/* ==========================================================================
+   Toolbar styles
+   ========================================================================== */
+
+#toolbar {
+    height: 55px;
+    background: #37474f;
+    color: #fff;
+}
 
 
+#toolbar > div {
+    height: 100%;
+    display: inline-block;
+}
 
+#toolbar ul, #toolbar li{
+    float: left;
+}
 
-
-
-
-
-
+#toolbar ul {
+    list-style: none;
+    padding: 0 20px;
+}
 
 
 /* ==========================================================================
@@ -137,4 +158,114 @@ html, body {
 
 .clearfix {
     *zoom: 1;
+}
+
+.vertical-centered{
+    position: relative;
+    top: 50%;
+    transform:  translateY(-50%);
+}
+
+.left {
+    float: left;
+}
+
+.ml-10 {
+    margin-left: 10px;
+}
+
+
+/* ==========================================================================
+   Elements classes
+   ========================================================================== */
+/* Common button styles */
+.button {
+    float: left;
+    min-width: 30px;
+    max-width: 30px;
+    display: block;
+    /*margin: 1em;*/
+    /*padding: 1em 2em;*/
+    border: none;
+    background: none;
+    color: inherit;
+    vertical-align: middle;
+    position: relative;
+    z-index: 1;
+}
+
+.button:focus {
+    outline: none;
+}
+
+.button > span {
+    vertical-align: middle;
+}
+
+.button--round-s {
+    border-radius: 5px;
+}
+
+/* Sacnite Buttons */
+.button.button--sacnite {
+    width: 30px;
+    height: 30px;
+    min-width: 0; 
+    padding: 0;
+    color: #fff;
+    -webkit-transition: color 0.3s;
+    transition: color 0.3s;
+}
+.button--scanite.button--round-l {
+    border-radius: 50%;
+}
+.button--sacnite.button--inverted {
+    color: #37474f;
+}
+.button--sacnite::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: inherit;
+    z-index: -1;
+    box-shadow: inset 0 0 0 35px #37474f;
+    -webkit-transform: scale3d(0.9, 0.9, 1);
+    transform: scale3d(0.9, 0.9, 1);
+    -webkit-transition: box-shadow 0.3s, -webkit-transform 0.3;
+    transition: box-shadow 0.3s, transform 0.3s;
+}
+.button--sacnite.button--inverted::before {
+    box-shadow: inset 0 0 0 35px #fff;
+}
+.button--sacnite .button__icon {
+    font-size: 22px;
+    width: 22px;
+}
+.button--sacnite > span {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+.button--sacnite:hover {
+    color: #37474f;
+}
+.button--sacnite.button--inverted:hover {
+    color: #fff;
+}
+.button--sacnite.button--inverted.active {
+    color: #fff;
+}
+.button--sacnite:not(.active):hover::before {
+    box-shadow: inset 0 0 0 2px #37474f;
+    -webkit-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+}
+.button--sacnite.button--inverted:hover::before {
+    box-shadow: inset 0 0 0 2px #fff;
+}
+.button--sacnite.button--inverted.active::before {
+    box-shadow: inset 0 0 0 2px #fff;
 }
