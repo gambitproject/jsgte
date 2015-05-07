@@ -11,5 +11,7 @@ var GAMBIT = (function () {
       CIRCLE_SIZE: 25
     };
 
+    GAMBIT.MODE_ADD = true;
+
     return GAMBIT;
 }());
