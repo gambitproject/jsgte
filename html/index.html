@@ -23,13 +23,13 @@
             </div>
             <div>
                 <ul class="vertical-centered">
-                    <li><button class="button button--sacnite button--inverted" alt="Remove node" onclick="javascript:GAMBIT.tools.new();return false"><i class="fa fa-file"></i><span>+</span></button></li>
+                    <li><button class="button button--sacnite button--inverted" alt="Remove node" onclick="javascript:GAMBIT.tools.newTree();return false"><i class="fa fa-file"></i><span>+</span></button></li>
                 </ul>
             </div>
             <div>
                 <ul class="vertical-centered">
-                    <li><button id="button-add" class="active button button--sacnite button--inverted" onclick="javascript:GAMBIT.tools.switchMode(this, 'add');return false" alt="Add child node"><i class="fa fa-plus-circle"></i><span>+</span></button></li>
-                    <li><button id="button-remove" class="button button--sacnite button--inverted" onclick="javascript:GAMBIT.tools.switchMode(this, 'remove');return false" alt="Remove node"><i class="fa fa-minus-circle"></i><span>+</span></button></li>
+                    <li><button id="button-add" mode="add" class="active button button--sacnite button--inverted" onclick="javascript:GAMBIT.tools.switchMode(this);return false" alt="Add child node"><i class="fa fa-plus-circle"></i><span>+</span></button></li>
+                    <li><button id="button-remove" mode="remove" class="button button--sacnite button--inverted" onclick="javascript:GAMBIT.tools.switchMode(this);return false" alt="Remove node"><i class="fa fa-minus-circle"></i><span>+</span></button></li>
                 </ul>
             </div>
         </div>

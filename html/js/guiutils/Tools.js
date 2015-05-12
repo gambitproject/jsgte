@@ -1,10 +1,18 @@
 GAMBIT.UI = (function (parentModule) {
     "use strict";
-    // UI tools constructor
+
+    /**
+    * Creates a new Tools object.
+    * @class
+    */
     function Tools() {
     }
 
-    Tools.prototype.new = function() {
+    /**
+    * Function called when New button is pressed.
+    * It creates a new Tree and draws it
+    */
+    Tools.prototype.newTree = function() {
         var root = new GAMBIT.TREE.Node(null);
         GAMBIT.tree = new GAMBIT.TREE.Tree(root);
         GAMBIT.tree.updatePositions();
@@ -12,7 +20,12 @@ GAMBIT.UI = (function (parentModule) {
         GAMBIT.tree.draw();
     };
 
-    Tools.prototype.switchMode = function(button, modeToSwitch){
+    /**
+    * Function that swithes mode to the one specified by the button pressed
+    * @param {Button} button Button pressed that will activate mode
+    */
+    Tools.prototype.switchMode = function(button){
+        var modeToSwitch = button.getAttribute('mode');
         // Change the class of the button to active
         if (modeToSwitch === 'add') {
             GAMBIT.MODE_ADD = true;
@@ -25,7 +38,7 @@ GAMBIT.UI = (function (parentModule) {
         }
         button.className += " " + "active";
     };
-    
+
     // Add class to parent module
     parentModule.Tools = Tools;
 
