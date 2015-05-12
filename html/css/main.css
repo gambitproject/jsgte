@@ -68,6 +68,7 @@ html, body {
 
 #canvas {
     height: 90%;
+    padding-top: 10px;
 }
 
 .full-height {
@@ -210,7 +211,7 @@ a {
 .button.button--sacnite {
     width: 30px;
     height: 30px;
-    min-width: 0; 
+    min-width: 0;
     padding: 0;
     color: #fff;
     -webkit-transition: color 0.3s;
