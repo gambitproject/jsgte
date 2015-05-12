@@ -1,7 +1,11 @@
 GAMBIT.TREE = (function (parentModule) {
     "use strict";
 
-    // Node constructor
+    /**
+    * Creates a new Node.
+    * @class
+    * @param {Node} [father] Father node. If null, this is root.
+    */
     function Node(father) {
         this.father = father;
         this.children = [];
@@ -14,7 +18,9 @@ GAMBIT.TREE = (function (parentModule) {
         }
     }
 
-    // Function that draws the node in the global canvas
+    /**
+    * Function that draws the node in the global canvas
+    */
     Node.prototype.draw = function () {
         var thisNode = this;
         var circle = GAMBIT.canvas.circle(GAMBIT.CONSTANTS.CIRCLE_SIZE)
@@ -39,14 +45,21 @@ GAMBIT.TREE = (function (parentModule) {
                 }
                 GAMBIT.tree.draw();
             });
-        console.log("Drawing at y " + this.level*50 + " and x " + this.x);
+        // console.log("Drawing at y " + this.level*50 + " and x " + this.x);
     };
 
-    // Function that adds child to node
+    /**
+    * Function that adds child to node
+    * @param {Node} node Node to add as child
+    */
     Node.prototype.addChild = function (node) {
         this.children.push(node);
     };
 
+    /**
+    * Function that removes child node from children
+    * @param {Node} node Child nod to remove
+    */
     Node.prototype.deleteChild = function (nodeToDelete) {
         var indexInList = this.children.indexOf(nodeToDelete);
 		if (indexInList > -1) {
@@ -54,6 +67,10 @@ GAMBIT.TREE = (function (parentModule) {
 		}
     };
 
+    /**
+    * Function that finds out if node is leaf
+    * @return {Boolean} True if is leaf.
+    */
     Node.prototype.isLeaf = function () {
         if (this.children.length === 0) {
             return true;
@@ -61,6 +78,10 @@ GAMBIT.TREE = (function (parentModule) {
         return false;
     };
 
+    /**
+    * Function that changes node's father to a given one
+    * @param {Node} newFather New father for node
+    */
     Node.prototype.changeFather = function (newFather) {
         this.father = newFather;
         this.father.addChild(this);
