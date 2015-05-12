@@ -5,15 +5,13 @@ GAMBIT.TREE = (function (parentModule) {
     function Node(father) {
         this.father = father;
         this.children = [];
-        this.x = 0;
-        
+
         if (father === null) { // If this is root set level to 0
             this.level = 0;
         } else {
             father.addChild(this);
             this.level = father.level + 1;
         }
-        this.y = this.level * 50;
     }
 
     // Function that draws the node in the global canvas
@@ -36,10 +34,10 @@ GAMBIT.TREE = (function (parentModule) {
                     }
                     GAMBIT.tree.addChildNodeTo(thisNode);
                     // Tell the tree to redraw itself
-                    GAMBIT.tree.draw();
                 } else {
-                    window.alert("Delete not implemented");
+                    GAMBIT.tree.deleteNode(thisNode);
                 }
+                GAMBIT.tree.draw();
             });
         console.log("Drawing at y " + this.level*50 + " and x " + this.x);
     };
@@ -49,13 +47,25 @@ GAMBIT.TREE = (function (parentModule) {
         this.children.push(node);
     };
 
+    Node.prototype.deleteChild = function (nodeToDelete) {
+        var indexInList = this.children.indexOf(nodeToDelete);
+		if (indexInList > -1) {
+			this.children.splice(indexInList, 1);
+		}
+    };
+
     Node.prototype.isLeaf = function () {
         if (this.children.length === 0) {
             return true;
         }
         return false;
     };
-    
+
+    Node.prototype.changeFather = function (newFather) {
+        this.father = newFather;
+        this.father.addChild(this);
+    };
+
     // Add class to parent module
     parentModule.Node = Node;
 
