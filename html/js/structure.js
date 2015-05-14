@@ -11,7 +11,14 @@ var GAMBIT = (function () {
       CIRCLE_SIZE: 25
     };
 
-    GAMBIT.MODE_ADD = true;
+    GAMBIT.MODE = 0;
+    GAMBIT.MODES = {
+      ADD: 0,
+      DELETE: 1,
+    };
+    if (Object.freeze) {
+      Object.freeze(GAMBIT.MODES);
+    }
 
     return GAMBIT;
 }());

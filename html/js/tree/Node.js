@@ -33,7 +33,7 @@ GAMBIT.TREE = (function (parentModule) {
                 this.fill({ color: '#000' });
             })
             .click(function() {
-                if (GAMBIT.MODE_ADD){
+                if (GAMBIT.MODE === GAMBIT.MODES.ADD){
                     if (thisNode.children.length === 0) {
                         // Always start with two nodes
                         GAMBIT.tree.addChildNodeTo(thisNode);

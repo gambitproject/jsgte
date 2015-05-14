@@ -21,22 +21,21 @@ GAMBIT.UI = (function (parentModule) {
     };
 
     /**
-    * Function that swithes mode to the one specified by the button pressed
+    * Function that switches mode to the one specified by the button pressed
     * @param {Button} button Button pressed that will activate mode
     */
-    Tools.prototype.switchMode = function(button){
-        var modeToSwitch = button.getAttribute('mode');
+    Tools.prototype.switchMode = function(modeToSwitch){
         // Change the class of the button to active
-        if (modeToSwitch === 'add') {
-            GAMBIT.MODE_ADD = true;
+        GAMBIT.MODE = modeToSwitch;
+        if (modeToSwitch === GAMBIT.MODES.ADD) {
             document.getElementById("button-remove").className =
                 document.getElementById("button-remove").className.replace(/\bactive\b/,'');
-        } else {
-            GAMBIT.MODE_ADD = false;
+            document.getElementById("button-add").className += " " + "active";
+        } if (modeToSwitch === GAMBIT.MODES.DELETE) {
             document.getElementById("button-add").className =
                 document.getElementById("button-add").className.replace(/\bactive\b/,'');
+            document.getElementById("button-remove").className += " " + "active";
         }
-        button.className += " " + "active";
     };
 
     // Add class to parent module
