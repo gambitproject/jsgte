@@ -24,14 +24,9 @@ GAMBIT.TREE = (function (parentModule) {
     Node.prototype.draw = function () {
         var thisNode = this;
         var circle = GAMBIT.canvas.circle(GAMBIT.CONSTANTS.CIRCLE_SIZE)
-            .y(this.y)
+            .addClass('node')
             .x(this.x)
-            .mouseover(function() {
-                this.fill({ color: '#f06' });
-            })
-            .mouseout(function() {
-                this.fill({ color: '#000' });
-            })
+            .y(this.y)
             .click(function() {
                 if (GAMBIT.MODE === GAMBIT.MODES.ADD){
                     if (thisNode.children.length === 0) {
