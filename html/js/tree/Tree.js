@@ -19,7 +19,7 @@ GAMBIT.TREE = (function (parentModule) {
         if (!this.positionsUpdated) {
             this.updatePositions();
         }
-        GAMBIT.canvas.clear();
+        // GAMBIT.canvas.clear();
         this.recursiveDraw();
     };
 
@@ -50,7 +50,22 @@ GAMBIT.TREE = (function (parentModule) {
     */
     Tree.prototype.drawLineBetweenNodes = function(node1, node2){
         var circleRadius = GAMBIT.CONSTANTS.CIRCLE_SIZE/2;
-        GAMBIT.canvas.line(node1.x + circleRadius, node1.y + circleRadius, node2.x + circleRadius, node2.y +circleRadius).stroke({ width: 1 });
+        if (node2.lineToParent === null) {
+            node2.lineToParent = GAMBIT.canvas.line(node1.x + circleRadius, node1.y + circleRadius, node2.x + circleRadius, node2.y + circleRadius)
+                                              .stroke({ width: 1 });
+        } else {
+            node2.lineToParent.attr({
+                'x1': node2.lineToParent.attr().x1,
+                'y1': node2.lineToParent.attr().y1,
+                'x2': node2.lineToParent.attr().x2,
+                'y2': node2.lineToParent.attr().y2
+            }).animate().attr({
+                'x1': node1.x + circleRadius,
+                'y1': node1.y + circleRadius,
+                'x2': node2.x + circleRadius,
+                'y2': node2.y + circleRadius,
+            });
+        }
     };
 
     /**
