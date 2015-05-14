@@ -5,6 +5,21 @@
     GAMBIT.canvas = SVG('canvas').size("100%", "100%").attr({'style': 'background: #fff'});
     GAMBIT.tools = new GAMBIT.UI.Tools();
 
+    document.getElementById("button-new").addEventListener("click", function(){
+        GAMBIT.tools.newTree();
+        return false;
+    });
+
+    document.getElementById("button-add").addEventListener("click", function(){
+        GAMBIT.tools.switchMode(GAMBIT.MODES.ADD);
+        return false;
+    });
+
+    document.getElementById("button-remove").addEventListener("click", function(){
+        GAMBIT.tools.switchMode(GAMBIT.MODES.DELETE);
+        return false;
+    });
+
     // // Create a tree and draw it
     // var root = new GAMBIT.TREE.Node(null,"padre");
     // GAMBIT.tree = new GAMBIT.TREE.Tree(root);
