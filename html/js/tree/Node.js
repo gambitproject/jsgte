@@ -9,6 +9,8 @@ GAMBIT.TREE = (function (parentModule) {
     function Node(parent) {
         this.parent = parent;
         this.children = [];
+        this.circle = null;
+        this.lineToParent = null;
 
         if (parent === null) { // If this is root set level to 0
             this.level = 0;
@@ -30,15 +32,20 @@ GAMBIT.TREE = (function (parentModule) {
     */
     Node.prototype.draw = function () {
         var thisNode = this;
-        var circle = GAMBIT.canvas.circle(GAMBIT.CONSTANTS.CIRCLE_SIZE)
-            .addClass('node')
-            .x(this.x)
-            .y(this.y)
-            .click(function() {
-                thisNode.onClick();
-            });
+        if (this.circle === null) {
+            this.circle = GAMBIT.canvas.circle(GAMBIT.CONSTANTS.CIRCLE_SIZE)
+                .addClass('node')
+                .x(this.x)
+                .y(this.y)
+                .click(function() {
+                    thisNode.onClick();
+                });
+        } else {
+            this.circle.animate().move(this.x, this.y);
+        }
         // console.log("Drawing at y " + this.level*50 + " and x " + this.x);
     };
+
 
     /**
     * Function that defines the behaviour of the node on click
