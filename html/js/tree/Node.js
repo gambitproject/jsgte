@@ -4,17 +4,17 @@ GAMBIT.TREE = (function (parentModule) {
     /**
     * Creates a new Node.
     * @class
-    * @param {Node} [father] Father node. If null, this is root.
+    * @param {Node} [parent] Parent node. If null, this is root.
     */
-    function Node(father) {
-        this.father = father;
+    function Node(parent) {
+        this.parent = parent;
         this.children = [];
 
-        if (father === null) { // If this is root set level to 0
+        if (parent === null) { // If this is root set level to 0
             this.level = 0;
         } else {
-            father.addChild(this);
-            this.level = father.level + 1;
+            parent.addChild(this);
+            this.level = parent.level + 1;
         }
     }
 
@@ -74,12 +74,12 @@ GAMBIT.TREE = (function (parentModule) {
     };
 
     /**
-    * Function that changes node's father to a given one
-    * @param {Node} newFather New father for node
+    * Function that changes node's parent to a given one
+    * @param {Node} newParent New parent for node
     */
-    Node.prototype.changeFather = function (newFather) {
-        this.father = newFather;
-        this.father.addChild(this);
+    Node.prototype.changeParent = function (newParent) {
+        this.parent = newParent;
+        this.parent.addChild(this);
     };
 
     // Add class to parent module

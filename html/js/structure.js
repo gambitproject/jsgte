@@ -8,7 +8,8 @@ var GAMBIT = (function () {
     GAMBIT.TREE = {};
 
     GAMBIT.CONSTANTS = {
-      CIRCLE_SIZE: 25
+      CIRCLE_SIZE: 25,
+      DIST_BETWEEN_LEVELS: 50
     };
 
     GAMBIT.MODE = 0;
