@@ -34,10 +34,10 @@ GAMBIT.TREE = (function (parentModule) {
                         GAMBIT.tree.addChildNodeTo(thisNode);
                     }
                     GAMBIT.tree.addChildNodeTo(thisNode);
-                    // Tell the tree to redraw itself
                 } else {
                     GAMBIT.tree.deleteNode(thisNode);
                 }
+                // Tell the tree to redraw itself
                 GAMBIT.tree.draw();
             });
         // console.log("Drawing at y " + this.level*50 + " and x " + this.x);
@@ -53,13 +53,13 @@ GAMBIT.TREE = (function (parentModule) {
 
     /**
     * Function that removes child node from children
-    * @param {Node} node Child nod to remove
+    * @param {Node} node Child node to remove
     */
     Node.prototype.deleteChild = function (nodeToDelete) {
         var indexInList = this.children.indexOf(nodeToDelete);
-		if (indexInList > -1) {
-			this.children.splice(indexInList, 1);
-		}
+        if (indexInList > -1) {
+            this.children.splice(indexInList, 1);
+        }
     };
 
     /**
