@@ -1,0 +1,6 @@
+.node {
+  fill: #000;
+}
+.node:hover {
+  fill: #f06;
+}
