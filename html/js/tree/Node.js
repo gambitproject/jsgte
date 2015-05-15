@@ -116,6 +116,8 @@ GAMBIT.TREE = (function (parentModule) {
     */
     Node.prototype.delete = function () {
         this.changeParent(null);
+        this.circle.remove();
+        this.lineToParent.remove();
     };
 
     // Add class to parent module
