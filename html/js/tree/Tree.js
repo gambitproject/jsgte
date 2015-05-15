@@ -154,15 +154,14 @@ GAMBIT.TREE = (function (parentModule) {
     Tree.prototype.deleteNode = function (nodeToDelete) {
         // Check if it has children
         if (!nodeToDelete.isLeaf()) {
-            // Change parent of children to own parent
-            for (var i=0; i < nodeToDelete.children.length; i++) {
-                nodeToDelete.children[i].changeFather(nodeToDelete.parent);
-            }
             // Change level of everything below
             this.recursiveDecreaseLevel(nodeToDelete);
+            // Change parent of children to own parent
+            while(nodeToDelete.children.length !== 0){
+                nodeToDelete.children[0].changeParent(nodeToDelete.parent);
+            }
         }
-        // Delete node by deleting its reference from its parent
-        nodeToDelete.parent.deleteChild(nodeToDelete);
+        nodeToDelete.delete();
         this.positionsUpdated = false;
     };
 
