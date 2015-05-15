@@ -19,6 +19,13 @@ GAMBIT.TREE = (function (parentModule) {
     }
 
     /**
+    * ToString function
+    */
+    Node.prototype.toString = function nodeToString() {
+        return "Node: " + "children.length: " + this.children.length + "; level: " + this.level;
+    };
+
+    /**
     * Function that draws the node in the global canvas
     */
     Node.prototype.draw = function () {
@@ -78,8 +85,22 @@ GAMBIT.TREE = (function (parentModule) {
     * @param {Node} newParent New parent for node
     */
     Node.prototype.changeParent = function (newParent) {
+        console.log('changing parent to ' + newParent);
+        if (this.parent !== null) {
+            this.parent.deleteChild(this);
+        }
         this.parent = newParent;
-        this.parent.addChild(this);
+        if (this.parent !== null) {
+            this.parent.addChild(this);
+        }
+    };
+
+    /**
+    * Function that tells node to delete himself
+    * @param {Node} newParent New parent for node
+    */
+    Node.prototype.delete = function () {
+        this.changeParent(null);
     };
 
     // Add class to parent module

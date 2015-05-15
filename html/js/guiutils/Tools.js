@@ -31,10 +31,12 @@ GAMBIT.UI = (function (parentModule) {
             document.getElementById("button-remove").className =
                 document.getElementById("button-remove").className.replace(/\bactive\b/,'');
             document.getElementById("button-add").className += " " + "active";
-        } if (modeToSwitch === GAMBIT.MODES.DELETE) {
-            document.getElementById("button-add").className =
-                document.getElementById("button-add").className.replace(/\bactive\b/,'');
-            document.getElementById("button-remove").className += " " + "active";
+        } else {
+            if (modeToSwitch === GAMBIT.MODES.DELETE) {
+                document.getElementById("button-add").className =
+                    document.getElementById("button-add").className.replace(/\bactive\b/,'');
+                document.getElementById("button-remove").className += " " + "active";
+            }
         }
     };
 
