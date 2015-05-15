@@ -35,20 +35,28 @@ GAMBIT.TREE = (function (parentModule) {
             .x(this.x)
             .y(this.y)
             .click(function() {
-                if (GAMBIT.MODE === GAMBIT.MODES.ADD){
-                    if (thisNode.children.length === 0) {
-                        // Always start with two nodes
-                        GAMBIT.tree.addChildNodeTo(thisNode);
-                    }
-                    GAMBIT.tree.addChildNodeTo(thisNode);
-                } else {
-                    GAMBIT.tree.deleteNode(thisNode);
-                }
-                // Tell the tree to redraw itself
-                GAMBIT.tree.draw();
+                thisNode.onClick();
             });
         // console.log("Drawing at y " + this.level*50 + " and x " + this.x);
     };
+
+    /**
+    * Function that defines the behaviour of the node on click
+    */
+    Node.prototype.onClick = function () {
+        if (GAMBIT.MODE === GAMBIT.MODES.ADD){
+            if (this.children.length === 0) {
+                // Always start with two nodes
+                GAMBIT.tree.addChildNodeTo(this);
+            }
+            GAMBIT.tree.addChildNodeTo(this);
+        } else {
+            GAMBIT.tree.deleteNode(this);
+        }
+        // Tell the tree to redraw itself
+        GAMBIT.tree.draw();
+    };
+
 
     /**
     * Function that adds child to node
