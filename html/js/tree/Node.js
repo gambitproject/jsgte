@@ -1,4 +1,4 @@
-GAMBIT.TREE = (function (parentModule) {
+GTE.TREE = (function (parentModule) {
     "use strict";
 
     /**
@@ -30,31 +30,35 @@ GAMBIT.TREE = (function (parentModule) {
     */
     Node.prototype.draw = function () {
         var thisNode = this;
-        var circle = GAMBIT.canvas.circle(GAMBIT.CONSTANTS.CIRCLE_SIZE)
+        var circle = GTE.canvas.circle(GTE.CONSTANTS.CIRCLE_SIZE)
             .addClass('node')
             .x(this.x)
             .y(this.y)
             .click(function() {
                 thisNode.onClick();
             });
-        // console.log("Drawing at y " + this.level*50 + " and x " + this.x);
     };
 
     /**
     * Function that defines the behaviour of the node on click
     */
     Node.prototype.onClick = function () {
-        if (GAMBIT.MODE === GAMBIT.MODES.ADD){
-            if (this.children.length === 0) {
+        if (GTE.MODE === GTE.MODES.ADD){
+            if (this.isLeaf()) {
                 // Always start with two nodes
-                GAMBIT.tree.addChildNodeTo(this);
+                GTE.tree.addChildNodeTo(this);
             }
-            GAMBIT.tree.addChildNodeTo(this);
+            GTE.tree.addChildNodeTo(this);
         } else {
-            GAMBIT.tree.deleteNode(this);
+            // If it is a leaf, delete itself, if not, delete all children
+            if (this.isLeaf()) {
+                this.delete();
+            } else {
+                GTE.tree.deleteChildrenOf(this);
+            }
         }
         // Tell the tree to redraw itself
-        GAMBIT.tree.draw();
+        GTE.tree.draw();
     };
 
 
@@ -70,7 +74,7 @@ GAMBIT.TREE = (function (parentModule) {
     * Function that removes child node from children
     * @param {Node} node Child node to remove
     */
-    Node.prototype.deleteChild = function (nodeToDelete) {
+    Node.prototype.removeChild = function (nodeToDelete) {
         var indexInList = this.children.indexOf(nodeToDelete);
         if (indexInList > -1) {
             this.children.splice(indexInList, 1);
@@ -93,9 +97,8 @@ GAMBIT.TREE = (function (parentModule) {
     * @param {Node} newParent New parent for node
     */
     Node.prototype.changeParent = function (newParent) {
-        console.log('changing parent to ' + newParent);
         if (this.parent !== null) {
-            this.parent.deleteChild(this);
+            this.parent.removeChild(this);
         }
         this.parent = newParent;
         if (this.parent !== null) {
@@ -105,14 +108,14 @@ GAMBIT.TREE = (function (parentModule) {
 
     /**
     * Function that tells node to delete himself
-    * @param {Node} newParent New parent for node
     */
     Node.prototype.delete = function () {
         this.changeParent(null);
+        GTE.tree.positionsUpdated = false;
     };
 
     // Add class to parent module
     parentModule.Node = Node;
 
     return parentModule;
-}(GAMBIT.TREE)); // Add to GAMBIT.TREE sub-module
+}(GTE.TREE)); // Add to GTE.TREE sub-module
