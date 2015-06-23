@@ -1,4 +1,4 @@
-GAMBIT.TREE = (function (parentModule) {
+GTE.TREE = (function (parentModule) {
     "use strict";
 
     /**
@@ -30,7 +30,7 @@ GAMBIT.TREE = (function (parentModule) {
     */
     Node.prototype.draw = function () {
         var thisNode = this;
-        var circle = GAMBIT.canvas.circle(GAMBIT.CONSTANTS.CIRCLE_SIZE)
+        var circle = GTE.canvas.circle(GTE.CONSTANTS.CIRCLE_SIZE)
             .addClass('node')
             .x(this.x)
             .y(this.y)
@@ -43,17 +43,17 @@ GAMBIT.TREE = (function (parentModule) {
     * Function that defines the behaviour of the node on click
     */
     Node.prototype.onClick = function () {
-        if (GAMBIT.MODE === GAMBIT.MODES.ADD){
+        if (GTE.MODE === GTE.MODES.ADD){
             if (this.children.length === 0) {
                 // Always start with two nodes
-                GAMBIT.tree.addChildNodeTo(this);
+                GTE.tree.addChildNodeTo(this);
             }
-            GAMBIT.tree.addChildNodeTo(this);
+            GTE.tree.addChildNodeTo(this);
         } else {
-            GAMBIT.tree.deleteNode(this);
+            GTE.tree.deleteNode(this);
         }
         // Tell the tree to redraw itself
-        GAMBIT.tree.draw();
+        GTE.tree.draw();
     };
 
 
@@ -112,4 +112,4 @@ GAMBIT.TREE = (function (parentModule) {
     parentModule.Node = Node;
 
     return parentModule;
-}(GAMBIT.TREE)); // Add to GAMBIT.TREE sub-module
+}(GTE.TREE)); // Add to GTE.TREE sub-module
