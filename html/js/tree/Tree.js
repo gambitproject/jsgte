@@ -135,7 +135,6 @@ GTE.TREE = (function (parentModule) {
             for (var i = 0; i < numberLeaves; i++) {
                 this.leaves[i].x = (widthPerNode*i)+(widthPerNode/2) -
                                         GTE.CONSTANTS.CIRCLE_SIZE/2 + offset;
-                this.leaves[i].y = this.leaves[i].level * GTE.CONSTANTS.DIST_BETWEEN_LEVELS;
             }
         }
     };
