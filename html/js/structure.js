@@ -10,7 +10,8 @@ var GTE = (function () {
     GTE.CONSTANTS = {
       CIRCLE_SIZE: 25,
       DIST_BETWEEN_LEVELS: 150,
-      LINE_THICKNESS: 3
+      LINE_THICKNESS: 3,
+      MAX_HORIZONTAL_DISTANCE_BW_NODES: 250
     };
 
     GTE.MODE = 0;
