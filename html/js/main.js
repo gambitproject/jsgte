@@ -22,19 +22,4 @@
         return false;
     });
 
-    // // Create a tree and draw it
-    // var root = new GTE.TREE.Node(null,"padre");
-    // GTE.tree = new GTE.TREE.Tree(root);
-    // // var node = GTE.tree.addChildNodeTo(root);
-    // // var node1 = GTE.tree.addChildNodeTo(root);
-
-    // // var node2 = GTE.tree.addChildNodeTo(node1);
-    // // var node3 = GTE.tree.addChildNodeTo(node1);
-    // // var node4 = GTE.tree.addChildNodeTo(node3);
-    // // var node5 = GTE.tree.addChildNodeTo(node3);
-
-    // GTE.tree.updatePositions();
-    // // Create a node and draw it
-    // GTE.tree.draw();
-
 }());
