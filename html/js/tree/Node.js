@@ -16,6 +16,8 @@ GTE.TREE = (function (parentModule) {
             parent.addChild(this);
             this.level = parent.level + 1;
         }
+
+        this.y = this.level * GTE.CONSTANTS.DIST_BETWEEN_LEVELS;
     }
 
     /**
