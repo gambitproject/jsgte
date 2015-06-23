@@ -50,7 +50,8 @@ GTE.TREE = (function (parentModule) {
     */
     Tree.prototype.drawLineBetweenNodes = function(node1, node2){
         var circleRadius = GTE.CONSTANTS.CIRCLE_SIZE/2;
-        GTE.canvas.line(node1.x + circleRadius, node1.y + circleRadius, node2.x + circleRadius, node2.y +circleRadius).stroke({ width: 1 });
+        GTE.canvas.line(node1.x + circleRadius, node1.y + circleRadius, node2.x + circleRadius, node2.y +circleRadius)
+                  .stroke({ width: GTE.CONSTANTS.LINE_THICKNESS });
     };
 
     /**
