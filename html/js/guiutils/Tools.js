@@ -14,6 +14,8 @@ GTE.UI = (function (parentModule) {
     */
     Tools.prototype.newTree = function() {
         var root = new GTE.TREE.Node(null);
+        var child1 = new GTE.TREE.Node(root);
+        var child2 = new GTE.TREE.Node(root);
         GTE.tree = new GTE.TREE.Tree(root);
         GTE.tree.updatePositions();
         // Create a node and draw it

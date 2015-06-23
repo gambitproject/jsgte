@@ -4,6 +4,8 @@
     // GTE is initialized by the library
     GTE.canvas = SVG('canvas').size("100%", "100%").attr({'style': 'background: #fff'});
     GTE.tools = new GTE.UI.Tools();
+    // Always start with root and two children
+    GTE.tools.newTree();
 
     document.getElementById("button-new").addEventListener("click", function(){
         GTE.tools.newTree();
