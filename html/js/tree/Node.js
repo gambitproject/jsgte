@@ -44,13 +44,18 @@ GTE.TREE = (function (parentModule) {
     */
     Node.prototype.onClick = function () {
         if (GTE.MODE === GTE.MODES.ADD){
-            if (this.children.length === 0) {
+            if (this.isLeaf()) {
                 // Always start with two nodes
                 GTE.tree.addChildNodeTo(this);
             }
             GTE.tree.addChildNodeTo(this);
         } else {
-            GTE.tree.deleteNode(this);
+            // If it is a leaf, delete itself, if not, delete all children
+            if (this.isLeaf()) {
+                this.delete();
+            } else {
+                GTE.tree.deleteChildrenOf(this);
+            }
         }
         // Tell the tree to redraw itself
         GTE.tree.draw();
@@ -106,6 +111,7 @@ GTE.TREE = (function (parentModule) {
     */
     Node.prototype.delete = function () {
         this.changeParent(null);
+        GTE.tree.positionsUpdated = false;
     };
 
     // Add class to parent module

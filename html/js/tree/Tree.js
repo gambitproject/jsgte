@@ -150,35 +150,29 @@ GTE.TREE = (function (parentModule) {
     /**
      * Function that deletes the node. It changes children's parent to their
      * grandparent.
-     * @param {Node} nodeToDelete Node to be deleted
+     * @param {Node} node Node to be deleted
      */
-    Tree.prototype.deleteNode = function (nodeToDelete) {
-        // Check if it has children
-        if (!nodeToDelete.isLeaf()) {
-            // Change level of everything below
-            this.recursiveDecreaseLevel(nodeToDelete);
-            // Change parent of children to own parent
-            while(nodeToDelete.children.length !== 0){
-                nodeToDelete.children[0].changeParent(nodeToDelete.parent);
-            }
+    Tree.prototype.deleteChildrenOf = function (node) {
+        // Delete everything below every child
+        while(node.children.length !== 0){
+            this.recursiveDeleteChildren(node.children[0]);
         }
-        nodeToDelete.delete();
         this.positionsUpdated = false;
     };
 
     /**
-    * Recursive function that decreases the level of everything before a node.
+    * Recursive function that deletes everything below a node.
     * Stopping criteria: that the current node is a leaf
     * Recursive expansion: to all of the node's children
     * @param {Node} node Starting node
     */
-    Tree.prototype.recursiveDecreaseLevel = function (node) {
+    Tree.prototype.recursiveDeleteChildren = function (node) {
         if (!node.isLeaf()) {
             for (var i=0; i < node.children.length; i++) {
-                this.recursiveDecreaseLevel(node.children[i]);
+                this.recursiveDeleteChildren(node.children[i]);
             }
         }
-        node.level = node.level - 1;
+        node.delete();
     };
 
     /**
