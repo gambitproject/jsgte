@@ -37,7 +37,6 @@ GAMBIT.TREE = (function (parentModule) {
             .click(function() {
                 thisNode.onClick();
             });
-        // console.log("Drawing at y " + this.level*50 + " and x " + this.x);
     };
 
     /**
@@ -70,7 +69,7 @@ GAMBIT.TREE = (function (parentModule) {
     * Function that removes child node from children
     * @param {Node} node Child node to remove
     */
-    Node.prototype.deleteChild = function (nodeToDelete) {
+    Node.prototype.removeChild = function (nodeToDelete) {
         var indexInList = this.children.indexOf(nodeToDelete);
         if (indexInList > -1) {
             this.children.splice(indexInList, 1);
@@ -93,9 +92,8 @@ GAMBIT.TREE = (function (parentModule) {
     * @param {Node} newParent New parent for node
     */
     Node.prototype.changeParent = function (newParent) {
-        console.log('changing parent to ' + newParent);
         if (this.parent !== null) {
-            this.parent.deleteChild(this);
+            this.parent.removeChild(this);
         }
         this.parent = newParent;
         if (this.parent !== null) {
@@ -105,7 +103,6 @@ GAMBIT.TREE = (function (parentModule) {
 
     /**
     * Function that tells node to delete himself
-    * @param {Node} newParent New parent for node
     */
     Node.prototype.delete = function () {
         this.changeParent(null);
