@@ -9,7 +9,7 @@ var GTE = (function () {
 
     GTE.CONSTANTS = {
       CIRCLE_SIZE: 25,
-      DIST_BETWEEN_LEVELS: 50
+      DIST_BETWEEN_LEVELS: 150
     };
 
     GTE.MODE = 0;
