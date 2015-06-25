@@ -52,6 +52,28 @@ GTE.TREE = (function (parentModule) {
         var circleRadius = GTE.CONSTANTS.CIRCLE_SIZE/2;
         GTE.canvas.line(node1.x + circleRadius, node1.y + circleRadius, node2.x + circleRadius, node2.y +circleRadius)
                   .stroke({ width: GTE.CONSTANTS.LINE_THICKNESS });
+        var middleX = ((node2.x + circleRadius) - (node1.x + circleRadius))/2+(node1.x + circleRadius);
+        var middleY = ((node2.y + circleRadius) - (node1.y + circleRadius))/2+(node1.y + circleRadius);
+
+        var myforeign = document.createElementNS('http://www.w3.org/2000/svg', 'foreignObject');
+        var textdiv = document.createElement("div");
+        var textnode = document.createTextNode("Click to edit");
+        console.log(textnode);
+        textdiv.appendChild(textnode);
+        textdiv.setAttribute("contentEditable", "true");
+        textdiv.setAttribute("width", "auto");
+
+        myforeign.setAttribute("width", "100%");
+        myforeign.setAttribute("height", "100%");
+        myforeign.classList.add("foreign"); //to make div fit text
+        textdiv.classList.add("insideforeign"); //to make div fit text
+        // textdiv.addEventListener("mousedown", elementMousedown, false);
+        myforeign.setAttributeNS(null, "transform", "translate(" + middleX + " " + middleY + ")");
+        document.getElementsByTagName('svg')[0].appendChild(myforeign);
+        myforeign.appendChild(textdiv);
+        // var text = GTE.canvas.text('A')
+        //                      .x(middleX)
+        //                      .y(middleY);
     };
 
     /**
