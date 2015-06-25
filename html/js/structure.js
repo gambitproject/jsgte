@@ -8,7 +8,7 @@ var GTE = (function () {
     GTE.TREE = {};
 
     GTE.CONSTANTS = {
-      CIRCLE_SIZE: 25,
+      CIRCLE_SIZE: 20,
       DIST_BETWEEN_LEVELS: 150,
       LINE_THICKNESS: 3,
       MAX_HORIZONTAL_DISTANCE_BW_NODES: 250
