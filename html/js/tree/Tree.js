@@ -121,14 +121,20 @@ GTE.TREE = (function (parentModule) {
     Tree.prototype.updateLeavesPositions = function () {
         var numberLeaves = this.numberLeaves();
         var widthPerNode = GTE.canvas.viewbox().width/numberLeaves;
+        var offset = 0;
+        // Avoid nodes to be too spreaded out
+        if (widthPerNode > GTE.CONSTANTS.MAX_HORIZONTAL_DISTANCE_BW_NODES) {
+            widthPerNode = GTE.CONSTANTS.MAX_HORIZONTAL_DISTANCE_BW_NODES;
+            // Calculate the offset so the nodes are centered on the screen
+            offset = (GTE.canvas.viewbox().width-widthPerNode*numberLeaves)/2;
+        }
         if (widthPerNode < GTE.CONSTANTS.CIRCLE_SIZE) {
             this.zoomOut();
             this.updateLeavesPositions();
         } else {
             for (var i = 0; i < numberLeaves; i++) {
                 this.leaves[i].x = (widthPerNode*i)+(widthPerNode/2) -
-                                        GTE.CONSTANTS.CIRCLE_SIZE/2;
-                this.leaves[i].y = this.leaves[i].level * GTE.CONSTANTS.DIST_BETWEEN_LEVELS;
+                                        GTE.CONSTANTS.CIRCLE_SIZE/2 + offset;
             }
         }
     };
