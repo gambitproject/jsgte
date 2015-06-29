@@ -1,4 +1,4 @@
-GAMBIT.UI = (function (parentModule) {
+GTE.UI = (function (parentModule) {
     "use strict";
 
     /**
@@ -13,11 +13,13 @@ GAMBIT.UI = (function (parentModule) {
     * It creates a new Tree and draws it
     */
     Tools.prototype.newTree = function() {
-        var root = new GAMBIT.TREE.Node(null);
-        GAMBIT.tree = new GAMBIT.TREE.Tree(root);
-        GAMBIT.tree.updatePositions();
+        var root = new GTE.TREE.Node(null);
+        var child1 = new GTE.TREE.Node(root);
+        var child2 = new GTE.TREE.Node(root);
+        GTE.tree = new GTE.TREE.Tree(root);
+        GTE.tree.updatePositions();
         // Create a node and draw it
-        GAMBIT.tree.draw();
+        GTE.tree.draw();
     };
 
     /**
@@ -26,13 +28,13 @@ GAMBIT.UI = (function (parentModule) {
     */
     Tools.prototype.switchMode = function(modeToSwitch){
         // Change the class of the button to active
-        GAMBIT.MODE = modeToSwitch;
-        if (modeToSwitch === GAMBIT.MODES.ADD) {
+        GTE.MODE = modeToSwitch;
+        if (modeToSwitch === GTE.MODES.ADD) {
             document.getElementById("button-remove").className =
                 document.getElementById("button-remove").className.replace(/\bactive\b/,'');
             document.getElementById("button-add").className += " " + "active";
         } else {
-            if (modeToSwitch === GAMBIT.MODES.DELETE) {
+            if (modeToSwitch === GTE.MODES.DELETE) {
                 document.getElementById("button-add").className =
                     document.getElementById("button-add").className.replace(/\bactive\b/,'');
                 document.getElementById("button-remove").className += " " + "active";
@@ -44,4 +46,4 @@ GAMBIT.UI = (function (parentModule) {
     parentModule.Tools = Tools;
 
     return parentModule;
-}(GAMBIT.UI)); // Add to GAMBIT.UI sub-module
+}(GTE.UI)); // Add to GTE.UI sub-module

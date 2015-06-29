@@ -1,25 +1,27 @@
 // This file loads all the modules in order to mantain a consistent structure
 // and avoid undefined errors
 
-var GAMBIT = (function () {
+var GTE = (function () {
 	"use strict";
-	var GAMBIT = {};
-    GAMBIT.UI = {};
-    GAMBIT.TREE = {};
+	var GTE = {};
+    GTE.UI = {};
+    GTE.TREE = {};
 
-    GAMBIT.CONSTANTS = {
-      CIRCLE_SIZE: 25,
-      DIST_BETWEEN_LEVELS: 50
+    GTE.CONSTANTS = {
+      CIRCLE_SIZE: 20,
+      DIST_BETWEEN_LEVELS: 150,
+      LINE_THICKNESS: 3,
+      MAX_HORIZONTAL_DISTANCE_BW_NODES: 250
     };
 
-    GAMBIT.MODE = 0;
-    GAMBIT.MODES = {
+    GTE.MODE = 0;
+    GTE.MODES = {
       ADD: 0,
       DELETE: 1,
     };
     if (Object.freeze) {
-      Object.freeze(GAMBIT.MODES);
+      Object.freeze(GTE.MODES);
     }
 
-    return GAMBIT;
+    return GTE;
 }());
