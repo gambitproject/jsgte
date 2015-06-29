@@ -19,8 +19,18 @@ GTE.TREE = (function (parentModule) {
         if (!this.positionsUpdated) {
             this.updatePositions();
         }
-        GTE.canvas.clear();
+        this.clear();
         this.recursiveDraw();
+    };
+
+    Tree.prototype.clear = function(){
+        // Clear canvas
+        GTE.canvas.clear();
+        // Remove labels
+        var foreigns = document.getElementsByTagName("foreignObject");
+        for (var index = foreigns.length - 1; index >= 0; index--) {
+            foreigns[index].parentNode.removeChild(foreigns[index]);
+        }
     };
 
     /**
@@ -55,7 +65,12 @@ GTE.TREE = (function (parentModule) {
         var middleX = ((node2.x + circleRadius) - (node1.x + circleRadius))/2+(node1.x + circleRadius);
         var middleY = ((node2.y + circleRadius) - (node1.y + circleRadius))/2+(node1.y + circleRadius);
 
-        var contentEditable = new GTE.UI.Widgets.ContentEditable(middleX, middleY);
+        // TODO: create variables for growing left and right
+        var growingDirectionOfText = 1;
+        if (node2.x < node1.x ) {
+            growingDirectionOfText = -1;
+        }
+        var contentEditable = new GTE.UI.Widgets.ContentEditable(middleX, middleY, growingDirectionOfText);
     };
 
     /**
