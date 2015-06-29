@@ -1,4 +1,4 @@
-GAMBIT.TREE = (function (parentModule) {
+GTE.TREE = (function (parentModule) {
     "use strict";
 
     /**
@@ -19,7 +19,7 @@ GAMBIT.TREE = (function (parentModule) {
         if (!this.positionsUpdated) {
             this.updatePositions();
         }
-        // GAMBIT.canvas.clear();
+        GTE.canvas.clear();
         this.recursiveDraw();
     };
 
@@ -49,23 +49,13 @@ GAMBIT.TREE = (function (parentModule) {
     * @param {Node} node2 Node B
     */
     Tree.prototype.drawLineBetweenNodes = function(node1, node2){
-        var circleRadius = GAMBIT.CONSTANTS.CIRCLE_SIZE/2;
-        if (node2.lineToParent === null) {
-            node2.lineToParent = GAMBIT.canvas.line(node1.x + circleRadius, node1.y + circleRadius, node2.x + circleRadius, node2.y + circleRadius)
-                                              .stroke({ width: 1 });
-        } else {
-            node2.lineToParent.attr({
-                'x1': node2.lineToParent.attr().x1,
-                'y1': node2.lineToParent.attr().y1,
-                'x2': node2.lineToParent.attr().x2,
-                'y2': node2.lineToParent.attr().y2
-            }).animate().attr({
-                'x1': node1.x + circleRadius,
-                'y1': node1.y + circleRadius,
-                'x2': node2.x + circleRadius,
-                'y2': node2.y + circleRadius,
-            });
-        }
+        var circleRadius = GTE.CONSTANTS.CIRCLE_SIZE/2;
+        GTE.canvas.line(node1.x + circleRadius, node1.y + circleRadius, node2.x + circleRadius, node2.y +circleRadius)
+                  .stroke({ width: GTE.CONSTANTS.LINE_THICKNESS });
+        var middleX = ((node2.x + circleRadius) - (node1.x + circleRadius))/2+(node1.x + circleRadius);
+        var middleY = ((node2.y + circleRadius) - (node1.y + circleRadius))/2+(node1.y + circleRadius);
+
+        var contentEditable = new GTE.UI.Widgets.ContentEditable(middleX, middleY);
     };
 
     /**
@@ -125,7 +115,7 @@ GAMBIT.TREE = (function (parentModule) {
             // TODO: apply level weighted function for special cases
             node.x = node.children[0].x +
                 (node.children[node.children.length-1].x - node.children[0].x)/2;
-            node.y = node.level * GAMBIT.CONSTANTS.DIST_BETWEEN_LEVELS;
+            node.y = node.level * GTE.CONSTANTS.DIST_BETWEEN_LEVELS;
         }
     };
 
@@ -134,15 +124,21 @@ GAMBIT.TREE = (function (parentModule) {
     */
     Tree.prototype.updateLeavesPositions = function () {
         var numberLeaves = this.numberLeaves();
-        var widthPerNode = GAMBIT.canvas.viewbox().width/numberLeaves;
-        if (widthPerNode < GAMBIT.CONSTANTS.CIRCLE_SIZE) {
+        var widthPerNode = GTE.canvas.viewbox().width/numberLeaves;
+        var offset = 0;
+        // Avoid nodes to be too spreaded out
+        if (widthPerNode > GTE.CONSTANTS.MAX_HORIZONTAL_DISTANCE_BW_NODES) {
+            widthPerNode = GTE.CONSTANTS.MAX_HORIZONTAL_DISTANCE_BW_NODES;
+            // Calculate the offset so the nodes are centered on the screen
+            offset = (GTE.canvas.viewbox().width-widthPerNode*numberLeaves)/2;
+        }
+        if (widthPerNode < GTE.CONSTANTS.CIRCLE_SIZE) {
             this.zoomOut();
             this.updateLeavesPositions();
         } else {
             for (var i = 0; i < numberLeaves; i++) {
                 this.leaves[i].x = (widthPerNode*i)+(widthPerNode/2) -
-                                        GAMBIT.CONSTANTS.CIRCLE_SIZE/2;
-                this.leaves[i].y = this.leaves[i].level * GAMBIT.CONSTANTS.DIST_BETWEEN_LEVELS;
+                                        GTE.CONSTANTS.CIRCLE_SIZE/2 + offset;
             }
         }
     };
@@ -153,8 +149,8 @@ GAMBIT.TREE = (function (parentModule) {
     * @return {Node} newNode    Node that has been added
     */
     Tree.prototype.addChildNodeTo = function (parentNode) {
-        var newNode = new GAMBIT.TREE.Node(parentNode);
-        if ((newNode.y + GAMBIT.CONSTANTS.CIRCLE_SIZE) > GAMBIT.canvas.viewbox().height) {
+        var newNode = new GTE.TREE.Node(parentNode);
+        if ((newNode.y + GTE.CONSTANTS.CIRCLE_SIZE) > GTE.canvas.viewbox().height) {
             this.zoomOut();
         }
         this.positionsUpdated = false;
@@ -164,46 +160,40 @@ GAMBIT.TREE = (function (parentModule) {
     /**
      * Function that deletes the node. It changes children's parent to their
      * grandparent.
-     * @param {Node} nodeToDelete Node to be deleted
+     * @param {Node} node Node to be deleted
      */
-    Tree.prototype.deleteNode = function (nodeToDelete) {
-        // Check if it has children
-        if (!nodeToDelete.isLeaf()) {
-            // Change level of everything below
-            this.recursiveDecreaseLevel(nodeToDelete);
-            // Change parent of children to own parent
-            while(nodeToDelete.children.length !== 0){
-                nodeToDelete.children[0].changeParent(nodeToDelete.parent);
-            }
+    Tree.prototype.deleteChildrenOf = function (node) {
+        // Delete everything below every child
+        while(node.children.length !== 0){
+            this.recursiveDeleteChildren(node.children[0]);
         }
-        nodeToDelete.delete();
         this.positionsUpdated = false;
     };
 
     /**
-    * Recursive function that decreases the level of everything before a node.
+    * Recursive function that deletes everything below a node.
     * Stopping criteria: that the current node is a leaf
     * Recursive expansion: to all of the node's children
     * @param {Node} node Starting node
     */
-    Tree.prototype.recursiveDecreaseLevel = function (node) {
+    Tree.prototype.recursiveDeleteChildren = function (node) {
         if (!node.isLeaf()) {
             for (var i=0; i < node.children.length; i++) {
-                this.recursiveDecreaseLevel(node.children[i]);
+                this.recursiveDeleteChildren(node.children[i]);
             }
         }
-        node.level = node.level - 1;
+        node.delete();
     };
 
     /**
     * Zooms out the canvas by making the viewbox bigger
     */
     Tree.prototype.zoomOut = function(){
-        GAMBIT.canvas.viewbox(0, 0, GAMBIT.canvas.viewbox().width*1.5, GAMBIT.canvas.viewbox().height*1.5);
+        GTE.canvas.viewbox(0, 0, GTE.canvas.viewbox().width*1.5, GTE.canvas.viewbox().height*1.5);
     };
 
     // Add class to parent module
     parentModule.Tree = Tree;
 
     return parentModule;
-}(GAMBIT.TREE)); // Add to GAMBIT.TREE sub-module
+}(GTE.TREE)); // Add to GTE.TREE sub-module

@@ -4,3 +4,10 @@
 .node:hover {
   fill: #f06;
 }
+
+.foreign {
+    text-align: left;
+}
+.insideforeign {
+    display: inline-block;
+}
