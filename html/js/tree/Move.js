@@ -5,11 +5,10 @@ GTE.TREE = (function (parentModule) {
     * Creates a new Move.
     * @class
     * @param {Node} parent Parent node origin of the move.
-    * @param {Node} child Child node destiny of the move.
+    * @param {Node} child Child node destination of the move.
     */
     function Move (parent, child) {
         this.parent = parent;
-        parent.children[child] = this;
         this.child = child;
         this.line = {};
     }
@@ -17,7 +16,7 @@ GTE.TREE = (function (parentModule) {
     /**
     * ToString function
     */
-    Move.prototype.toString = function moveToString() {
+    Move.prototype.toString = function () {
         return "Move: " + "parent: " + this.parent + "; child: " + this.child;
     };
 
