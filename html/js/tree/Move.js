@@ -4,8 +4,8 @@ GTE.TREE = (function (parentModule) {
     /**
     * Creates a new Move.
     * @class
-    * @param {Node} parent Parent node origin of the move.
-    * @param {Node} child Child node destination of the move.
+    * @param {ISet} parent Parent ISet origin of the move.
+    * @param {ISet} child Child ISet destination of the move.
     */
     function Move (parent, child) {
         this.parent = parent;
@@ -22,7 +22,7 @@ GTE.TREE = (function (parentModule) {
 
     Move.prototype.draw = function() {
         var circleRadius = GTE.CONSTANTS.CIRCLE_SIZE/2;
-        this.line = GTE.canvas.line(this.parent.x + circleRadius, this.parent.y + circleRadius, this.child.x + circleRadius, this.child.y +circleRadius)
+        this.line = GTE.canvas.line(this.parent.node.x + circleRadius, this.parent.node.y + circleRadius, this.child.node.x + circleRadius, this.child.node.y +circleRadius)
                   .stroke({ width: GTE.CONSTANTS.LINE_THICKNESS });
     };
 
