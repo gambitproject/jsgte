@@ -10,10 +10,11 @@ GTE.TREE = (function (parentModule) {
         this.parent = parent;
         this.children = [];
 
+        this.reachedBy = null;
         if (parent === null) { // If this is root set level to 0
             this.level = 0;
         } else {
-            parent.addChild(this);
+            this.reachedBy = parent.addChild(this);
             this.level = parent.level + 1;
         }
 
@@ -24,13 +25,17 @@ GTE.TREE = (function (parentModule) {
     * ToString function
     */
     Node.prototype.toString = function nodeToString() {
-        return "Node: " + "children.length: " + this.children.length + "; level: " + this.level;
+        return "Node: " + "children.length: " + this.children.length + "; level: " + this.level + "; move: " + this.reachedBy;
     };
 
     /**
     * Function that draws the node in the global canvas
     */
     Node.prototype.draw = function () {
+        // The line has to be drawn before so that the circle is drawn on top of it
+        if (this.reachedBy !== null) {
+            this.reachedBy.draw();
+        }
         var thisNode = this;
         var circle = GTE.canvas.circle(GTE.CONSTANTS.CIRCLE_SIZE)
             .addClass('node')
@@ -67,9 +72,11 @@ GTE.TREE = (function (parentModule) {
     /**
     * Function that adds child to node
     * @param {Node} node Node to add as child
+    * @return {Move} The move that has been created for this child
     */
     Node.prototype.addChild = function (node) {
         this.children.push(node);
+        return new GTE.TREE.Move(this, node);
     };
 
     /**
