@@ -36,23 +36,12 @@ GTE.TREE = (function (parentModule) {
 
         if (!node.isLeaf()) {
             for (var i = 0; i < node.children.length; i++) {
-                this.drawLineBetweenNodes(node, node.children[i]);
                 this.recursiveDraw(node.children[i]);
             }
         }
         node.draw();
     };
 
-    /**
-    * Function that draws a line between two given nodes
-    * @param {Node} node1 Node A
-    * @param {Node} node2 Node B
-    */
-    Tree.prototype.drawLineBetweenNodes = function(node1, node2){
-        var circleRadius = GTE.CONSTANTS.CIRCLE_SIZE/2;
-        GTE.canvas.line(node1.x + circleRadius, node1.y + circleRadius, node2.x + circleRadius, node2.y +circleRadius)
-                  .stroke({ width: GTE.CONSTANTS.LINE_THICKNESS });
-    };
 
     /**
     * Function that returns the number of leaves in the tree
