@@ -5,7 +5,7 @@ GTE.TREE = (function (parentModule) {
     * Creates a new ISet.
     * @class
     * @param {ISet} [parent] Parent ISet. If null, this is root.
-    * @param  {Integer} numOfNodes Number of nodes of this new information set
+    * @param  {Number} [numOfNodes] Number of nodes of this new information set. If null 1
     */
     function ISet(parent, numOfNodes) {
         this.parent = parent;
@@ -48,22 +48,28 @@ GTE.TREE = (function (parentModule) {
     };
 
     /**
-    * Function that removes child ISet from children
+    * Function that finds the move that leads to a child ISet
+    * @param {ISet}   childISet ISet to look for
+    * @return {Number}          The index of the move in the list of
+    *                           moves that contains the given iSet 
+    */
+    ISet.prototype.findMoveThatLeadsTo = function (iSet) {
+        for (var indexInList = 0; indexInList < this.moves.length; indexInList++) {
+            if (this.moves[indexInList].child == iSet) return indexInList;
+        };
+        return -1;
+    };
+
+    /**
+    * Function that removes the move that contains a children iSet
     * @param {ISet} iSetToDelete Child ISet to remove
     */
     ISet.prototype.removeChild = function (iSetToDelete) {
         // Find the move that leads to this ISet
-        var indexInList = findMoveThatLeadsTo(iSetToDelete);
+        var indexInList = this.findMoveThatLeadsTo(iSetToDelete);
         if (indexInList > -1) {
             this.moves.splice(indexInList, 1);
         }
-    };
-
-    ISet.prototype.findMoveThatLeadsTo = function (iSet) {
-        for (var indexInList = 0; indexInList < moves.length; indexInList++) {
-            if (moves[indexInList].child == this.iSetToDelete) return indexInList;
-        };
-        return -1;
     };
 
     /**
@@ -102,7 +108,8 @@ GTE.TREE = (function (parentModule) {
     };
 
     /**
-    * Function that defines the behaviour of the ISet on click. This function is called if one of the nodes is clicked
+    * Function that defines the behaviour of the ISet on click.
+    * This function is called if one of the nodes is clicked
     */
     ISet.prototype.onClick = function () {
         if (GTE.MODE === GTE.MODES.ADD){
@@ -124,15 +131,17 @@ GTE.TREE = (function (parentModule) {
     };
 
     /**
-    * Function that tells ISet to delete himself
+    * Function that tells ISet to delete itself
     */
     ISet.prototype.delete = function () {
         // Delete the move that leads to this iSet in current parent
-        this.parent.removeChild(this);
-        // Set current parent to null
-        this.parent = null;
-        // Inform that tree needs to be redrawn
-        GTE.tree.positionsUpdated = false;
+        if (this.parent !== null) {
+            this.parent.removeChild(this);
+            // Set current parent to null
+            this.parent = null;
+            // Inform that tree needs to be redrawn
+            GTE.tree.positionsUpdated = false;
+        }
     };
 
     // Add class to parent module

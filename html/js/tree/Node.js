@@ -4,7 +4,8 @@ GTE.TREE = (function (parentModule) {
     /**
     * Creates a new Node.
     * @class
-    * @param {Node} [parent] Parent node. If null, this is root.
+    * @param {ISet} [iSet] iSet that contains the node. Needed for sending onClicks to it
+    * @param {Number} [level] Level of the node
     */
     function Node(iSet, level) {
         this.iSet = iSet;
@@ -15,8 +16,8 @@ GTE.TREE = (function (parentModule) {
     /**
     * ToString function
     */
-    Node.prototype.toString = function nodeToString() {
-        return "Node: " + "level: " + this.level + "; y: " + this.y;
+    Node.prototype.toString = function () {
+        return "Node: " + "iSet: " + this.iSet + "; level: " + this.level;
     };
 
     /**
@@ -29,7 +30,6 @@ GTE.TREE = (function (parentModule) {
             .x(this.x)
             .y(this.y)
             .click(function() {
-                console.log(thisNode);
                 thisNode.iSet.onClick();
             });
     };
