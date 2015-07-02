@@ -44,6 +44,8 @@ GTE.TREE = (function (parentModule) {
 
         if (!iSet.isLeaf()) {
             for (var i = 0; i < iSet.moves.length; i++) {
+                // Draw the moves first
+                iSet.moves[i].draw();
                 this.recursiveDraw(iSet.moves[i].child);
             }
         }

@@ -97,10 +97,6 @@ GTE.TREE = (function (parentModule) {
     * Function that draws the node in the global canvas
     */
     ISet.prototype.draw = function () {
-        // The lines have to be drawn before the node so that the circle is drawn on top of it
-        for (var i = 0; i < this.moves.length; i++) {
-            this.moves[i].draw;
-        };
         // TODO #13
         this.node.draw();
     };
