@@ -104,7 +104,7 @@ GTE.TREE = (function (parentModule) {
     /**
     * Function that defines the behaviour of the ISet on click. This function is called if one of the nodes is clicked
     */
-    Node.prototype.onClick = function () {
+    ISet.prototype.onClick = function () {
         if (GTE.MODE === GTE.MODES.ADD){
             if (this.isLeaf()) {
                 // Add two new ISets if ISet is leaf

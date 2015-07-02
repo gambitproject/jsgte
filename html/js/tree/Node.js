@@ -29,6 +29,7 @@ GTE.TREE = (function (parentModule) {
             .x(this.x)
             .y(this.y)
             .click(function() {
+                console.log(thisNode);
                 thisNode.iSet.onClick();
             });
     };
