@@ -2,9 +2,9 @@ GTE.TREE = (function (parentModule) {
     "use strict";
 
     /**
-    * Creates a new ISet.
+    * Creates a new Information Set.
     * @class
-    * @param {ISet} [parent] Parent ISet. If null, this is root.
+    * @param {ISet} parent Parent information set. If null, this is root.
     * @param  {Number} [numOfNodes] Number of nodes of this new information set. If null 1
     */
     function ISet(parent, numOfNodes) {
@@ -30,13 +30,6 @@ GTE.TREE = (function (parentModule) {
         return "ISet: " + "parent " + this.parent + "; numOfNodes: " + this.numOfNodes + "; moves: " + this.moves;
     };
 
-    /**
-    * Function that adds a node to ISet
-    * @param {Node} node Node to add
-    */
-    ISet.prototype.addNode = function (node) {
-        this.nodes.push(node);
-    };
 
     /**
     * Function that adds a child ISet to the ISet
@@ -55,7 +48,7 @@ GTE.TREE = (function (parentModule) {
     */
     ISet.prototype.findMoveThatLeadsTo = function (iSet) {
         for (var indexInList = 0; indexInList < this.moves.length; indexInList++) {
-            if (this.moves[indexInList].child == iSet) return indexInList;
+            if (this.moves[indexInList].child === iSet) return indexInList;
         };
         return -1;
     };

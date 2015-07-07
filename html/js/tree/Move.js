@@ -20,6 +20,7 @@ GTE.TREE = (function (parentModule) {
         return "Move: " + "parent: " + this.parent + "; child: " + this.child;
     };
 
+    // TODO #11
     /**
     * Draws the move (a line) in the canvas
     */

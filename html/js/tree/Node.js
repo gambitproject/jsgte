@@ -2,10 +2,10 @@ GTE.TREE = (function (parentModule) {
     "use strict";
 
     /**
-    * Creates a new Node.
+    * Creates a new Node. A Node only represents the circle in the tree.
     * @class
-    * @param {ISet} [iSet] iSet that contains the node. Needed for sending onClicks to it
-    * @param {Number} [level] Level of the node
+    * @param {ISet} iSet iSet that contains the node. Needed for sending onClicks to it
+    * @param {Number} level Level of the node
     */
     function Node(iSet, level) {
         this.iSet = iSet;

@@ -169,7 +169,7 @@ GTE.TREE = (function (parentModule) {
         // Delete everything below every child
         while(iSet.moves.length !== 0){
             // Send moves[0] because moves[] will decrease in size
-            this.recursiveDeleteChildren(iSet.moves[0].child);
+            this.recursiveDeleteChildren(iSet.moves.pop().child);
         }
         this.positionsUpdated = false;
     };
