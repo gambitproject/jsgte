@@ -61,10 +61,13 @@ so you see for each node you should know to which
 information set it belongs, what its father is, by which
 move it is reach from its father, and what outcome it is
 (normally only relevant if the node is terminal).
-There is also a tuple of moves, one for each player
+
+There is also a tuple `defseq` of moves, one for each player
 (including chance) where `defseq[pl]` means the LAST
 move on the path to the current root by player `pl`.
-
+This is derived information use to find out if the game has
+perfect recall, and to compute expected payoffs when
+converting it to the strategic form.
 
     struct iset     /* information set      */
         {
@@ -81,6 +84,24 @@ move on the path to the current root by player `pl`.
         int         prefact;        /* multiplyer for later parallel isets  */
         };
 
+`iset` represents an information set, including `player`
+(so the player to move at a node `n` would be
+`n->iset->player`, I suppose `n.iset.player` in JS),
+`nmoves` for the number of moves at the information set,
+`move0` would be the first of these moves, where from this
+move you would successively reach the second, third, move,
+and so on (I had them successively stored in an array, but
+this is not important).
+Here `name[NAMECHARS]` is just a string which I used as the
+name for the information set for output purposes.
+
+`seqin` is the last move of the player who owns the
+information set on the path from the root to any node in the
+set. Important for the "sequence form" algorithm. 
+
+`ncontin` and and `prefact` are important for generating
+reduced strategies.
+
     struct move   /* move, also sequence ending in that move        */
         {
         Iset        atiset;         /* where this move emanates from        */
@@ -93,59 +114,15 @@ move on the path to the current root by player `pl`.
                     /* to the right of this at same iset    */
         };
 
+This is information stored with each move. `atiset`
+identifies to which information set it belongs.
+
     struct outcome
         {
         Payvec      pay;
         Node        whichnode;
         };
 
-    /* sizes of these arrays                                                */
-    /* first ILLEGAL pointer at the end of array nodes      */
-    extern  Node lastnode;
-    /* isets for player  pl:  firstiset[pl] ... firstiset[pl+1]-1       */
-    extern  Iset firstiset[PLAYERS+1];
-    /* moves for player  pl:  firstmove[pl] ... firstmove[pl+1]-1       */
-    extern  Move firstmove[PLAYERS+1];
-    /* first ILLEGAL pointer at end of array outcomes */
-    extern  Outcome lastoutcome;
-
-    /* number of sequences for each player          */
-    extern  int nseqs[PLAYERS];     
-    /* number of information sets for each player   */
-    extern  int nisets[PLAYERS];
-
-    /* ----------- generating derived tree data -------------------- */
-    /* checks perfect recall, returns 1 if there is a problem 
-     * sets  sequence triples leading to nodes & seqin for isets
-     * sets  nseqs[], nisets[]
-     */
-    Bool genseqin(void);
-
-    /* normalize maximum payoff to players to -1
-     * bprint:  announce current max payoffs to stdout
-     */
-    void maxpayminusone(Bool bprint);
-
-    /* names  isets  using an1[pl]..an2[pl]
-     * assume nisets[] set  by  genseqin()
-     */
-    void autoname(void);
-
-    /* ----------- output routines --------------------------------- */
-    /*
-     * convert  c  of player  pl  to string  s
-     * c == NULL:  s = "*".  c == empty sequence: s="()"
-     * o/w  iset's name + move no
-     * returns length of string.  s must be long enough
-     */
-    int movetoa (Move c, int pl, char *s);
-
-    /* convert sequence  seq  of player  pl  to string  s  
-     * c == NULL:  s = "*".  c == empty sequence: s="." 
-     * returns length of string.  s must be long enough
-     */
-    int seqtoa (Move seq, int pl, char *s);
-
-    /* prints the raw tree data                     */
-    void rawtreeprint(void);
+For an outcome, the vector of payoffs, and to which node the
+outcome belongs.
 
