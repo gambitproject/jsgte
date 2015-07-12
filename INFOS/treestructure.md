@@ -46,92 +46,79 @@ struct iset     /* information set      */
     int         ncontin;        /* how many strategy-type continuations */
     int         prefact;        /* multiplyer for later parallel isets  */
     };
-
-struct move   /* move, also sequence ending in that move        */
-    {
-    Iset        atiset;         /* where this move emanates from        */
-    Rat         behavprob;      /* behavior probability                 */
-    Rat         realprob;       /* realization probability              */
-    int         redsfcol;       /* column of reduced sequence form      */
-    /* for NF computation                                               */
-    int         ncompat;        /* number of compatible partial strats  */
-    int         offset;         /* number of partial strats for moves   */
-				/* to the right of this at same iset    */
-    };
 
-struct outcome
-    {
-    Payvec      pay;
-    Node        whichnode;
-    };
+    struct move   /* move, also sequence ending in that move        */
+        {
+        Iset        atiset;         /* where this move emanates from        */
+        Rat         behavprob;      /* behavior probability                 */
+        Rat         realprob;       /* realization probability              */
+        int         redsfcol;       /* column of reduced sequence form      */
+        /* for NF computation                                               */
+        int         ncompat;        /* number of compatible partial strats  */
+        int         offset;         /* number of partial strats for moves   */
+                    /* to the right of this at same iset    */
+        };
 
-/* ------------- global variables ------------------------------------- */
-/* game tree                                    */
-extern  Node    nodes;          /* nodes of game tree   */
-extern  Node    root;           /* &nodes[ROOT]         */
-extern  Iset    isets;          /* information sets     */
-extern  Move    moves;          /* moves & sequences    */
-extern  Outcome outcomes;       /* outcomes             */
-/* sizes of these arrays                                                */
-/* first ILLEGAL pointer at the end of array nodes      */
-extern  Node lastnode;
-/* isets for player  pl:  firstiset[pl] ... firstiset[pl+1]-1       */
-extern  Iset firstiset[PLAYERS+1];
-/* moves for player  pl:  firstmove[pl] ... firstmove[pl+1]-1       */
-extern  Move firstmove[PLAYERS+1];
-/* first ILLEGAL pointer at end of array outcomes */
-extern  Outcome lastoutcome;
+    struct outcome
+        {
+        Payvec      pay;
+        Node        whichnode;
+        };
 
-/* number of sequences for each player          */
-extern  int nseqs[PLAYERS];     
-/* number of information sets for each player   */
-extern  int nisets[PLAYERS];
-
-/* alloctree:
- * after freeing space used for old tree,
- * allocate storage space for a game tree with 
- * nn  nodes    (determines  lastnode)
- * ni  isets    (determines  firstiset[PLAYERS] )
- * nm  moves    (determines  firstmove[PLAYERS] )
- * no  outcomes (determines  lastoutcome)
- */
-void alloctree(int nn, int ni, int nm, int no);
+    /* ------------- global variables ------------------------------------- */
+    /* game tree                                    */
+    extern  Node    nodes;          /* nodes of game tree   */
+    extern  Node    root;           /* &nodes[ROOT]         */
+    extern  Iset    isets;          /* information sets     */
+    extern  Move    moves;          /* moves & sequences    */
+    extern  Outcome outcomes;       /* outcomes             */
+    /* sizes of these arrays                                                */
+    /* first ILLEGAL pointer at the end of array nodes      */
+    extern  Node lastnode;
+    /* isets for player  pl:  firstiset[pl] ... firstiset[pl+1]-1       */
+    extern  Iset firstiset[PLAYERS+1];
+    /* moves for player  pl:  firstmove[pl] ... firstmove[pl+1]-1       */
+    extern  Move firstmove[PLAYERS+1];
+    /* first ILLEGAL pointer at end of array outcomes */
+    extern  Outcome lastoutcome;
 
-/* ----------- generating derived tree data -------------------- */
-/* checks perfect recall, returns 1 if there is a problem 
- * sets  sequence triples leading to nodes & seqin for isets
- * sets  nseqs[], nisets[]
- */
-Bool genseqin(void);
+    /* number of sequences for each player          */
+    extern  int nseqs[PLAYERS];     
+    /* number of information sets for each player   */
+    extern  int nisets[PLAYERS];
 
-/* next integer representing payoff, using MAXRANDPAY   */
-int nextrandpay (void); 
+    /* ----------- generating derived tree data -------------------- */
+    /* checks perfect recall, returns 1 if there is a problem 
+     * sets  sequence triples leading to nodes & seqin for isets
+     * sets  nseqs[], nisets[]
+     */
+    Bool genseqin(void);
 
-/* normalize maximum payoff to players to -1
- * bprint:  announce current max payoffs to stdout
- */
-void maxpayminusone(Bool bprint);
+    /* normalize maximum payoff to players to -1
+     * bprint:  announce current max payoffs to stdout
+     */
+    void maxpayminusone(Bool bprint);
 
-/* names  isets  using an1[pl]..an2[pl]
- * assume nisets[] set  by  genseqin()
- */
-void autoname(void);
+    /* names  isets  using an1[pl]..an2[pl]
+     * assume nisets[] set  by  genseqin()
+     */
+    void autoname(void);
 
-/* ----------- output routines --------------------------------- */
-/*
- * convert  c  of player  pl  to string  s
- * c == NULL:  s = "*".  c == empty sequence: s="()"
- * o/w  iset's name + move no
- * returns length of string.  s must be long enough
- */
-int movetoa (Move c, int pl, char *s);
+    /* ----------- output routines --------------------------------- */
+    /*
+     * convert  c  of player  pl  to string  s
+     * c == NULL:  s = "*".  c == empty sequence: s="()"
+     * o/w  iset's name + move no
+     * returns length of string.  s must be long enough
+     */
+    int movetoa (Move c, int pl, char *s);
 
-/* convert sequence  seq  of player  pl  to string  s  
- * c == NULL:  s = "*".  c == empty sequence: s="." 
- * returns length of string.  s must be long enough
- */
-int seqtoa (Move seq, int pl, char *s);
+    /* convert sequence  seq  of player  pl  to string  s  
+     * c == NULL:  s = "*".  c == empty sequence: s="." 
+     * returns length of string.  s must be long enough
+     */
+    int seqtoa (Move seq, int pl, char *s);
 
-/* prints the raw tree data                     */
-void rawtreeprint(void);
+    /* prints the raw tree data                     */
+    void rawtreeprint(void);
 
