@@ -8,6 +8,10 @@ My point was that MOVES should be associated with
 information sets, but I think information sets should be
 objects of their own right.
 
+# Game tree - logical structure
+
+## Four basic "classes" node  iset move outcome
+
 I had a rather clean way of storing game tree in a C program
 where the most important definition is in the C header file
 
@@ -126,3 +130,30 @@ identifies to which information set it belongs.
 For an outcome, the vector of payoffs, and to which node the
 outcome belongs.
 
+## Traversing a game tree
+
+In order to build certain structures, for example to
+generate all strategies in the game tree, you have to
+traverse the entire game tree, typically its nodes.
+
+I had an *array* of all tree nodes where the father of a
+node had to come earlier in the array, so the root must be
+the first node in the array.
+
+In my application, I knew the structure of the game tree in
+advance, but we generate it interactively.
+So an array is not a good data structure.
+
+I presume each node has a list of its children, which allows
+for an easy recursive _depth-first_ traversal.
+
+However, for the automatic naming of moves, _breadth-first_
+is better, which requires a harder-to-implement queue.
+
+The question is if one should LINK the nodes (with some kind
+of `next` pointer) so that one can follow these links for a
+breadth-first traversal. It then has to be maintained
+consistently, which may be a source of errors.  
+Alternatively, it may be worth COMPUTING this structure from
+scratch when needed, for example for the autoname feature or
+for creating the XML file.
