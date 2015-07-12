@@ -10,7 +10,7 @@ objects of their own right.
 
 # Game tree - logical structure
 
-## Four basic "classes" node  iset move outcome
+## Four basic "classes" `node`  `iset` `move` `outcome`
 
 I had a rather clean way of storing game tree in a C program
 where the most important definition is in the C header file
