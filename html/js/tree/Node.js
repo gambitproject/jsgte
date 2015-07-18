@@ -6,12 +6,11 @@ GTE.TREE = (function (parentModule) {
     * @class
     * @param {Node} [parent] Parent node. If null, this is root.
     */
-    function Node(parent) {
+    function Node(parent, reachedBy, iset) {
         this.parent = parent;
         this.children = [];
-        this.iset = null;
-
-        this.reachedBy = null;
+        this.iset = iset || null;
+        this.reachedBy = reachedBy || null;
         if (parent === null) { // If this is root set level to 0
             this.level = 0;
         } else {
@@ -53,10 +52,11 @@ GTE.TREE = (function (parentModule) {
     Node.prototype.onClick = function () {
         if (GTE.MODE === GTE.MODES.ADD){
             if (this.isLeaf()) {
-                // Always start with two nodes
+                // Create a new ISet and add it
+                GTE.tree.addChildISetTo(this.iset);
+            } else {
                 GTE.tree.addChildNodeTo(this);
             }
-            GTE.tree.addChildNodeTo(this);
         } else {
             // If it is a leaf, delete itself, if not, delete all children
             if (this.isLeaf()) {
