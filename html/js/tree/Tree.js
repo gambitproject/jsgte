@@ -9,6 +9,7 @@ GTE.TREE = (function (parentModule) {
     function Tree(root) {
         this.root = root;
         this.positionsUpdated = false;
+        this.isets = [];
     }
 
     /**
@@ -20,7 +21,18 @@ GTE.TREE = (function (parentModule) {
             this.updatePositions();
         }
         GTE.canvas.clear();
-        this.recursiveDraw();
+        this.drawISets();
+        this.drawNodes();
+    };
+
+    Tree.prototype.drawISets = function () {
+        for (var i = 0; i < this.isets.length; i++) {
+            this.isets[i].draw();
+        }
+    };
+
+    Tree.prototype.drawNodes = function () {
+        this.recursiveDrawNodes(this.root);
     };
 
     /**
@@ -30,18 +42,17 @@ GTE.TREE = (function (parentModule) {
     * Recursive expansion: to all of the node's children
     * @param {Node} [node] Node to start drawing from
     */
-    Tree.prototype.recursiveDraw = function (node) {
+    Tree.prototype.recursiveDrawNodes = function (node) {
         // In case there is no arguments start from root
         if (node === undefined) { node = this.root; }
 
         if (!node.isLeaf()) {
             for (var i = 0; i < node.children.length; i++) {
-                this.recursiveDraw(node.children[i]);
+                this.recursiveDrawNodes(node.children[i]);
             }
         }
         node.draw();
     };
-
 
     /**
     * Function that returns the number of leaves in the tree
@@ -149,10 +160,13 @@ GTE.TREE = (function (parentModule) {
     */
     Tree.prototype.addChildISetTo = function (parentISet) {
         // Create new information set
-        var newISet = new GTE.TREE.ISet();
-        // Get nodes that belong to parentISet
+        var newISet = new GTE.TREE.ISet("hijo");
+        // Get nodes that belong to parentISet as isets don't keep reference of nodes
         var nodesInParentISet = this.getNodesThatBelongTo(parentISet);
+        console.log("parentISet " + parentISet);
+        console.log("nodesInParentISet " + nodesInParentISet);
         parentISet.addChildISet(newISet, nodesInParentISet);
+        this.isets.push(newISet);
         this.positionsUpdated = false;
     };
 
@@ -193,18 +207,21 @@ GTE.TREE = (function (parentModule) {
 
 
     Tree.prototype.getNodesThatBelongTo = function(iset) {
+        console.log("getNodesThatBelongTo " + iset);
         var returnArray = [];
         this.recursiveGetNodesThatBelongTo(this.root, iset, returnArray);
+        console.log(returnArray.length);
         return returnArray;
     };
 
     Tree.prototype.recursiveGetNodesThatBelongTo = function(node, iset, returnArray) {
-        if (node.iset == iset) {
+        console.log("node " + node);
+        if (node.iset === iset) {
             returnArray.push(node);
         }
-        if (!node.isLeaf) {
+        if (!node.isLeaf()) {
             for (var i = 0; i < node.children.length; i++) {
-                recursiveGetNodesThatBelongTo(node.children[i]);
+                this.recursiveGetNodesThatBelongTo(node.children[i], iset, returnArray);
             }
         }
     };

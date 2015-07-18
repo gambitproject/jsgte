@@ -25,7 +25,9 @@ GTE.TREE = (function (parentModule) {
     * ToString function
     */
     Node.prototype.toString = function nodeToString() {
-        return "Node: " + "children.length: " + this.children.length + "; level: " + this.level + "; move: " + this.reachedBy;
+        return "Node: " + "children.length: " + this.children.length +
+               "; level: " + this.level + "; reachedBy: " + this.reachedBy +
+               "; iset: " + this.iset;
     };
 
     /**
@@ -34,7 +36,7 @@ GTE.TREE = (function (parentModule) {
     Node.prototype.draw = function () {
         // The line has to be drawn before so that the circle is drawn on top of it
         if (this.reachedBy !== null) {
-            this.reachedBy.draw();
+            this.reachedBy.draw(this.parent, this);
         }
         var thisNode = this;
         var circle = GTE.canvas.circle(GTE.CONSTANTS.CIRCLE_SIZE)
@@ -46,28 +48,28 @@ GTE.TREE = (function (parentModule) {
             });
     };
 
-    /**
-    * Function that defines the behaviour of the node on click
-    */
-    Node.prototype.onClick = function () {
-        if (GTE.MODE === GTE.MODES.ADD){
-            if (this.isLeaf()) {
-                // Create a new ISet and add it
-                GTE.tree.addChildISetTo(this.iset);
-            } else {
-                GTE.tree.addChildNodeTo(this);
-            }
-        } else {
-            // If it is a leaf, delete itself, if not, delete all children
-            if (this.isLeaf()) {
-                this.delete();
-            } else {
-                GTE.tree.deleteChildrenOf(this);
-            }
-        }
-        // Tell the tree to redraw itself
-        GTE.tree.draw();
-    };
+    // /**
+    // * Function that defines the behaviour of the node on click
+    // */
+    // Node.prototype.onClick = function () {
+    //     if (GTE.MODE === GTE.MODES.ADD){
+    //         if (this.isLeaf()) {
+    //             // Create a new ISet and add it
+    //             GTE.tree.addChildISetTo(this.iset);
+    //         } else {
+    //             GTE.tree.addChildNodeTo(this);
+    //         }
+    //     } else {
+    //         // If it is a leaf, delete itself, if not, delete all children
+    //         if (this.isLeaf()) {
+    //             this.delete();
+    //         } else {
+    //             GTE.tree.deleteChildrenOf(this);
+    //         }
+    //     }
+    //     // Tell the tree to redraw itself
+    //     GTE.tree.draw();
+    // };
 
 
     /**

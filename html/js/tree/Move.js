@@ -8,7 +8,7 @@ GTE.TREE = (function (parentModule) {
     */
     function Move (atISet) {
         this.atISet = atISet;
-        // this.line = {};
+        this.line = {};
     }
 
     /**
@@ -18,11 +18,14 @@ GTE.TREE = (function (parentModule) {
         return "Move: " + "atISet: " + this.atISet;
     };
 
-    // Move.prototype.draw = function() {
-    //     var circleRadius = GTE.CONSTANTS.CIRCLE_SIZE/2;
-    //     this.line = GTE.canvas.line(this.atISet.x + circleRadius, this.atISet.y + circleRadius, this.child.x + circleRadius, this.child.y +circleRadius)
-    //               .stroke({ width: GTE.CONSTANTS.LINE_THICKNESS });
-    // };
+    Move.prototype.draw = function(parent, child) {
+        var circleRadius = GTE.CONSTANTS.CIRCLE_SIZE/2;
+        this.line = GTE.canvas.line(parent.x + circleRadius,
+                                    parent.y + circleRadius,
+                                    child.x + circleRadius,
+                                    child.y + circleRadius)
+                  .stroke({ width: GTE.CONSTANTS.LINE_THICKNESS });
+    };
 
     // Add class to parent module
     parentModule.Move = Move;
