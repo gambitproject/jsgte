@@ -9,6 +9,7 @@ GTE.TREE = (function (parentModule) {
     function Node(parent) {
         this.parent = parent;
         this.children = [];
+        this.iset = null;
 
         this.reachedBy = null;
         if (parent === null) { // If this is root set level to 0
