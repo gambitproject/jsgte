@@ -4,27 +4,25 @@ GTE.TREE = (function (parentModule) {
     /**
     * Creates a new Move.
     * @class
-    * @param {Node} parent Parent node origin of the move.
-    * @param {Node} child Child node destination of the move.
+    * @param {ISet} atISet Parent information set where this move emanates from.
     */
-    function Move (parent, child) {
-        this.parent = parent;
-        this.child = child;
-        this.line = {};
+    function Move (atISet) {
+        this.atISet = atISet;
+        // this.line = {};
     }
 
     /**
     * ToString function
     */
     Move.prototype.toString = function () {
-        return "Move: " + "parent: " + this.parent + "; child: " + this.child;
+        return "Move: " + "atISet: " + this.atISet;
     };
 
-    Move.prototype.draw = function() {
-        var circleRadius = GTE.CONSTANTS.CIRCLE_SIZE/2;
-        this.line = GTE.canvas.line(this.parent.x + circleRadius, this.parent.y + circleRadius, this.child.x + circleRadius, this.child.y +circleRadius)
-                  .stroke({ width: GTE.CONSTANTS.LINE_THICKNESS });
-    };
+    // Move.prototype.draw = function() {
+    //     var circleRadius = GTE.CONSTANTS.CIRCLE_SIZE/2;
+    //     this.line = GTE.canvas.line(this.atISet.x + circleRadius, this.atISet.y + circleRadius, this.child.x + circleRadius, this.child.y +circleRadius)
+    //               .stroke({ width: GTE.CONSTANTS.LINE_THICKNESS });
+    // };
 
     // Add class to parent module
     parentModule.Move = Move;
