@@ -143,6 +143,20 @@ GTE.TREE = (function (parentModule) {
     };
 
     /**
+    * Creates two new moves for a given ISet and the new ISet that
+    * the moves will lead to
+    * @param  {ISet} parentISet ISet that will get two new moves
+    */
+    Tree.prototype.addChildISetTo = function (parentISet) {
+        // Create new information set
+        var newISet = new GTE.TREE.ISet();
+        // Get nodes that belong to parentISet
+        var nodesInParentISet = this.getNodesThatBelongTo(parentISet);
+        parentISet.addChildISet(newISet, nodesInParentISet);
+        this.positionsUpdated = false;
+    };
+
+    /**
      * Function that deletes the node. It changes children's parent to their
      * grandparent.
      * @param {Node} node Node to be deleted
@@ -175,6 +189,24 @@ GTE.TREE = (function (parentModule) {
     */
     Tree.prototype.zoomOut = function(){
         GTE.canvas.viewbox(0, 0, GTE.canvas.viewbox().width*1.5, GTE.canvas.viewbox().height*1.5);
+    };
+
+
+    Tree.prototype.getNodesThatBelongTo = function(iset) {
+        var returnArray = [];
+        this.recursiveGetNodesThatBelongTo(this.root, iset, returnArray);
+        return returnArray;
+    };
+
+    Tree.prototype.recursiveGetNodesThatBelongTo = function(node, iset, returnArray) {
+        if (node.iset == iset) {
+            returnArray.push(node);
+        }
+        if (!node.isLeaf) {
+            for (var i = 0; i < node.children.length; i++) {
+                recursiveGetNodesThatBelongTo(node.children[i]);
+            }
+        }
     };
 
     // Add class to parent module
