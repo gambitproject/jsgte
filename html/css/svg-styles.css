@@ -4,3 +4,10 @@
 .node:hover {
   fill: #f06;
 }
+
+.iset {
+    fill: none;
+}
+.iset:hover {
+  fill: #CACACA;
+}
