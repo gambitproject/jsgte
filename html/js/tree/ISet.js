@@ -56,9 +56,9 @@ GTE.TREE = (function (parentModule) {
                         (this.firstNode.x-GTE.CONSTANTS.CIRCLE_SIZE);
 
             this.shape = GTE.canvas.rect(width, 50)
-                                    .fill({ color: '#fff', opacity: 0 })
                                     .stroke({ color: '#000', width: 2 })
-                                    .radius(10);
+                                    .radius(10)
+                                    .addClass('iset');
             this.shape.translate(this.firstNode.x - GTE.CONSTANTS.CIRCLE_SIZE,
                                 this.firstNode.y - GTE.CONSTANTS.CIRCLE_SIZE + 4);
             var thisISet = this;
