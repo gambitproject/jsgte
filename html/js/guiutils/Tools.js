@@ -18,7 +18,6 @@ GTE.UI = (function (parentModule) {
         GTE.tree = new GTE.TREE.Tree(root);
         GTE.tree.isets.push(rootIset);
         GTE.tree.addChildISetTo(rootIset);
-        // console.log(root);
         GTE.tree.updatePositions();
         // Create a node and draw it
         GTE.tree.draw();

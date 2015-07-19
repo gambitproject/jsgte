@@ -6,8 +6,7 @@ GTE.TREE = (function (parentModule) {
     * @class
     * @param {Number} numberOfNodes Number of nodes in this information set
     */
-    function ISet(name) {
-        this.name = name;
+    function ISet() {
         this.moves = [];
         this.shape = {};
         this.firstNode = null;
@@ -15,7 +14,7 @@ GTE.TREE = (function (parentModule) {
     }
 
     ISet.prototype.toString = function () {
-        return "ISet: " + "name: " + this.name;
+        return "ISet: " + "moves: " + this.moves;
     };
 
     ISet.prototype.numberOfMoves = function () {
@@ -24,19 +23,15 @@ GTE.TREE = (function (parentModule) {
 
     ISet.prototype.addChildISet = function (childISet, nodesInThis) {
         // Create two new moves
-        var newMove = new GTE.TREE.Move(this);
+        var newMove = new GTE.TREE.Move(GTE.tree.getNextMoveName(), this);
         this.moves.push(newMove);
-        newMove = new GTE.TREE.Move(this);
+        newMove = new GTE.TREE.Move(GTE.tree.getNextMoveName(), this);
         this.moves.push(newMove);
-        console.log("nodesInThis " + nodesInThis.length);
         // Add one node per move per node in set
         for (var i = 0; i < nodesInThis.length; i++) {
             for (var j = 0; j < this.numberOfMoves(); j++) {
-                console.log("i " + i);
-                console.log("j " + j);
 
                 var node = new GTE.TREE.Node(nodesInThis[i], this.moves[j], childISet);
-                console.log("Node " + node);
                 // If first node
                 if (i === 0 && j === 0) {
                     childISet.firstNode = node;

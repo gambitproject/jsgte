@@ -6,7 +6,8 @@ GTE.TREE = (function (parentModule) {
     * @class
     * @param {ISet} atISet Parent information set where this move emanates from.
     */
-    function Move (atISet) {
+    function Move (name, atISet) {
+        this.name = name;
         this.atISet = atISet;
         this.line = {};
     }
@@ -15,7 +16,7 @@ GTE.TREE = (function (parentModule) {
     * ToString function
     */
     Move.prototype.toString = function () {
-        return "Move: " + "atISet: " + this.atISet;
+        return "Move: " + "name: " + this.name;
     };
 
     Move.prototype.draw = function(parent, child) {

@@ -160,11 +160,9 @@ GTE.TREE = (function (parentModule) {
     */
     Tree.prototype.addChildISetTo = function (parentISet) {
         // Create new information set
-        var newISet = new GTE.TREE.ISet("hijo");
+        var newISet = new GTE.TREE.ISet();
         // Get nodes that belong to parentISet as isets don't keep reference of nodes
         var nodesInParentISet = this.getNodesThatBelongTo(parentISet);
-        console.log("parentISet " + parentISet);
-        console.log("nodesInParentISet " + nodesInParentISet);
         parentISet.addChildISet(newISet, nodesInParentISet);
         this.isets.push(newISet);
         this.positionsUpdated = false;
@@ -207,15 +205,12 @@ GTE.TREE = (function (parentModule) {
 
 
     Tree.prototype.getNodesThatBelongTo = function(iset) {
-        console.log("getNodesThatBelongTo " + iset);
         var returnArray = [];
         this.recursiveGetNodesThatBelongTo(this.root, iset, returnArray);
-        console.log(returnArray.length);
         return returnArray;
     };
 
     Tree.prototype.recursiveGetNodesThatBelongTo = function(node, iset, returnArray) {
-        console.log("node " + node);
         if (node.iset === iset) {
             returnArray.push(node);
         }
@@ -226,6 +221,25 @@ GTE.TREE = (function (parentModule) {
         }
     };
 
+    Tree.prototype.getNextMoveName = function () {
+        // Get all moves
+        var listOfMoves = this.getAllMoves();
+        if (listOfMoves.length === 0) return "A";
+        var lastMove = listOfMoves[listOfMoves.length-1];
+        var name = lastMove.name.substring(0, lastMove.name.length-1) +
+               String.fromCharCode(lastMove.name.charCodeAt(lastMove.name.length-1) + 1);
+        return name;
+    };
+
+    Tree.prototype.getAllMoves = function () {
+        var listOfMoves = [];
+        for (var i = 0; i < this.isets.length; i++) {
+            for (var j = 0; j < this.isets[i].moves.length; j++) {
+                listOfMoves.push(this.isets[i].moves[j]);
+            }
+        }
+        return listOfMoves;
+    };
     // Add class to parent module
     parentModule.Tree = Tree;
 
