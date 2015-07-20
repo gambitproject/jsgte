@@ -152,6 +152,7 @@ GTE.TREE = (function (parentModule) {
         // Update first and last one
         iset.firstNode = nodesInIset[0];
         iset.lastNode = nodesInIset[nodesInIset.length-1];
+        this.positionsUpdated = false;
         return newNode;
     };
 
@@ -194,19 +195,8 @@ GTE.TREE = (function (parentModule) {
     Tree.prototype.addNodesToChildISet = function (parent, child) {
         var newMove = parent.addNewMove();
         var nodesInParentISet = this.getNodesThatBelongTo(parent);
-
         for (var i = 0; i < nodesInParentISet.length; i++) {
-            this.addNewNode(nodesInParentISet[i], newMove, child);
-        }
-        this.positionsUpdated = false;
-    };
-
-    Tree.prototype.addSingletonISets = function (parentISet) {
-        var newMove = parentISet.addNewMove();
-        var nodesInParentISet = this.getNodesThatBelongTo(parentISet);
-
-        for (var i = 0; i < nodesInParentISet.length; i++) {
-            this.addNewNode(nodesInParentISet[i], newMove, this.addNewISet());
+            this.addNewNode(nodesInParentISet[i], newMove, child || this.addNewISet());
         }
         this.positionsUpdated = false;
     };
