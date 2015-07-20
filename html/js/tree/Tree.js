@@ -145,7 +145,13 @@ GTE.TREE = (function (parentModule) {
     * @return {Node} newNode    Node that has been added
     */
     Tree.prototype.addChildNodeTo = function (parentNode) {
-        var newNode = new GTE.TREE.Node(parentNode);
+        // Create a new move in parent ISet
+        var newMove = parentNode.iset.addNewMove();
+
+        // Create a new Iset with only one node
+        var newISet = new GTE.TREE.ISet();
+
+        var newNode = new GTE.TREE.Node(parentNode, newMove, newISet);
         if ((newNode.y + GTE.CONSTANTS.CIRCLE_SIZE) > GTE.canvas.viewbox().height) {
             this.zoomOut();
         }
@@ -165,6 +171,19 @@ GTE.TREE = (function (parentModule) {
         var nodesInParentISet = this.getNodesThatBelongTo(parentISet);
         parentISet.addChildISet(newISet, nodesInParentISet);
         this.isets.push(newISet);
+        this.positionsUpdated = false;
+    };
+
+    Tree.prototype.addNodesToChildISet = function (parent, child) {
+        var newMove = parent.addNewMove();
+        var nodesInParentISet = this.getNodesThatBelongTo(parent);
+
+        for (var i = 0; i < nodesInParentISet.length; i++) {
+            var newNode = new GTE.TREE.Node(nodesInParentISet[i], newMove, child);
+            if (i === nodesInParentISet.length - 1) {
+                child.lastNode = newNode;
+            }
+        }
         this.positionsUpdated = false;
     };
 
@@ -240,6 +259,23 @@ GTE.TREE = (function (parentModule) {
         }
         return listOfMoves;
     };
+
+    Tree.prototype.getChildrenNodes = function (iset) {
+        // Get the nodes that belong to given iset
+        var nodesInIset = this.getNodesThatBelongTo(iset);
+        console.log(nodesInIset);
+
+        var children = [];
+        // Iterate over nodes and get their children
+        for (var i = 0; i < nodesInIset.length; i++) {
+            for (var j = 0; j < nodesInIset[i].children.length; j++) {
+                children.push(nodesInIset[i].children[j]);
+            }
+        }
+
+        return children;
+    };
+
     // Add class to parent module
     parentModule.Tree = Tree;
 

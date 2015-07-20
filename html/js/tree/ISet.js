@@ -11,6 +11,7 @@ GTE.TREE = (function (parentModule) {
         this.shape = {};
         this.firstNode = null;
         this.lastNode = null;
+        this.numberOfNodes = 0;
     }
 
     ISet.prototype.toString = function () {
@@ -21,16 +22,20 @@ GTE.TREE = (function (parentModule) {
         return this.moves.length;
     };
 
+    ISet.prototype.addNewMove = function () {
+        var newMove = new GTE.TREE.Move(GTE.tree.getNextMoveName, this);
+        this.moves.push(newMove);
+        return newMove;
+    };
+
     ISet.prototype.addChildISet = function (childISet, nodesInThis) {
         // Create two new moves
-        var newMove = new GTE.TREE.Move(GTE.tree.getNextMoveName(), this);
-        this.moves.push(newMove);
-        newMove = new GTE.TREE.Move(GTE.tree.getNextMoveName(), this);
-        this.moves.push(newMove);
+        this.addNewMove();
+        this.addNewMove();
+
         // Add one node per move per node in set
         for (var i = 0; i < nodesInThis.length; i++) {
             for (var j = 0; j < this.numberOfMoves(); j++) {
-
                 var node = new GTE.TREE.Node(nodesInThis[i], this.moves[j], childISet);
                 // If first node
                 if (i === 0 && j === 0) {
@@ -45,8 +50,7 @@ GTE.TREE = (function (parentModule) {
     };
 
     ISet.prototype.draw = function () {
-        console.log(this);
-        if (this.lastNode) {
+        if (this.lastNode !== this.firstNode) {
             var width = (this.lastNode.x + GTE.CONSTANTS.CIRCLE_SIZE*2) -
                         (this.firstNode.x-GTE.CONSTANTS.CIRCLE_SIZE);
 
@@ -61,22 +65,42 @@ GTE.TREE = (function (parentModule) {
                 thisISet.onClick();
             });
         }
+        this.updateNumberOfNodes();
     };
 
+    ISet.prototype.updateNumberOfNodes = function () {
+        return GTE.tree.getNodesThatBelongTo(this).length;
+    };
 
     ISet.prototype.onClick = function () {
         if (GTE.MODE === GTE.MODES.ADD){
             if (this.numberOfMoves() === 0) {
                 GTE.tree.addChildISetTo(this);
             } else {
-                // GTE.tree.addChildNodeTo(this);
-            }
-        } else {
-            // If it is a leaf, delete itself, if not, delete all children
-            if (this.numberOfMoves() === 0) {
-                this.delete();
-            } else {
-                GTE.tree.deleteChildrenOf(this);
+                // If there is only one child iset and it has no moves,
+                // add new nodes to it
+
+                // Get children nodes
+                var children = GTE.tree.getChildrenNodes(this);
+                // Check number of different isets in children
+                var childrenIsets = [];
+                for (var i = 0; i < children.length; i++) {
+                    if (childrenIsets.indexOf(children[i].iset) === -1) {
+                        childrenIsets.push(children[i].iset);
+                    }
+                }
+                // If there is more than one children iset or there is only one,
+                // but it already has moves, add children nodes as single node
+                // isets
+                if (childrenIsets.length > 1 || childrenIsets[0].moves.length > 0) {
+                    // Add new nodes as singletons
+                    GTE.tree.addSingletons();
+                } else {
+                    // If there is a single child iset and it has no moves
+                    // Add new nodes to child iset
+                    GTE.tree.addNodesToChildISet(this, childrenIsets[0]);
+                    console.log(GTE.tree.getNodesThatBelongTo(childrenIsets[0]));
+                }
             }
         }
         // Tell the tree to redraw itself
