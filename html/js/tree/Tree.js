@@ -13,7 +13,7 @@ GTE.TREE = (function (parentModule) {
     }
 
     /**
-    * Function that draws the Game in the global canvas starting from a node
+    * Function that draws the Game in the global canvas
     * Takes care of updating the positions, clearing the canvas and drawing in it
     */
     Tree.prototype.draw = function(){
@@ -25,12 +25,20 @@ GTE.TREE = (function (parentModule) {
         this.drawNodes();
     };
 
+    /**
+    * Function that draws the isets in the global canvas by calling the drawing
+    * function of each of the isets in the game
+    */
     Tree.prototype.drawISets = function () {
         for (var i = 0; i < this.isets.length; i++) {
             this.isets[i].draw();
         }
     };
 
+    /**
+    * Function that draws the nodes in the global canvas by calling the recursive
+    * function that goes along the tree drawing each node
+    */
     Tree.prototype.drawNodes = function () {
         this.recursiveDrawNodes(this.root);
     };
@@ -59,23 +67,27 @@ GTE.TREE = (function (parentModule) {
     * @return {Number} leafCounter Number of Leaves
     */
     Tree.prototype.numberLeaves = function () {
+        return this.leaves.length;
+    };
+
+    /**
+    * Function that updates the different structures used while drawing
+    */
+    Tree.prototype.updateDataStructures = function () {
         this.leaves = [];
         this.nodesByLevel = [];
         this.isetsByLevel = [];
         this.leavesByLevel = [];
-        return this.recursiveNumberLeaves(this.root);
+        this.recursiveUpdateDataStructures(this.root);
     };
 
-
     /**
-    * Recursive function that returns the number of leaves below a determinate node
-    * Leaves positions are updated in a different function.
+    * Recursive function that updates the data structures used while drawing
     * Stopping criteria: that the current node is a leaf
     * Recursive expansion: to all of the node's children
     * @param    {Node}      node        Node to start from
-    * @return   {Number}    leafCounter Number of Leaves
     */
-    Tree.prototype.recursiveNumberLeaves = function (node) {
+    Tree.prototype.recursiveUpdateDataStructures = function (node) {
         if (this.nodesByLevel[node.level] === undefined) {
             this.nodesByLevel[node.level] = [];
         }
@@ -90,13 +102,10 @@ GTE.TREE = (function (parentModule) {
         if (node.isLeaf()) {
             this.leavesByLevel[node.level].push(node);
             this.leaves.push(node);
-            return 1;
         } else {
-            var leafCounter = 0;
             for (var i = 0; i < node.children.length; i++) {
-                leafCounter += this.recursiveNumberLeaves(node.children[i]);
+                this.recursiveUpdateDataStructures(node.children[i]);
             }
-            return leafCounter;
         }
     };
 
@@ -104,6 +113,7 @@ GTE.TREE = (function (parentModule) {
     * Function that updates the positions of the nodes in the tree
     */
     Tree.prototype.updatePositions = function () {
+        this.updateDataStructures();
         this.updateLeavesPositions();
         this.recursiveUpdatePositions(this.root);
         this.recursiveCheckForCollisions(this.root);
@@ -111,7 +121,7 @@ GTE.TREE = (function (parentModule) {
     };
 
     /**
-    * Recursive function that updates the positions of the node children.
+    * Recursive function that updates the positions of the children nodes.
     * Leaves positions are updated in a different function.
     * Stopping criteria: that the current node is a leaf
     * Recursive expansion: to all of the node's children
@@ -131,27 +141,41 @@ GTE.TREE = (function (parentModule) {
         }
     };
 
+    /**
+    * Recursive function that checks for collisions between leaves and isets.
+    * It checks if any leaf is positioned between first and last node of the iset
+    * In that case, it will move everything down so that the leaves don't collide
+    * Stopping criteria: that the current node is a leaf
+    * Recursive expansion: to all of the node's children
+    * @param {Node} node Node that will be checked
+    */
     Tree.prototype.recursiveCheckForCollisions = function (node) {
         if (!node.isLeaf()) {
             for (var i = 0; i < node.children.length; i++) {
                 this.recursiveCheckForCollisions(node.children[i]);
             }
+            // It is only needed to check if current node is the last one
+            // in its iset
             if (node.iset.lastNode === node) {
-                // Check iset doesn't collide with leaves at same level
+                // Check if iset collides with any leaf at same level
                 for (i = 0; i < this.leavesByLevel[node.level].length; i++) {
+                    // If leaf is positioned between first node and last node
                     if (node.iset.firstNode.x < this.leavesByLevel[node.level][i].x &&
-                        this.leavesByLevel[node.level][i].x < node.iset.lastNode.x) {
+                        this.leavesByLevel[node.level][i].x < node.x) {
                         // If it collides move everything below a little bit down
                         this.moveDownEverythingBelow(node.iset);
+                        // Only one collision is sufficient to move everything
                         break;
                     }
 
                 }
             }
-
         }
     };
 
+    /**
+    * Function that will move everything below a given iset a little bit down
+    */
     Tree.prototype.moveDownEverythingBelow = function (iset) {
         var nodesInIset = this.getNodesThatBelongTo(iset);
         for (var i = 0; i < nodesInIset.length; i++) {
@@ -159,6 +183,12 @@ GTE.TREE = (function (parentModule) {
         }
     };
 
+    /**
+    * Recursive function that moves everything below down
+    * Stopping criteria: that the current node is a leaf
+    * Recursive expansion: to all of the node's children
+    * @param {Node} node Node that will be moved
+    */
     Tree.prototype.recursiveMoveDownEverythingBelow = function (node) {
         node.y += 50;
         if (!node.isLeaf()) {
@@ -193,12 +223,25 @@ GTE.TREE = (function (parentModule) {
         }
     };
 
+    /**
+    * Function that adds a new information set to the tree. It creates it and
+    * adds it to the list of isets
+    * @return {ISet} newISet New information set that has been created
+    */
     Tree.prototype.addNewISet = function () {
         var newISet = new GTE.TREE.ISet();
         this.isets.push(newISet);
         return newISet;
     };
 
+    /**
+    * Function that adds a new node to the tree. It creates it and checks
+    * if the node is the first or last in its information set
+    * @param {Node} parent Node that will be set as parent to the new one
+    * @param {Move} reachedby Move that leads to this new node
+    * @param {ISet} iset Information set that will contain it
+    * @return {Node} newNode New node that has been created
+    */
     Tree.prototype.addNewNode = function (parent, reachedby, iset) {
         var newNode = new GTE.TREE.Node(parent, reachedby, iset);
         var nodesInIset = this.getNodesThatBelongTo(iset);
