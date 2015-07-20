@@ -36,15 +36,7 @@ GTE.TREE = (function (parentModule) {
         // Add one node per move per node in set
         for (var i = 0; i < nodesInThis.length; i++) {
             for (var j = 0; j < this.numberOfMoves(); j++) {
-                var node = new GTE.TREE.Node(nodesInThis[i], this.moves[j], childISet);
-                // If first node
-                if (i === 0 && j === 0) {
-                    childISet.firstNode = node;
-                }
-                // If last node
-                if (i === nodesInThis.length-1 && j === this.numberOfMoves()-1) {
-                    childISet.lastNode = node;
-                }
+                GTE.tree.addNewNode(nodesInThis[i], this.moves[j], childISet);
             }
         }
     };
@@ -94,12 +86,11 @@ GTE.TREE = (function (parentModule) {
                 // isets
                 if (childrenIsets.length > 1 || childrenIsets[0].moves.length > 0) {
                     // Add new nodes as singletons
-                    GTE.tree.addSingletons();
+                    GTE.tree.addSingletonISets(this);
                 } else {
                     // If there is a single child iset and it has no moves
                     // Add new nodes to child iset
                     GTE.tree.addNodesToChildISet(this, childrenIsets[0]);
-                    console.log(GTE.tree.getNodesThatBelongTo(childrenIsets[0]));
                 }
             }
         }
