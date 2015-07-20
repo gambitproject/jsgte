@@ -60,6 +60,9 @@ GTE.TREE = (function (parentModule) {
     */
     Tree.prototype.numberLeaves = function () {
         this.leaves = [];
+        this.nodesByLevel = [];
+        this.isetsByLevel = [];
+        this.leavesByLevel = [];
         return this.recursiveNumberLeaves(this.root);
     };
 
@@ -73,7 +76,19 @@ GTE.TREE = (function (parentModule) {
     * @return   {Number}    leafCounter Number of Leaves
     */
     Tree.prototype.recursiveNumberLeaves = function (node) {
+        if (this.nodesByLevel[node.level] === undefined) {
+            this.nodesByLevel[node.level] = [];
+        }
+        this.nodesByLevel[node.level].push(node);
+        if (this.isetsByLevel[node.level] === undefined) {
+            this.isetsByLevel[node.level] = [];
+        }
+        this.isetsByLevel[node.level].push(node.iset);
+        if (this.leavesByLevel[node.level] === undefined) {
+            this.leavesByLevel[node.level] = [];
+        }
         if (node.isLeaf()) {
+            this.leavesByLevel[node.level].push(node);
             this.leaves.push(node);
             return 1;
         } else {
@@ -91,6 +106,7 @@ GTE.TREE = (function (parentModule) {
     Tree.prototype.updatePositions = function () {
         this.updateLeavesPositions();
         this.recursiveUpdatePositions(this.root);
+        this.recursiveCheckForCollisions(this.root);
         this.positionsUpdated = true;
     };
 
@@ -115,6 +131,43 @@ GTE.TREE = (function (parentModule) {
         }
     };
 
+    Tree.prototype.recursiveCheckForCollisions = function (node) {
+        if (!node.isLeaf()) {
+            for (var i = 0; i < node.children.length; i++) {
+                this.recursiveCheckForCollisions(node.children[i]);
+            }
+            if (node.iset.lastNode === node) {
+                // Check iset doesn't collide with leaves at same level
+                for (i = 0; i < this.leavesByLevel[node.level].length; i++) {
+                    if (node.iset.firstNode.x < this.leavesByLevel[node.level][i].x &&
+                        this.leavesByLevel[node.level][i].x < node.iset.lastNode.x) {
+                        // If it collides move everything below a little bit down
+                        this.moveDownEverythingBelow(node.iset);
+                        break;
+                    }
+
+                }
+            }
+
+        }
+    };
+
+    Tree.prototype.moveDownEverythingBelow = function (iset) {
+        var nodesInIset = this.getNodesThatBelongTo(iset);
+        for (var i = 0; i < nodesInIset.length; i++) {
+            this.recursiveMoveDownEverythingBelow(nodesInIset[i]);
+        }
+    };
+
+    Tree.prototype.recursiveMoveDownEverythingBelow = function (node) {
+        node.y += 50;
+        if (!node.isLeaf()) {
+            for (var i = 0; i < node.children.length; i++) {
+                this.recursiveMoveDownEverythingBelow(node.children[i]);
+            }
+        }
+    };
+
     /**
     * Updates the positions (x and y) of the Tree leaves
     */
@@ -135,6 +188,7 @@ GTE.TREE = (function (parentModule) {
             for (var i = 0; i < numberLeaves; i++) {
                 this.leaves[i].x = (widthPerNode*i)+(widthPerNode/2) -
                                         GTE.CONSTANTS.CIRCLE_SIZE/2 + offset;
+                this.leaves[i].y = this.leaves[i].level * GTE.CONSTANTS.DIST_BETWEEN_LEVELS;
             }
         }
     };
