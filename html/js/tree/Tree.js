@@ -139,25 +139,42 @@ GTE.TREE = (function (parentModule) {
         }
     };
 
-    /**
-    * Adds a child to a given node
-    * @param  {Node} parentNode Node that will get a new child
-    * @return {Node} newNode    Node that has been added
-    */
-    Tree.prototype.addChildNodeTo = function (parentNode) {
-        // Create a new move in parent ISet
-        var newMove = parentNode.iset.addNewMove();
-
-        // Create a new Iset with only one node
+    Tree.prototype.addNewISet = function () {
         var newISet = new GTE.TREE.ISet();
+        this.isets.push(newISet);
+        return newISet;
+    };
 
-        var newNode = new GTE.TREE.Node(parentNode, newMove, newISet);
-        if ((newNode.y + GTE.CONSTANTS.CIRCLE_SIZE) > GTE.canvas.viewbox().height) {
-            this.zoomOut();
-        }
-        this.positionsUpdated = false;
+    Tree.prototype.addNewNode = function (parent, reachedby, iset) {
+        var newNode = new GTE.TREE.Node(parent, reachedby, iset);
+        var nodesInIset = this.getNodesThatBelongTo(iset);
+
+        // Update first and last one
+        iset.firstNode = nodesInIset[0];
+        iset.lastNode = nodesInIset[nodesInIset.length-1];
         return newNode;
     };
+
+    // /**
+    // * Adds a child to a given node
+    // * @param  {Node} parentNode Node that will get a new child
+    // * @return {Node} newNode    Node that has been added
+    // */
+    // Tree.prototype.addChildNodeTo = function (parentNode) {
+    //     // Create a new move in parent ISet
+    //     var newMove = parentNode.iset.addNewMove();
+    //
+    //     // Create a new Iset with only one node
+    //     var newISet = this.addNewISet();
+    //
+    //     var newNode = new GTE.TREE.Node(parentNode, newMove, newISet);
+    //
+    //     if ((newNode.y + GTE.CONSTANTS.CIRCLE_SIZE) > GTE.canvas.viewbox().height) {
+    //         this.zoomOut();
+    //     }
+    //     this.positionsUpdated = false;
+    //     return newNode;
+    // };
 
     /**
     * Creates two new moves for a given ISet and the new ISet that
@@ -166,11 +183,11 @@ GTE.TREE = (function (parentModule) {
     */
     Tree.prototype.addChildISetTo = function (parentISet) {
         // Create new information set
-        var newISet = new GTE.TREE.ISet();
+        var newISet = this.addNewISet();
+
         // Get nodes that belong to parentISet as isets don't keep reference of nodes
         var nodesInParentISet = this.getNodesThatBelongTo(parentISet);
         parentISet.addChildISet(newISet, nodesInParentISet);
-        this.isets.push(newISet);
         this.positionsUpdated = false;
     };
 
@@ -179,10 +196,17 @@ GTE.TREE = (function (parentModule) {
         var nodesInParentISet = this.getNodesThatBelongTo(parent);
 
         for (var i = 0; i < nodesInParentISet.length; i++) {
-            var newNode = new GTE.TREE.Node(nodesInParentISet[i], newMove, child);
-            if (i === nodesInParentISet.length - 1) {
-                child.lastNode = newNode;
-            }
+            this.addNewNode(nodesInParentISet[i], newMove, child);
+        }
+        this.positionsUpdated = false;
+    };
+
+    Tree.prototype.addSingletonISets = function (parentISet) {
+        var newMove = parentISet.addNewMove();
+        var nodesInParentISet = this.getNodesThatBelongTo(parentISet);
+
+        for (var i = 0; i < nodesInParentISet.length; i++) {
+            this.addNewNode(nodesInParentISet[i], newMove, this.addNewISet());
         }
         this.positionsUpdated = false;
     };
@@ -263,7 +287,6 @@ GTE.TREE = (function (parentModule) {
     Tree.prototype.getChildrenNodes = function (iset) {
         // Get the nodes that belong to given iset
         var nodesInIset = this.getNodesThatBelongTo(iset);
-        console.log(nodesInIset);
 
         var children = [];
         // Iterate over nodes and get their children
@@ -272,7 +295,6 @@ GTE.TREE = (function (parentModule) {
                 children.push(nodesInIset[i].children[j]);
             }
         }
-
         return children;
     };
 
