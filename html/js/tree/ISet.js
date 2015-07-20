@@ -69,9 +69,6 @@ GTE.TREE = (function (parentModule) {
             if (this.numberOfMoves() === 0) {
                 GTE.tree.addChildISetTo(this);
             } else {
-                // If there is only one child iset and it has no moves,
-                // add new nodes to it
-
                 // Get children nodes
                 var children = GTE.tree.getChildrenNodes(this);
                 // Check number of different isets in children
@@ -85,8 +82,8 @@ GTE.TREE = (function (parentModule) {
                 // but it already has moves, add children nodes as single node
                 // isets
                 if (childrenIsets.length > 1 || childrenIsets[0].moves.length > 0) {
-                    // Add new nodes as singletons
-                    GTE.tree.addSingletonISets(this);
+                    // Add new isets as singletons
+                    GTE.tree.addNodesToChildISet(this);
                 } else {
                     // If there is a single child iset and it has no moves
                     // Add new nodes to child iset

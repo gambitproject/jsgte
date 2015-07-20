@@ -42,7 +42,7 @@ GTE.TREE = (function (parentModule) {
         var circle = GTE.canvas.circle(GTE.CONSTANTS.CIRCLE_SIZE)
             .addClass('node')
             .x(this.x)
-            .y(this.y)
+            .y(this.y);
             // .click(function() {
             //     thisNode.onClick();
             // });
