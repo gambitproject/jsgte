@@ -23,7 +23,7 @@ GTE.TREE = (function (parentModule) {
     };
 
     ISet.prototype.addNewMove = function () {
-        var newMove = new GTE.TREE.Move(GTE.tree.getNextMoveName, this);
+        var newMove = new GTE.TREE.Move(GTE.tree.getNextMoveName(), this);
         this.moves.push(newMove);
         return newMove;
     };

@@ -1,0 +1,17 @@
+.foreign {
+    text-align: left ;
+}
+.insideforeign {
+    display: inline-block;
+    width: 300px;
+}
+
+.contentEditable.growToLeft{
+	text-align: right;
+}
+
+[contenteditable="true"]:active,
+[contenteditable="true"]:focus{
+	border:none;
+	outline:none;
+}
