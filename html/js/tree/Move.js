@@ -19,6 +19,14 @@ GTE.TREE = (function (parentModule) {
         return "Move: " + "name: " + this.name;
     };
 
+    Move.prototype.compare = function (a,b) {
+        if (a.name < b.name)
+            return -1;
+        if (a.name > b.name)
+            return 1;
+        return 0;
+    };
+
     Move.prototype.draw = function(parent, child) {
         var circleRadius = GTE.CONSTANTS.CIRCLE_SIZE/2;
         this.line = GTE.canvas.line(parent.x + circleRadius,
