@@ -302,10 +302,12 @@ GTE.TREE = (function (parentModule) {
 
     Tree.prototype.addNodesToChildISet = function (parent, child) {
         var newMove = parent.addNewMove();
+        console.log("newMove " + newMove);
         var nodesInParentISet = this.getNodesThatBelongTo(parent);
         for (var i = 0; i < nodesInParentISet.length; i++) {
             this.addNewNode(nodesInParentISet[i], newMove, child || this.addNewISet());
         }
+        console.log(parent.moves);
         this.positionsUpdated = false;
     };
 
@@ -379,6 +381,7 @@ GTE.TREE = (function (parentModule) {
                 listOfMoves.push(this.isets[i].moves[j]);
             }
         }
+        listOfMoves.sort(GTE.TREE.Move.compare);
         return listOfMoves;
     };
 

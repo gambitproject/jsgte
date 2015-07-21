@@ -23,6 +23,7 @@ GTE.TREE = (function (parentModule) {
     };
 
     ISet.prototype.addNewMove = function () {
+        console.log("addNewMove");
         var newMove = new GTE.TREE.Move(GTE.tree.getNextMoveName(), this);
         this.moves.push(newMove);
         return newMove;
@@ -82,9 +83,11 @@ GTE.TREE = (function (parentModule) {
                 // but it already has moves, add children nodes as single node
                 // isets
                 if (childrenIsets.length > 1 || childrenIsets[0].moves.length > 0) {
-                    // Add new isets as singletons
+                    console.log("Add new child iset");
+                    // Add new isets as singletons by not specifying an iset
                     GTE.tree.addNodesToChildISet(this);
                 } else {
+                    console.log("Add to child iset");
                     // If there is a single child iset and it has no moves
                     // Add new nodes to child iset
                     GTE.tree.addNodesToChildISet(this, childrenIsets[0]);
