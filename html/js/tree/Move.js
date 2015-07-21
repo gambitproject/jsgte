@@ -26,6 +26,14 @@ GTE.TREE = (function (parentModule) {
                                     child.x + circleRadius,
                                     child.y + circleRadius)
                   .stroke({ width: GTE.CONSTANTS.LINE_THICKNESS });
+        var middleX = ((child.x + circleRadius) - (parent.x + circleRadius))/2+(parent.x + circleRadius);
+        var middleY = ((child.y + circleRadius) - (parent.y + circleRadius))/2+(parent.y + circleRadius);
+        // TODO: create variables for growing left and right
+        var growingDirectionOfText = 1;
+        if (child.x < parent.x ) {
+            growingDirectionOfText = -1;
+        }
+        var contentEditable = new GTE.UI.Widgets.ContentEditable(middleX, middleY, growingDirectionOfText, this.name);
     };
 
     // Add class to parent module
