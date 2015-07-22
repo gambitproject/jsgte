@@ -14,25 +14,50 @@ GTE.TREE = (function (parentModule) {
         this.numberOfNodes = 0;
     }
 
+    /**
+    * ToString function
+    */
     ISet.prototype.toString = function () {
         return "ISet: " + "moves: " + this.moves;
     };
 
+    /**
+    * Returns the number of moves that belong to current information set
+    * @return {Number} numberOfMoves Number of moves that belong to this
+    */
     ISet.prototype.numberOfMoves = function () {
         return this.moves.length;
     };
 
+    /**
+    * Adds a new move to current information set
+    * @return {Move} newMove Move that has been created
+    */
     ISet.prototype.addNewMove = function () {
+        // Create a new move and add to the list of moves
         var newMove = new GTE.TREE.Move(GTE.tree.getNextMoveName(), this);
         this.moves.push(newMove);
         return newMove;
     };
 
+    /**
+    * Adds a given node to current information set
+    * @param {Node} node Node that will be added to current information set
+    */
     ISet.prototype.addNode = function (node) {
         node.iset = this;
-        this.updateFirstAndLast();
+        this.numberOfNodes++;
+        this.lastNode = node;
     };
 
+    /**
+    * Adds a newly created child iset as children for current information set
+    * nodes
+    * @param {ISet} childISet New information set that current information set
+    *                         will be connected to through moves
+    * @param {Array} nodesInThis Array that contains the nodes that belong to
+    *                            this iset
+    */
     ISet.prototype.addChildISet = function (childISet, nodesInThis) {
         // Create two new moves
         this.addNewMove();
@@ -79,6 +104,7 @@ GTE.TREE = (function (parentModule) {
     };
 
     ISet.prototype.removeNode = function (node) {
+        this.numberOfNodes--;
         node.iset = null;
         this.updateFirstAndLast();
         this.updateNumberOfNodes();
