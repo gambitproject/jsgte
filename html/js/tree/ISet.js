@@ -14,25 +14,50 @@ GTE.TREE = (function (parentModule) {
         this.numberOfNodes = 0;
     }
 
+    /**
+    * ToString function
+    */
     ISet.prototype.toString = function () {
         return "ISet: " + "moves: " + this.moves;
     };
 
+    /**
+    * Returns the number of moves that belong to current information set
+    * @return {Number} numberOfMoves Number of moves that belong to this
+    */
     ISet.prototype.numberOfMoves = function () {
         return this.moves.length;
     };
 
+    /**
+    * Adds a new move to current information set
+    * @return {Move} newMove Move that has been created
+    */
     ISet.prototype.addNewMove = function () {
+        // Create a new move and add to the list of moves
         var newMove = new GTE.TREE.Move(GTE.tree.getNextMoveName(), this);
         this.moves.push(newMove);
         return newMove;
     };
 
+    /**
+    * Adds a given node to current information set
+    * @param {Node} node Node that will be added to current information set
+    */
     ISet.prototype.addNode = function (node) {
         node.iset = this;
-        this.updateFirstAndLast();
+        this.numberOfNodes++;
+        this.lastNode = node;
     };
 
+    /**
+    * Adds a newly created child iset as children for current information set
+    * nodes
+    * @param {ISet} childISet New information set that current information set
+    *                         will be connected to through moves
+    * @param {Array} nodesInThis Array that contains the nodes that belong to
+    *                            this iset
+    */
     ISet.prototype.addChildISet = function (childISet, nodesInThis) {
         // Create two new moves
         this.addNewMove();
@@ -46,6 +71,9 @@ GTE.TREE = (function (parentModule) {
         }
     };
 
+    /**
+    * Draws the information set
+    */
     ISet.prototype.draw = function () {
         if (this.lastNode !== this.firstNode) {
             var width = (this.lastNode.x + GTE.CONSTANTS.CIRCLE_SIZE*2) -
@@ -69,6 +97,9 @@ GTE.TREE = (function (parentModule) {
         return GTE.tree.getNodesThatBelongTo(this).length;
     };
 
+    /**
+    * Updates the first and last node of the iset
+    */
     ISet.prototype.updateFirstAndLast = function () {
         var nodesInIset = GTE.tree.getNodesThatBelongTo(this);
 
@@ -78,12 +109,20 @@ GTE.TREE = (function (parentModule) {
         GTE.tree.positionsUpdated = false;
     };
 
+    /**
+    * Removes the node from the iset
+    * @param {Node} node Node that will be removed
+    */
     ISet.prototype.removeNode = function (node) {
+        this.numberOfNodes--;
         node.iset = null;
         this.updateFirstAndLast();
         this.updateNumberOfNodes();
     };
 
+    /**
+    * On click function for the information set
+    */
     ISet.prototype.onClick = function () {
         if (GTE.MODE === GTE.MODES.ADD){
             if (this.numberOfMoves() === 0) {
