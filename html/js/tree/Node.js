@@ -42,43 +42,44 @@ GTE.TREE = (function (parentModule) {
         var circle = GTE.canvas.circle(GTE.CONSTANTS.CIRCLE_SIZE)
             .addClass('node')
             .x(this.x)
-            .y(this.y);
-            // .click(function() {
-            //     thisNode.onClick();
-            // });
+            .y(this.y)
+            .click(function() {
+                thisNode.onClick();
+            });
     };
 
     /**
     * Function that defines the behaviour of the node on click
     */
-    // Node.prototype.onClick = function () {
-    //     if (GTE.MODE === GTE.MODES.ADD){
-    //         // If it is the only node in the information set
-    //         if (this.iset.numberOfNodes > 1) {
-    //             if (this.isLeaf()) {
-    //                 // Create a new ISet and add it
-    //                 GTE.tree.addChildISetTo(this.iset);
-    //             } else {
-    //                 GTE.tree.addNodesToChildISet(this);
-    //             }
-    //         } else {
-    //             if (this.isLeaf()) {
-    //                 // Create a new ISet and add it
-    //                 GTE.tree.addChildNodeTo(this);
-    //             }
-    //             GTE.tree.addChildNodeTo(this);
-    //         }
-    //     } else {
-    //         // If it is a leaf, delete itself, if not, delete all children
-    //         if (this.isLeaf()) {
-    //             this.delete();
-    //         } else {
-    //             GTE.tree.deleteChildrenOf(this);
-    //         }
-    //     }
-    //     // Tell the tree to redraw itself
-    //     GTE.tree.draw();
-    // };
+    Node.prototype.onClick = function () {
+        if (GTE.MODE === GTE.MODES.ADD){
+            // // If it is the only node in the information set
+            // if (this.iset.numberOfNodes > 1) {
+            //     if (this.isLeaf()) {
+            //         // Create a new ISet and add it
+            //         GTE.tree.addChildISetTo(this.iset);
+            //     } else {
+            //         GTE.tree.addNodesToChildISet(this);
+            //     }
+            // } else {
+            //     if (this.isLeaf()) {
+            //         // Create a new ISet and add it
+            //         GTE.tree.addChildNodeTo(this);
+            //     }
+            //     GTE.tree.addChildNodeTo(this);
+            // }
+        } else {
+            GTE.tree.deleteNode(this);
+            // // If it is a leaf, delete itself, if not, delete all children
+            // if (this.isLeaf()) {
+            //     this.delete();
+            // } else {
+            //     GTE.tree.deleteChildrenOf(this);
+            // }
+        }
+        // Tell the tree to redraw itself
+        GTE.tree.draw();
+    };
 
 
     /**
@@ -127,11 +128,18 @@ GTE.TREE = (function (parentModule) {
         }
     };
 
+    Node.prototype.changeISetTo = function (iset) {
+        this.iset.removeNode(this);
+        GTE.tree.addNewISet().addNode(this);
+    };
+
     /**
     * Function that tells node to delete himself
     */
     Node.prototype.delete = function () {
         this.changeParent(null);
+        this.iset = null;
+        this.reachedby = null;
         GTE.tree.positionsUpdated = false;
     };
 
