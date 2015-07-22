@@ -138,6 +138,7 @@ GTE.TREE = (function (parentModule) {
     */
     Node.prototype.delete = function () {
         this.changeParent(null);
+        this.iset.removeNode(this);
         this.iset = null;
         this.reachedby = null;
         GTE.tree.positionsUpdated = false;

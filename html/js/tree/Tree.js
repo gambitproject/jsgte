@@ -25,6 +25,10 @@ GTE.TREE = (function (parentModule) {
         this.drawNodes();
     };
 
+    /**
+    * Function that clears the canvas
+    * Takes care of removing the foreigns used during inline editing
+    */
     Tree.prototype.clear = function(){
         // Clear canvas
         GTE.canvas.clear();
@@ -96,7 +100,7 @@ GTE.TREE = (function (parentModule) {
     * Recursive function that updates the data structures used while drawing
     * Stopping criteria: that the current node is a leaf
     * Recursive expansion: to all of the node's children
-    * @param    {Node}      node        Node to start from
+    * @param {Node} node Node to start from
     */
     Tree.prototype.recursiveUpdateDataStructures = function (node) {
         if (this.nodesByLevel[node.level] === undefined) {
@@ -122,6 +126,8 @@ GTE.TREE = (function (parentModule) {
 
     /**
     * Function that updates the positions of the nodes in the tree
+    * This function is called if the drawing function detects that the positions
+    * have changed
     */
     Tree.prototype.updatePositions = function () {
         this.updateDataStructures();
@@ -186,15 +192,17 @@ GTE.TREE = (function (parentModule) {
     };
 
     /**
-    * Function that will move everything below a given iset a little bit down
+    * Function that will shift everything below a given level down
+    * @param {ISet} iset ISet that collides
+    * @param {Number} level Level to start moving down from
     */
     Tree.prototype.moveDownEverythingBelow = function (iset, level) {
         for (var i = level; i < this.nodesByLevel.length; i++) {
             for (var j = 0; j < this.nodesByLevel[i].length; j++) {
                 if ((i === level && this.nodesByLevel[i][j].iset === iset) ||
                     (i > level)) {
-                        this.nodesByLevel[i][j].y += 50;
-
+                        this.nodesByLevel[i][j].y +=
+                            GTE.CONSTANTS.VERTICAL_SHIFTING_ON_COLLISIONS;
                 }
             }
         }
@@ -265,30 +273,46 @@ GTE.TREE = (function (parentModule) {
         return newNode;
     };
 
+    /**
+    * Function that removes a node from the tree
+    * @param {Node} node Node that will be deleted
+    */
     Tree.prototype.deleteNode = function (node) {
-        console.log("deleteNode");
         var isetThatContainsNode = node.iset;
         var parent = node.parent;
-        console.log("parent " + parent);
         // If it has children, delete all of them
         if (!node.isLeaf()) {
             this.deleteChildrenOf(node);
         }
-        // Delete node
+        // Delete node. This will also remove the node from the iset
         node.delete();
         // If iset is empty delete it
         if (this.getNodesThatBelongTo(isetThatContainsNode).length === 0) {
-            isetThatContainsNode.delete();
+            this.deleteISetFromList(isetThatContainsNode);
         }
         // Check integrity of parent iset
         this.checkISetIntegrity(parent.iset);
+        // Check the tree for collisions
         this.recursiveCheckForCollisions(this.root);
     };
 
-    Tree.prototype.deleteMove = function () {
-
+    /**
+    * Function that removes a given iset from the list of isets
+    * @param {ISet} iset ISet that will be deleted
+    */
+    Tree.prototype.deleteISetFromList = function (iset) {
+        var index = this.isets.indexOf(iset);
+        if (index > -1) {
+            this.isets.splice(index, 1);
+        }
     };
 
+    /**
+    * Function that checks that all the nodes in a given iset have the same
+    * number of children. If any node is not consistent it deletes it from the
+    * information set and creates its own singgleton information set
+    * @param {ISet} iset ISet that will be checked
+    */
     Tree.prototype.checkISetIntegrity = function (iset) {
         // Get nodes in iset
         var nodesInIset = this.getNodesThatBelongTo(iset);
@@ -298,13 +322,8 @@ GTE.TREE = (function (parentModule) {
                 // This node is not consistent
                 // Create a new iset for this node
                 nodesInIset[i].changeISetTo(null);
-                console.log("nodesInIset[i] " + nodesInIset[i]);
-                console.log("nodesInIset[i].children " + nodesInIset[i].children);
-
-
                 // Create a new move that reaches each children of the node
                 for (var j = 0; j < nodesInIset[i].children.length; j++) {
-                    console.log("nodesInIset[i].children " + nodesInIset[i].children);
                     nodesInIset[i].children[j].reachedBy = nodesInIset[i].iset.addNewMove();
                 }
             }
@@ -340,21 +359,32 @@ GTE.TREE = (function (parentModule) {
     Tree.prototype.addChildISetTo = function (parentISet) {
         // Create new information set
         var newISet = this.addNewISet();
-
         // Get nodes that belong to parentISet as isets don't keep reference of nodes
         var nodesInParentISet = this.getNodesThatBelongTo(parentISet);
         parentISet.addChildISet(newISet, nodesInParentISet);
         this.positionsUpdated = false;
     };
 
-    Tree.prototype.addNodesToChildISet = function (parent, child) {
-        var newMove = parent.addNewMove();
-        console.log("newMove " + newMove);
-        var nodesInParentISet = this.getNodesThatBelongTo(parent);
+    /**
+    * Creates a new move for a given parent information set and adds as many
+    * nodes needed in a given child information set. It connects the nodes in
+    * parent information set with this new nodes in child information set by
+    * through a new move
+    * @param  {ISet} parentISet ISet that will get the new move
+    * @param  {ISet} [childISet] ISet that will get the new nodes. If null, a
+    *                            new information set will be created
+    */
+    Tree.prototype.addNodesToChildISet = function (parentISet, childISet) {
+        // Create a new move
+        var newMove = parentISet.addNewMove();
+        // Get the nodes in parent information set
+        var nodesInParentISet = this.getNodesThatBelongTo(parentISet);
+        // Iterate over the nodes in the parent and create a child node
+        // for each of them. This new node will be connected by the new move
         for (var i = 0; i < nodesInParentISet.length; i++) {
-            this.addNewNode(nodesInParentISet[i], newMove, child || this.addNewISet());
+            this.addNewNode(nodesInParentISet[i], newMove,
+                childISet || this.addNewISet());
         }
-        console.log(parent.moves);
         this.positionsUpdated = false;
     };
 
@@ -393,13 +423,25 @@ GTE.TREE = (function (parentModule) {
         GTE.canvas.viewbox(0, 0, GTE.canvas.viewbox().width*1.5, GTE.canvas.viewbox().height*1.5);
     };
 
-
+    /**
+    * Gets the nodes that belong to a given information set
+    * @param {ISet} iset Information set to get the nodes from
+    * @return {Array} returnArray Array that contains the nodes in given iset
+    */
     Tree.prototype.getNodesThatBelongTo = function(iset) {
         var returnArray = [];
         this.recursiveGetNodesThatBelongTo(this.root, iset, returnArray);
         return returnArray;
     };
 
+    /**
+    * Recursive function that gets nodes that belong to an iset.
+    * Stopping criteria: that the current node is a leaf
+    * Recursive expansion: to all of the node's children
+    * @param {Node} node Starting node
+    * @param {ISet} iset Information set that nodes should belong to
+    * @param {Array} returnArray Array that will be returned by the main function
+    */
     Tree.prototype.recursiveGetNodesThatBelongTo = function(node, iset, returnArray) {
         if (node.iset === iset) {
             returnArray.push(node);
@@ -411,6 +453,11 @@ GTE.TREE = (function (parentModule) {
         }
     };
 
+    /**
+    * Finds out the next move name
+    * @return {String} name Next move name
+    */
+    // TODO #18
     Tree.prototype.getNextMoveName = function () {
         // Get all moves
         var listOfMoves = this.getAllMoves();
@@ -421,17 +468,29 @@ GTE.TREE = (function (parentModule) {
         return name;
     };
 
+    /**
+    * Gets all the moves used in the tree
+    * @return {Array} listOfMoves Array that contains all the moves in the tree
+    */
     Tree.prototype.getAllMoves = function () {
         var listOfMoves = [];
+        // Iterate over the list of isets and get its moves
         for (var i = 0; i < this.isets.length; i++) {
             for (var j = 0; j < this.isets[i].moves.length; j++) {
                 listOfMoves.push(this.isets[i].moves[j]);
             }
         }
+        // Sort the list alphabetically
         listOfMoves.sort(GTE.TREE.Move.compare);
         return listOfMoves;
     };
 
+    /**
+    * Gets all the children nodes to a given iset
+    * @param {ISet} iset Information set whose nodes should be parents
+    *                    of the returned ones
+    * @return {Array} children Nodes whose parents belong to param iset
+    */
     Tree.prototype.getChildrenNodes = function (iset) {
         // Get the nodes that belong to given iset
         var nodesInIset = this.getNodesThatBelongTo(iset);
