@@ -165,20 +165,21 @@ GTE.TREE = (function (parentModule) {
             for (var i = 0; i < node.children.length; i++) {
                 this.recursiveCheckForCollisions(node.children[i]);
             }
-            // It is only needed to check if current node is the last one
-            // in its iset
-            if (node.iset.lastNode === node) {
-                // Check if iset collides with any leaf at same level
-                for (i = 0; i < this.leavesByLevel[node.level].length; i++) {
+        }
+        // It is only needed to check if current node is the last one
+        // in its iset
+        if (node.iset.lastNode === node) {
+            // Check if iset collides with any node at same level but different iset
+            for (var j = 0; j < this.nodesByLevel[node.level].length; j++) {
+                if (this.nodesByLevel[node.level][j].iset !== node.iset) {
                     // If leaf is positioned between first node and last node
-                    if (node.iset.firstNode.x < this.leavesByLevel[node.level][i].x &&
-                        this.leavesByLevel[node.level][i].x < node.x) {
+                    if (node.iset.firstNode.x < this.nodesByLevel[node.level][j].x &&
+                        this.nodesByLevel[node.level][j].x < node.x) {
                         // If it collides move everything below a little bit down
-                        this.moveDownEverythingBelow(node.iset);
+                        this.moveDownEverythingBelow(node.iset, node.level);
                         // Only one collision is sufficient to move everything
                         break;
                     }
-
                 }
             }
         }
@@ -187,10 +188,15 @@ GTE.TREE = (function (parentModule) {
     /**
     * Function that will move everything below a given iset a little bit down
     */
-    Tree.prototype.moveDownEverythingBelow = function (iset) {
-        var nodesInIset = this.getNodesThatBelongTo(iset);
-        for (var i = 0; i < nodesInIset.length; i++) {
-            this.recursiveMoveDownEverythingBelow(nodesInIset[i]);
+    Tree.prototype.moveDownEverythingBelow = function (iset, level) {
+        for (var i = level; i < this.nodesByLevel.length; i++) {
+            for (var j = 0; j < this.nodesByLevel[i].length; j++) {
+                if ((i === level && this.nodesByLevel[i][j].iset === iset) ||
+                    (i > level)) {
+                        this.nodesByLevel[i][j].y += 50;
+
+                }
+            }
         }
     };
 
@@ -255,13 +261,57 @@ GTE.TREE = (function (parentModule) {
     */
     Tree.prototype.addNewNode = function (parent, reachedby, iset) {
         var newNode = new GTE.TREE.Node(parent, reachedby, iset);
-        var nodesInIset = this.getNodesThatBelongTo(iset);
-
-        // Update first and last one
-        iset.firstNode = nodesInIset[0];
-        iset.lastNode = nodesInIset[nodesInIset.length-1];
-        this.positionsUpdated = false;
+        iset.updateFirstAndLast();
         return newNode;
+    };
+
+    Tree.prototype.deleteNode = function (node) {
+        console.log("deleteNode");
+        var isetThatContainsNode = node.iset;
+        var parent = node.parent;
+        console.log("parent " + parent);
+        // If it has children, delete all of them
+        if (!node.isLeaf()) {
+            this.deleteChildrenOf(node);
+        }
+        // Delete node
+        node.delete();
+        // If iset is empty delete it
+        if (this.getNodesThatBelongTo(isetThatContainsNode).length === 0) {
+            this.deleteISet(isetThatContainsNode);
+        }
+        // Check integrity of parent iset
+        this.checkISetIntegrity(parent.iset);
+        this.recursiveCheckForCollisions(this.root);
+    };
+
+    Tree.prototype.deleteISet = function (iset) {
+        var index = this.isets.indexOf(iset);
+        if (index > -1) {
+            this.isets.splice(index, 1);
+        }
+    };
+
+    Tree.prototype.checkISetIntegrity = function (iset) {
+        // Get nodes in iset
+        var nodesInIset = this.getNodesThatBelongTo(iset);
+        // Check all nodes have same number of children
+        for (var i = 0; i < nodesInIset.length; i++) {
+            if (iset.moves.length !== nodesInIset[i].children.length) {
+                // This node is not consistent
+                // Create a new iset for this node
+                nodesInIset[i].changeISetTo(null);
+                console.log("nodesInIset[i] " + nodesInIset[i]);
+                console.log("nodesInIset[i].children " + nodesInIset[i].children);
+
+
+                // Create a new move that reaches each children of the node
+                for (var j = 0; j < nodesInIset[i].children.length; j++) {
+                    console.log("nodesInIset[i].children " + nodesInIset[i].children);
+                    nodesInIset[i].children[j].reachedBy = nodesInIset[i].iset.addNewMove();
+                }
+            }
+        }
     };
 
     // /**

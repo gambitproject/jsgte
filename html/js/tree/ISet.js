@@ -23,10 +23,14 @@ GTE.TREE = (function (parentModule) {
     };
 
     ISet.prototype.addNewMove = function () {
-        console.log("addNewMove");
         var newMove = new GTE.TREE.Move(GTE.tree.getNextMoveName(), this);
         this.moves.push(newMove);
         return newMove;
+    };
+
+    ISet.prototype.addNode = function (node) {
+        node.iset = this;
+        this.updateFirstAndLast();
     };
 
     ISet.prototype.addChildISet = function (childISet, nodesInThis) {
@@ -63,6 +67,21 @@ GTE.TREE = (function (parentModule) {
 
     ISet.prototype.updateNumberOfNodes = function () {
         return GTE.tree.getNodesThatBelongTo(this).length;
+    };
+
+    ISet.prototype.updateFirstAndLast = function () {
+        var nodesInIset = GTE.tree.getNodesThatBelongTo(this);
+
+        // Update first and last one
+        this.firstNode = nodesInIset[0];
+        this.lastNode = nodesInIset[nodesInIset.length-1];
+        GTE.tree.positionsUpdated = false;
+    };
+
+    ISet.prototype.removeNode = function (node) {
+        node.iset = null;
+        this.updateFirstAndLast();
+        this.updateNumberOfNodes();
     };
 
     ISet.prototype.onClick = function () {
