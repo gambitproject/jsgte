@@ -5,13 +5,13 @@ GTE.UI.Widgets = (function (parentModule) {
     * Creates a new ContentEditable object.
     * @class
     */
-    function ContentEditable(x, y, growingOfText) {
+    function ContentEditable(x, y, growingOfText, text) {
         var myforeign = document.createElementNS('http://www.w3.org/2000/svg', 'foreignObject');
         var textdiv = document.createElement("div");
-        var textnode = document.createTextNode("Click to edit");
+        var textnode = document.createTextNode(text);
         textdiv.appendChild(textnode);
         textdiv.className = "contentEditable";
-        if (growingOfText === -1) { textdiv.className += " growToLeft"};
+        if (growingOfText === -1) { textdiv.className += " growToLeft";}
         textdiv.setAttribute("contentEditable", "true");
         textdiv.setAttribute("width", "auto");
 
