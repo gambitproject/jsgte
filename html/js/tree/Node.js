@@ -6,12 +6,11 @@ GTE.TREE = (function (parentModule) {
     * @class
     * @param {Node} [parent] Parent node. If null, this is root.
     */
-    function Node(parent) {
+    function Node(parent, reachedBy, iset) {
         this.parent = parent;
         this.children = [];
-        this.circle = null;
-        this.lineToParent = null;
-
+        this.iset = iset || null;
+        this.reachedBy = reachedBy || null;
         if (parent === null) { // If this is root set level to 0
             this.level = 0;
         } else {
@@ -26,13 +25,19 @@ GTE.TREE = (function (parentModule) {
     * ToString function
     */
     Node.prototype.toString = function nodeToString() {
-        return "Node: " + "children.length: " + this.children.length + "; level: " + this.level;
+        return "Node: " + "children.length: " + this.children.length +
+               "; level: " + this.level + "; reachedBy: " + this.reachedBy +
+               "; iset: " + this.iset;
     };
 
     /**
     * Function that draws the node in the global canvas
     */
     Node.prototype.draw = function () {
+        // The line has to be drawn before so that the circle is drawn on top of it
+        if (this.reachedBy !== null) {
+            this.reachedBy.draw(this.parent, this);
+        }
         var thisNode = this;
         var circle = GTE.canvas.circle(GTE.CONSTANTS.CIRCLE_SIZE)
             .addClass('node')
@@ -43,24 +48,34 @@ GTE.TREE = (function (parentModule) {
             });
     };
 
-
     /**
     * Function that defines the behaviour of the node on click
     */
     Node.prototype.onClick = function () {
         if (GTE.MODE === GTE.MODES.ADD){
-            if (this.isLeaf()) {
-                // Always start with two nodes
-                GTE.tree.addChildNodeTo(this);
-            }
-            GTE.tree.addChildNodeTo(this);
+            // // If it is the only node in the information set
+            // if (this.iset.numberOfNodes > 1) {
+            //     if (this.isLeaf()) {
+            //         // Create a new ISet and add it
+            //         GTE.tree.addChildISetTo(this.iset);
+            //     } else {
+            //         GTE.tree.addNodesToChildISet(this);
+            //     }
+            // } else {
+            //     if (this.isLeaf()) {
+            //         // Create a new ISet and add it
+            //         GTE.tree.addChildNodeTo(this);
+            //     }
+            //     GTE.tree.addChildNodeTo(this);
+            // }
         } else {
-            // If it is a leaf, delete itself, if not, delete all children
-            if (this.isLeaf()) {
-                this.delete();
-            } else {
-                GTE.tree.deleteChildrenOf(this);
-            }
+            GTE.tree.deleteNode(this);
+            // // If it is a leaf, delete itself, if not, delete all children
+            // if (this.isLeaf()) {
+            //     this.delete();
+            // } else {
+            //     GTE.tree.deleteChildrenOf(this);
+            // }
         }
         // Tell the tree to redraw itself
         GTE.tree.draw();
@@ -70,9 +85,11 @@ GTE.TREE = (function (parentModule) {
     /**
     * Function that adds child to node
     * @param {Node} node Node to add as child
+    * @return {Move} The move that has been created for this child
     */
     Node.prototype.addChild = function (node) {
         this.children.push(node);
+        return new GTE.TREE.Move(this, node);
     };
 
     /**
@@ -111,11 +128,18 @@ GTE.TREE = (function (parentModule) {
         }
     };
 
+    Node.prototype.changeISetTo = function (iset) {
+        this.iset.removeNode(this);
+        GTE.tree.addNewISet().addNode(this);
+    };
+
     /**
     * Function that tells node to delete himself
     */
     Node.prototype.delete = function () {
         this.changeParent(null);
+        this.iset = null;
+        this.reachedby = null;
         GTE.tree.positionsUpdated = false;
     };
 

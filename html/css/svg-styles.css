@@ -5,21 +5,10 @@
   fill: #f06;
 }
 
-.foreign {
-    text-align: left ;
+.iset {
+    fill: none;
+    pointer-events: all;
 }
-.insideforeign {
-    display: inline-block;
-    width: 300px;
-}
-
-.contentEditable.growToLeft{
-	text-align: right;
-}
-
-
-[contenteditable="true"]:active,
-[contenteditable="true"]:focus{
-	border:none;
-	outline:none;
+.iset:hover {
+  fill: #CACACA;
 }
