@@ -128,8 +128,14 @@ GTE.TREE = (function (parentModule) {
         }
     };
 
+    /**
+    * Function that changes node's iset to a given one
+    * @param {ISet} iset New iset for node
+    */
     Node.prototype.changeISetTo = function (iset) {
+        // Remove current node from given iset
         this.iset.removeNode(this);
+        // Create a new iset and add current node to it
         GTE.tree.addNewISet().addNode(this);
     };
 
@@ -137,9 +143,9 @@ GTE.TREE = (function (parentModule) {
     * Function that tells node to delete himself
     */
     Node.prototype.delete = function () {
+        // Delete all references to current node
         this.changeParent(null);
         this.iset.removeNode(this);
-        this.iset = null;
         this.reachedby = null;
         GTE.tree.positionsUpdated = false;
     };
