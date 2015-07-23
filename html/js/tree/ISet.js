@@ -47,7 +47,23 @@ GTE.TREE = (function (parentModule) {
     ISet.prototype.addNode = function (node) {
         node.iset = this;
         this.numberOfNodes++;
+        this.firstNode = node;
         this.lastNode = node;
+    };
+
+    /**
+    * Function that adds a new node to the tree. It creates it and checks
+    * if the node is the first or last in its information set
+    * @param {Node} parent Node that will be set as parent to the new one
+    * @param {Move} reachedby Move that leads to this new node
+    * @param {ISet} iset Information set that will contain it
+    * @return {Node} newNode New node that has been created
+    */
+    ISet.prototype.addNewNode = function (parent, reachedby) {
+        var newNode = new GTE.TREE.Node(parent, reachedby, this);
+        this.numberOfNodes++;
+        this.updateFirstAndLast();
+        return newNode;
     };
 
     /**
@@ -66,9 +82,26 @@ GTE.TREE = (function (parentModule) {
         // Add one node per move per node in set
         for (var i = 0; i < nodesInThis.length; i++) {
             for (var j = 0; j < this.numberOfMoves(); j++) {
-                GTE.tree.addNewNode(nodesInThis[i], this.moves[j], childISet);
+                childISet.addNewNode(nodesInThis[i], this.moves[j]);
             }
         }
+    };
+
+    /**
+    * Get isets that are connected to this iset through its moves
+    * @return {Array} childrenISets Children information sets
+    */
+    ISet.prototype.getChildrenISets = function () {
+        // Get children nodes
+        var childrenNodes = GTE.tree.getChildrenNodes(this);
+        // Check number of different isets in children
+        var childrenISets = [];
+        for (var i = 0; i < childrenNodes.length; i++) {
+            if (childrenISets.indexOf(childrenNodes[i].iset) === -1) {
+                childrenISets.push(childrenNodes[i].iset);
+            }
+        }
+        return childrenISets;
     };
 
     /**
@@ -121,24 +154,14 @@ GTE.TREE = (function (parentModule) {
             if (this.numberOfMoves() === 0) {
                 GTE.tree.addChildISetTo(this);
             } else {
-                // Get children nodes
-                var children = GTE.tree.getChildrenNodes(this);
-                // Check number of different isets in children
-                var childrenIsets = [];
-                for (var i = 0; i < children.length; i++) {
-                    if (childrenIsets.indexOf(children[i].iset) === -1) {
-                        childrenIsets.push(children[i].iset);
-                    }
-                }
+                var childrenIsets = this.getChildrenISets();
                 // If there is more than one children iset or there is only one,
                 // but it already has moves, add children nodes as single node
                 // isets
                 if (childrenIsets.length > 1 || childrenIsets[0].moves.length > 0) {
-                    console.log("Add new child iset");
                     // Add new isets as singletons by not specifying an iset
                     GTE.tree.addNodesToChildISet(this);
                 } else {
-                    console.log("Add to child iset");
                     // If there is a single child iset and it has no moves
                     // Add new nodes to child iset
                     GTE.tree.addNodesToChildISet(this, childrenIsets[0]);
