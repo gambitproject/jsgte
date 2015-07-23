@@ -90,11 +90,6 @@ GTE.TREE = (function (parentModule) {
                 thisISet.onClick();
             });
         }
-        this.updateNumberOfNodes();
-    };
-
-    ISet.prototype.updateNumberOfNodes = function () {
-        return GTE.tree.getNodesThatBelongTo(this).length;
     };
 
     /**
@@ -117,9 +112,7 @@ GTE.TREE = (function (parentModule) {
         this.numberOfNodes--;
         node.iset = null;
         this.updateFirstAndLast();
-        this.updateNumberOfNodes();
     };
-
     /**
     * On click function for the information set
     */
