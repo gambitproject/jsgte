@@ -260,20 +260,6 @@ GTE.TREE = (function (parentModule) {
     };
 
     /**
-    * Function that adds a new node to the tree. It creates it and checks
-    * if the node is the first or last in its information set
-    * @param {Node} parent Node that will be set as parent to the new one
-    * @param {Move} reachedby Move that leads to this new node
-    * @param {ISet} iset Information set that will contain it
-    * @return {Node} newNode New node that has been created
-    */
-    Tree.prototype.addNewNode = function (parent, reachedby, iset) {
-        var newNode = new GTE.TREE.Node(parent, reachedby, iset);
-        iset.updateFirstAndLast();
-        return newNode;
-    };
-
-    /**
     * Function that removes a node from the tree
     * @param {Node} node Node that will be deleted
     */
@@ -321,7 +307,7 @@ GTE.TREE = (function (parentModule) {
             if (iset.moves.length !== nodesInIset[i].children.length) {
                 // This node is not consistent
                 // Create a new iset for this node
-                nodesInIset[i].changeISetTo(null);
+                nodesInIset[i].createSingletonISetWithNode();
                 // Create a new move that reaches each children of the node
                 for (var j = 0; j < nodesInIset[i].children.length; j++) {
                     nodesInIset[i].children[j].reachedBy = nodesInIset[i].iset.addNewMove();
@@ -330,26 +316,26 @@ GTE.TREE = (function (parentModule) {
         }
     };
 
-    // /**
-    // * Adds a child to a given node
-    // * @param  {Node} parentNode Node that will get a new child
-    // * @return {Node} newNode    Node that has been added
-    // */
-    // Tree.prototype.addChildNodeTo = function (parentNode) {
-    //     // Create a new move in parent ISet
-    //     var newMove = parentNode.iset.addNewMove();
-    //
-    //     // Create a new Iset with only one node
-    //     var newISet = this.addNewISet();
-    //
-    //     var newNode = new GTE.TREE.Node(parentNode, newMove, newISet);
-    //
-    //     if ((newNode.y + GTE.CONSTANTS.CIRCLE_SIZE) > GTE.canvas.viewbox().height) {
-    //         this.zoomOut();
-    //     }
-    //     this.positionsUpdated = false;
-    //     return newNode;
-    // };
+    /**
+    * Adds a child to a given node
+    * @param  {Node} parentNode Node that will get a new child
+    * @return {Node} newNode    Node that has been added
+    */
+    Tree.prototype.addChildNodeTo = function (parentNode) {
+        // Create a new move in parent ISet
+        var newMove = parentNode.iset.addNewMove();
+
+        // Create a new Iset with only one node
+        var newISet = this.addNewISet();
+
+        var newNode = new GTE.TREE.Node(parentNode, newMove, newISet);
+
+        if ((newNode.y + GTE.CONSTANTS.CIRCLE_SIZE) > GTE.canvas.viewbox().height) {
+            this.zoomOut();
+        }
+        this.positionsUpdated = false;
+        return newNode;
+    };
 
     /**
     * Creates two new moves for a given ISet and the new ISet that
@@ -382,8 +368,7 @@ GTE.TREE = (function (parentModule) {
         // Iterate over the nodes in the parent and create a child node
         // for each of them. This new node will be connected by the new move
         for (var i = 0; i < nodesInParentISet.length; i++) {
-            this.addNewNode(nodesInParentISet[i], newMove,
-                childISet || this.addNewISet());
+            (childISet || this.addNewISet()).addNewNode(nodesInParentISet[i], newMove);
         }
         this.positionsUpdated = false;
     };
