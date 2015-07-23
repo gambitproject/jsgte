@@ -53,21 +53,15 @@ GTE.TREE = (function (parentModule) {
     */
     Node.prototype.onClick = function () {
         if (GTE.MODE === GTE.MODES.ADD){
-            // // If it is the only node in the information set
-            // if (this.iset.numberOfNodes > 1) {
-            //     if (this.isLeaf()) {
-            //         // Create a new ISet and add it
-            //         GTE.tree.addChildISetTo(this.iset);
-            //     } else {
-            //         GTE.tree.addNodesToChildISet(this);
-            //     }
-            // } else {
-            //     if (this.isLeaf()) {
-            //         // Create a new ISet and add it
-            //         GTE.tree.addChildNodeTo(this);
-            //     }
-            //     GTE.tree.addChildNodeTo(this);
-            // }
+            // If there are more nodes in the information set
+            // Remove the node from the iset since the iset will
+            // not be coherent
+            if (this.iset.numberOfNodes > 1) {
+                console.log("Not alone");
+                this.createSingletonISetWithNode();
+            }
+            console.log(this.iset);
+            this.iset.onClick();
         } else {
             GTE.tree.deleteNode(this);
             // // If it is a leaf, delete itself, if not, delete all children
@@ -130,13 +124,17 @@ GTE.TREE = (function (parentModule) {
 
     /**
     * Function that changes node's iset to a given one
-    * @param {ISet} iset New iset for node
     */
-    Node.prototype.changeISetTo = function (iset) {
+    Node.prototype.createSingletonISetWithNode = function () {
         // Remove current node from given iset
         this.iset.removeNode(this);
         // Create a new iset and add current node to it
         GTE.tree.addNewISet().addNode(this);
+        // Add as many moves as node's children
+        for (var i = 0; i < this.children.length; i++) {
+            console.log(this);
+            this.children[i].reachedBy = this.iset.addNewMove();
+        }
     };
 
     /**
