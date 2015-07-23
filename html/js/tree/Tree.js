@@ -442,16 +442,16 @@ GTE.TREE = (function (parentModule) {
     * Finds out the next move name
     * @return {String} name Next move name
     */
-    // TODO #18
     Tree.prototype.getNextMoveName = function () {
         // Get all moves
         var listOfMoves = this.getAllMoves();
         if (listOfMoves.length === 0) return "A";
-        var lastMove = listOfMoves[listOfMoves.length-1];
-        var name = lastMove.name.substring(0, lastMove.name.length-1) +
-               String.fromCharCode(lastMove.name.charCodeAt(lastMove.name.length-1) + 1);
+        var lastMoveName = listOfMoves[listOfMoves.length-1].name;
+        var name =  GTE.TREE.Move.incrementName(lastMoveName);
         return name;
     };
+
+
 
     /**
     * Gets all the moves used in the tree
