@@ -152,6 +152,9 @@ GTE.TREE = (function (parentModule) {
     Node.prototype.changeISet = function (newISet) {
         this.iset.removeNode(this);
         newISet.addNode(this);
+        for (var i = 0; i < this.children.length; i++) {
+            this.children[i].reachedBy = newIset.moves[i];
+        }
     };
 
     /**
