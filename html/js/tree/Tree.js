@@ -260,6 +260,17 @@ GTE.TREE = (function (parentModule) {
         return newISet;
     };
 
+    Tree.prototype.createSingletonISets = function (nodes) {
+        for (var i = 0; i < nodes.length; i++) {
+            var newISet = this.addNewISet();
+            newISet.addNode(nodes[i]);
+            // Add as many moves as node's children
+            for (var j = 0; j < nodes[i].children.length; j++) {
+                nodes[i].children[j].reachedBy = newISet.addNewMove();
+            }
+        }
+    };
+
     /**
     * Function that removes a node from the tree
     * @param {Node} node Node that will be deleted
@@ -492,7 +503,6 @@ GTE.TREE = (function (parentModule) {
     };
 
     Tree.prototype.link = function (a, b) {
-        console.log("Link a and b");
         if (a.numberOfMoves() !== b.numberOfMoves()) {
             window.alert("Couldn't merge the information sets." +
                 "Please select two information sets with same number of moves.");

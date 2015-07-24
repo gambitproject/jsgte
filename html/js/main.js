@@ -22,8 +22,13 @@
         return false;
     });
 
-    document.getElementById("button-link").addEventListener("click", function(){
-        GTE.tools.switchMode(GTE.MODES.LINK);
+    document.getElementById("button-merge").addEventListener("click", function(){
+        GTE.tools.switchMode(GTE.MODES.MERGE);
+        return false;
+    });
+
+    document.getElementById("button-dissolve").addEventListener("click", function(){
+        GTE.tools.switchMode(GTE.MODES.DISSOLVE);
         return false;
     });
 
