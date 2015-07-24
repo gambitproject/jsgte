@@ -78,15 +78,11 @@ GTE.TREE = (function (parentModule) {
                 GTE.tree.draw();
                 break;
             case GTE.MODES.MERGE:
-                this.select();
+                this.iset.onClick();
                 break;
             default:
                 break;
         }
-    };
-
-    Node.prototype.select = function () {
-        this.iset.onClick();
     };
 
     /**
@@ -149,9 +145,17 @@ GTE.TREE = (function (parentModule) {
         }
     };
 
+    /**
+    * Changes current information set to a given one
+    * @param {ISet} newISet New information set for current node
+    */
     Node.prototype.changeISet = function (newISet) {
+        // Remove the node for current information set
         this.iset.removeNode(this);
+        // Add the node to the new information set
         newISet.addNode(this);
+        // Set the new moves for current children
+        // children[] and moves[] will have the same length
         for (var i = 0; i < this.children.length; i++) {
             this.children[i].reachedBy = newIset.moves[i];
         }

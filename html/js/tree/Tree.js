@@ -463,8 +463,6 @@ GTE.TREE = (function (parentModule) {
         return name;
     };
 
-
-
     /**
     * Gets all the moves used in the tree
     * @return {Array} listOfMoves Array that contains all the moves in the tree
@@ -502,6 +500,11 @@ GTE.TREE = (function (parentModule) {
         return children;
     };
 
+    /**
+    * Merges two isets
+    * @param {ISet} a Information set A
+    * @param {ISet} b Information set B
+    */
     Tree.prototype.merge = function (a, b) {
         if (a.numberOfMoves() !== b.numberOfMoves()) {
             window.alert("Couldn't merge the information sets." +
