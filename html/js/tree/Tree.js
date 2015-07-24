@@ -502,7 +502,7 @@ GTE.TREE = (function (parentModule) {
         return children;
     };
 
-    Tree.prototype.link = function (a, b) {
+    Tree.prototype.merge = function (a, b) {
         if (a.numberOfMoves() !== b.numberOfMoves()) {
             window.alert("Couldn't merge the information sets." +
                 "Please select two information sets with same number of moves.");
