@@ -42,8 +42,11 @@ GTE.UI = (function (parentModule) {
             case GTE.MODES.DELETE:
                 buttonToSwitch = "button-remove";
                 break;
-            case GTE.MODES.LINK:
-                buttonToSwitch = "button-link";
+            case GTE.MODES.MERGE:
+                buttonToSwitch = "button-merge";
+                break;
+            case GTE.MODES.DISSOLVE:
+                buttonToSwitch = "button-dissolve";
                 break;
             default:
 

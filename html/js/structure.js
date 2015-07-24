@@ -19,7 +19,8 @@ var GTE = (function () {
     GTE.MODES = {
       ADD: 0,
       DELETE: 1,
-	  LINK: 2,
+	  MERGE: 2,
+	  DISSOLVE: 3,
     };
     if (Object.freeze) {
       Object.freeze(GTE.MODES);

@@ -77,7 +77,7 @@ GTE.TREE = (function (parentModule) {
                 // Tell the tree to redraw itself
                 GTE.tree.draw();
                 break;
-            case GTE.MODES.LINK:
+            case GTE.MODES.MERGE:
                 this.select();
                 break;
             default:
@@ -145,7 +145,6 @@ GTE.TREE = (function (parentModule) {
         GTE.tree.addNewISet().addNode(this);
         // Add as many moves as node's children
         for (var i = 0; i < this.children.length; i++) {
-            console.log(this);
             this.children[i].reachedBy = this.iset.addNewMove();
         }
     };

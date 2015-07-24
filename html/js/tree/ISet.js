@@ -175,8 +175,12 @@ GTE.TREE = (function (parentModule) {
                 break;
             case GTE.MODES.DELETE:
                 break;
-            case GTE.MODES.LINK:
+            case GTE.MODES.MERGE:
                 this.select();
+                break;
+            case GTE.MODES.DISSOLVE:
+                this.dissolve();
+                GTE.tree.draw();
                 break;
             default:
                 break;
@@ -191,7 +195,8 @@ GTE.TREE = (function (parentModule) {
                 this.removeNode(nodes[i]);
             }
         } else {
-            GTE.tree.deleteISetFromList();
+            this.moves = [];
+            GTE.tree.deleteISetFromList(this);
         }
     };
 
@@ -211,6 +216,12 @@ GTE.TREE = (function (parentModule) {
             }
             GTE.tree.selected.push(this);
         }
+    };
+
+    ISet.prototype.dissolve = function () {
+        var nodes = GTE.tree.getNodesThatBelongTo(this);
+        this.delete();
+        GTE.tree.createSingletonISets(nodes);
     };
 
     // Add class to parent module
