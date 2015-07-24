@@ -188,18 +188,26 @@ GTE.TREE = (function (parentModule) {
 
     };
 
+    /**
+    * Deletes current information set
+    */
     ISet.prototype.delete = function () {
+        // If there are nodes, remove all of them to get rid of all the references
         if (this.numberOfNodes > 0) {
             var nodes = GTE.tree.getNodesThatBelongTo(this);
             for (var i = 0; i < nodes.length; i++) {
                 this.removeNode(nodes[i]);
             }
-        } else {
-            this.moves = [];
+        } else { // If there are no nodes
+            this.moves = []; //remove references to moves
             GTE.tree.deleteISetFromList(this);
         }
     };
 
+    /**
+    * Marks current information set as selected and does the proper if there is another
+    * information set selected
+    */
     ISet.prototype.select = function () {
         if (GTE.tree.selected.length > 0 ) {
             // There are two selected nodes. Merge
@@ -218,6 +226,9 @@ GTE.TREE = (function (parentModule) {
         }
     };
 
+    /**
+    * Function that dissolves current iset
+    */
     ISet.prototype.dissolve = function () {
         var nodes = GTE.tree.getNodesThatBelongTo(this);
         this.delete();

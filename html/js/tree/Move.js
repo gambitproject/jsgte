@@ -61,6 +61,11 @@ GTE.TREE = (function (parentModule) {
         return str;
     };
 
+    /**
+    * Draws the line and creates a editable label
+    * @param {Node} parent Parent node
+    * @param {Node} child Child node
+    */
     Move.prototype.draw = function(parent, child) {
         var circleRadius = GTE.CONSTANTS.CIRCLE_SIZE/2;
         this.line = GTE.canvas.line(parent.x + circleRadius,
