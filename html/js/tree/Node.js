@@ -7,6 +7,7 @@ GTE.TREE = (function (parentModule) {
     * @param {Node} [parent] Parent node. If null, this is root.
     */
     function Node(parent, reachedBy, iset) {
+        this.circle = null;
         this.parent = parent;
         this.children = [];
         this.iset = iset || null;
@@ -34,12 +35,13 @@ GTE.TREE = (function (parentModule) {
     * Function that draws the node in the global canvas
     */
     Node.prototype.draw = function () {
+        // TODO #19
         // The line has to be drawn before so that the circle is drawn on top of it
         if (this.reachedBy !== null) {
             this.reachedBy.draw(this.parent, this);
         }
         var thisNode = this;
-        var circle = GTE.canvas.circle(GTE.CONSTANTS.CIRCLE_SIZE)
+        this.circle = GTE.canvas.circle(GTE.CONSTANTS.CIRCLE_SIZE)
             .addClass('node')
             .x(this.x)
             .y(this.y)
@@ -52,29 +54,40 @@ GTE.TREE = (function (parentModule) {
     * Function that defines the behaviour of the node on click
     */
     Node.prototype.onClick = function () {
-        if (GTE.MODE === GTE.MODES.ADD){
-            // If there are more nodes in the information set
-            // Remove the node from the iset since the iset will
-            // not be coherent
-            if (this.iset.numberOfNodes > 1) {
-                console.log("Not alone");
-                this.createSingletonISetWithNode();
-            }
-            console.log(this.iset);
-            this.iset.onClick();
-        } else {
-            GTE.tree.deleteNode(this);
-            // // If it is a leaf, delete itself, if not, delete all children
-            // if (this.isLeaf()) {
-            //     this.delete();
-            // } else {
-            //     GTE.tree.deleteChildrenOf(this);
-            // }
+        switch (GTE.MODE) {
+            case GTE.MODES.ADD:
+                // If there are more nodes in the information set
+                // Remove the node from the iset since the iset will
+                // not be coherent
+                if (this.iset.numberOfNodes > 1) {
+                    this.createSingletonISetWithNode();
+                }
+                this.iset.onClick();
+                // Tell the tree to redraw itself
+                GTE.tree.draw();
+                break;
+            case GTE.MODES.DELETE:
+                GTE.tree.deleteNode(this);
+                // // If it is a leaf, delete itself, if not, delete all children
+                // if (this.isLeaf()) {
+                //     this.delete();
+                // } else {
+                //     GTE.tree.deleteChildrenOf(this);
+                // }
+                // Tell the tree to redraw itself
+                GTE.tree.draw();
+                break;
+            case GTE.MODES.LINK:
+                this.select();
+                break;
+            default:
+                break;
         }
-        // Tell the tree to redraw itself
-        GTE.tree.draw();
     };
 
+    Node.prototype.select = function () {
+        this.iset.onClick();
+    };
 
     /**
     * Function that adds child to node
@@ -135,6 +148,11 @@ GTE.TREE = (function (parentModule) {
             console.log(this);
             this.children[i].reachedBy = this.iset.addNewMove();
         }
+    };
+
+    Node.prototype.changeISet = function (newISet) {
+        this.iset.removeNode(this);
+        newISet.addNode(this);
     };
 
     /**

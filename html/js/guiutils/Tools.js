@@ -28,19 +28,29 @@ GTE.UI = (function (parentModule) {
     * @param {Button} button Button pressed that will activate mode
     */
     Tools.prototype.switchMode = function(modeToSwitch){
+        // Remove active class from current active button
+        var activeButton = document.getElementsByClassName("active button")[0];
+        activeButton.className =
+            activeButton.className.replace(/\bactive\b/,'');
+
         // Change the class of the button to active
-        GTE.MODE = modeToSwitch;
-        if (modeToSwitch === GTE.MODES.ADD) {
-            document.getElementById("button-remove").className =
-                document.getElementById("button-remove").className.replace(/\bactive\b/,'');
-            document.getElementById("button-add").className += " " + "active";
-        } else {
-            if (modeToSwitch === GTE.MODES.DELETE) {
-                document.getElementById("button-add").className =
-                    document.getElementById("button-add").className.replace(/\bactive\b/,'');
-                document.getElementById("button-remove").className += " " + "active";
-            }
+        var buttonToSwitch = "";
+        switch (modeToSwitch) {
+            case GTE.MODES.ADD:
+                buttonToSwitch = "button-add";
+                break;
+            case GTE.MODES.DELETE:
+                buttonToSwitch = "button-remove";
+                break;
+            case GTE.MODES.LINK:
+                buttonToSwitch = "button-link";
+                break;
+            default:
+
         }
+        document.getElementById(buttonToSwitch).className += " " + "active";
+
+        GTE.MODE = modeToSwitch;
     };
 
     // Add class to parent module

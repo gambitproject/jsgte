@@ -22,4 +22,9 @@
         return false;
     });
 
+    document.getElementById("button-link").addEventListener("click", function(){
+        GTE.tools.switchMode(GTE.MODES.LINK);
+        return false;
+    });
+
 }());

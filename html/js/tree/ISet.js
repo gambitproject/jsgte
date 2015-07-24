@@ -8,7 +8,7 @@ GTE.TREE = (function (parentModule) {
     */
     function ISet() {
         this.moves = [];
-        this.shape = {};
+        this.shape = null;
         this.firstNode = null;
         this.lastNode = null;
         this.numberOfNodes = 0;
@@ -47,8 +47,7 @@ GTE.TREE = (function (parentModule) {
     ISet.prototype.addNode = function (node) {
         node.iset = this;
         this.numberOfNodes++;
-        this.firstNode = node;
-        this.lastNode = node;
+        this.updateFirstAndLast();
     };
 
     /**
@@ -144,32 +143,74 @@ GTE.TREE = (function (parentModule) {
     ISet.prototype.removeNode = function (node) {
         this.numberOfNodes--;
         node.iset = null;
-        this.updateFirstAndLast();
+        if (this.numberOfNodes === 0) {
+            this.delete();
+        } else {
+            this.updateFirstAndLast();
+        }
     };
     /**
     * On click function for the information set
     */
     ISet.prototype.onClick = function () {
-        if (GTE.MODE === GTE.MODES.ADD){
-            if (this.numberOfMoves() === 0) {
-                GTE.tree.addChildISetTo(this);
-            } else {
-                var childrenIsets = this.getChildrenISets();
-                // If there is more than one children iset or there is only one,
-                // but it already has moves, add children nodes as single node
-                // isets
-                if (childrenIsets.length > 1 || childrenIsets[0].moves.length > 0) {
-                    // Add new isets as singletons by not specifying an iset
-                    GTE.tree.addNodesToChildISet(this);
+        switch (GTE.MODE) {
+            case GTE.MODES.ADD:
+                if (this.numberOfMoves() === 0) {
+                    GTE.tree.addChildISetTo(this);
                 } else {
-                    // If there is a single child iset and it has no moves
-                    // Add new nodes to child iset
-                    GTE.tree.addNodesToChildISet(this, childrenIsets[0]);
-                }
-            }
+                    var childrenIsets = this.getChildrenISets();
+                    // If there is more than one children iset or there is only one,
+                    // but it already has moves, add children nodes as single node
+                    // isets
+                    if (childrenIsets.length > 1 || childrenIsets[0].moves.length > 0) {
+                        // Add new isets as singletons by not specifying an iset
+                        GTE.tree.addNodesToChildISet(this);
+                    } else {
+                        // If there is a single child iset and it has no moves
+                        // Add new nodes to child iset
+                        GTE.tree.addNodesToChildISet(this, childrenIsets[0]);
+                    }
+                }// Tell the tree to redraw itself
+                GTE.tree.draw();
+                break;
+            case GTE.MODES.DELETE:
+                break;
+            case GTE.MODES.LINK:
+                this.select();
+                break;
+            default:
+                break;
         }
-        // Tell the tree to redraw itself
-        GTE.tree.draw();
+
+    };
+
+    ISet.prototype.delete = function () {
+        if (this.numberOfNodes > 0) {
+            var nodes = GTE.tree.getNodesThatBelongTo(this);
+            for (var i = 0; i < nodes.length; i++) {
+                this.removeNode(nodes[i]);
+            }
+        } else {
+            GTE.tree.deleteISetFromList();
+        }
+    };
+
+    ISet.prototype.select = function () {
+        if (GTE.tree.selected.length > 0 ) {
+            // There are two selected nodes. Merge
+            var firstSelected = GTE.tree.selected.pop();
+            GTE.tree.link(firstSelected, this);
+            GTE.tree.draw();
+        } else {
+            if (this.shape !== null) {
+                this.shape.toggleClass('selected');
+            }
+            var nodes = GTE.tree.getNodesThatBelongTo(this);
+            for (var i = 0; i < nodes.length; i++) {
+                nodes[i].circle.toggleClass('selected');
+            }
+            GTE.tree.selected.push(this);
+        }
     };
 
     // Add class to parent module

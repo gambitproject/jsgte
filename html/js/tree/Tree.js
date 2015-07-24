@@ -10,6 +10,7 @@ GTE.TREE = (function (parentModule) {
         this.root = root;
         this.positionsUpdated = false;
         this.isets = [];
+        this.selected = [];
     }
 
     /**
@@ -488,6 +489,21 @@ GTE.TREE = (function (parentModule) {
             }
         }
         return children;
+    };
+
+    Tree.prototype.link = function (a, b) {
+        console.log("Link a and b");
+        if (a.numberOfMoves() !== b.numberOfMoves()) {
+            window.alert("Couldn't merge the information sets." +
+                "Please select two information sets with same number of moves.");
+        } else {
+            // Add Node A to Node B ISet
+            var nodesInA = this.getNodesThatBelongTo(a);
+            for (var i = 0; i < nodesInA.length; i++) {
+                nodesInA[i].changeISet(b);
+            }
+        }
+        this.positionsUpdated = false;
     };
 
     // Add class to parent module
