@@ -4,6 +4,9 @@
 .node:hover {
   fill: #f06;
 }
+.node.selected {
+  fill: #14A520;
+}
 
 .iset {
     fill: none;
@@ -11,4 +14,7 @@
 }
 .iset:hover {
   fill: #CACACA;
+}
+.iset.selected {
+    stroke: #14A520;
 }
