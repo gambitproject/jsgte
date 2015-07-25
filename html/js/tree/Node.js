@@ -163,7 +163,7 @@ GTE.TREE = (function (parentModule) {
         // Set the new moves for current children
         // children[] and moves[] will have the same length
         for (var i = 0; i < this.children.length; i++) {
-            this.children[i].reachedBy = newIset.moves[i];
+            this.children[i].reachedBy = newISet.moves[i];
         }
     };
 
