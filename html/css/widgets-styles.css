@@ -3,11 +3,16 @@
 }
 .inside-foreign {
     display: inline-block;
+    min-width: 30px;
+}
+
+.content-editable-container {
     width: 300px;
 }
 
 .content-editable.growToLeft{
     text-align: right;
+    float: right;
 }
 [contenteditable="true"]:active,
 [contenteditable="true"]:focus{
