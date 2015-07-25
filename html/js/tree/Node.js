@@ -137,10 +137,11 @@ GTE.TREE = (function (parentModule) {
     };
 
     /**
-    * Function that changes node's iset to a given one
+    * Creates a new singleton information set with given node.
+    * It creates a new move for each node's children
     */
     Node.prototype.createSingletonISetWithNode = function () {
-        // Remove current node from given iset
+        // Remove current node from current iset
         this.iset.removeNode(this);
         // Create a new iset and add current node to it
         GTE.tree.addNewISet().addNode(this);
