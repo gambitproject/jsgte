@@ -6,12 +6,12 @@
     width: 300px;
 }
 
-.contentEditable.growToLeft{
+.content-editable.growToLeft{
 	text-align: right;
 }
 
-[contenteditable="true"]:active,
-[contenteditable="true"]:focus{
+[content-editable="true"]:active,
+[content-editable="true"]:focus{
 	border:none;
 	outline:none;
 }
