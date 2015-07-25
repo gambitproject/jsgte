@@ -18,7 +18,7 @@ GTE.UI.Widgets = (function (parentModule) {
         myforeign.setAttribute("width", "100%");
         myforeign.setAttribute("height", "100%");
         myforeign.classList.add("foreign"); //to make div fit text
-        textdiv.classList.add("insideforeign"); //to make div fit text
+        textdiv.classList.add("inside-foreign"); //to make div fit text
         if (growingOfText === -1) {
             x -= 350;
         } else {
