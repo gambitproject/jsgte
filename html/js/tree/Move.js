@@ -72,7 +72,7 @@ GTE.TREE = (function (parentModule) {
                                     parent.y + circleRadius,
                                     child.x + circleRadius,
                                     child.y + circleRadius)
-                  .stroke({ width: GTE.CONSTANTS.LINE_THICKNESS });
+                              .stroke({ width: GTE.CONSTANTS.LINE_THICKNESS });
         var middleX = ((child.x + circleRadius) - (parent.x + circleRadius))/2+(parent.x + circleRadius);
         var middleY = ((child.y + circleRadius) - (parent.y + circleRadius))/2+(parent.y + circleRadius);
         // TODO: create variables for growing left and right

@@ -7,11 +7,10 @@
 }
 
 .content-editable.growToLeft{
-	text-align: right;
+    text-align: right;
 }
-
 [content-editable="true"]:active,
 [content-editable="true"]:focus{
-	border:none;
-	outline:none;
+    border:none;
+    outline:none;
 }
