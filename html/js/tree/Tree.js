@@ -481,26 +481,6 @@ GTE.TREE = (function (parentModule) {
     };
 
     /**
-    * Gets all the children nodes to a given iset
-    * @param {ISet} iset Information set whose nodes should be parents
-    *                    of the returned ones
-    * @return {Array} children Nodes whose parents belong to param iset
-    */
-    Tree.prototype.getChildrenNodes = function (iset) {
-        // Get the nodes that belong to given iset
-        var nodesInIset = this.getNodesThatBelongTo(iset);
-
-        var children = [];
-        // Iterate over nodes and get their children
-        for (var i = 0; i < nodesInIset.length; i++) {
-            for (var j = 0; j < nodesInIset[i].children.length; j++) {
-                children.push(nodesInIset[i].children[j]);
-            }
-        }
-        return children;
-    };
-
-    /**
     * Merges two isets
     * @param {ISet} a Information set A
     * @param {ISet} b Information set B
