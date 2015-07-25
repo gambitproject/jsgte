@@ -174,6 +174,8 @@ GTE.TREE = (function (parentModule) {
                 GTE.tree.draw();
                 break;
             case GTE.MODES.DELETE:
+                // Do not do anything. Nodes are the only things that can be deleted
+                // ISets are dissolved, not deleted
                 break;
             case GTE.MODES.MERGE:
                 this.select();
