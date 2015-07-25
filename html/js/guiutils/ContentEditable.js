@@ -20,9 +20,9 @@ GTE.UI.Widgets = (function (parentModule) {
         myforeign.classList.add("foreign"); //to make div fit text
         textdiv.classList.add("inside-foreign"); //to make div fit text
         if (growingOfText === -1) {
-            x -= 350;
+            x -= GTE.CONSTANTS.CONTENT_EDITABLE_OFFSET_LEFT;
         } else {
-            x += 50;
+            x += GTE.CONSTANTS.CONTENT_EDITABLE_OFFSET_RIGHT;
         }
         myforeign.setAttributeNS(null, "transform", "translate(" + x + " " + y + ")");
         document.getElementsByTagName('svg')[0].appendChild(myforeign);
@@ -30,6 +30,7 @@ GTE.UI.Widgets = (function (parentModule) {
 
         textdiv.addEventListener('keydown', function(e) {
             var max = 30;
+            // TODO #21
             // Check if key pressed is return
             if(e.keyCode == 13) {
                 e.preventDefault();
