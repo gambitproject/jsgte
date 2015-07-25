@@ -18,8 +18,8 @@ GTE.UI.Widgets = (function (parentModule) {
         textdiv.setAttribute("contenteditable", "true");
         textdiv.setAttribute("width", "auto");
 
-        myforeign.setAttribute("width", "100%");
-        myforeign.setAttribute("height", "100%");
+        myforeign.setAttribute("width", "300px");
+        myforeign.setAttribute("height", "22px");
         myforeign.classList.add("foreign"); //to make div fit text
         textdiv.classList.add("inside-foreign"); //to make div fit text
         if (growingOfText === -1) {

@@ -1,5 +1,7 @@
 .foreign {
     text-align: left ;
+    width: 300px;
+    height: 22px;
 }
 .inside-foreign {
     display: inline-block;

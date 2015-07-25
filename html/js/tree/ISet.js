@@ -259,8 +259,10 @@ GTE.TREE = (function (parentModule) {
     */
     ISet.prototype.dissolve = function () {
         var nodes = this.getNodes();
-        this.delete();
-        GTE.tree.createSingletonISets(nodes);
+        if (nodes.length > 1) {
+            this.delete();
+            GTE.tree.createSingletonISets(nodes);
+        }
     };
 
     // Add class to parent module
