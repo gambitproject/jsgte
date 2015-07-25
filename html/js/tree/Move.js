@@ -73,8 +73,32 @@ GTE.TREE = (function (parentModule) {
                                     child.x + circleRadius,
                                     child.y + circleRadius)
                               .stroke({ width: GTE.CONSTANTS.LINE_THICKNESS });
-        var middleX = ((child.x + circleRadius) - (parent.x + circleRadius))/2+(parent.x + circleRadius);
-        var middleY = ((child.y + circleRadius) - (parent.y + circleRadius))/2+(parent.y + circleRadius);
+        var middleX = ((child.x + circleRadius) - (parent.x + circleRadius))/2+
+                        (parent.x);
+        var middleY = ((child.y + circleRadius) - (parent.y + circleRadius))/2+
+                        (parent.y);
+
+        // Compute a unit vector perpendicular to the line and get point
+        // where the label has to be drawn at a distance CONTENT_EDITABLE_MARGIN_TO_LINE
+        var dx;
+        var dy;
+        if (child.x > parent.x) {
+            dx = child.x-parent.x;
+            dy = child.y-parent.y;
+        } else {
+            dx = parent.x-child.x;
+            dy = parent.y-child.y;
+        }
+        var distance = Math.sqrt(dx*dx + dy*dy);
+        dx = dx/distance;
+        dy = dy/distance;
+        if (child.x < parent.x ) {
+            middleX = middleX - (GTE.CONSTANTS.CONTENT_EDITABLE_MARGIN_TO_LINE/2)*dy;
+        } else {
+            middleX = middleX + (GTE.CONSTANTS.CONTENT_EDITABLE_MARGIN_TO_LINE/2)*dy;
+        }
+        middleY = middleY - (GTE.CONSTANTS.CONTENT_EDITABLE_MARGIN_TO_LINE/2)*dx;
+
         // TODO: create variables for growing left and right
         var growingDirectionOfText = 1;
         if (child.x < parent.x ) {

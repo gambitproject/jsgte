@@ -23,9 +23,11 @@ GTE.UI.Widgets = (function (parentModule) {
         myforeign.classList.add("foreign"); //to make div fit text
         textdiv.classList.add("inside-foreign"); //to make div fit text
         if (growingOfText === -1) {
+            // As text grows to the left, the text contained will
+            // be drawn at a distance as big as the size of the container. This
+            // size is defined in the css and CONTENT_EDITABLE_OFFSET_LEFT
+            // is used to move the text the same distance to the left
             x -= GTE.CONSTANTS.CONTENT_EDITABLE_OFFSET_LEFT;
-        } else {
-            x += GTE.CONSTANTS.CONTENT_EDITABLE_OFFSET_RIGHT;
         }
         myforeign.setAttributeNS(null, "transform", "translate(" + x + " " + y + ")");
         document.getElementsByTagName('svg')[0].appendChild(myforeign);
