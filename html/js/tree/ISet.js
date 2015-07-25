@@ -92,7 +92,7 @@ GTE.TREE = (function (parentModule) {
     */
     ISet.prototype.getChildrenISets = function () {
         // Get children nodes
-        var childrenNodes = GTE.tree.getChildrenNodes(this);
+        var childrenNodes = this.getChildrenNodes();
         // Check number of different isets in children
         var childrenISets = [];
         for (var i = 0; i < childrenNodes.length; i++) {
@@ -101,6 +101,24 @@ GTE.TREE = (function (parentModule) {
             }
         }
         return childrenISets;
+    };
+
+    /**
+    * Gets all the children nodes to current iset
+    * @return {Array} children Nodes whose parents belong to current iset
+    */
+    ISet.prototype.getChildrenNodes = function () {
+        // Get the nodes that belong to given iset
+        var nodesInIset = GTE.tree.getNodesThatBelongTo(this);
+
+        var children = [];
+        // Iterate over nodes and get their children
+        for (var i = 0; i < nodesInIset.length; i++) {
+            for (var j = 0; j < nodesInIset[i].children.length; j++) {
+                children.push(nodesInIset[i].children[j]);
+            }
+        }
+        return children;
     };
 
     /**
