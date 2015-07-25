@@ -459,7 +459,7 @@ GTE.TREE = (function (parentModule) {
         var listOfMoves = this.getAllMoves();
         if (listOfMoves.length === 0) return "A";
         var lastMoveName = listOfMoves[listOfMoves.length-1].name;
-        var name =  GTE.TREE.Move.incrementName(lastMoveName);
+        var name =  GTE.TREE.Move.generateName(lastMoveName);
         return name;
     };
 

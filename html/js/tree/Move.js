@@ -44,7 +44,7 @@ GTE.TREE = (function (parentModule) {
     * Public static function that increments a given name
     * @param {String} str A Move name that will be incremented
     */
-    Move.incrementName = function (str) {
+    Move.generateName = function (str) {
         for (var i = str.length-1; i >= 0 ; i--) {
             var nextChar = String.fromCharCode(str.charCodeAt(i) + 1);
             if (nextChar === "[") {
