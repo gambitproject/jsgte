@@ -285,7 +285,7 @@ GTE.TREE = (function (parentModule) {
         // Delete node. This will also remove the node from the iset
         node.delete();
         // If iset is empty delete it
-        if (this.getNodesThatBelongTo(isetThatContainsNode).length === 0) {
+        if (isetThatContainsNode.getNodes().length === 0) {
             this.deleteISetFromList(isetThatContainsNode);
         }
         // Check integrity of parent iset
@@ -313,7 +313,7 @@ GTE.TREE = (function (parentModule) {
     */
     Tree.prototype.checkISetIntegrity = function (iset) {
         // Get nodes in iset
-        var nodesInIset = this.getNodesThatBelongTo(iset);
+        var nodesInIset = iset.getNodes();
         // Check all nodes have same number of children
         for (var i = 0; i < nodesInIset.length; i++) {
             if (iset.moves.length !== nodesInIset[i].children.length) {
@@ -358,7 +358,7 @@ GTE.TREE = (function (parentModule) {
         // Create new information set
         var newISet = this.addNewISet();
         // Get nodes that belong to parentISet as isets don't keep reference of nodes
-        var nodesInParentISet = this.getNodesThatBelongTo(parentISet);
+        var nodesInParentISet = parentISet.getNodes();
         parentISet.addChildISet(newISet, nodesInParentISet);
         this.positionsUpdated = false;
     };
@@ -376,7 +376,7 @@ GTE.TREE = (function (parentModule) {
         // Create a new move
         var newMove = parentISet.addNewMove();
         // Get the nodes in parent information set
-        var nodesInParentISet = this.getNodesThatBelongTo(parentISet);
+        var nodesInParentISet = parentISet.getNodes();
         // Iterate over the nodes in the parent and create a child node
         // for each of them. This new node will be connected by the new move
         for (var i = 0; i < nodesInParentISet.length; i++) {
@@ -491,7 +491,7 @@ GTE.TREE = (function (parentModule) {
                 "Please select two information sets with same number of moves.");
         } else {
             // Add Node A to Node B ISet
-            var nodesInA = this.getNodesThatBelongTo(a);
+            var nodesInA = a.getNodes();
             for (var i = 0; i < nodesInA.length; i++) {
                 nodesInA[i].changeISet(b);
             }
