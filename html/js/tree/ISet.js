@@ -104,12 +104,20 @@ GTE.TREE = (function (parentModule) {
     };
 
     /**
+    * Gets all the nodes that belong to current iset
+    * @return {Array} nodes Nodes that belong to current iset
+    */
+    ISet.prototype.getNodes = function () {
+        return GTE.tree.getNodesThatBelongTo(this);
+    };
+
+    /**
     * Gets all the children nodes to current iset
     * @return {Array} children Nodes whose parents belong to current iset
     */
     ISet.prototype.getChildrenNodes = function () {
         // Get the nodes that belong to given iset
-        var nodesInIset = GTE.tree.getNodesThatBelongTo(this);
+        var nodesInIset = this.getNodes();
 
         var children = [];
         // Iterate over nodes and get their children
@@ -146,7 +154,7 @@ GTE.TREE = (function (parentModule) {
     * Updates the first and last node of the iset
     */
     ISet.prototype.updateFirstAndLast = function () {
-        var nodesInIset = GTE.tree.getNodesThatBelongTo(this);
+        var nodesInIset = this.getNodes();
 
         // Update first and last one
         this.firstNode = nodesInIset[0];
@@ -214,7 +222,7 @@ GTE.TREE = (function (parentModule) {
     ISet.prototype.delete = function () {
         // If there are nodes, remove all of them to get rid of all the references
         if (this.numberOfNodes > 0) {
-            var nodes = GTE.tree.getNodesThatBelongTo(this);
+            var nodes = this.getNodes();
             for (var i = 0; i < nodes.length; i++) {
                 this.removeNode(nodes[i]);
             }
@@ -238,7 +246,7 @@ GTE.TREE = (function (parentModule) {
             if (this.shape !== null) {
                 this.shape.toggleClass('selected');
             }
-            var nodes = GTE.tree.getNodesThatBelongTo(this);
+            var nodes = this.getNodes();
             for (var i = 0; i < nodes.length; i++) {
                 nodes[i].circle.toggleClass('selected');
             }
@@ -250,7 +258,7 @@ GTE.TREE = (function (parentModule) {
     * Function that dissolves current iset
     */
     ISet.prototype.dissolve = function () {
-        var nodes = GTE.tree.getNodesThatBelongTo(this);
+        var nodes = this.getNodes();
         this.delete();
         GTE.tree.createSingletonISets(nodes);
     };
