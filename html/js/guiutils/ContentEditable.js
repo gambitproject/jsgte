@@ -12,7 +12,7 @@ GTE.UI.Widgets = (function (parentModule) {
         textdiv.appendChild(textnode);
         textdiv.className = "content-editable";
         if (growingOfText === -1) { textdiv.className += " growToLeft";}
-        textdiv.setAttribute("content-editable", "true");
+        textdiv.setAttribute("contenteditable", "true");
         textdiv.setAttribute("width", "auto");
 
         myforeign.setAttribute("width", "100%");
