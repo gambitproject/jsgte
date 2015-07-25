@@ -78,6 +78,11 @@ GTE.TREE = (function (parentModule) {
                 GTE.tree.draw();
                 break;
             case GTE.MODES.MERGE:
+                // This is controlled by the information set
+                this.iset.onClick();
+                break;
+            case GTE.MODES.DISSOLVE:
+                // This is controlled by the information set
                 this.iset.onClick();
                 break;
             default:
