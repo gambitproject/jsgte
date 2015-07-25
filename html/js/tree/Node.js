@@ -42,12 +42,12 @@ GTE.TREE = (function (parentModule) {
         }
         var thisNode = this;
         this.circle = GTE.canvas.circle(GTE.CONSTANTS.CIRCLE_SIZE)
-            .addClass('node')
-            .x(this.x)
-            .y(this.y)
-            .click(function() {
-                thisNode.onClick();
-            });
+                                .addClass('node')
+                                .x(this.x)
+                                .y(this.y)
+                                .click(function() {
+                                    thisNode.onClick();
+                                });
     };
 
     /**

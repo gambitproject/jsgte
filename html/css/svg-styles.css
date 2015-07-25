@@ -1,11 +1,11 @@
 .node {
-  fill: #000;
+    fill: #000;
 }
 .node:hover {
-  fill: #f06;
+    fill: #f06;
 }
 .node.selected {
-  fill: #14A520;
+    fill: #14A520;
 }
 
 .iset {
@@ -13,7 +13,7 @@
     pointer-events: all;
 }
 .iset:hover {
-  fill: #CACACA;
+    fill: #CACACA;
 }
 .iset.selected {
     stroke: #14A520;
