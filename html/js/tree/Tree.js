@@ -155,7 +155,11 @@ GTE.TREE = (function (parentModule) {
             // TODO: apply level weighted function for special cases
             node.x = node.children[0].x +
                 (node.children[node.children.length-1].x - node.children[0].x)/2;
+        }
+        if (node.iset === null) {
             node.y = node.level * GTE.CONSTANTS.DIST_BETWEEN_LEVELS;
+        } else {
+            node.y = node.calculateY();
         }
     };
 
@@ -176,19 +180,41 @@ GTE.TREE = (function (parentModule) {
         // It is only needed to check if current node is the last one
         // in its iset
         if (node.iset.lastNode === node) {
-            // Check if iset collides with any node at same level but different iset
-            for (var j = 0; j < this.nodesByLevel[node.level].length; j++) {
-                if (this.nodesByLevel[node.level][j].iset !== node.iset) {
-                    // If leaf is positioned between first node and last node
-                    if (node.iset.firstNode.x < this.nodesByLevel[node.level][j].x &&
-                        this.nodesByLevel[node.level][j].x < node.x) {
-                        // If it collides move everything below a little bit down
-                        this.moveDownEverythingBelow(node.iset, node.level);
-                        // Only one collision is sufficient to move everything
-                        break;
+            // Check if iset collides with any other node at different iset
+            for (var j = 0; j < this.isets.length; j++) {
+                if (this.isets[j] !== node.iset) {
+                    var nodesInISet = this.isets[j].getNodes();
+                    // Iterate over the nodes in the iset
+                    for (var k = 0; k < nodesInISet.length; k++) {
+                        if (node.iset.firstNode.x < nodesInISet[k].x &&
+                        nodesInISet[k].x < node.iset.lastNode.x) {
+                            if (nodesInISet[k].y === node.y) {
+                                // They collide
+                                // If it collides move everything below a little bit down
+                                this.moveDownEverythingBelowISet(node.iset, node.level,
+                                        GTE.CONSTANTS.VERTICAL_SHIFTING_ON_COLLISIONS);
+                                // Only one collision is sufficient to move everything
+                                break;
+                            }
+                        }
                     }
                 }
             }
+
+
+            // for (var j = 0; j < this.nodesByLevel[node.level].length; j++) {
+            //     if (this.nodesByLevel[node.level][j].iset !== node.iset) {
+            //         // If leaf is positioned between first node and last node
+            //         if (node.iset.firstNode.x < this.nodesByLevel[node.level][j].x &&
+            //             this.nodesByLevel[node.level][j].x < node.x) {
+            //             // If it collides move everything below a little bit down
+            //             this.moveDownEverythingBelowISet(node.iset, node.level,
+            //                     GTE.CONSTANTS.VERTICAL_SHIFTING_ON_COLLISIONS);
+            //             // Only one collision is sufficient to move everything
+            //             break;
+            //         }
+            //     }
+            // }
         }
     };
 
@@ -197,13 +223,12 @@ GTE.TREE = (function (parentModule) {
     * @param {ISet} iset ISet that collides
     * @param {Number} level Level to start moving down from
     */
-    Tree.prototype.moveDownEverythingBelow = function (iset, level) {
+    Tree.prototype.moveDownEverythingBelowISet = function (iset, level, howMuch) {
         for (var i = level; i < this.nodesByLevel.length; i++) {
             for (var j = 0; j < this.nodesByLevel[i].length; j++) {
                 if ((i === level && this.nodesByLevel[i][j].iset === iset) ||
                     (i > level)) {
-                        this.nodesByLevel[i][j].y +=
-                            GTE.CONSTANTS.VERTICAL_SHIFTING_ON_COLLISIONS;
+                        this.nodesByLevel[i][j].y += howMuch;
                 }
             }
         }
@@ -215,11 +240,11 @@ GTE.TREE = (function (parentModule) {
     * Recursive expansion: to all of the node's children
     * @param {Node} node Node that will be moved
     */
-    Tree.prototype.recursiveMoveDownEverythingBelow = function (node) {
-        node.y += 50;
+    Tree.prototype.recursiveMoveDownEverythingBelowNode = function (node, howMuch) {
+        node.y += howMuch;
         if (!node.isLeaf()) {
             for (var i = 0; i < node.children.length; i++) {
-                this.recursiveMoveDownEverythingBelow(node.children[i]);
+                this.recursiveMoveDownEverythingBelowNode(node.children[i], howMuch);
             }
         }
     };
