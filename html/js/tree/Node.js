@@ -18,18 +18,46 @@ GTE.TREE = (function (parentModule) {
             parent.addChild(this);
             this.level = parent.level + 1;
         }
-
-        this.y = this.level * GTE.CONSTANTS.DIST_BETWEEN_LEVELS;
     }
 
     /**
     * ToString function
     */
-    Node.prototype.toString = function nodeToString() {
+    Node.prototype.toString = function () {
         return "Node: " + "children.length: " + this.children.length +
                "; level: " + this.level + "; reachedBy: " + this.reachedBy +
                "; iset: " + this.iset;
     };
+
+    /**
+    * Calculates the y of the circle depending. It needs to check for the positions
+    * of the other nodes in the same iset
+    */
+    Node.prototype.calculateY = function () {
+        var nodesInSameISet = this.iset.getNodes();
+        // If it is alone
+        if (nodesInSameISet.length === 1) {
+            return this.level * GTE.CONSTANTS.DIST_BETWEEN_LEVELS;
+        } else {
+            var levels = [];
+            // Iterate over the nodes in same iset and get the deepest level of all
+            while (nodesInSameISet.length !== 0) {
+                var node = nodesInSameISet.pop();
+                if (levels.indexOf(node.level) === -1) {
+                    levels.push(node.level);
+                }
+            }
+            levels.sort();
+            var y = levels[levels.length-1] * GTE.CONSTANTS.DIST_BETWEEN_LEVELS;
+            if (levels[levels.length-1] !== this.level) {
+                GTE.tree.recursiveMoveDownEverythingBelowNode(this,
+                            y - this.level * GTE.CONSTANTS.DIST_BETWEEN_LEVELS);
+            }
+            return y;
+        }
+    };
+
+
 
     /**
     * Function that draws the node in the global canvas
