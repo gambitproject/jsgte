@@ -87,6 +87,14 @@ a {
     color: black;
 }
 
+.red {
+    color: red !important;
+}
+
+.blue {
+    color: blue !important;
+}
+
 /* ==========================================================================
    Toolbar styles
    ========================================================================== */
@@ -193,6 +201,10 @@ a {
     vertical-align: middle;
     position: relative;
     z-index: 1;
+}
+
+.button i{
+    line-height: 30px;
 }
 
 .button:focus {

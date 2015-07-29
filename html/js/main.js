@@ -22,4 +22,24 @@
         return false;
     });
 
+    document.getElementById("button-player-chance").addEventListener("click", function(){
+        GTE.tools.switchMode(GTE.MODES.PLAYER_CHANCE);
+        return false;
+    });
+
+    document.getElementById("button-player-1").addEventListener("click", function(){
+        GTE.tools.switchMode(GTE.MODES.PLAYER_1);
+        return false;
+    });
+
+    document.getElementById("button-player-2").addEventListener("click", function(){
+        GTE.tools.switchMode(GTE.MODES.PLAYER_2);
+        return false;
+    });
+
+    document.getElementById("button-player-more").addEventListener("click", function(){
+        GTE.tools.switchMode(GTE.MODES.PLAYER_MORE);
+        return false;
+    });
+
 }());
