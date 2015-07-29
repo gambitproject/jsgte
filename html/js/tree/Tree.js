@@ -9,6 +9,8 @@ GTE.TREE = (function (parentModule) {
     function Tree(root) {
         this.root = root;
         this.positionsUpdated = false;
+
+        this.players = [];
     }
 
     /**
@@ -173,8 +175,40 @@ GTE.TREE = (function (parentModule) {
     /**
     * Zooms out the canvas by making the viewbox bigger
     */
-    Tree.prototype.zoomOut = function(){
+    Tree.prototype.zoomOut = function () {
         GTE.canvas.viewbox(0, 0, GTE.canvas.viewbox().width*1.5, GTE.canvas.viewbox().height*1.5);
+    };
+
+    Tree.prototype.newPlayer = function (name) {
+        var player = new GTE.TREE.Player(name);
+        return this.addPlayer(player);
+    };
+
+    Tree.prototype.addPlayer = function (player) {
+        try {
+            if (players.indexOf(player) !== -1) {
+                throw "Player already in list";
+            }
+            players.push(player);
+        } catch (err) {
+            console.log("EXCEPTION: " + err);
+            return -1;
+        }
+        return players.indexOf(player);
+    };
+
+    Tree.prototype.removePlayer = function (player) {
+        try {
+            var index = players.indexOf(player);
+            if (index === -1) {
+                throw "Player not found";
+            }
+            players.splice(index, 1);
+            return index;
+        } catch (err) {
+            console.log("EXCEPTION: " + err);
+            return -1;
+        }
     };
 
     // Add class to parent module
