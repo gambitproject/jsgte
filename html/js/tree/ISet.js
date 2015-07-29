@@ -12,6 +12,7 @@ GTE.TREE = (function (parentModule) {
         this.firstNode = null;
         this.lastNode = null;
         this.numberOfNodes = 0;
+        this.y = 0;
     }
 
     /**
@@ -142,11 +143,52 @@ GTE.TREE = (function (parentModule) {
                                     .radius(GTE.CONSTANTS.ISET_HEIGHT/2)
                                     .addClass('iset');
             this.shape.translate(this.firstNode.x - GTE.CONSTANTS.CIRCLE_SIZE,
-                                this.firstNode.y - GTE.CONSTANTS.CIRCLE_SIZE + 4);
+                                this.y - GTE.CONSTANTS.CIRCLE_SIZE + 4);
             var thisISet = this;
             this.shape.click(function() {
                 thisISet.onClick();
             });
+        }
+    };
+
+    /**
+    * Calculates the y of the circle depending. It needs to check for the positions
+    * of the other nodes in the same iset
+    */
+    ISet.prototype.calculateY = function () {
+        var nodesInSameISet = this.getNodes();
+        this.y = nodesInSameISet[0].level * GTE.CONSTANTS.DIST_BETWEEN_LEVELS;
+    };
+
+    ISet.prototype.allign = function () {
+        var nodesInSameISet = this.getNodes();
+        // If it is singleton
+        if (nodesInSameISet.length !== 1) {
+            var levels = [];
+            var node;
+            // Iterate over the nodes in same iset and get the deepest level of all
+            for (var i = 0; i < nodesInSameISet.length; i++) {
+                node = nodesInSameISet[i];
+                if (levels.indexOf(node.level) === -1) {
+                    levels.push(node.level);
+                }
+            }
+            levels.sort();
+            var y = levels[levels.length-1] * GTE.CONSTANTS.DIST_BETWEEN_LEVELS;
+            while (nodesInSameISet.length > 0) {
+                node = nodesInSameISet.pop();
+                if (node.level < levels[levels.length-1]) {
+                    GTE.tree.moveDownEverythingBelowNode(node,
+                            y - node.level * GTE.CONSTANTS.DIST_BETWEEN_LEVELS);
+                }
+            }
+            // if (levels.length > 1 && levels[levels.length-1] !== this.level) {
+            //     GTE.tree.recursiveMoveDownEverythingBelowNode(this,
+            //                 y - this.level * GTE.CONSTANTS.DIST_BETWEEN_LEVELS);
+            // }
+            if (y > this.y) {
+                this.y = y;
+            }
         }
     };
 
@@ -263,6 +305,17 @@ GTE.TREE = (function (parentModule) {
             this.delete();
             GTE.tree.createSingletonISets(nodes);
         }
+    };
+
+    ISet.prototype.getISetsBelow = function (isets) {
+        var nodes = this.getNodes();
+        for (var i = 0; i < nodes.length; i++) {
+            nodes[i].getISetsBelow(isets);
+        }
+    };
+
+    ISet.prototype.recursiveGetISetsBelow = function () {
+
     };
 
     // Add class to parent module

@@ -30,36 +30,6 @@ GTE.TREE = (function (parentModule) {
     };
 
     /**
-    * Calculates the y of the circle depending. It needs to check for the positions
-    * of the other nodes in the same iset
-    */
-    Node.prototype.calculateY = function () {
-        var nodesInSameISet = this.iset.getNodes();
-        // If it is alone
-        if (nodesInSameISet.length === 1) {
-            return this.level * GTE.CONSTANTS.DIST_BETWEEN_LEVELS;
-        } else {
-            var levels = [];
-            // Iterate over the nodes in same iset and get the deepest level of all
-            while (nodesInSameISet.length !== 0) {
-                var node = nodesInSameISet.pop();
-                if (levels.indexOf(node.level) === -1) {
-                    levels.push(node.level);
-                }
-            }
-            levels.sort();
-            var y = levels[levels.length-1] * GTE.CONSTANTS.DIST_BETWEEN_LEVELS;
-            if (levels[levels.length-1] !== this.level) {
-                GTE.tree.recursiveMoveDownEverythingBelowNode(this,
-                            y - this.level * GTE.CONSTANTS.DIST_BETWEEN_LEVELS);
-            }
-            return y;
-        }
-    };
-
-
-
-    /**
     * Function that draws the node in the global canvas
     */
     Node.prototype.draw = function () {
@@ -72,7 +42,7 @@ GTE.TREE = (function (parentModule) {
         this.circle = GTE.canvas.circle(GTE.CONSTANTS.CIRCLE_SIZE)
                                 .addClass('node')
                                 .x(this.x)
-                                .y(this.y)
+                                .y(this.iset.y)
                                 .click(function() {
                                     thisNode.onClick();
                                 });
@@ -136,6 +106,32 @@ GTE.TREE = (function (parentModule) {
         var indexInList = this.children.indexOf(nodeToDelete);
         if (indexInList > -1) {
             this.children.splice(indexInList, 1);
+        }
+    };
+
+    Node.prototype.getChildrenISets = function () {
+        var isets = [];
+        for (var i = 0; i < this.children.length; i++) {
+            if (isets.indexOf(this.children[i].iset) === -1) {
+                isets.push(this.children[i].iset);
+            }
+        }
+        return isets;
+    };
+
+    Node.prototype.getISetsBelow = function (isets) {
+        for (var i = 0; i < this.children.length; i++) {
+            this.recursiveGetISetsBelow(this.children[i], isets);
+        }
+    };
+
+    Node.prototype.recursiveGetISetsBelow = function (node, isets) {
+        var iset = node.iset;
+        if (isets.indexOf(iset) === -1) {
+            isets.push(iset);
+        }
+        for (var i = 0; i < node.children.length; i++) {
+            this.recursiveGetISetsBelow(node.children[i], isets);
         }
     };
 
