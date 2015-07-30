@@ -45,28 +45,43 @@ GTE.TREE = (function (parentModule) {
             .click(function() {
                 thisNode.onClick();
             });
+        if (this.player) {
+            circle.fill(this.player.colour);
+        } else {
+            circle.fill(GTE.COLOURS.BLACK);
+        }
     };
 
     /**
     * Function that defines the behaviour of the node on click
     */
     Node.prototype.onClick = function () {
-        if (GTE.MODE === GTE.MODES.ADD){
-            if (this.isLeaf()) {
-                // Always start with two nodes
+        switch (GTE.MODE) {
+            case GTE.MODES.ADD:
+                if (this.isLeaf()) {
+                    // Always start with two nodes
+                    GTE.tree.addChildNodeTo(this);
+                }
                 GTE.tree.addChildNodeTo(this);
-            }
-            GTE.tree.addChildNodeTo(this);
-        } else {
-            // If it is a leaf, delete itself, if not, delete all children
-            if (this.isLeaf()) {
-                this.delete();
-            } else {
-                GTE.tree.deleteChildrenOf(this);
-            }
+                // Tell the tree to redraw itself
+                GTE.tree.draw();
+                break;
+            case GTE.MODES.DELETE:
+                // If it is a leaf, delete itself, if not, delete all children
+                if (this.isLeaf()) {
+                    this.delete();
+                } else {
+                    GTE.tree.deleteChildrenOf(this);
+                }
+                GTE.tree.draw();
+                break;
+            case GTE.MODES.PLAYERS:
+                GTE.tree.assignSelectedPlayerToNode(this);
+                GTE.tree.draw();
+                break;
+            default:
+                break;
         }
-        // Tell the tree to redraw itself
-        GTE.tree.draw();
     };
 
 
@@ -122,6 +137,10 @@ GTE.TREE = (function (parentModule) {
     Node.prototype.delete = function () {
         this.changeParent(null);
         GTE.tree.positionsUpdated = false;
+    };
+
+    Node.prototype.assignPlayer = function (player) {
+        this.player = player;
     };
 
     // Add class to parent module

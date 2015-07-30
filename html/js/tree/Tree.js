@@ -222,6 +222,10 @@ GTE.TREE = (function (parentModule) {
         }
     };
 
+    Tree.prototype.assignSelectedPlayerToNode = function (node) {
+        node.assignPlayer(this.players[GTE.tools.getActivePlayer()]);
+    };
+
     Tree.prototype.checkColourSingularity = function (colour) {
         for (var i = 0; i < this.players.length; i++) {
             if (colour === this.players[i].colour) {

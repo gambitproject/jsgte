@@ -54,7 +54,6 @@ GTE.UI = (function (parentModule) {
     };
 
     Tools.prototype.selectPlayer = function (player) {
-        alert(player);
         this.activePlayer = player;
         this.switchMode(GTE.MODES.PLAYERS);
         return false;
@@ -83,7 +82,9 @@ GTE.UI = (function (parentModule) {
         return GTE.COLOURS[Object.keys(GTE.COLOURS)[random]];
     };
 
-
+    Tools.prototype.getActivePlayer = function () {
+        return this.activePlayer;
+    };
 
 
     // Add class to parent module
