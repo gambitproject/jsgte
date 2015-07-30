@@ -11,8 +11,9 @@ GTE.TREE = (function (parentModule) {
         this.positionsUpdated = false;
 
         this.players = [];
-        this.newPlayer(GTE.COLOURS.RED);
-        this.newPlayer(GTE.COLOURS.BLUE);
+        this.newPlayer(0, "", GTE.COLOURS.BLACK);
+        this.newPlayer(1, "1", GTE.COLOURS.RED);
+        this.newPlayer(2, "2", GTE.COLOURS.BLUE);
     }
 
     /**
@@ -181,9 +182,9 @@ GTE.TREE = (function (parentModule) {
         GTE.canvas.viewbox(0, 0, GTE.canvas.viewbox().width*1.5, GTE.canvas.viewbox().height*1.5);
     };
 
-    Tree.prototype.newPlayer = function (colour) {
-        var id = this.players.length+1;
-        var name = this.players.length+1;
+    Tree.prototype.newPlayer = function (id, name, colour) {
+        var id = id || this.players.length;
+        var name = name || this.players.length;
         colour = colour || GTE.tools.getRandomColour();
         // Check there are no players with that colour
         while (!this.checkColourSingularity(colour)) {

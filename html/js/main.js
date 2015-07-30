@@ -22,15 +22,13 @@
         return false;
     });
 
-    var playerButtonsFunction = function () {
-        var attribute = this.getAttribute("player");
-        alert(attribute);
-    };
-
     var playerButtons = document.getElementsByClassName("button-player");
-
     for (var i = 0; i < playerButtons.length; i++) {
-        playerButtons[i].addEventListener("click", playerButtonsFunction, false);
+        playerButtons[i].addEventListener("click", function () {
+            var player = this.getAttribute("player");
+            GTE.tools.selectPlayer(player);
+            return false;
+        });
     }
 
     // document.getElementById("button-player-chance").addEventListener("click", function(){
