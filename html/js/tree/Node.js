@@ -47,6 +47,10 @@ GTE.TREE = (function (parentModule) {
             });
         if (this.player) {
             circle.fill(this.player.colour);
+            GTE.canvas.plain(this.player.name)
+                .x(this.x + GTE.CONSTANTS.TEXT_NODE_MARGIN)
+                .y(this.y)
+                .fill(this.player.colour);
         } else {
             circle.fill(GTE.COLOURS.BLACK);
         }
