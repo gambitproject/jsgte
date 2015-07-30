@@ -182,8 +182,8 @@ GTE.TREE = (function (parentModule) {
     };
 
     Tree.prototype.newPlayer = function (colour) {
-        var id = this.players.length;
-        var name = this.players.length;
+        var id = this.players.length+1;
+        var name = this.players.length+1;
         colour = colour || GTE.tools.getRandomColour();
         // Check there are no players with that colour
         while (!this.checkColourSingularity(colour)) {
@@ -204,7 +204,7 @@ GTE.TREE = (function (parentModule) {
             console.log("EXCEPTION: " + err);
             return -1;
         }
-        return this.players.indexOf(player);
+        return player;
     };
 
     Tree.prototype.removePlayer = function (player) {

@@ -50,18 +50,26 @@ GTE.UI = (function (parentModule) {
         var player = GTE.tree.newPlayer();
         var playerButtons = document.getElementById("player-buttons");
         var lastPlayer = playerButtons.lastElementChild;
-        var color = this.getRandomColour();
-        lastPlayer.insertAdjacentHTML("afterend", "<li><button style='color:"+ color +
+        lastPlayer.insertAdjacentHTML(
+            "afterend", "<li><button style='color:"+ player.colour +
             "' id='button-player-" + player.id +
             "' class='button button--sacnite button--inverted button-player'" +
             "alt='Player " + player.id + "' player='" + player.id +
             "'><i class='icon-user'></i><span>" + player.id + "</span></button></li>");
+        lastPlayer = playerButtons.lastElementChild;
+        lastPlayer.firstElementChild.addEventListener("click", function () {
+            var attribute = this.getAttribute("player");
+            alert(attribute);
+            return false;
+        });
     };
 
     Tools.prototype.getRandomColour = function () {
         var random = Math.floor((Math.random() * Object.keys(GTE.COLOURS).length) + 1);
         return GTE.COLOURS[Object.keys(GTE.COLOURS)[random]];
     };
+
+
 
 
     // Add class to parent module
