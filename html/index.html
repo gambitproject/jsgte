@@ -32,9 +32,12 @@
                     <li><button id="button-remove" class="button button--sacnite button--inverted" alt="Remove node"><i class="icon-minus-circle"></i><span>+</span></button></li>
                 </ul>
                 <ul class="vertical-centered">
-                    <li><button id="button-player-chance" class="button button--sacnite button--inverted" alt="Chance"><i class="icon-dice"></i><span>+</span></button></li>
-                    <li><button id="button-player-1" class="button button--sacnite button--inverted red" alt="Player 1"><i class="icon-user"></i><span>+</span></button></li>
-                    <li><button id="button-player-2" class="button button--sacnite button--inverted blue" alt="Player 2"><i class="icon-user"></i><span>+</span></button></li>
+                    <div id="player-buttons">
+                        <li><button id="button-player-chance" class="button button--sacnite button--inverted button-player" alt="Chance" player="0"><i class="icon-dice"></i><span>+</span></button></li>
+                        <li><button id="button-player-1" class="button button--sacnite button--inverted red button-player" alt="Player 1" player="1"><i class="icon-user"></i><span>+</span></button></li>
+                        <li><button id="button-player-2" class="button button--sacnite button--inverted blue button-player" alt="Player 2" player="2"><i class="icon-user"></i><span>+</span></button></li>
+                    </div>
+                    <li><button id="button-player-more" class="button button--sacnite button--inverted" alt="More players"><i class="icon-user-plus"></i><span>+</span></button></li>
                 </ul>
             </div>
         </div>

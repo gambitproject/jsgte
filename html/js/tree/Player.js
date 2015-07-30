@@ -6,8 +6,10 @@ GTE.TREE = (function (parentModule) {
     * @class
     * @param {String} name Player's name.
     */
-    function Player(name) {
+    function Player(id, name, colour) {
+        this.id = id;
         this.name = name;
+        this.colour = colour;
     }
 
     /**

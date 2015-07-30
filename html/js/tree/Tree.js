@@ -11,6 +11,8 @@ GTE.TREE = (function (parentModule) {
         this.positionsUpdated = false;
 
         this.players = [];
+        this.newPlayer(GTE.COLOURS.RED);
+        this.newPlayer(GTE.COLOURS.BLUE);
     }
 
     /**
@@ -179,36 +181,53 @@ GTE.TREE = (function (parentModule) {
         GTE.canvas.viewbox(0, 0, GTE.canvas.viewbox().width*1.5, GTE.canvas.viewbox().height*1.5);
     };
 
-    Tree.prototype.newPlayer = function (name) {
-        var player = new GTE.TREE.Player(name);
+    Tree.prototype.newPlayer = function (colour) {
+        var id = this.players.length;
+        var name = this.players.length;
+        colour = colour || GTE.tools.getRandomColour();
+        // Check there are no players with that colour
+        while (!this.checkColourSingularity(colour)) {
+            colour = GTE.tools.getRandomColour();
+        }
+
+        var player = new GTE.TREE.Player(id, name, colour);
         return this.addPlayer(player);
     };
 
     Tree.prototype.addPlayer = function (player) {
         try {
-            if (players.indexOf(player) !== -1) {
+            if (this.players.indexOf(player) !== -1) {
                 throw "Player already in list";
             }
-            players.push(player);
+            this.players.push(player);
         } catch (err) {
             console.log("EXCEPTION: " + err);
             return -1;
         }
-        return players.indexOf(player);
+        return this.players.indexOf(player);
     };
 
     Tree.prototype.removePlayer = function (player) {
         try {
-            var index = players.indexOf(player);
+            var index = this.players.indexOf(player);
             if (index === -1) {
                 throw "Player not found";
             }
-            players.splice(index, 1);
+            this.players.splice(index, 1);
             return index;
         } catch (err) {
             console.log("EXCEPTION: " + err);
             return -1;
         }
+    };
+
+    Tree.prototype.checkColourSingularity = function (colour) {
+        for (var i = 0; i < this.players.length; i++) {
+            if (colour === this.players[i].colour) {
+                return false;
+            }
+        }
+        return true;
     };
 
     // Add class to parent module
