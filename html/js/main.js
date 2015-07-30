@@ -22,23 +22,35 @@
         return false;
     });
 
-    document.getElementById("button-player-chance").addEventListener("click", function(){
-        GTE.tools.switchMode(GTE.MODES.PLAYER_CHANCE);
-        return false;
-    });
+    var playerButtonsFunction = function () {
+        var attribute = this.getAttribute("player");
+        alert(attribute);
+    };
 
-    document.getElementById("button-player-1").addEventListener("click", function(){
-        GTE.tools.switchMode(GTE.MODES.PLAYER_1);
-        return false;
-    });
+    var playerButtons = document.getElementsByClassName("button-player");
 
-    document.getElementById("button-player-2").addEventListener("click", function(){
-        GTE.tools.switchMode(GTE.MODES.PLAYER_2);
-        return false;
-    });
+    for (var i = 0; i < playerButtons.length; i++) {
+        playerButtons[i].addEventListener("click", playerButtonsFunction, false);
+    }
+
+    // document.getElementById("button-player-chance").addEventListener("click", function(){
+    //     GTE.tools.switchMode(GTE.MODES.PLAYER);
+    //     GTE.tools.selectPlayer();
+    //     return false;
+    // });
+    //
+    // document.getElementById("button-player-1").addEventListener("click", function(){
+    //     GTE.tools.switchMode(GTE.MODES.PLAYER);
+    //     return false;
+    // });
+    //
+    // document.getElementById("button-player-2").addEventListener("click", function(){
+    //     GTE.tools.switchMode(GTE.MODES.PLAYER);
+    //     return false;
+    // });
 
     document.getElementById("button-player-more").addEventListener("click", function(){
-        GTE.tools.switchMode(GTE.MODES.PLAYER_MORE);
+        GTE.tools.addPlayer();
         return false;
     });
 
