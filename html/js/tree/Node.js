@@ -143,6 +143,9 @@ GTE.TREE = (function (parentModule) {
         GTE.tree.positionsUpdated = false;
     };
 
+    /** Assigns a specific player to current node
+    * @param {Player} player Player that will be assigned to the node
+    */
     Node.prototype.assignPlayer = function (player) {
         this.player = player;
     };
