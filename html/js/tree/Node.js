@@ -38,21 +38,37 @@ GTE.TREE = (function (parentModule) {
             this.reachedBy.draw();
         }
         var thisNode = this;
-        var circle = GTE.canvas.circle(GTE.CONSTANTS.CIRCLE_SIZE)
-            .addClass('node')
-            .x(this.x)
-            .y(this.y)
-            .click(function() {
-                thisNode.onClick();
-            });
+        if (this.player && this.player.id === 0){
+            this.shape = GTE.canvas.rect(
+                          GTE.CONSTANTS.CIRCLE_SIZE, GTE.CONSTANTS.CIRCLE_SIZE);
+        } else {
+            this.shape = GTE.canvas.circle(GTE.CONSTANTS.CIRCLE_SIZE);
+        }
+        this.shape.addClass('node')
+                  .x(this.x)
+                  .y(this.y)
+                  .click(function() {
+                      thisNode.onClick();
+                  });
         if (this.player) {
-            circle.fill(this.player.colour);
-            GTE.canvas.plain(this.player.name)
+            this.shape.fill(this.player.colour);
+            var text = GTE.canvas.plain(this.player.name)
                 .x(this.x + GTE.CONSTANTS.TEXT_NODE_MARGIN)
                 .y(this.y)
                 .fill(this.player.colour);
+            text.click(function () {
+                var newName = window.prompt("Enter the new name");
+                if (newName !== null) {
+                    thisNode.player.changeName(newName);
+                }
+                GTE.tree.draw();
+            });
         } else {
-            circle.fill(GTE.COLOURS.BLACK);
+            this.shape.fill(GTE.COLOURS.BLACK);
+        }
+
+        if (GTE.MODE === GTE.MODES.PLAYERS && this.isLeaf()) {
+            this.shape.hide();
         }
     };
 
@@ -80,8 +96,10 @@ GTE.TREE = (function (parentModule) {
                 GTE.tree.draw();
                 break;
             case GTE.MODES.PLAYERS:
-                GTE.tree.assignSelectedPlayerToNode(this);
-                GTE.tree.draw();
+                if (!this.isLeaf()) {
+                    GTE.tree.assignSelectedPlayerToNode(this);
+                    GTE.tree.draw();
+                }
                 break;
             default:
                 break;
@@ -148,6 +166,14 @@ GTE.TREE = (function (parentModule) {
     */
     Node.prototype.assignPlayer = function (player) {
         this.player = player;
+    };
+
+    Node.prototype.hide = function () {
+        this.shape.hide();
+    };
+
+    Node.prototype.show = function () {
+        this.shape.show();
     };
 
     // Add class to parent module

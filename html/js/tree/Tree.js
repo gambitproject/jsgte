@@ -11,7 +11,7 @@ GTE.TREE = (function (parentModule) {
         this.positionsUpdated = false;
 
         this.players = [];
-        this.newPlayer("", GTE.COLOURS.BLACK);
+        this.newPlayer("Chance", GTE.COLOURS.BLACK);
         this.newPlayer("1", GTE.COLOURS.RED);
         this.newPlayer("2", GTE.COLOURS.BLUE);
     }
@@ -193,8 +193,8 @@ GTE.TREE = (function (parentModule) {
     Tree.prototype.newPlayer = function (name, colour) {
         // Player ID is incremental
         var id;
-        if (this.players.length > 1) {
-            id = this.players[this.players.length-1]+1;
+        if (this.players.length >= 1) {
+            id = this.players[this.players.length-1].id+1;
         } else {
             id = 0;
         }
@@ -278,6 +278,20 @@ GTE.TREE = (function (parentModule) {
             }
         }
         return true;
+    };
+
+    Tree.prototype.hideLeaves = function () {
+        var numberLeaves = this.numberLeaves();
+        for (var i = 0; i < numberLeaves; i++) {
+            this.leaves[i].hide();
+        }
+    };
+
+    Tree.prototype.showLeaves = function () {
+        var numberLeaves = this.numberLeaves();
+        for (var i = 0; i < numberLeaves; i++) {
+            this.leaves[i].show();
+        }
     };
 
     // Add class to parent module

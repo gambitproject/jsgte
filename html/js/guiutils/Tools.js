@@ -51,6 +51,11 @@ GTE.UI = (function (parentModule) {
         document.getElementById(buttonToSwitch).className += " " + "active";
 
         GTE.MODE = modeToSwitch;
+        if (GTE.MODE === GTE.MODES.PLAYERS) {
+            GTE.tree.hideLeaves();
+        } else {
+            GTE.tree.showLeaves();
+        }
     };
 
     /**
