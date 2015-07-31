@@ -19,6 +19,14 @@ GTE.TREE = (function (parentModule) {
         return "Player: " + this.name;
     };
 
+    /**
+    * Changes player's name to a given one
+    * @param {String} newName New player's name
+    */
+    Player.prototype.changeName = function (newName) {
+        this.name = newName;
+    };
+
     // Add class to parent module
     parentModule.Player = Player;
 
