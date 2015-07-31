@@ -11,9 +11,9 @@ GTE.TREE = (function (parentModule) {
         this.positionsUpdated = false;
 
         this.players = [];
-        this.newPlayer(0, "", GTE.COLOURS.BLACK);
-        this.newPlayer(1, "1", GTE.COLOURS.RED);
-        this.newPlayer(2, "2", GTE.COLOURS.BLUE);
+        this.newPlayer("", GTE.COLOURS.BLACK);
+        this.newPlayer("1", GTE.COLOURS.RED);
+        this.newPlayer("2", GTE.COLOURS.BLUE);
     }
 
     /**
@@ -182,38 +182,70 @@ GTE.TREE = (function (parentModule) {
         GTE.canvas.viewbox(0, 0, GTE.canvas.viewbox().width*1.5, GTE.canvas.viewbox().height*1.5);
     };
 
-    Tree.prototype.newPlayer = function (id, name, colour) {
-        var id = id || this.players.length;
-        var name = name || this.players.length;
+    /**
+    * Creates a new player with a random unique colour and adds it to the list
+    * of players
+    * @param  {String}  [name]  The name of the player. If null, it will be the same
+    *                           as the player id
+    * @param  {String} [colour] Hex code of the player's colour
+    * @return {Player} player   Created player
+    */
+    Tree.prototype.newPlayer = function (name, colour) {
+        // Player ID is incremental
+        var id;
+        if (this.players.length > 1) {
+            id = this.players[this.players.length-1]+1;
+        } else {
+            id = 0;
+        }
+        // If there is no specified name, the name is the same as the id
+        name = name || id;
+        // If there is no specified colour, get a random one
         colour = colour || GTE.tools.getRandomColour();
         // Check there are no players with that colour
-        while (!this.checkColourSingularity(colour)) {
+        while (!this.checkColourIsUnique(colour)) {
+            // If the colour is not unique get a new random colour
             colour = GTE.tools.getRandomColour();
         }
-
+        // Create the new player
         var player = new GTE.TREE.Player(id, name, colour);
+        // Add the player to the list of players and return it
         return this.addPlayer(player);
     };
 
+    /**
+    * Adds a player to the list of players
+    * @param  {Player} player  Player that will be added to the list
+    * @return {Player} player  Player added to the list. Null if error.
+    */
     Tree.prototype.addPlayer = function (player) {
         try {
+            // Check for the player not to be already in the list
             if (this.players.indexOf(player) !== -1) {
                 throw "Player already in list";
             }
+            // Add the player to the list
             this.players.push(player);
         } catch (err) {
             console.log("EXCEPTION: " + err);
-            return -1;
+            return null;
         }
         return player;
     };
 
+    /**
+    * Removes a player from the list of players
+    * @param  {Player} player Player to be removed
+    * @return {Number} index  Index of the removed player. -1 if not found
+    */
     Tree.prototype.removePlayer = function (player) {
         try {
+            // Get the index of the player in the list
             var index = this.players.indexOf(player);
             if (index === -1) {
                 throw "Player not found";
             }
+            // Extract that player from the list
             this.players.splice(index, 1);
             return index;
         } catch (err) {
@@ -222,13 +254,26 @@ GTE.TREE = (function (parentModule) {
         }
     };
 
+    /**
+    * Assigns the current active player to a node
+    * @param {Node} node Node that will get the player assigned
+    */
     Tree.prototype.assignSelectedPlayerToNode = function (node) {
+        // This function simply calls the proper function in the Node and
+        // specifies the current active player as the player to assign
         node.assignPlayer(this.players[GTE.tools.getActivePlayer()]);
     };
 
-    Tree.prototype.checkColourSingularity = function (colour) {
+    /**
+    * Checks a colour is unique in the list of players
+    * @param  {String}  colour Hex code of the colour to check
+    * @return {Boolean} unique Returns false if the colour is not unique
+    */
+    Tree.prototype.checkColourIsUnique = function (colour) {
+        // Iterate over the list of players trying to find that specific colour
         for (var i = 0; i < this.players.length; i++) {
             if (colour === this.players[i].colour) {
+                // Return false if colour found
                 return false;
             }
         }
