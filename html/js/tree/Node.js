@@ -196,9 +196,10 @@ GTE.TREE = (function (parentModule) {
     */
     Node.prototype.delete = function () {
         // Delete all references to current node
+        this.parent.iset.removeMove(this.reachedBy);
         this.changeParent(null);
         this.iset.removeNode(this);
-        this.reachedby = null;
+        this.reachedBy = null;
         GTE.tree.positionsUpdated = false;
     };
 
