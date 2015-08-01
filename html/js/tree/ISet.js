@@ -55,12 +55,12 @@ GTE.TREE = (function (parentModule) {
     * Function that adds a new node to the tree. It creates it and checks
     * if the node is the first or last in its information set
     * @param {Node} parent Node that will be set as parent to the new one
-    * @param {Move} reachedby Move that leads to this new node
+    * @param {Move} reachedBy Move that leads to this new node
     * @param {ISet} iset Information set that will contain it
     * @return {Node} newNode New node that has been created
     */
-    ISet.prototype.addNewNode = function (parent, reachedby) {
-        var newNode = new GTE.TREE.Node(parent, reachedby, this);
+    ISet.prototype.addNewNode = function (parent, reachedBy) {
+        var newNode = new GTE.TREE.Node(parent, reachedBy, this);
         this.numberOfNodes++;
         this.updateFirstAndLast();
         return newNode;
@@ -217,6 +217,19 @@ GTE.TREE = (function (parentModule) {
             this.updateFirstAndLast();
         }
     };
+
+    /**
+    * Removes the move from the iset
+    * @param {Move} move Move that will be removed
+    */
+    ISet.prototype.removeMove = function (move) {
+        var indexInList = this.moves.indexOf(move);
+        if (indexInList > -1) {
+            this.moves.splice(indexInList, 1);
+        }
+    };
+
+
     /**
     * On click function for the information set
     */
