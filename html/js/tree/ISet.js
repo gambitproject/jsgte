@@ -13,6 +13,7 @@ GTE.TREE = (function (parentModule) {
         this.lastNode = null;
         this.numberOfNodes = 0;
         this.y = 0;
+        this.depth = 0;
     }
 
     /**
@@ -152,12 +153,20 @@ GTE.TREE = (function (parentModule) {
     };
 
     /**
-    * Calculates the y of the circle depending. It needs to check for the positions
-    * of the other nodes in the same iset
+    * Calculates the y of the iset depending on the level. It needs to check for
+    * the positions of the other nodes in the same iset
     */
     ISet.prototype.calculateY = function () {
         var nodesInSameISet = this.getNodes();
         this.y = nodesInSameISet[0].level * GTE.CONSTANTS.DIST_BETWEEN_LEVELS;
+    };
+
+    ISet.prototype.calculateDepth = function () {
+        this.depth = -1;
+        var nodesInSameISet = this.getNodes();
+        for (var i = 0; i < nodesInSameISet.length; i++) {
+            this.depth = Math.max(this.depth, nodesInSameISet[i].level);
+        }
     };
 
     ISet.prototype.allign = function () {
@@ -191,6 +200,8 @@ GTE.TREE = (function (parentModule) {
             }
         }
     };
+
+
 
     /**
     * Updates the first and last node of the iset
@@ -329,6 +340,25 @@ GTE.TREE = (function (parentModule) {
 
     ISet.prototype.recursiveGetISetsBelow = function () {
 
+    };
+
+    ISet.compare = function (a, b) {
+        if (parseInt(a.firstNode.x) <= parseInt(b.firstNode.x)) {
+            return -1;
+        } else {
+            return 1;
+        }
+        return 0;
+    };
+
+    ISet.prototype.hasChildren = function () {
+        var nodes = this.getNodes();
+        for (var i = 0; i < nodes.length; i++) {
+            if (nodes[i].children.length > 0) {
+                return true;
+            }
+        }
+        return false;
     };
 
     // Add class to parent module
