@@ -6,8 +6,8 @@ GTE.TREE = (function (parentModule) {
     * @class
     * @param {Node} [parent] Parent node. If null, this is root.
     */
-    function Node(parent, reachedBy, iset) {
-        this.circle = null;
+    function Node(parent, player, reachedBy, iset) {
+        this.player = player;
         this.parent = parent;
         this.children = [];
         this.iset = iset || null;
@@ -39,13 +39,28 @@ GTE.TREE = (function (parentModule) {
             this.reachedBy.draw(this.parent, this);
         }
         var thisNode = this;
-        this.circle = GTE.canvas.circle(GTE.CONSTANTS.CIRCLE_SIZE)
-                                .addClass('node')
-                                .x(this.x)
-                                .y(this.iset.y)
-                                .click(function() {
-                                    thisNode.onClick();
-                                });
+        if (this.player && this.player.id === 0){
+            this.shape = GTE.canvas.rect(
+                          GTE.CONSTANTS.CIRCLE_SIZE, GTE.CONSTANTS.CIRCLE_SIZE);
+        } else {
+            this.shape = GTE.canvas.circle(GTE.CONSTANTS.CIRCLE_SIZE);
+        }
+        this.shape.addClass('node')
+                  .x(this.x)
+                  .y(this.iset.y)
+                  .click(function() {
+                      thisNode.onClick();
+                  });
+        if (this.player) {
+            this.shape.fill(this.player.colour);
+            this.player.draw(this.x, this.y);
+        } else {
+            this.shape.fill(GTE.COLOURS.BLACK);
+        }
+
+        if (GTE.MODE === GTE.MODES.PLAYERS && this.isLeaf()) {
+            this.shape.hide();
+        }
     };
 
     /**
@@ -82,6 +97,19 @@ GTE.TREE = (function (parentModule) {
             case GTE.MODES.DISSOLVE:
                 // This is controlled by the information set
                 this.iset.onClick();
+            case GTE.MODES.PLAYERS:
+                if (!this.isLeaf()) {
+                    // If player name is empty and default name is hidden, show the default name
+                    if (this.player !== undefined) {
+                        if (this.player === GTE.tree.getActivePlayer() &&
+                                this.player.name.length === 0) {
+                            this.player.toggleDefault();
+                            break;
+                        }
+                    }
+                    GTE.tree.assignSelectedPlayerToNode(this);
+                    GTE.tree.draw();
+                }
                 break;
             default:
                 break;
@@ -201,6 +229,21 @@ GTE.TREE = (function (parentModule) {
         this.iset.removeNode(this);
         this.reachedBy = null;
         GTE.tree.positionsUpdated = false;
+    };
+
+    /** Assigns a specific player to current node
+    * @param {Player} player Player that will be assigned to the node
+    */
+    Node.prototype.assignPlayer = function (player) {
+        this.player = player;
+    };
+
+    Node.prototype.hide = function () {
+        this.shape.hide();
+    };
+
+    Node.prototype.show = function () {
+        this.shape.show();
     };
 
     // Add class to parent module

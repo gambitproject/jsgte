@@ -6,6 +6,7 @@ GTE.UI = (function (parentModule) {
     * @class
     */
     function Tools() {
+        this.activePlayer = -1;
     }
 
     /**
@@ -51,13 +52,78 @@ GTE.UI = (function (parentModule) {
             case GTE.MODES.DISSOLVE:
                 buttonToSwitch = "button-dissolve";
                 break;
+            case GTE.MODES.PLAYERS:
+                buttonToSwitch = "button-player-" + this.activePlayer;
+                break;
             default:
 
         }
         document.getElementById(buttonToSwitch).className += " " + "active";
 
         GTE.MODE = modeToSwitch;
+        if (GTE.MODE === GTE.MODES.PLAYERS) {
+            GTE.tree.hideLeaves();
+        } else {
+            GTE.tree.showLeaves();
+        }
+        document.getElementById(buttonToSwitch).className += " " + "active";
+
     };
+
+    /**
+    * Function that selects a player
+    * @param {Player} player Player to be set as active
+    */
+    Tools.prototype.selectPlayer = function (player) {
+        // Set player as active player and mode to PLAYERS mode
+        this.activePlayer = player;
+        this.switchMode(GTE.MODES.PLAYERS);
+    };
+
+    /**
+    * Function that adds a player button to the toolbar
+    */
+    Tools.prototype.addPlayer = function () {
+        // Create a new player
+        var player = GTE.tree.newPlayer();
+        // Get the last player button
+        var playerButtons = document.getElementById("player-buttons");
+        var lastPlayer = playerButtons.lastElementChild;
+        // Insert a new button after the last button
+        lastPlayer.insertAdjacentHTML("afterend",
+            "<li><button style='color:"+ player.colour +
+            "' id='button-player-" + player.id +
+            "' class='button button--sacnite button--inverted button-player'" +
+            " alt='Player " + player.id +
+            "' player='" + player.id +
+            "'><i class='icon-user'></i><span>" + player.id + "</span></button></li>");
+        // Get the newly added button
+        lastPlayer = playerButtons.lastElementChild;
+        // And add a click event that will call the selectPlayer function
+        lastPlayer.firstElementChild.addEventListener("click", function () {
+            var player = this.getAttribute("player");
+            GTE.tools.selectPlayer(player);
+            return false;
+        });
+    };
+
+    /**
+    * Function that gets a random colour from the list of GTE.COLOURS
+    * @return {String} colour Hex code of the randomly chosen colour
+    */
+    Tools.prototype.getRandomColour = function () {
+        var random = Math.floor((Math.random() * Object.keys(GTE.COLOURS).length) + 1);
+        return GTE.COLOURS[Object.keys(GTE.COLOURS)[random]];
+    };
+
+    /**
+    * Function that gets the active player (the player button that is selected)
+    * @return {Player} activePlayer Currently selected player
+    */
+    Tools.prototype.getActivePlayer = function () {
+        return this.activePlayer;
+    };
+
 
     // Add class to parent module
     parentModule.Tools = Tools;

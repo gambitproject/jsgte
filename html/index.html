@@ -11,8 +11,7 @@
         <link rel="stylesheet" href="css/main.css">
         <link rel="stylesheet" href="css/svg-styles.css">
         <link rel="stylesheet" href="css/widgets-styles.css">
-        <!-- Load Font awesome for icons from their CDN -->
-        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="css/font.css">
     </head>
     <body>
         <!--[if lt IE 8]>
@@ -25,13 +24,23 @@
             </div>
             <div>
                 <ul class="vertical-centered">
-                    <li><button id="button-new" class="button button--sacnite button--inverted" alt="Remove node"><i class="fa fa-file"></i><span>+</span></button></li>
+                    <li><button id="button-new" class="button button--sacnite button--inverted" alt="Remove node"><i class="icon-file"></i><span>+</span></button></li>
                 </ul>
             </div>
             <div>
                 <ul class="vertical-centered">
-                    <li><button id="button-add" class="active button button--sacnite button--inverted" alt="Add child node"><i class="fa fa-plus-circle"></i><span>+</span></button></li>
-                    <li><button id="button-remove" class="button button--sacnite button--inverted" alt="Remove node"><i class="fa fa-minus-circle"></i><span>+</span></button></li>
+                    <li><button id="button-add" class="active button button--sacnite button--inverted" alt="Add child node"><i class="icon-plus-circle"></i><span>+</span></button></li>
+                    <li><button id="button-remove" class="button button--sacnite button--inverted" alt="Remove node"><i class="icon-minus-circle"></i><span>+</span></button></li>
+                </ul>
+                <ul class="vertical-centered">
+                    <div id="player-buttons">
+                        <li><button id="button-player-0" class="button button--sacnite button--inverted button-player" alt="Chance" player="0"><i class="icon-dice"></i><span>+</span></button></li>
+                        <li><button id="button-player-1" class="button button--sacnite button--inverted red button-player" alt="Player 1" player="1"><i class="icon-user"></i><span>+</span></button></li>
+                        <li><button id="button-player-2" class="button button--sacnite button--inverted blue button-player" alt="Player 2" player="2"><i class="icon-user"></i><span>+</span></button></li>
+                    </div>
+                    <li><button id="button-player-more" class="button button--sacnite button--inverted" alt="More players"><i class="icon-user-plus"></i><span>+</span></button></li>
+                </ul>
+                <ul class="vertical-centered">
                     <li><button id="button-merge" class="button button--sacnite button--inverted" alt="Merge isets"><i class="fa fa-link"></i><span>+</span></button></li>
                     <li><button id="button-dissolve" class="button button--sacnite button--inverted" alt="Dissolve iset"><i class="fa fa-unlink"></i><span>+</span></button></li>
                 </ul>
@@ -46,6 +55,7 @@
         <script src="js/guiutils/ContentEditable.js"></script>
         <script src="js/tree/ISet.js"></script>
         <script src="js/tree/Move.js"></script>
+        <script src="js/tree/Player.js"></script>
         <script src="js/tree/Tree.js"></script>
         <script src="js/tree/Node.js"></script>
         <script src="js/main.js"></script>
