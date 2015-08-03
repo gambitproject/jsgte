@@ -14,16 +14,11 @@ GTE.UI = (function (parentModule) {
     * It creates a new Tree and draws it
     */
     Tools.prototype.newTree = function() {
-        var rootIset = new GTE.TREE.ISet();
-        var root = new GTE.TREE.Node(null, null, null, rootIset);
-        rootIset.firstNode = root;
-        rootIset.lastNode = root;
-
+        var root = new GTE.TREE.Node();
         GTE.tree = new GTE.TREE.Tree(root);
-        GTE.tree.isets.push(rootIset);
-        GTE.tree.addChildISetTo(rootIset);
-        GTE.tree.updatePositions();
-        // Create a node and draw it
+        new GTE.TREE.Node(root);
+        new GTE.TREE.Node(root);
+        // Draw the tree
         GTE.tree.draw();
     };
 
