@@ -11,9 +11,9 @@ GTE.TREE = (function (parentModule) {
         this.positionsUpdated = false;
 
         this.players = [];
-        this.newPlayer("Chance", GTE.COLOURS.BLACK);
-        this.newPlayer("1", GTE.COLOURS.RED);
-        this.newPlayer("2", GTE.COLOURS.BLUE);
+        this.newPlayer("", GTE.COLOURS.BLACK);
+        this.newPlayer(GTE.PLAYERS.DEFAULT_PLAYER_NAME + " 1", GTE.COLOURS.RED);
+        this.newPlayer(GTE.PLAYERS.DEFAULT_PLAYER_NAME + " 2", GTE.COLOURS.BLUE);
     }
 
     /**
@@ -199,7 +199,11 @@ GTE.TREE = (function (parentModule) {
             id = 0;
         }
         // If there is no specified name, the name is the same as the id
-        name = name || id;
+        if (name === undefined) {
+            if (id !== 0){
+                name = GTE.PLAYERS.DEFAULT_PLAYER_NAME + " " + id;
+            }
+        }
         // If there is no specified colour, get a random one
         colour = colour || GTE.tools.getRandomColour();
         // Check there are no players with that colour
@@ -292,6 +296,14 @@ GTE.TREE = (function (parentModule) {
         for (var i = 0; i < numberLeaves; i++) {
             this.leaves[i].show();
         }
+    };
+
+    /**
+    * Returns the active player
+    * @return {Player} player Active Player
+    */
+    Tree.prototype.getActivePlayer = function () {
+        return this.players[GTE.tools.getActivePlayer()];
     };
 
     // Add class to parent module
