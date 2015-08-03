@@ -1,10 +1,10 @@
 @font-face {
 	font-family: 'icomoon';
-	src:url('../fonts/icomoon.eot?1a8tgl');
-	src:url('../fonts/icomoon.eot?#iefix1a8tgl') format('embedded-opentype'),
-		url('../fonts/icomoon.ttf?1a8tgl') format('truetype'),
-		url('../fonts/icomoon.woff?1a8tgl') format('woff'),
-		url('../fonts/icomoon.svg?1a8tgl#icomoon') format('svg');
+	src:url('../fonts/icomoon.eot?rc0ao3');
+	src:url('../fonts/icomoon.eot?#iefixrc0ao3') format('embedded-opentype'),
+		url('../fonts/icomoon.ttf?rc0ao3') format('truetype'),
+		url('../fonts/icomoon.woff?rc0ao3') format('woff'),
+		url('../fonts/icomoon.svg?rc0ao3#icomoon') format('svg');
 	font-weight: normal;
 	font-style: normal;
 }
@@ -26,17 +26,29 @@
 .icon-user:before {
 	content: "\f007";
 }
-.icon-user-plus:before {
-	content: "\f234";
-}
 .icon-plus-circle:before {
 	content: "\f055";
 }
 .icon-minus-circle:before {
 	content: "\f056";
 }
+.icon-chain:before {
+	content: "\f0c1";
+}
+.icon-link:before {
+	content: "\f0c1";
+}
+.icon-chain-broken:before {
+	content: "\f127";
+}
+.icon-unlink:before {
+	content: "\f127";
+}
 .icon-file:before {
 	content: "\f15b";
+}
+.icon-user-plus:before {
+	content: "\f234";
 }
 .icon-dice:before {
 	content: "\e600";
