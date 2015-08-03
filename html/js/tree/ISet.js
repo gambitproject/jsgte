@@ -167,6 +167,13 @@ GTE.TREE = (function (parentModule) {
         for (var i = 0; i < nodesInSameISet.length; i++) {
             this.depth = Math.max(this.depth, nodesInSameISet[i].level);
         }
+        // Get maximum parents depth
+        var parents = this.getParentISets();
+        var parentsMaxDepth = -1;
+        for (i = 0; i < parents.length; i++) {
+            parentsMaxDepth = Math.max(parentsMaxDepth, parents[i].depth);
+        }
+        this.depth = Math.max(this.depth, parentsMaxDepth+1);
     };
 
     ISet.prototype.allign = function () {
@@ -359,6 +366,20 @@ GTE.TREE = (function (parentModule) {
             }
         }
         return false;
+    };
+
+    ISet.prototype.getParentISets = function () {
+        var nodes = this.getNodes();
+        var parents = [];
+        for (var i = 0; i < nodes.length; i++) {
+            if (nodes[i].parent !== null) {
+                var parentISet = nodes[i].parent.iset;
+                if (parents.indexOf(parentISet) === -1) {
+                    parents.push(parentISet);
+                }
+            }
+        }
+        return parents;
     };
 
     // Add class to parent module

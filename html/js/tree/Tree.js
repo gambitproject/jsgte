@@ -93,6 +93,7 @@ GTE.TREE = (function (parentModule) {
     */
     Tree.prototype.updateDataStructures = function () {
         this.leaves = [];
+        this.isetsByLevel = [];
         // this.nodesByLevel = [];
         this.recursiveUpdateDataStructures(this.root);
     };
@@ -104,6 +105,12 @@ GTE.TREE = (function (parentModule) {
     * @param {Node} node Node to start from
     */
     Tree.prototype.recursiveUpdateDataStructures = function (node) {
+        if (this.isetsByLevel[node.level] === undefined) {
+            this.isetsByLevel[node.level] = [];
+        }
+        if (this.isetsByLevel[node.level].indexOf(node.iset) === -1){
+            this.isetsByLevel[node.level].push(node.iset);
+        }
         // if (this.nodesByLevel[node.level] === undefined) {
         //     this.nodesByLevel[node.level] = [];
         // }
@@ -127,12 +134,12 @@ GTE.TREE = (function (parentModule) {
         this.updateLeavesPositions();
         this.recursiveUpdatePositions(this.root);
         this.updateYs();
-        // this.allignISets();
         this.recursiveCheckForCollisions(this.root);
-        console.log(this.depths);
-        console.log("-------");
         this.calculateYs();
+        console.log(this.depths);
+        this.centerParents(this.root);
         this.positionsUpdated = true;
+
     };
 
     /**
@@ -152,82 +159,37 @@ GTE.TREE = (function (parentModule) {
             // TODO: apply level weighted function for special cases
             node.x = node.children[0].x +
                 (node.children[node.children.length-1].x - node.children[0].x)/2;
-            node.iset.y = node.level * GTE.CONSTANTS.DIST_BETWEEN_LEVELS;
+            // node.iset.y = node.level * GTE.CONSTANTS.DIST_BETWEEN_LEVELS;
         }
     };
 
     Tree.prototype.updateYs = function () {
-        // This function needs to be run from the bottom to the top of the tree
         this.depths = [];
-        // this.recursiveUpdateYs(this.root, isets);
-        console.log("ISETS " + this.isets);
-        for (var i = 0; i < this.isets.length; i++) {
-            this.isets[i].calculateDepth();
-            if (this.depths[this.isets[i].depth] === undefined){
-                this.depths[this.isets[i].depth] = [];
+        for (var i = 0; i < this.isetsByLevel.length; i++) {
+            for (var j = 0; j < this.isetsByLevel[i].length; j++) {
+                this.isetsByLevel[i][j].calculateDepth();
+                if (this.depths[this.isetsByLevel[i][j].depth] === undefined){
+                    this.depths[this.isetsByLevel[i][j].depth] = [];
+                }
+                if (this.depths[this.isetsByLevel[i][j].depth].indexOf(this.isetsByLevel[i][j]) === -1) {
+                    this.depths[this.isetsByLevel[i][j].depth].push(this.isetsByLevel[i][j]);
+                }
             }
-            this.depths[this.isets[i].depth].push(this.isets[i]);
         }
-        // for (i = 0; i < this.depths.length; i++) {
-        //     console.log("@@@@@ ANTES");
-        //     console.log(this.depths[i]);
-        //     this.depths[i].sort(function (a, b) {
-        //         if (parseInt(a.firstNode.x) <= parseInt(b.firstNode.x)) {
-        //             return -1;
-        //         } else {
-        //             return 1;
-        //         }
-        //         return 0;
-        //     });
-        //     console.log(this.depths[i]);
-        //     console.log("@@@@@ DESPUES");
-        // }
-        console.log(this.depths);
-        console.log("//////////");
     };
 
     Tree.prototype.calculateYs = function () {
         for (var i = 0; i < this.isets.length; i++) {
             this.isets[i].y = this.isets[i].depth * GTE.CONSTANTS.DIST_BETWEEN_LEVELS;
-        }
-    };
-
-    Tree.prototype.recursiveUpdateYs = function (node, isets) {
-        for (var i = 0; i < node.children.length; i++) {
-            this.recursiveUpdateYs(node.children[i], isets);
-        }
-        var iset = node.iset;
-        if (isets.indexOf(iset) === -1) {
-            isets.push(iset);
-            // iset.calculateY();
-            iset.calculateDepth();
-        }
-    };
-
-    Tree.prototype.allignISets = function () {
-        // This function needs to be run from the bottom to the top of the tree
-        var isets = [];
-        this.recursiveAllignISets(this.root, isets);
-    };
-
-    Tree.prototype.recursiveAllignISets = function (node, isets) {
-        for (var i = 0; i < node.children.length; i++) {
-            this.recursiveAllignISets(node.children[i], isets);
-        }
-        var iset = node.iset;
-        if (isets.indexOf(iset) === -1) {
-            isets.push(iset);
-            iset.allign();
+            if ((this.isets[i].y + GTE.CONSTANTS.CIRCLE_SIZE) > GTE.canvas.viewbox().height) {
+                this.zoomOut();
+            }
         }
     };
 
     Tree.prototype.recursiveCheckForCollisions = function () {
-        console.log("Checking for collisions");
         // Iterate over the depths array
         for (var i = 0; i < this.depths.length; i++) {
-            console.log("Checking depth " + i);
-            console.log("@@@@@ ANTES");
-            console.log(this.depths[i]);
             this.depths[i].sort(function (a, b) {
                 if (parseInt(a.firstNode.x) <= parseInt(b.firstNode.x)) {
                     return -1;
@@ -236,10 +198,7 @@ GTE.TREE = (function (parentModule) {
                 }
                 return 0;
             });
-            console.log(this.depths[i]);
-            console.log("@@@@@ DESPUES");
             for (var j = 0; j < this.depths[i].length; j++) {
-                console.log("Checking iset " + this.depths[i][j]);
                 // For every iset check if there are nodes in the same depth but
                 // different iset that collide with that iset
                 var currentIset = this.depths[i][j];
@@ -247,7 +206,7 @@ GTE.TREE = (function (parentModule) {
                     if ((currentIset.firstNode.x <= this.depths[i][k].firstNode.x) &&
                         (this.depths[i][k].lastNode.x <= currentIset.lastNode.x)) {
                             console.log("COLLISION!!!!!!");
-                            this.moveDownEverythingBelow(currentIset);
+                            this.moveDownEverythingBelow(this.depths[i][k]);
                     }
                 }
             }
@@ -291,21 +250,6 @@ GTE.TREE = (function (parentModule) {
                     }
                 }
             }
-
-
-            // for (var j = 0; j < this.nodesByLevel[node.level].length; j++) {
-            //     if (this.nodesByLevel[node.level][j].iset !== node.iset) {
-            //         // If leaf is positioned between first node and last node
-            //         if (node.iset.firstNode.x < this.nodesByLevel[node.level][j].x &&
-            //             this.nodesByLevel[node.level][j].x < node.x) {
-            //             // If it collides move everything below a little bit down
-            //             this.moveDownEverythingBelowISet(node.iset, node.level,
-            //                     GTE.CONSTANTS.VERTICAL_SHIFTING_ON_COLLISIONS);
-            //             // Only one collision is sufficient to move everything
-            //             break;
-            //         }
-            //     }
-            // }
         }
     };
 
@@ -316,12 +260,15 @@ GTE.TREE = (function (parentModule) {
         if (this.depths[iset.depth] === undefined) {
             this.depths[iset.depth] = [];
         }
-        this.depths[iset.depth].push(iset);
+        // Check iset is not already in array
+        indexInList = this.depths[iset.depth].indexOf(iset);
+        if (indexInList === -1) {
+            this.depths[iset.depth].push(iset);
+        }
         var iSetsToMoveDown = this.getISetsToMoveDown(iset);
         for (var i = 0; i < iSetsToMoveDown.length; i++) {
             this.moveDownEverythingBelow(iSetsToMoveDown[i]);
         }
-        console.log("ISETS to move down " + iSetsToMoveDown);
     };
 
     /**
@@ -348,27 +295,15 @@ GTE.TREE = (function (parentModule) {
         for (var i = 0; i < iSetsToMoveDown.length; i++) {
             iSetsToMoveDown[i].y += howMuch;
         }
-
-        //
-        // node.iset.y += howMuch;
-        // if (!node.isLeaf()) {
-        //     for (var i = 0; i < node.children.length; i++) {
-        //         this.recursiveMoveDownEverythingBelowNode(
-        //                                             node.children[i], howMuch);
-        //     }
-        // }
     };
 
     // Tree.prototype.getISetsToMoveDown = function (node) {
     Tree.prototype.getISetsToMoveDown = function (iset) {
         // var isets = node.getChildrenISets();
         var isets = iset.getChildrenISets();
-        console.log("children isets " + isets);
-
         for (var i = 0; i < isets.length; i++) {
             isets[i].getISetsBelow(isets);
         }
-        console.log("isets below " + isets);
         return isets;
     };
 
@@ -645,6 +580,22 @@ GTE.TREE = (function (parentModule) {
             }
         }
         this.positionsUpdated = false;
+    };
+
+    Tree.prototype.centerParents = function (node) {
+        if (!node.isLeaf()) {
+            for (var i = 0; i < node.children.length; i++) {
+                this.centerParents(node.children[i]);
+            }
+            var depthDifferenceToLeft = node.children[0].iset.depth - node.iset.depth;
+            var depthDifferenceToRight = node.children[node.children.length-1].iset.depth - node.iset.depth;
+            var total = depthDifferenceToLeft + depthDifferenceToRight;
+
+            var horizontalDistanceToLeft = depthDifferenceToLeft *
+                    (node.children[node.children.length-1].x - node.children[0].x)/total;
+
+            node.x = node.children[0].x + horizontalDistanceToLeft;
+        }
     };
 
     // Add class to parent module
