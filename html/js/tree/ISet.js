@@ -60,8 +60,8 @@ GTE.TREE = (function (parentModule) {
     * @param {ISet} iset Information set that will contain it
     * @return {Node} newNode New node that has been created
     */
-    ISet.prototype.addNewNode = function (parent, reachedBy) {
-        var newNode = new GTE.TREE.Node(parent, reachedBy, this);
+    ISet.prototype.addNewNode = function (parent, player, reachedBy) {
+        var newNode = new GTE.TREE.Node(parent, player, reachedBy, this);
         this.numberOfNodes++;
         this.updateFirstAndLast();
         return newNode;
@@ -83,7 +83,7 @@ GTE.TREE = (function (parentModule) {
         // Add one node per move per node in set
         for (var i = 0; i < nodesInThis.length; i++) {
             for (var j = 0; j < this.numberOfMoves(); j++) {
-                childISet.addNewNode(nodesInThis[i], this.moves[j]);
+                childISet.addNewNode(nodesInThis[i], null, this.moves[j]);
             }
         }
     };
