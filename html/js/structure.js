@@ -73,5 +73,10 @@ var GTE = (function () {
       Object.freeze(GTE.COLOURS);
     }
 
+    GTE.PLAYERS = {
+        DEFAULT_CHANCE_NAME: "Chance",
+        DEFAULT_PLAYER_NAME: "Player"
+    };
+
     return GTE;
 }());

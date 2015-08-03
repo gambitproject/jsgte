@@ -52,17 +52,7 @@ GTE.TREE = (function (parentModule) {
                   });
         if (this.player) {
             this.shape.fill(this.player.colour);
-            var text = GTE.canvas.plain(this.player.name)
-                .x(this.x + GTE.CONSTANTS.TEXT_NODE_MARGIN)
-                .y(this.y)
-                .fill(this.player.colour);
-            text.click(function () {
-                var newName = window.prompt("Enter the new name");
-                if (newName !== null) {
-                    thisNode.player.changeName(newName);
-                }
-                GTE.tree.draw();
-            });
+            this.player.draw(this.x, this.y);
         } else {
             this.shape.fill(GTE.COLOURS.BLACK);
         }
@@ -97,6 +87,14 @@ GTE.TREE = (function (parentModule) {
                 break;
             case GTE.MODES.PLAYERS:
                 if (!this.isLeaf()) {
+                    // If player name is empty and default name is hidden, show the default name
+                    if (this.player !== undefined) {
+                        if (this.player === GTE.tree.getActivePlayer() &&
+                                this.player.name.length === 0) {
+                            this.player.toggleDefault();
+                            break;
+                        }
+                    }
                     GTE.tree.assignSelectedPlayerToNode(this);
                     GTE.tree.draw();
                 }
