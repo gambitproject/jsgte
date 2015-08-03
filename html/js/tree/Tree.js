@@ -467,8 +467,7 @@ GTE.TREE = (function (parentModule) {
         // Iterate over the nodes in the parent and create a child node
         // for each of them. This new node will be connected by the new move
         for (var i = 0; i < nodesInParentISet.length; i++) {
-            (childISet || this.addNewISet()).addNewNode(nodesInParentISet[i],
-                childISet.firstNode.player, newMove);
+            (childISet || this.addNewISet()).addNewNode(nodesInParentISet[i], null, newMove);
         }
         this.positionsUpdated = false;
     };
