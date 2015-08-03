@@ -87,6 +87,14 @@ a {
     color: black;
 }
 
+.red {
+    color: red !important;
+}
+
+.blue {
+    color: blue !important;
+}
+
 /* ==========================================================================
    Toolbar styles
    ========================================================================== */
@@ -110,6 +118,10 @@ a {
 #toolbar ul {
     list-style: none;
     padding: 0 20px;
+}
+
+#player-buttons {
+    float: left;
 }
 
 
@@ -193,6 +205,10 @@ a {
     vertical-align: middle;
     position: relative;
     z-index: 1;
+}
+
+.button i{
+    line-height: 30px;
 }
 
 .button:focus {

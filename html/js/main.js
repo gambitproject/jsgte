@@ -32,4 +32,34 @@
         return false;
     });
 
+    var playerButtons = document.getElementsByClassName("button-player");
+    for (var i = 0; i < playerButtons.length; i++) {
+        playerButtons[i].addEventListener("click", function () {
+            var player = this.getAttribute("player");
+            GTE.tools.selectPlayer(player);
+            return false;
+        });
+    }
+
+    // document.getElementById("button-player-chance").addEventListener("click", function(){
+    //     GTE.tools.switchMode(GTE.MODES.PLAYER);
+    //     GTE.tools.selectPlayer();
+    //     return false;
+    // });
+    //
+    // document.getElementById("button-player-1").addEventListener("click", function(){
+    //     GTE.tools.switchMode(GTE.MODES.PLAYER);
+    //     return false;
+    // });
+    //
+    // document.getElementById("button-player-2").addEventListener("click", function(){
+    //     GTE.tools.switchMode(GTE.MODES.PLAYER);
+    //     return false;
+    // });
+
+    document.getElementById("button-player-more").addEventListener("click", function(){
+        GTE.tools.addPlayer();
+        return false;
+    });
+
 }());
