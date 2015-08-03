@@ -7,17 +7,18 @@ GTE.TREE = (function (parentModule) {
     * @param {Node} [parent] Parent node. If null, this is root.
     */
     function Node(parent, player, reachedBy, iset) {
-        this.player = player;
-        this.parent = parent;
+        this.player = player || null;
+        this.parent = parent || null;
         this.children = [];
         this.iset = iset || null;
         this.reachedBy = reachedBy || null;
-        if (parent === null) { // If this is root set level to 0
+        if (this.parent === null) { // If this is root set level to 0
             this.level = 0;
         } else {
-            parent.addChild(this);
-            this.level = parent.level + 1;
+            this.parent.addChild(this);
+            this.level = this.parent.level + 1;
         }
+        this.depth = this.level;
     }
 
     /**
@@ -35,7 +36,16 @@ GTE.TREE = (function (parentModule) {
     Node.prototype.draw = function () {
         // TODO #19
         // The line has to be drawn before so that the circle is drawn on top of it
-        if (this.reachedBy !== null) {
+        // Draw line if there are is no iset in parent
+        if (this.parent !== null && this.reachedBy === null) {
+            var circleRadius = GTE.CONSTANTS.CIRCLE_SIZE/2;
+            this.line = GTE.canvas.line(this.parent.x + circleRadius,
+                                        this.parent.y + circleRadius,
+                                        this.x + circleRadius,
+                                        this.y + circleRadius)
+                                    .stroke({ width: GTE.CONSTANTS.LINE_THICKNESS });
+
+        }else if (this.reachedBy !== null) {
             this.reachedBy.draw(this.parent, this);
         }
         var thisNode = this;
@@ -47,7 +57,7 @@ GTE.TREE = (function (parentModule) {
         }
         this.shape.addClass('node')
                   .x(this.x)
-                  .y(this.iset.y)
+                  .y(this.y)
                   .click(function() {
                       thisNode.onClick();
                   });
@@ -81,7 +91,8 @@ GTE.TREE = (function (parentModule) {
                 // }
                 if (this.iset === null) {
                     if (this.isLeaf()) {
-                        // Always start with two nodes
+                        // If no children, add two, since one child only doesn't
+                        // make sense
                         GTE.tree.addChildNodeTo(this);
                     }
                     GTE.tree.addChildNodeTo(this);

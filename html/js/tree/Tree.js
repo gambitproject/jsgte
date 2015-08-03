@@ -12,6 +12,10 @@ GTE.TREE = (function (parentModule) {
         this.isets = [];
         this.selected = [];
         this.depths = [];
+        this.leaves = [];
+        this.isetsByLevel = [];
+        // this.nodesByLevel = [];
+        // this.nodesByDepth = [];
 
         this.players = [];
         this.newPlayer("", GTE.COLOURS.BLACK);
@@ -28,7 +32,9 @@ GTE.TREE = (function (parentModule) {
             this.updatePositions();
         }
         this.clear();
-        this.drawISets();
+        if (this.isets.length >= 0) {
+            this.drawISets();
+        }
         this.drawNodes();
     };
 
@@ -39,11 +45,11 @@ GTE.TREE = (function (parentModule) {
     Tree.prototype.clear = function(){
         // Clear canvas
         GTE.canvas.clear();
-        // Remove labels
-        var foreigns = document.getElementsByTagName("foreignObject");
-        for (var index = foreigns.length - 1; index >= 0; index--) {
-            foreigns[index].parentNode.removeChild(foreigns[index]);
-        }
+        // // Remove labels
+        // var foreigns = document.getElementsByTagName("foreignObject");
+        // for (var index = foreigns.length - 1; index >= 0; index--) {
+        //     foreigns[index].parentNode.removeChild(foreigns[index]);
+        // }
     };
 
 
@@ -99,6 +105,8 @@ GTE.TREE = (function (parentModule) {
         this.leaves = [];
         this.isetsByLevel = [];
         // this.nodesByLevel = [];
+        // this.nodesByDepth = [];
+        this.depths = [];
         this.recursiveUpdateDataStructures(this.root);
     };
 
@@ -109,16 +117,22 @@ GTE.TREE = (function (parentModule) {
     * @param {Node} node Node to start from
     */
     Tree.prototype.recursiveUpdateDataStructures = function (node) {
-        if (this.isetsByLevel[node.level] === undefined) {
-            this.isetsByLevel[node.level] = [];
-        }
-        if (this.isetsByLevel[node.level].indexOf(node.iset) === -1){
-            this.isetsByLevel[node.level].push(node.iset);
-        }
+        // if (node.iset !== null) {
+        //     if (this.isetsByLevel[node.level] === undefined) {
+        //         this.isetsByLevel[node.level] = [];
+        //     }
+        //     if (this.isetsByLevel[node.level].indexOf(node.iset) === -1){
+        //         this.isetsByLevel[node.level].push(node.iset);
+        //     }
+        // }
         // if (this.nodesByLevel[node.level] === undefined) {
         //     this.nodesByLevel[node.level] = [];
         // }
         // this.nodesByLevel[node.level].push(node);
+        if (this.depths[node.depth] === undefined) {
+            this.depths[node.depth] = [];
+        }
+        this.depths[node.depth].push(node);
         if (node.isLeaf()) {
             this.leaves.push(node);
         } else {
@@ -137,10 +151,9 @@ GTE.TREE = (function (parentModule) {
         this.updateDataStructures();
         this.updateLeavesPositions();
         this.recursiveUpdatePositions(this.root);
-        this.updateYs();
-        this.recursiveCheckForCollisions(this.root);
-        this.calculateYs();
-        console.log(this.depths);
+        // this.updateDepths();
+        // this.recursiveCheckForCollisions(this.root);
+        this.recursiveCalculateYs(this.root);
         this.centerParents(this.root);
         this.positionsUpdated = true;
 
@@ -160,34 +173,34 @@ GTE.TREE = (function (parentModule) {
             }
             // Get middle point between the children most in the left and most
             // in the right
-            // TODO: apply level weighted function for special cases
             node.x = node.children[0].x +
                 (node.children[node.children.length-1].x - node.children[0].x)/2;
-            // node.iset.y = node.level * GTE.CONSTANTS.DIST_BETWEEN_LEVELS;
         }
     };
 
-    Tree.prototype.updateYs = function () {
-        this.depths = [];
-        for (var i = 0; i < this.isetsByLevel.length; i++) {
-            for (var j = 0; j < this.isetsByLevel[i].length; j++) {
-                this.isetsByLevel[i][j].calculateDepth();
-                if (this.depths[this.isetsByLevel[i][j].depth] === undefined){
-                    this.depths[this.isetsByLevel[i][j].depth] = [];
-                }
-                if (this.depths[this.isetsByLevel[i][j].depth].indexOf(this.isetsByLevel[i][j]) === -1) {
-                    this.depths[this.isetsByLevel[i][j].depth].push(this.isetsByLevel[i][j]);
-                }
-            }
-        }
-    };
+    // Tree.prototype.updateDepths = function () {
+    //     this.depths = [];
+    //     for (var i = 0; i < this.nodesByDepth.length; i++) {
+    //         for (var j = 0; j < this.nodesByDepth[i].length; j++) {
+    //             this.nodesByDepth[i][j].calculateDepth();
+    //             if (this.depths[this.nodesByDepth[i][j].depth] === undefined){
+    //                 this.depths[this.nodesByDepth[i][j].depth] = [];
+    //             }
+    //             if (this.depths[this.nodesByDepth[i][j].depth].indexOf(this.nodesByDepth[i][j]) === -1) {
+    //                 this.depths[this.nodesByDepth[i][j].depth].push(this.nodesByDepth[i][j]);
+    //             }
+    //         }
+    //     }
+    // };
 
-    Tree.prototype.calculateYs = function () {
-        for (var i = 0; i < this.isets.length; i++) {
-            this.isets[i].y = this.isets[i].depth * GTE.CONSTANTS.DIST_BETWEEN_LEVELS;
-            if ((this.isets[i].y + GTE.CONSTANTS.CIRCLE_SIZE) > GTE.canvas.viewbox().height) {
-                this.zoomOut();
-            }
+    Tree.prototype.recursiveCalculateYs = function (node) {
+        for (var i = 0; i < node.children.length; i++) {
+            this.recursiveCalculateYs(node.children[i]);
+        }
+        node.y = node.depth * GTE.CONSTANTS.DIST_BETWEEN_LEVELS;
+        if ((node.y + GTE.CONSTANTS.CIRCLE_SIZE) > GTE.canvas.viewbox().height) {
+            this.zoomOut();
+            this.updatePositions();
         }
     };
 
@@ -209,7 +222,6 @@ GTE.TREE = (function (parentModule) {
                 for (var k = j+1; k < this.depths[i].length; k++) {
                     if ((currentIset.firstNode.x <= this.depths[i][k].firstNode.x) &&
                         (this.depths[i][k].lastNode.x <= currentIset.lastNode.x)) {
-                            console.log("COLLISION!!!!!!");
                             this.moveDownEverythingBelow(this.depths[i][k]);
                     }
                 }
@@ -331,7 +343,7 @@ GTE.TREE = (function (parentModule) {
             for (var i = 0; i < numberLeaves; i++) {
                 this.leaves[i].x = (widthPerNode*i)+(widthPerNode/2) -
                                         GTE.CONSTANTS.CIRCLE_SIZE/2 + offset;
-                this.leaves[i].iset.y = this.leaves[i].level * GTE.CONSTANTS.DIST_BETWEEN_LEVELS;
+                // this.leaves[i].y = this.leaves[i].depth * GTE.CONSTANTS.DIST_BETWEEN_LEVELS;
             }
         }
     };
@@ -421,17 +433,7 @@ GTE.TREE = (function (parentModule) {
     * @return {Node} newNode    Node that has been added
     */
     Tree.prototype.addChildNodeTo = function (parentNode) {
-        // Create a new move in parent ISet
-        var newMove = parentNode.iset.addNewMove();
-
-        // Create a new Iset with only one node
-        var newISet = this.addNewISet();
-
-        var newNode = new GTE.TREE.Node(parentNode, null, newMove, newISet);
-
-        if ((newNode.iset.y + GTE.CONSTANTS.CIRCLE_SIZE) > GTE.canvas.viewbox().height) {
-            this.zoomOut();
-        }
+        var newNode = new GTE.TREE.Node(parentNode);
         this.positionsUpdated = false;
         return newNode;
     };
@@ -591,8 +593,8 @@ GTE.TREE = (function (parentModule) {
             for (var i = 0; i < node.children.length; i++) {
                 this.centerParents(node.children[i]);
             }
-            var depthDifferenceToLeft = node.children[0].iset.depth - node.iset.depth;
-            var depthDifferenceToRight = node.children[node.children.length-1].iset.depth - node.iset.depth;
+            var depthDifferenceToLeft = node.children[0].depth - node.depth;
+            var depthDifferenceToRight = node.children[node.children.length-1].depth - node.depth;
             var total = depthDifferenceToLeft + depthDifferenceToRight;
 
             var horizontalDistanceToLeft = depthDifferenceToLeft *

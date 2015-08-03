@@ -68,12 +68,9 @@ GTE.TREE = (function (parentModule) {
     * Toggles the visibility of the default name text
     */
     Player.prototype.toggleDefault = function () {
-        console.log("Toggling");
         if (this.defaultText.visible() === false) {
-            console.log("Showing");
             this.defaultText.show();
         } else {
-            console.log("Hiding");
             this.defaultText.hide();
         }
     };
