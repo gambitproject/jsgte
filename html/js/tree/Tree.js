@@ -427,7 +427,7 @@ GTE.TREE = (function (parentModule) {
         // Create a new Iset with only one node
         var newISet = this.addNewISet();
 
-        var newNode = new GTE.TREE.Node(parentNode, newMove, newISet);
+        var newNode = new GTE.TREE.Node(parentNode, null, newMove, newISet);
 
         if ((newNode.iset.y + GTE.CONSTANTS.CIRCLE_SIZE) > GTE.canvas.viewbox().height) {
             this.zoomOut();
@@ -467,7 +467,8 @@ GTE.TREE = (function (parentModule) {
         // Iterate over the nodes in the parent and create a child node
         // for each of them. This new node will be connected by the new move
         for (var i = 0; i < nodesInParentISet.length; i++) {
-            (childISet || this.addNewISet()).addNewNode(nodesInParentISet[i], newMove);
+            (childISet || this.addNewISet()).addNewNode(nodesInParentISet[i],
+                childISet.firstNode.player, newMove);
         }
         this.positionsUpdated = false;
     };

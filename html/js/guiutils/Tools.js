@@ -15,7 +15,7 @@ GTE.UI = (function (parentModule) {
     */
     Tools.prototype.newTree = function() {
         var rootIset = new GTE.TREE.ISet();
-        var root = new GTE.TREE.Node(null, null, rootIset);
+        var root = new GTE.TREE.Node(null, null, null, rootIset);
         rootIset.firstNode = root;
         rootIset.lastNode = root;
 
