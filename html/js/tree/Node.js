@@ -69,24 +69,30 @@ GTE.TREE = (function (parentModule) {
     Node.prototype.onClick = function () {
         switch (GTE.MODE) {
             case GTE.MODES.ADD:
-                // If there are more nodes in the information set
-                // Remove the node from the iset since the iset will
-                // not be coherent
-                if (this.iset.numberOfNodes > 1) {
-                    this.createSingletonISetWithNode();
+                // As talked in email "the phases of creating a game tree"
+                // on 26th July 2015, nodes won't have any particular behaviour
+                // by clicking on them. The behaviour will be the same as if
+                // the click was on an iset
+                // // If there are more nodes in the information set
+                // // Remove the node from the iset since the iset will
+                // // not be coherent
+                // if (this.iset.numberOfNodes > 1) {
+                //     this.createSingletonISetWithNode();
+                // }
+                if (this.iset === null) {
+                    if (this.isLeaf()) {
+                        // Always start with two nodes
+                        GTE.tree.addChildNodeTo(this);
+                    }
+                    GTE.tree.addChildNodeTo(this);
+                } else {
+                    this.iset.onClick();
                 }
-                this.iset.onClick();
                 // Tell the tree to redraw itself
                 GTE.tree.draw();
                 break;
             case GTE.MODES.DELETE:
                 GTE.tree.deleteNode(this);
-                // // If it is a leaf, delete itself, if not, delete all children
-                // if (this.isLeaf()) {
-                //     this.delete();
-                // } else {
-                //     GTE.tree.deleteChildrenOf(this);
-                // }
                 // Tell the tree to redraw itself
                 GTE.tree.draw();
                 break;
@@ -97,6 +103,7 @@ GTE.TREE = (function (parentModule) {
             case GTE.MODES.DISSOLVE:
                 // This is controlled by the information set
                 this.iset.onClick();
+                break;
             case GTE.MODES.PLAYERS:
                 if (!this.isLeaf()) {
                     // If player name is empty and default name is hidden, show the default name
