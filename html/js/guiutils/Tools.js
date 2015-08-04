@@ -27,12 +27,7 @@ GTE.UI = (function (parentModule) {
     * @param {Button} button Button pressed that will activate mode
     */
     Tools.prototype.switchMode = function(modeToSwitch){
-        // Remove active class from current active button
-        var activeButton = document.getElementsByClassName("active button")[0];
-        activeButton.className =
-            activeButton.className.replace(/\bactive\b/,'');
-
-        // Change the class of the button to active
+        // Change the class of the button to active if possible
         var buttonToSwitch = "";
         switch (modeToSwitch) {
             case GTE.MODES.ADD:
@@ -41,18 +36,32 @@ GTE.UI = (function (parentModule) {
             case GTE.MODES.DELETE:
                 buttonToSwitch = "button-remove";
                 break;
-            case GTE.MODES.MERGE:
-                buttonToSwitch = "button-merge";
-                break;
-            case GTE.MODES.DISSOLVE:
-                buttonToSwitch = "button-dissolve";
-                break;
             case GTE.MODES.PLAYERS:
                 buttonToSwitch = "button-player-" + this.activePlayer;
                 break;
+            case GTE.MODES.MERGE:
+                if (this.ableToSwitchToISetMode()) {
+                    buttonToSwitch = "button-merge";
+                } else {
+                    window.alert("Assign a player to every node first.");
+                    return;
+                }
+                break;
+            case GTE.MODES.DISSOLVE:
+                if (this.ableToSwitchToISetMode()) {
+                    buttonToSwitch = "button-dissolve";
+                } else {
+                    window.alert("Assign a player to every node first.");
+                    return;
+                }
+                break;
             default:
-
+                break;
         }
+        // Remove active class from current active button
+        var activeButton = document.getElementsByClassName("active button")[0];
+        activeButton.className = activeButton.className.replace(/\bactive\b/,'');
+
         document.getElementById(buttonToSwitch).className += " " + "active";
 
         GTE.MODE = modeToSwitch;
@@ -115,6 +124,10 @@ GTE.UI = (function (parentModule) {
     */
     Tools.prototype.getActivePlayer = function () {
         return this.activePlayer;
+    };
+
+    Tools.prototype.ableToSwitchToISetMode = function () {
+        return GTE.tree.recursiveCheckAllNodesHavePlayer();
     };
 
 
