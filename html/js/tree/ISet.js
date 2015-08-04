@@ -135,7 +135,7 @@ GTE.TREE = (function (parentModule) {
     ISet.prototype.draw = function () {
         if (this.lastNode !== this.firstNode) {
             var width = (this.lastNode.x + GTE.CONSTANTS.CIRCLE_SIZE*2) -
-                        (this.firstNode.x-GTE.CONSTANTS.CIRCLE_SIZE);
+                        (this.firstNode.x - GTE.CONSTANTS.CIRCLE_SIZE);
 
             this.shape = GTE.canvas.rect(width, GTE.CONSTANTS.ISET_HEIGHT)
                                     .stroke({ color: '#000', width: 2 })
@@ -147,6 +147,13 @@ GTE.TREE = (function (parentModule) {
             this.shape.click(function() {
                 thisISet.onClick();
             });
+        }
+        if (this.getPlayer()) {
+            if (this.lastNode !== this.firstNode) {
+                this.getPlayer().draw((this.lastNode.x + GTE.CONSTANTS.CIRCLE_SIZE - this.firstNode.x)/2 + this.firstNode.x, this.firstNode.y);
+            } else {
+                this.getPlayer().draw(this.firstNode.x, this.firstNode.y);
+            }
         }
     };
 
