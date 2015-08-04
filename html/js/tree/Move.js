@@ -69,14 +69,14 @@ GTE.TREE = (function (parentModule) {
     Move.prototype.draw = function(parent, child) {
         var circleRadius = GTE.CONSTANTS.CIRCLE_SIZE/2;
         this.line = GTE.canvas.line(parent.x + circleRadius,
-                                    parent.iset.y + circleRadius,
+                                    parent.y + circleRadius,
                                     child.x + circleRadius,
-                                    child.iset.y + circleRadius)
+                                    child.y + circleRadius)
                               .stroke({ width: GTE.CONSTANTS.LINE_THICKNESS });
         var middleX = ((child.x + circleRadius) - (parent.x + circleRadius))/2+
                         (parent.x);
-        var middleY = ((child.iset.y + circleRadius) - (parent.iset.y + circleRadius))/2+
-                        (parent.iset.y);
+        var middleY = ((child.y + circleRadius) - (parent.y + circleRadius))/2+
+                        (parent.y);
 
         // Compute a unit vector perpendicular to the line and get point
         // where the label has to be drawn at a distance CONTENT_EDITABLE_MARGIN_TO_LINE
@@ -84,10 +84,10 @@ GTE.TREE = (function (parentModule) {
         var dy;
         if (child.x > parent.x) {
             dx = child.x-parent.x;
-            dy = child.iset.y-parent.iset.y;
+            dy = child.y-parent.y;
         } else {
             dx = parent.x-child.x;
-            dy = parent.iset.y-child.iset.y;
+            dy = parent.y-child.y;
         }
         var distance = Math.sqrt(dx*dx + dy*dy);
         dx = dx/distance;

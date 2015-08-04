@@ -747,6 +747,22 @@ GTE.TREE = (function (parentModule) {
         return true;
     };
 
+    Tree.prototype.initializeISets = function () {
+        var nodes = this.getAllNodes();
+        this.createSingletonISets(nodes);
+        this.draw();
+    };
+
+    Tree.prototype.getAllNodes = function () {
+        var listOfNodes = [];
+        // Iterate over the list of depths
+        for (var i = 0; i < this.depths.length; i++) {
+            for (var j = 0; j < this.depths[i].length; j++) {
+                listOfNodes.push(this.depths[i][j]);
+            }
+        }
+        return listOfNodes;
+    };
     // Add class to parent module
     parentModule.Tree = Tree;
 
