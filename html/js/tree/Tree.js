@@ -582,7 +582,10 @@ GTE.TREE = (function (parentModule) {
         if (a.numberOfMoves() !== b.numberOfMoves()) {
             window.alert("Couldn't merge the information sets." +
                 "Please select two information sets with same number of moves.");
-        } else {
+        } else if (a.getPlayer() !== b.getPlayer()) {
+            window.alert("Couldn't merge the information sets." +
+                "Please select two information sets that belong to same player.");
+        }else {
             // Add Node A to Node B ISet
             var nodesInA = a.getNodes();
             for (var i = 0; i < nodesInA.length; i++) {

@@ -319,7 +319,7 @@ GTE.TREE = (function (parentModule) {
             }
             var nodes = this.getNodes();
             for (var i = 0; i < nodes.length; i++) {
-                nodes[i].circle.toggleClass('selected');
+                nodes[i].shape.toggleClass('selected');
             }
             GTE.tree.selected.push(this);
         }
@@ -378,6 +378,10 @@ GTE.TREE = (function (parentModule) {
             }
         }
         return parents;
+    };
+
+    ISet.prototype.getPlayer = function () {
+        return this.firstNode.player;
     };
 
     // Add class to parent module
