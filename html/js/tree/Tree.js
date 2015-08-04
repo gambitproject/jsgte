@@ -206,27 +206,27 @@ GTE.TREE = (function (parentModule) {
 
     Tree.prototype.recursiveCheckForCollisions = function () {
         // Iterate over the depths array
-        for (var i = 0; i < this.depths.length; i++) {
-            this.depths[i].sort(function (a, b) {
-                if (parseInt(a.firstNode.x) <= parseInt(b.firstNode.x)) {
-                    return -1;
-                } else {
-                    return 1;
-                }
-                return 0;
-            });
-            for (var j = 0; j < this.depths[i].length; j++) {
-                // For every iset check if there are nodes in the same depth but
-                // different iset that collide with that iset
-                var currentIset = this.depths[i][j];
-                for (var k = j+1; k < this.depths[i].length; k++) {
-                    if ((currentIset.firstNode.x <= this.depths[i][k].firstNode.x) &&
-                        (this.depths[i][k].lastNode.x <= currentIset.lastNode.x)) {
-                            this.moveDownEverythingBelow(this.depths[i][k]);
-                    }
-                }
-            }
-        }
+        // for (var i = 0; i < this.depths.length; i++) {
+        //     this.depths[i].sort(function (a, b) {
+        //         if (parseInt(a.firstNode.x) <= parseInt(b.firstNode.x)) {
+        //             return -1;
+        //         } else {
+        //             return 1;
+        //         }
+        //         return 0;
+        //     });
+        //     for (var j = 0; j < this.depths[i].length; j++) {
+        //         // For every iset check if there are nodes in the same depth but
+        //         // different iset that collide with that iset
+        //         var currentIset = this.depths[i][j];
+        //         for (var k = j+1; k < this.depths[i].length; k++) {
+        //             if ((currentIset.firstNode.x <= this.depths[i][k].firstNode.x) &&
+        //                 (this.depths[i][k].lastNode.x <= currentIset.lastNode.x)) {
+        //                     this.moveDownEverythingBelow(this.depths[i][k]);
+        //             }
+        //         }
+        //     }
+        // }
     };
 
     /**
@@ -383,12 +383,16 @@ GTE.TREE = (function (parentModule) {
         }
         // Delete node. This will also remove the node from the iset
         node.delete();
-        // If iset is empty delete it
-        if (isetThatContainsNode.getNodes().length === 0) {
-            this.deleteISetFromList(isetThatContainsNode);
+        if (isetThatContainsNode !== null) {
+            // If iset is empty delete it
+            if (isetThatContainsNode.getNodes().length === 0) {
+                this.deleteISetFromList(isetThatContainsNode);
+            }
         }
-        // Check integrity of parent iset
-        this.checkISetIntegrity(parent.iset);
+        if (parent.iset !== null) {
+            // Check integrity of parent iset
+            this.checkISetIntegrity(parent.iset);
+        }
         // Check the tree for collisions
         this.recursiveCheckForCollisions(this.root);
     };
