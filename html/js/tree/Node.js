@@ -63,9 +63,15 @@ GTE.TREE = (function (parentModule) {
                   });
         if (this.player) {
             this.shape.fill(this.player.colour);
-            this.player.draw(this.x, this.y);
         } else {
             this.shape.fill(GTE.COLOURS.BLACK);
+        }
+
+        if (this.iset === null) {
+            // If if belongs to an iset, the iset will draw the player
+            if (this.player) {
+                this.player.draw(this.x, this.y);
+            }
         }
 
         if ((GTE.MODE === GTE.MODES.PLAYERS ||
