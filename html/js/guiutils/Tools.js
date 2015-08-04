@@ -61,8 +61,6 @@ GTE.UI = (function (parentModule) {
         } else {
             GTE.tree.showLeaves();
         }
-        document.getElementById(buttonToSwitch).className += " " + "active";
-
     };
 
     /**
