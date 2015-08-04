@@ -7,6 +7,7 @@ GTE.UI = (function (parentModule) {
     */
     function Tools() {
         this.activePlayer = -1;
+        this.isetToolsRan = false;
     }
 
     /**
@@ -42,6 +43,12 @@ GTE.UI = (function (parentModule) {
             case GTE.MODES.MERGE:
                 if (this.ableToSwitchToISetMode()) {
                     buttonToSwitch = "button-merge";
+                    // If iset tools have never been chosen
+                    if (!this.isetToolsRan) {
+                        // Assign singleton isets to each node with no iset
+                        GTE.tree.initializeISets();
+                        this.isetToolsRan = true;
+                    }
                 } else {
                     window.alert("Assign a player to every node first.");
                     return;
