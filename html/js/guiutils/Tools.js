@@ -65,7 +65,9 @@ GTE.UI = (function (parentModule) {
         document.getElementById(buttonToSwitch).className += " " + "active";
 
         GTE.MODE = modeToSwitch;
-        if (GTE.MODE === GTE.MODES.PLAYERS) {
+        if (GTE.MODE === GTE.MODES.PLAYERS ||
+            GTE.MODE === GTE.MODES.MERGE ||
+            GTE.MODE === GTE.MODES.DISSOLVE) {
             GTE.tree.hideLeaves();
         } else {
             GTE.tree.showLeaves();
