@@ -12,8 +12,6 @@ GTE.TREE = (function (parentModule) {
         this.firstNode = null;
         this.lastNode = null;
         this.numberOfNodes = 0;
-        this.y = 0;
-        this.depth = 0;
     }
 
     /**
@@ -144,7 +142,7 @@ GTE.TREE = (function (parentModule) {
                                     .radius(GTE.CONSTANTS.ISET_HEIGHT/2)
                                     .addClass('iset');
             this.shape.translate(this.firstNode.x - GTE.CONSTANTS.CIRCLE_SIZE,
-                                this.y - GTE.CONSTANTS.CIRCLE_SIZE + 4);
+                                this.firstNode.y - GTE.CONSTANTS.CIRCLE_SIZE + 4);
             var thisISet = this;
             this.shape.click(function() {
                 thisISet.onClick();
@@ -156,57 +154,57 @@ GTE.TREE = (function (parentModule) {
     * Calculates the y of the iset depending on the level. It needs to check for
     * the positions of the other nodes in the same iset
     */
-    ISet.prototype.calculateY = function () {
-        var nodesInSameISet = this.getNodes();
-        this.y = nodesInSameISet[0].level * GTE.CONSTANTS.DIST_BETWEEN_LEVELS;
-    };
+    // ISet.prototype.calculateY = function () {
+    //     var nodesInSameISet = this.getNodes();
+    //     this.y = nodesInSameISet[0].level * GTE.CONSTANTS.DIST_BETWEEN_LEVELS;
+    // };
 
-    ISet.prototype.calculateDepth = function () {
-        this.depth = -1;
-        var nodesInSameISet = this.getNodes();
-        for (var i = 0; i < nodesInSameISet.length; i++) {
-            this.depth = Math.max(this.depth, nodesInSameISet[i].level);
-        }
-        // Get maximum parents depth
-        var parents = this.getParentISets();
-        var parentsMaxDepth = -1;
-        for (i = 0; i < parents.length; i++) {
-            parentsMaxDepth = Math.max(parentsMaxDepth, parents[i].depth);
-        }
-        this.depth = Math.max(this.depth, parentsMaxDepth+1);
-    };
+    // ISet.prototype.calculateDepth = function () {
+    //     this.depth = -1;
+    //     var nodesInSameISet = this.getNodes();
+    //     for (var i = 0; i < nodesInSameISet.length; i++) {
+    //         this.depth = Math.max(this.depth, nodesInSameISet[i].level);
+    //     }
+    //     // Get maximum parents depth
+    //     var parents = this.getParentISets();
+    //     var parentsMaxDepth = -1;
+    //     for (i = 0; i < parents.length; i++) {
+    //         parentsMaxDepth = Math.max(parentsMaxDepth, parents[i].depth);
+    //     }
+    //     this.depth = Math.max(this.depth, parentsMaxDepth+1);
+    // };
 
-    ISet.prototype.allign = function () {
-        var nodesInSameISet = this.getNodes();
-        // If it is singleton
-        if (nodesInSameISet.length !== 1) {
-            var levels = [];
-            var node;
-            // Iterate over the nodes in same iset and get the deepest level of all
-            for (var i = 0; i < nodesInSameISet.length; i++) {
-                node = nodesInSameISet[i];
-                if (levels.indexOf(node.level) === -1) {
-                    levels.push(node.level);
-                }
-            }
-            levels.sort();
-            var y = levels[levels.length-1] * GTE.CONSTANTS.DIST_BETWEEN_LEVELS;
-            while (nodesInSameISet.length > 0) {
-                node = nodesInSameISet.pop();
-                if (node.level < levels[levels.length-1]) {
-                    GTE.tree.moveDownEverythingBelowNode(node,
-                            y - node.level * GTE.CONSTANTS.DIST_BETWEEN_LEVELS);
-                }
-            }
-            // if (levels.length > 1 && levels[levels.length-1] !== this.level) {
-            //     GTE.tree.recursiveMoveDownEverythingBelowNode(this,
-            //                 y - this.level * GTE.CONSTANTS.DIST_BETWEEN_LEVELS);
-            // }
-            if (y > this.y) {
-                this.y = y;
-            }
-        }
-    };
+    // ISet.prototype.allign = function () {
+    //     var nodesInSameISet = this.getNodes();
+    //     // If it is singleton
+    //     if (nodesInSameISet.length !== 1) {
+    //         var levels = [];
+    //         var node;
+    //         // Iterate over the nodes in same iset and get the deepest level of all
+    //         for (var i = 0; i < nodesInSameISet.length; i++) {
+    //             node = nodesInSameISet[i];
+    //             if (levels.indexOf(node.level) === -1) {
+    //                 levels.push(node.level);
+    //             }
+    //         }
+    //         levels.sort();
+    //         var y = levels[levels.length-1] * GTE.CONSTANTS.DIST_BETWEEN_LEVELS;
+    //         while (nodesInSameISet.length > 0) {
+    //             node = nodesInSameISet.pop();
+    //             if (node.level < levels[levels.length-1]) {
+    //                 GTE.tree.moveDownEverythingBelowNode(node,
+    //                         y - node.level * GTE.CONSTANTS.DIST_BETWEEN_LEVELS);
+    //             }
+    //         }
+    //         // if (levels.length > 1 && levels[levels.length-1] !== this.level) {
+    //         //     GTE.tree.recursiveMoveDownEverythingBelowNode(this,
+    //         //                 y - this.level * GTE.CONSTANTS.DIST_BETWEEN_LEVELS);
+    //         // }
+    //         if (y > this.y) {
+    //             this.y = y;
+    //         }
+    //     }
+    // };
 
 
 

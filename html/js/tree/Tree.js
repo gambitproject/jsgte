@@ -45,11 +45,11 @@ GTE.TREE = (function (parentModule) {
     Tree.prototype.clear = function(){
         // Clear canvas
         GTE.canvas.clear();
-        // // Remove labels
-        // var foreigns = document.getElementsByTagName("foreignObject");
-        // for (var index = foreigns.length - 1; index >= 0; index--) {
-        //     foreigns[index].parentNode.removeChild(foreigns[index]);
-        // }
+        // Remove labels
+        var foreigns = document.getElementsByTagName("foreignObject");
+        for (var index = foreigns.length - 1; index >= 0; index--) {
+            foreigns[index].parentNode.removeChild(foreigns[index]);
+        }
     };
 
 
