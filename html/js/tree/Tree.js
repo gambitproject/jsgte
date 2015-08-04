@@ -732,6 +732,21 @@ GTE.TREE = (function (parentModule) {
         return this.players[GTE.tools.getActivePlayer()];
     };
 
+    Tree.prototype.recursiveCheckAllNodesHavePlayer = function (node) {
+        if (node === undefined) {
+            node = this.root;
+        }
+        if (node.children.length !== 0 && node.player === null) {
+            return false;
+        }
+        for (var i = 0; i < node.children.length; i++) {
+            if (this.recursiveCheckAllNodesHavePlayer(node.children[i]) === false) {
+                return false;
+            }
+        }
+        return true;
+    };
+
     // Add class to parent module
     parentModule.Tree = Tree;
 
