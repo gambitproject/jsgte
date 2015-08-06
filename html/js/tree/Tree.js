@@ -312,6 +312,26 @@ GTE.TREE = (function (parentModule) {
         listOfNodes.push(node);
     };
 
+    Tree.prototype.getPlayerNodes = function (playerId) {
+        var allNodes = this.getAllNodes();
+        var playerNodes = [];
+        for (var i = 0; i < allNodes.length; i++) {
+            if (allNodes[i].player !== undefined &&
+                allNodes[i].player.id === playerId) {
+                playerNodes.push(allNodes[i]);
+            }
+        }
+        return playerNodes;
+    };
+
+    Tree.prototype.toggleDefaultChanceName = function () {
+        // Get all chance nodes
+        var nodes = this.getPlayerNodes(0);
+        for (var i = 0; i < nodes.length; i++) {
+            nodes[i].toggleDefaultText();
+        }
+    };
+
     // Add class to parent module
     parentModule.Tree = Tree;
 
