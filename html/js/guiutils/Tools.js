@@ -30,8 +30,10 @@ GTE.UI = (function (parentModule) {
     Tools.prototype.switchMode = function(modeToSwitch){
         // Remove active class from current active button
         var activeButton = document.getElementsByClassName("active button")[0];
-        activeButton.className =
-            activeButton.className.replace(/\bactive\b/,'');
+        if (activeButton !== undefined) {
+            activeButton.className =
+                activeButton.className.replace(/\bactive\b/,'');
+        }
 
         // Change the class of the button to active
         var buttonToSwitch = "";
@@ -74,6 +76,10 @@ GTE.UI = (function (parentModule) {
     Tools.prototype.addPlayer = function () {
         // Create a new player
         var player = GTE.tree.newPlayer();
+        if (player.id === 3) {
+            document.getElementById("button-player-less").className =
+                document.getElementById("button-player-less").className.replace(/\bdisabled\b/,'');
+        }
         // Get the last player button
         var playerButtons = document.getElementById("player-buttons");
         var lastPlayer = playerButtons.lastElementChild;
@@ -89,10 +95,25 @@ GTE.UI = (function (parentModule) {
         lastPlayer = playerButtons.lastElementChild;
         // And add a click event that will call the selectPlayer function
         lastPlayer.firstElementChild.addEventListener("click", function () {
-            var player = this.getAttribute("player");
+            var player = parseInt(this.getAttribute("player"));
             GTE.tools.selectPlayer(player);
             return false;
         });
+    };
+
+    Tools.prototype.removePlayer = function () {
+        var playerId = GTE.tree.removeLastPlayer();
+        if (playerId !== -1) {
+            var playerButtons = document.getElementById("player-buttons");
+            var lastPlayer = playerButtons.lastElementChild;
+            lastPlayer.parentNode.removeChild(lastPlayer);
+            if (playerId === 3) {
+                document.getElementById("button-player-less").className += " disabled";
+            }
+            if (playerId === this.activePlayer) {
+                this.selectPlayer(this.activePlayer-1);
+            }
+        }
     };
 
     Tools.prototype.getColour = function (colourIndex) {
