@@ -47,13 +47,36 @@ GTE.UI = (function (parentModule) {
             case GTE.MODES.PLAYERS:
                 buttonToSwitch = "button-player-" + this.activePlayer;
                 break;
+            case GTE.MODES.MERGE:
+                if (this.ableToSwitchToISetMode()) {
+                    buttonToSwitch = "button-merge";
+                    // If iset tools have never been chosen
+                    if (!this.isetToolsRan) {
+                        // Assign singleton isets to each node with no iset
+                        GTE.tree.initializeISets();
+                        this.isetToolsRan = true;
+                    }
+                } else {
+                    window.alert("Assign a player to every node first.");
+                    return;
+                }
+                break;
+            case GTE.MODES.DISSOLVE:
+                if (this.ableToSwitchToISetMode()) {
+                    buttonToSwitch = "button-dissolve";
+                } else {
+                    window.alert("Assign a player to every node first.");
+                    return;
+                }
+                break;
             default:
-
         }
         document.getElementById(buttonToSwitch).className += " " + "active";
 
         GTE.MODE = modeToSwitch;
-        if (GTE.MODE === GTE.MODES.PLAYERS) {
+        if (GTE.MODE === GTE.MODES.PLAYERS ||
+            GTE.MODE === GTE.MODES.MERGE ||
+            GTE.MODE === GTE.MODES.DISSOLVE) {
             GTE.tree.hideLeaves();
         } else {
             GTE.tree.showLeaves();
@@ -128,6 +151,9 @@ GTE.UI = (function (parentModule) {
         return this.activePlayer;
     };
 
+    Tools.prototype.ableToSwitchToISetMode = function () {
+        return GTE.tree.recursiveCheckAllNodesHavePlayer();
+    };
 
     // Add class to parent module
     parentModule.Tools = Tools;
