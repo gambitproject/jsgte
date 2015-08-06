@@ -95,13 +95,8 @@ GTE.UI = (function (parentModule) {
         });
     };
 
-    /**
-    * Function that gets a random colour from the list of GTE.COLOURS
-    * @return {String} colour Hex code of the randomly chosen colour
-    */
-    Tools.prototype.getRandomColour = function () {
-        var random = Math.floor((Math.random() * Object.keys(GTE.COLOURS).length) + 1);
-        return GTE.COLOURS[Object.keys(GTE.COLOURS)[random]];
+    Tools.prototype.getColour = function (colourIndex) {
+        return GTE.COLOURS[Object.keys(GTE.COLOURS)[colourIndex]];
     };
 
     /**
