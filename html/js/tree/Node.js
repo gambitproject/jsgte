@@ -63,6 +63,7 @@ GTE.TREE = (function (parentModule) {
                   });
         if (this.player) {
             this.shape.fill(this.player.colour);
+            this.drawPlayer();
         } else {
             this.shape.fill(GTE.COLOURS.BLACK);
         }
@@ -79,6 +80,36 @@ GTE.TREE = (function (parentModule) {
             GTE.MODE === GTE.MODES.MERGE)
             && this.isLeaf()) {
             this.shape.hide();
+        }
+    };
+
+    Node.prototype.drawPlayer = function () {
+        var thisPlayer = this.player;
+        this.text = GTE.canvas.plain(thisPlayer.name)
+            .x(this.x + GTE.CONSTANTS.TEXT_NODE_MARGIN)
+            .y(this.y)
+            .fill(thisPlayer.colour)
+            .click(function() {
+                thisPlayer.onClick();
+            });
+        this.defaultText = GTE.canvas.plain(thisPlayer.defaultName)
+            .x(this.x + GTE.CONSTANTS.TEXT_NODE_MARGIN)
+            .y(this.y)
+            .hide()
+            .fill(thisPlayer.colour)
+            .click(function() {
+                thisPlayer.onClick();
+            });
+    };
+
+    /**
+    * Toggles the visibility of the default name text
+    */
+    Node.prototype.toggleDefaultText = function () {
+        if (this.defaultText.visible() === false) {
+            this.defaultText.show();
+        } else {
+            this.defaultText.hide();
         }
     };
 
@@ -126,11 +157,12 @@ GTE.TREE = (function (parentModule) {
                 break;
             case GTE.MODES.PLAYERS:
                 if (!this.isLeaf()) {
-                    // If player name is empty and default name is hidden, show the default name
+                    // If player name is empty and default name is hidden,
+                    // show the default name
                     if (this.player !== undefined) {
                         if (this.player === GTE.tree.getActivePlayer() &&
                                 this.player.name.length === 0) {
-                            this.player.toggleDefault();
+                            GTE.tree.toggleDefaultChanceName();
                             break;
                         }
                     }

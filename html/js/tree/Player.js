@@ -33,30 +33,6 @@ GTE.TREE = (function (parentModule) {
         this.name = newName;
     };
 
-    /**
-    * Draw function for the Player
-    * @param {Number} x X coordinate
-    * @param {Number} y Y coordinate
-    */
-    Player.prototype.draw = function (x, y) {
-        var thisPlayer = this;
-        this.text = GTE.canvas.plain(this.name)
-            .x(x + GTE.CONSTANTS.TEXT_NODE_MARGIN)
-            .y(y)
-            .fill(this.colour)
-            .click(function() {
-                thisPlayer.onClick();
-            });
-        this.defaultText = GTE.canvas.plain(this.defaultName)
-            .x(x + GTE.CONSTANTS.TEXT_NODE_MARGIN)
-            .y(y)
-            .hide()
-            .fill(this.colour)
-            .click(function() {
-                thisPlayer.onClick();
-            });
-    };
-
     Player.prototype.onClick = function () {
         var newName = window.prompt("Enter the new name");
         if (newName !== null) {
@@ -67,17 +43,6 @@ GTE.TREE = (function (parentModule) {
             }
         }
         GTE.tree.draw();
-    };
-
-    /**
-    * Toggles the visibility of the default name text
-    */
-    Player.prototype.toggleDefault = function () {
-        if (this.defaultText.visible() === false) {
-            this.defaultText.show();
-        } else {
-            this.defaultText.hide();
-        }
     };
 
     // Add class to parent module
