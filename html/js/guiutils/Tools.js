@@ -7,7 +7,6 @@ GTE.UI = (function (parentModule) {
     */
     function Tools() {
         this.activePlayer = -1;
-        this.isetToolsRan = false;
     }
 
     /**
@@ -15,11 +14,12 @@ GTE.UI = (function (parentModule) {
     * It creates a new Tree and draws it
     */
     Tools.prototype.newTree = function() {
-        var root = new GTE.TREE.Node();
+        var root = new GTE.TREE.Node(null);
+        var child1 = new GTE.TREE.Node(root);
+        var child2 = new GTE.TREE.Node(root);
         GTE.tree = new GTE.TREE.Tree(root);
-        new GTE.TREE.Node(root);
-        new GTE.TREE.Node(root);
-        // Draw the tree
+        GTE.tree.updatePositions();
+        // Create a node and draw it
         GTE.tree.draw();
     };
 
@@ -28,7 +28,14 @@ GTE.UI = (function (parentModule) {
     * @param {Button} button Button pressed that will activate mode
     */
     Tools.prototype.switchMode = function(modeToSwitch){
-        // Change the class of the button to active if possible
+        // Remove active class from current active button
+        var activeButton = document.getElementsByClassName("active button")[0];
+        if (activeButton !== undefined) {
+            activeButton.className =
+                activeButton.className.replace(/\bactive\b/,'');
+        }
+
+        // Change the class of the button to active
         var buttonToSwitch = "";
         switch (modeToSwitch) {
             case GTE.MODES.ADD:
@@ -40,41 +47,13 @@ GTE.UI = (function (parentModule) {
             case GTE.MODES.PLAYERS:
                 buttonToSwitch = "button-player-" + this.activePlayer;
                 break;
-            case GTE.MODES.MERGE:
-                if (this.ableToSwitchToISetMode()) {
-                    buttonToSwitch = "button-merge";
-                    // If iset tools have never been chosen
-                    if (!this.isetToolsRan) {
-                        // Assign singleton isets to each node with no iset
-                        GTE.tree.initializeISets();
-                        this.isetToolsRan = true;
-                    }
-                } else {
-                    window.alert("Assign a player to every node first.");
-                    return;
-                }
-                break;
-            case GTE.MODES.DISSOLVE:
-                if (this.ableToSwitchToISetMode()) {
-                    buttonToSwitch = "button-dissolve";
-                } else {
-                    window.alert("Assign a player to every node first.");
-                    return;
-                }
-                break;
             default:
-                break;
-        }
-        // Remove active class from current active button
-        var activeButton = document.getElementsByClassName("active button")[0];
-        activeButton.className = activeButton.className.replace(/\bactive\b/,'');
 
+        }
         document.getElementById(buttonToSwitch).className += " " + "active";
 
         GTE.MODE = modeToSwitch;
-        if (GTE.MODE === GTE.MODES.PLAYERS ||
-            GTE.MODE === GTE.MODES.MERGE ||
-            GTE.MODE === GTE.MODES.DISSOLVE) {
+        if (GTE.MODE === GTE.MODES.PLAYERS) {
             GTE.tree.hideLeaves();
         } else {
             GTE.tree.showLeaves();
@@ -97,6 +76,10 @@ GTE.UI = (function (parentModule) {
     Tools.prototype.addPlayer = function () {
         // Create a new player
         var player = GTE.tree.newPlayer();
+        if (player.id === 3) {
+            document.getElementById("button-player-less").className =
+                document.getElementById("button-player-less").className.replace(/\bdisabled\b/,'');
+        }
         // Get the last player button
         var playerButtons = document.getElementById("player-buttons");
         var lastPlayer = playerButtons.lastElementChild;
@@ -112,10 +95,25 @@ GTE.UI = (function (parentModule) {
         lastPlayer = playerButtons.lastElementChild;
         // And add a click event that will call the selectPlayer function
         lastPlayer.firstElementChild.addEventListener("click", function () {
-            var player = this.getAttribute("player");
+            var player = parseInt(this.getAttribute("player"));
             GTE.tools.selectPlayer(player);
             return false;
         });
+    };
+
+    Tools.prototype.removePlayer = function () {
+        var playerId = GTE.tree.removeLastPlayer();
+        if (playerId !== -1) {
+            var playerButtons = document.getElementById("player-buttons");
+            var lastPlayer = playerButtons.lastElementChild;
+            lastPlayer.parentNode.removeChild(lastPlayer);
+            if (playerId === 3) {
+                document.getElementById("button-player-less").className += " disabled";
+            }
+            if (playerId === this.activePlayer) {
+                this.selectPlayer(this.activePlayer-1);
+            }
+        }
     };
 
     Tools.prototype.getColour = function (colourIndex) {
@@ -128,10 +126,6 @@ GTE.UI = (function (parentModule) {
     */
     Tools.prototype.getActivePlayer = function () {
         return this.activePlayer;
-    };
-
-    Tools.prototype.ableToSwitchToISetMode = function () {
-        return GTE.tree.recursiveCheckAllNodesHavePlayer();
     };
 
 
