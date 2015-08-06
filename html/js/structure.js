@@ -75,8 +75,7 @@ var GTE = (function () {
     }
 
     GTE.PLAYERS = {
-        DEFAULT_CHANCE_NAME: "Chance",
-        DEFAULT_PLAYER_NAME: "Player"
+        DEFAULT_CHANCE_NAME: "chance"
     };
 
     return GTE;

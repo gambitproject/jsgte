@@ -18,9 +18,9 @@ GTE.TREE = (function (parentModule) {
         // this.nodesByDepth = [];
 
         this.players = [];
-        this.newPlayer("", GTE.COLOURS.BLACK);
-        this.newPlayer(GTE.PLAYERS.DEFAULT_PLAYER_NAME + " 1", GTE.COLOURS.RED);
-        this.newPlayer(GTE.PLAYERS.DEFAULT_PLAYER_NAME + " 2", GTE.COLOURS.BLUE);
+        this.newPlayer(GTE.COLOURS.BLACK);
+        this.newPlayer(GTE.COLOURS.RED);
+        this.newPlayer(GTE.COLOURS.BLUE);
     }
 
     /**
@@ -619,7 +619,7 @@ GTE.TREE = (function (parentModule) {
     * @param  {String} [colour] Hex code of the player's colour
     * @return {Player} player   Created player
     */
-    Tree.prototype.newPlayer = function (name, colour) {
+    Tree.prototype.newPlayer = function (colour) {
         // Player ID is incremental
         var id;
         if (this.players.length >= 1) {
@@ -627,16 +627,10 @@ GTE.TREE = (function (parentModule) {
         } else {
             id = 0;
         }
-        // If there is no specified name, the name is the same as the id
-        if (name === undefined) {
-            if (id !== 0){
-                name = GTE.PLAYERS.DEFAULT_PLAYER_NAME + " " + id;
-            }
-        }
 
         colour = colour || GTE.tools.getColour(this.players.length);
         // Create the new player
-        var player = new GTE.TREE.Player(id, name, colour);
+        var player = new GTE.TREE.Player(id, colour);
         // Add the player to the list of players and return it
         return this.addPlayer(player);
     };
