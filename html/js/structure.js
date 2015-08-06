@@ -32,19 +32,16 @@ var GTE = (function () {
     }
 
     GTE.COLOURS = {
-        AQUA: "#00FFFF",
-        AZURE: "#F0FFFF",
-        BEIGE: "#F5F5DC",
         BLACK: "#000000",
+        RED: "#FF0000",
         BLUE: "#0000FF",
+        DARKGREEN: "#006400",
+        AQUA: "#00FFFF",
         BROWN: "#A52A2A",
-        CYAN: "#00FFFF",
         DARKBLUE: "#00008B",
         DARKCYAN: "#008B8B",
         DARKGREY: "#A9A9A9",
-        DARKGREEN: "#006400",
         DARKKHAKI: "#BDB76B",
-        // DARKMAGENTA: "#8B008B",
         DARKOLIVEGREEN: "#556B2F",
         DARKORANGE: "#FF8C00",
         DARKORCHID: "#9932CC",
@@ -61,7 +58,6 @@ var GTE = (function () {
         LIGHTGREEN: "#90EE90",
         LIGHTGREY: "#D3D3D3",
         LIGHTPINK: "#FFB6C1",
-        // LIGHTYELLOW: "#FFFFE0",
         LIME: "#00FF00",
         MAGENTA: "#FF00FF",
         MAROON: "#800000",
@@ -71,9 +67,7 @@ var GTE = (function () {
         PINK: "#FFC0CB",
         PURPLE: "#800080",
         VIOLET: "#800080",
-        RED: "#FF0000",
         SILVER: "#C0C0C0",
-        // WHITE: "#FFFFFF",
         YELLOW: "#FFFF00"
     };
     if (Object.freeze) {
