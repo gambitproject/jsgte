@@ -6,13 +6,14 @@ GTE.TREE = (function (parentModule) {
     * @class
     * @param {String} name Player's name.
     */
-    function Player(id, name, colour) {
+    function Player(id, colour) {
         this.id = id;
-        this.name = name;
         if (this.id === 0) {
+            this.name = GTE.PLAYERS.DEFAULT_CHANCE_NAME;
             this.defaultName = GTE.PLAYERS.DEFAULT_CHANCE_NAME;
         } else {
-            this.defaultName = GTE.PLAYERS.DEFAULT_PLAYER_NAME + " " + this.id;
+            this.name = "" + this.id;
+            this.defaultName = "" + this.id;
         }
         this.colour = colour;
     }
@@ -43,25 +44,29 @@ GTE.TREE = (function (parentModule) {
             .x(x + GTE.CONSTANTS.TEXT_NODE_MARGIN)
             .y(y)
             .fill(this.colour)
-            .click(function () {
-                var newName = window.prompt("Enter the new name");
-                if (newName !== null) {
-                    thisPlayer.changeName(newName);
-                }
-                GTE.tree.draw();
+            .click(function() {
+                thisPlayer.onClick();
             });
         this.defaultText = GTE.canvas.plain(this.defaultName)
             .x(x + GTE.CONSTANTS.TEXT_NODE_MARGIN)
             .y(y)
             .hide()
             .fill(this.colour)
-            .click(function () {
-                var newName = window.prompt("Enter the new name");
-                if (newName !== null) {
-                    thisPlayer.changeName(newName);
-                }
-                GTE.tree.draw();
+            .click(function() {
+                thisPlayer.onClick();
             });
+    };
+
+    Player.prototype.onClick = function () {
+        var newName = window.prompt("Enter the new name");
+        if (newName !== null) {
+            if (this.id !== 0 && newName === "") {
+                window.alert("Player name should not be empty.");
+            } else {
+                this.changeName(newName);
+            }
+        }
+        GTE.tree.draw();
     };
 
     /**
