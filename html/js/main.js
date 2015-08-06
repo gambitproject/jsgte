@@ -52,4 +52,9 @@
         return false;
     });
 
+    document.getElementById("button-player-less").addEventListener("click", function(){
+        GTE.tools.removePlayer();
+        return false;
+    });
+
 }());

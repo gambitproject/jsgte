@@ -233,24 +233,17 @@ GTE.TREE = (function (parentModule) {
     };
 
     /**
-    * Removes a player from the list of players
-    * @param  {Player} player Player to be removed
-    * @return {Number} index  Index of the removed player. -1 if not found
+    * Removes last player from the list of players
     */
-    Tree.prototype.removePlayer = function (player) {
-        try {
-            // Get the index of the player in the list
-            var index = this.players.indexOf(player);
-            if (index === -1) {
-                throw "Player not found";
-            }
-            // Extract that player from the list
-            this.players.splice(index, 1);
-            return index;
-        } catch (err) {
-            console.log("EXCEPTION: " + err);
+    Tree.prototype.removeLastPlayer = function () {
+        if (this.players.length === 3) {
             return -1;
         }
+        var playerId = this.players.length-1;
+        this.players.splice(playerId, 1);
+        this.deassignNodesWithPlayer(playerId);
+        this.draw();
+        return playerId;
     };
 
     /**
@@ -261,6 +254,17 @@ GTE.TREE = (function (parentModule) {
         // This function simply calls the proper function in the Node and
         // specifies the current active player as the player to assign
         node.assignPlayer(this.players[GTE.tools.getActivePlayer()]);
+    };
+
+    Tree.prototype.deassignNodesWithPlayer = function (playerId) {
+        var nodes = this.getAllNodes();
+        for (var i = 0; i < nodes.length; i++) {
+            if (nodes[i].player !== null && nodes[i].player !== undefined) {
+                if (nodes[i].player.id === playerId) {
+                    nodes[i].player = null;
+                }
+            }
+        }
     };
 
     /**
@@ -299,6 +303,19 @@ GTE.TREE = (function (parentModule) {
     */
     Tree.prototype.getActivePlayer = function () {
         return this.players[GTE.tools.getActivePlayer()];
+    };
+
+    Tree.prototype.getAllNodes = function () {
+        var listOfNodes = [];
+        this.recursiveGetAllNodes(this.root, listOfNodes);
+        return listOfNodes;
+    };
+
+    Tree.prototype.recursiveGetAllNodes = function (node, listOfNodes) {
+        for (var i = 0; i < node.children.length; i++) {
+            this.recursiveGetAllNodes(node.children[i], listOfNodes);
+        }
+        listOfNodes.push(node);
     };
 
     // Add class to parent module
