@@ -204,13 +204,8 @@ GTE.TREE = (function (parentModule) {
                 name = GTE.PLAYERS.DEFAULT_PLAYER_NAME + " " + id;
             }
         }
-        // If there is no specified colour, get a random one
-        colour = colour || GTE.tools.getRandomColour();
-        // Check there are no players with that colour
-        while (!this.checkColourIsUnique(colour)) {
-            // If the colour is not unique get a new random colour
-            colour = GTE.tools.getRandomColour();
-        }
+
+        colour = colour || GTE.tools.getColour(this.players.length);
         // Create the new player
         var player = new GTE.TREE.Player(id, name, colour);
         // Add the player to the list of players and return it
