@@ -63,7 +63,6 @@ GTE.TREE = (function (parentModule) {
                   });
         if (this.player) {
             this.shape.fill(this.player.colour);
-            this.drawPlayer();
         } else {
             this.shape.fill(GTE.COLOURS.BLACK);
         }
@@ -71,7 +70,7 @@ GTE.TREE = (function (parentModule) {
         if (this.iset === null) {
             // If if belongs to an iset, the iset will draw the player
             if (this.player) {
-                this.player.draw(this.x, this.y);
+                this.drawPlayer();
             }
         }
 
