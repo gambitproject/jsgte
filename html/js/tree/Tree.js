@@ -26,8 +26,22 @@ GTE.TREE = (function (parentModule) {
         if (!this.positionsUpdated) {
             this.updatePositions();
         }
-        GTE.canvas.clear();
+        this.clear();
         this.recursiveDraw();
+    };
+
+    /**
+    * Function that clears the canvas
+    * Takes care of removing the foreigns used during inline editing
+    */
+    Tree.prototype.clear = function(){
+        // Clear canvas
+        GTE.canvas.clear();
+        // Remove labels
+        var foreigns = document.getElementsByTagName("foreignObject");
+        for (var index = foreigns.length - 1; index >= 0; index--) {
+            foreigns[index].parentNode.removeChild(foreigns[index]);
+        }
     };
 
     /**
