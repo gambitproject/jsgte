@@ -84,31 +84,26 @@ GTE.TREE = (function (parentModule) {
 
     Node.prototype.drawPlayer = function () {
         var thisPlayer = this.player;
-        this.text = GTE.canvas.plain(thisPlayer.name)
+        this.playerNameText = GTE.canvas.plain(thisPlayer.name)
             .x(this.x + GTE.CONSTANTS.TEXT_NODE_MARGIN)
             .y(this.y)
             .fill(thisPlayer.colour)
             .click(function() {
                 thisPlayer.onClick();
             });
-        this.defaultText = GTE.canvas.plain(thisPlayer.defaultName)
-            .x(this.x + GTE.CONSTANTS.TEXT_NODE_MARGIN)
-            .y(this.y)
-            .hide()
-            .fill(thisPlayer.colour)
-            .click(function() {
-                thisPlayer.onClick();
-            });
+        if (this.player.id === 0 && !GTE.tree.showChanceName) {
+            this.playerNameText.hide();
+        }
     };
 
     /**
     * Toggles the visibility of the default name text
     */
-    Node.prototype.toggleDefaultText = function () {
-        if (this.defaultText.visible() === false) {
-            this.defaultText.show();
+    Node.prototype.togglePlayerName = function () {
+        if (this.playerNameText.visible() === false) {
+            this.playerNameText.show();
         } else {
-            this.defaultText.hide();
+            this.playerNameText.hide();
         }
     };
 
@@ -159,9 +154,9 @@ GTE.TREE = (function (parentModule) {
                     // If player name is empty and default name is hidden,
                     // show the default name
                     if (this.player !== undefined) {
-                        if (this.player === GTE.tree.getActivePlayer() &&
-                                this.player.name.length === 0) {
-                            GTE.tree.toggleDefaultChanceName();
+                        if (GTE.tree.getActivePlayer().id === 0 &&
+                                this.player.id === 0) {
+                            GTE.tree.toggleChanceName();
                             break;
                         }
                     }

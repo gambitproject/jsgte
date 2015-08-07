@@ -159,21 +159,16 @@ GTE.TREE = (function (parentModule) {
 
     ISet.prototype.drawPlayer = function () {
         var thisPlayer = this.getPlayer();
-        this.text = GTE.canvas.plain(thisPlayer.name)
+        this.playerNameText = GTE.canvas.plain(thisPlayer.name)
             .x((this.lastNode.x + GTE.CONSTANTS.CIRCLE_SIZE - this.firstNode.x)/2 + this.firstNode.x)
             .y(this.firstNode.y)
             .fill(thisPlayer.colour)
             .click(function() {
                 thisPlayer.onClick();
             });
-        this.defaultText = GTE.canvas.plain(thisPlayer.defaultName)
-            .x((this.lastNode.x + GTE.CONSTANTS.CIRCLE_SIZE - this.firstNode.x)/2 + this.firstNode.x)
-            .y(this.firstNode.y)
-            .hide()
-            .fill(thisPlayer.colour)
-            .click(function() {
-                thisPlayer.onClick();
-            });
+        if (this.player.id === 0 && !GTE.tree.showChanceName) {
+            this.playerNameText.hide();
+        }
     };
 
     /**

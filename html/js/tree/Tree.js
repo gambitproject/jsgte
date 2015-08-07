@@ -21,6 +21,8 @@ GTE.TREE = (function (parentModule) {
         this.newPlayer(GTE.COLOURS.BLACK);
         this.newPlayer(GTE.COLOURS.RED);
         this.newPlayer(GTE.COLOURS.BLUE);
+
+        this.showChanceName = true;
     }
 
     /**
@@ -783,11 +785,12 @@ GTE.TREE = (function (parentModule) {
         return playerNodes;
     };
 
-    Tree.prototype.toggleDefaultChanceName = function () {
+    Tree.prototype.toggleChanceName = function () {
+        this.showChanceName = !this.showChanceName;
         // Get all chance nodes
         var nodes = this.getPlayerNodes(0);
         for (var i = 0; i < nodes.length; i++) {
-            nodes[i].toggleDefaultText();
+            nodes[i].togglePlayerName();
         }
     };
 
