@@ -1,6 +1,6 @@
 .foreign {
     text-align: left ;
-    width: 300px;
+    /*width: 300px;*/
     height: 22px;
 }
 .inside-foreign {
@@ -14,7 +14,7 @@
 
 .content-editable.growToLeft{
     text-align: right;
-    float: right;
+    /*float: right;*/
 }
 [contenteditable="true"]:active,
 [contenteditable="true"]:focus{

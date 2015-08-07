@@ -101,7 +101,7 @@ GTE.TREE = (function (parentModule) {
 
         // TODO: create variables for growing left and right
         var growingDirectionOfText = 1;
-        if (child.x < parent.x ) {
+        if (child.x <= parent.x ) {
             growingDirectionOfText = -1;
         }
         var contentEditable = new GTE.UI.Widgets.ContentEditable(middleX, middleY, growingDirectionOfText, this.name);
