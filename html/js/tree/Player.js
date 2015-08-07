@@ -30,13 +30,22 @@ GTE.TREE = (function (parentModule) {
     * @param {String} newName New player's name
     */
     Player.prototype.changeName = function (newName) {
-        this.name = newName;
+        try {
+            if (newName !== "") {
+                this.name = newName;
+            } else {
+                throw "Empty name";
+            }
+        } catch (err) {
+            console.log("EXCEPTION: " + err);
+        }
     };
 
     Player.prototype.onClick = function () {
         var newName = window.prompt("Enter the new name");
         if (newName !== null) {
-            if (this.id !== 0 && newName === "") {
+            newName = newName.trim();
+            if (newName === "") {
                 window.alert("Player name should not be empty.");
             } else {
                 this.changeName(newName);
