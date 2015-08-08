@@ -8,20 +8,22 @@ GTE.UI.Widgets = (function (parentModule) {
     function ContentEditable(x, y, growingOfText, text) {
         this.myforeign = document.createElementNS('http://www.w3.org/2000/svg', 'foreignObject');
         var textdivContainer = document.createElement("div");
-        var textdiv = document.createElement("div");
+        this.textdiv = document.createElement("div");
         this.textnode = document.createTextNode(text);
-        textdivContainer.appendChild(textdiv);
+        this.textdiv.style.color = this.colour;
+        textdivContainer.appendChild(this.textdiv);
         textdivContainer.className = "content-editable-container";
-        textdiv.appendChild(this.textnode);
-        textdiv.className = "content-editable";
-        if (growingOfText === GTE.CONSTANTS.CONTENT_EDITABLE_GROW_TO_LEFT) { textdiv.className += " growToLeft";}
-        textdiv.setAttribute("contenteditable", "true");
-        textdiv.setAttribute("width", "auto");
+        this.textdiv.appendChild(this.textnode);
+
+        this.textdiv.className = "content-editable";
+        if (growingOfText === GTE.CONSTANTS.CONTENT_EDITABLE_GROW_TO_LEFT) { this.textdiv.className += " growToLeft";}
+        this.textdiv.setAttribute("contenteditable", "true");
+        this.textdiv.setAttribute("width", "auto");
 
         // this.myforeign.setAttribute("width", "300px");
         this.myforeign.setAttribute("height", "22px");
         this.myforeign.classList.add("foreign"); //to make div fit text
-        textdiv.classList.add("inside-foreign"); //to make div fit text
+        this.textdiv.classList.add("inside-foreign"); //to make div fit text
         if (growingOfText === GTE.CONSTANTS.CONTENT_EDITABLE_GROW_TO_LEFT) {
             // As text grows to the left, the text contained will
             // be drawn at a distance as big as the size of the inside-foreign.
@@ -37,15 +39,15 @@ GTE.UI.Widgets = (function (parentModule) {
         this.myforeign.appendChild(textdivContainer);
 
         // Apply some extra width so that the editing flashy line is shown in
-        // firefox. If foreign width is the same as the textdiv width, firefox
+        // firefox. If foreign width is the same as the this.textdiv width, firefox
         // will render the flashy line outside the visible area. Making the
         // foreign a little bit bigger does the trick
-        var newWidth = textdiv.scrollWidth + GTE.CONSTANTS.CONTENT_EDITABLE_FOREIGN_EXTRA_WIDTH;
+        var newWidth = this.textdiv.scrollWidth + GTE.CONSTANTS.CONTENT_EDITABLE_FOREIGN_EXTRA_WIDTH;
         this.myforeign.setAttribute("width", newWidth);
         var previousWidth = newWidth;
         var thisContentEditable = this;
-        textdiv.addEventListener('input', function(e) {
-            newWidth = textdiv.scrollWidth + GTE.CONSTANTS.CONTENT_EDITABLE_FOREIGN_EXTRA_WIDTH;
+        this.textdiv.addEventListener('input', function(e) {
+            newWidth = thisContentEditable.textdiv.scrollWidth + GTE.CONSTANTS.CONTENT_EDITABLE_FOREIGN_EXTRA_WIDTH;
             thisContentEditable.myforeign.setAttribute("width", newWidth);
             if (growingOfText === GTE.CONSTANTS.CONTENT_EDITABLE_GROW_TO_LEFT) {
                 x -= newWidth - previousWidth;
@@ -54,7 +56,7 @@ GTE.UI.Widgets = (function (parentModule) {
             previousWidth = newWidth;
         });
 
-        textdiv.addEventListener('keypress', function(e) {
+        this.textdiv.addEventListener('keypress', function(e) {
             var max = 30;
             // TODO #21
             // Check for max number of chars
@@ -102,6 +104,12 @@ GTE.UI.Widgets = (function (parentModule) {
     ContentEditable.prototype.setText = function (text) {
         this.textnode.data = text;
         return this.textnode.data;
+    };
+
+    ContentEditable.prototype.colour = function (colour) {
+        this.textdiv.style.color = colour;
+        this.colour = colour;
+        return this;
     };
 
     if (parentModule === undefined) {

@@ -76,6 +76,7 @@ GTE.TREE = (function (parentModule) {
                 this.y,
                 GTE.CONSTANTS.CONTENT_EDITABLE_GROW_TO_RIGHT,
                 thisPlayer.name)
+                .colour(thisPlayer.colour)
                 .onEnter(function () {
                     thisPlayer.changeName(this.getText());
                     GTE.tree.updatePlayerNames(thisPlayer);
