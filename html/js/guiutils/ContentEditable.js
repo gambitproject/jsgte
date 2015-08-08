@@ -55,7 +55,13 @@ GTE.UI.Widgets = (function (parentModule) {
             }
             previousWidth = newWidth;
         });
-
+        this.textdiv.addEventListener('keydown', function(e) {
+            if(e.which == 9) {
+                if (thisContentEditable.functionOnEnter !== null){
+                    thisContentEditable.functionOnEnter();
+                }
+            }
+        });
         this.textdiv.addEventListener('keypress', function(e) {
             var max = 30;
             // TODO #21
