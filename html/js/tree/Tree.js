@@ -4,7 +4,7 @@ GTE.TREE = (function (parentModule) {
     /**
     * Creates a new Tree.
     * @class
-    * @param {Node} root Root node for the tree
+    * @param {ISet} root Root information set
     */
     function Tree(root) {
         this.root = root;
@@ -12,34 +12,45 @@ GTE.TREE = (function (parentModule) {
     }
 
     /**
-    * Function that draws the Game in the global canvas starting from a node
-    * Takes care of updating the positions, clearing the canvas and drawing in it
+    * Function that draws the Game in the global canvas starting from an information set
+    * Takes care of updating the positions, clearing the drawing and redrawing in it
     */
     Tree.prototype.draw = function(){
         if (!this.positionsUpdated) {
             this.updatePositions();
         }
-        GTE.canvas.clear();
+        this.clear();
         this.recursiveDraw();
     };
 
     /**
-    * Recursive function that draws the Game in the global canvas starting from a node
-    * If no param is given it will start from root
+    * Function that takes care of clearing the canvas and deleting all labels
+    */
+    Tree.prototype.clear = function(){
+        // Clear canvas
+        GTE.canvas.clear();
+    };
+
+    /**
+    * Recursive function that draws the Game in the global canvas
+    * starting from a given iSet. If no param is given it will
+    * start from root.
     * Stopping criteria: that the current node is a leaf
     * Recursive expansion: to all of the node's children
-    * @param {Node} [node] Node to start drawing from
+    * @param {ISet} [iSet] ISet to start drawing from
     */
-    Tree.prototype.recursiveDraw = function (node) {
+    Tree.prototype.recursiveDraw = function (iSet) {
         // In case there is no arguments start from root
-        if (node === undefined) { node = this.root; }
+        if (iSet === undefined) { iSet = this.root; }
 
-        if (!node.isLeaf()) {
-            for (var i = 0; i < node.children.length; i++) {
-                this.recursiveDraw(node.children[i]);
+        if (!iSet.isLeaf()) {
+            for (var i = 0; i < iSet.moves.length; i++) {
+                // Draw the moves first
+                iSet.moves[i].draw();
+                this.recursiveDraw(iSet.moves[i].child);
             }
         }
-        node.draw();
+        iSet.draw();
     };
 
 
@@ -54,21 +65,23 @@ GTE.TREE = (function (parentModule) {
 
 
     /**
-    * Recursive function that returns the number of leaves below a determinate node
-    * Leaves positions are updated in a different function.
+    * Recursive function that returns the number of leaves
+    * below a determinate information set. Leaves positions
+    * are updated in a different function.
     * Stopping criteria: that the current node is a leaf
     * Recursive expansion: to all of the node's children
-    * @param    {Node}      node        Node to start from
+    * @param    {ISet}      iSet        ISet to start from
     * @return   {Number}    leafCounter Number of Leaves
     */
-    Tree.prototype.recursiveNumberLeaves = function (node) {
-        if (node.isLeaf()) {
-            this.leaves.push(node);
+    Tree.prototype.recursiveNumberLeaves = function (iSet) {
+        // TODO #16
+        if (iSet.isLeaf()) {
+            this.leaves.push(iSet);
             return 1;
         } else {
             var leafCounter = 0;
-            for (var i = 0; i < node.children.length; i++) {
-                leafCounter += this.recursiveNumberLeaves(node.children[i]);
+            for (var i = 0; i < iSet.moves.length; i++) {
+                leafCounter += this.recursiveNumberLeaves(iSet.moves[i].child);
             }
             return leafCounter;
         }
@@ -84,23 +97,24 @@ GTE.TREE = (function (parentModule) {
     };
 
     /**
-    * Recursive function that updates the positions of the node children.
-    * Leaves positions are updated in a different function.
-    * Stopping criteria: that the current node is a leaf
-    * Recursive expansion: to all of the node's children
-    * @param {Node} node Node that will get their children's positions updated
+    * Recursive function that updates the positions of the nodes
+    * inside the information sets. Leaves positions are updated
+    * in a different function.
+    * Stopping criteria: that the current information set is a leaf
+    * Recursive expansion: to all of the isets that moves lead to
+    * @param {ISet} iSet ISet that will get their children's positions updated
     */
-    Tree.prototype.recursiveUpdatePositions = function (node) {
-        if (!node.isLeaf()) {
-            for (var i = 0; i < node.children.length; i++) {
-                this.recursiveUpdatePositions(node.children[i]);
+    Tree.prototype.recursiveUpdatePositions = function (iSet) {
+        if (!iSet.isLeaf()) {
+            for (var i = 0; i < iSet.moves.length; i++) {
+                this.recursiveUpdatePositions(iSet.moves[i].child);
             }
             // Get middle point between the children most in the left and most
             // in the right
-            // TODO: apply level weighted function for special cases
-            node.x = node.children[0].x +
-                (node.children[node.children.length-1].x - node.children[0].x)/2;
-            node.y = node.level * GTE.CONSTANTS.DIST_BETWEEN_LEVELS;
+            // TODO #9
+            iSet.node.x = iSet.moves[0].child.node.x +
+                (iSet.moves[iSet.moves.length - 1].child.node.x - iSet.moves[0].child.node.x)/2;
+            iSet.node.y = iSet.node.level * GTE.CONSTANTS.DIST_BETWEEN_LEVELS;
         }
     };
 
@@ -122,52 +136,57 @@ GTE.TREE = (function (parentModule) {
             this.updateLeavesPositions();
         } else {
             for (var i = 0; i < numberLeaves; i++) {
-                this.leaves[i].x = (widthPerNode*i)+(widthPerNode/2) -
+                this.leaves[i].node.x = (widthPerNode*i)+(widthPerNode/2) -
                                         GTE.CONSTANTS.CIRCLE_SIZE/2 + offset;
             }
         }
     };
 
     /**
-    * Adds a child to a given node
-    * @param  {Node} parentNode Node that will get a new child
-    * @return {Node} newNode    Node that has been added
+    * Adds a child to a given iSet
+    * @param  {ISet} parentISet ISet that will get a new child
+    * @return {ISet} newISet    ISet that has been added
     */
-    Tree.prototype.addChildNodeTo = function (parentNode) {
-        var newNode = new GTE.TREE.Node(parentNode);
-        if ((newNode.y + GTE.CONSTANTS.CIRCLE_SIZE) > GTE.canvas.viewbox().height) {
+    Tree.prototype.addChildISetTo = function (parentISet) {
+        // Create a new ISet
+        // TODO #15
+        var newISet = new GTE.TREE.ISet(parentISet, 1);
+        // Check none of the new nodes of the ISet is out of the canvas
+        // TODO #14
+        if ((newISet.node.y + GTE.CONSTANTS.CIRCLE_SIZE) > GTE.canvas.viewbox().height) {
             this.zoomOut();
         }
+        // Inform that tree needs to be redrawn
         this.positionsUpdated = false;
-        return newNode;
+        return newISet;
     };
 
     /**
-     * Function that deletes the node. It changes children's parent to their
-     * grandparent.
-     * @param {Node} node Node to be deleted
+     * Function that deletes the iSet children
+     * @param {ISet} iSet iSet whose children will be deleted
      */
-    Tree.prototype.deleteChildrenOf = function (node) {
+    Tree.prototype.deleteChildrenOf = function (iSet) {
         // Delete everything below every child
-        while(node.children.length !== 0){
-            this.recursiveDeleteChildren(node.children[0]);
+        while(iSet.moves.length !== 0){
+            // Send moves[0] because moves[] will decrease in size
+            this.recursiveDeleteChildren(iSet.moves.pop().child);
         }
         this.positionsUpdated = false;
     };
 
     /**
-    * Recursive function that deletes everything below a node.
-    * Stopping criteria: that the current node is a leaf
-    * Recursive expansion: to all of the node's children
-    * @param {Node} node Starting node
+    * Recursive function that deletes everything below an iSet.
+    * Stopping criteria: that the current iSet is a leaf
+    * Recursive expansion: to all of the iSet's children
+    * @param {ISet} iSet Starting iSet
     */
-    Tree.prototype.recursiveDeleteChildren = function (node) {
-        if (!node.isLeaf()) {
-            for (var i=0; i < node.children.length; i++) {
-                this.recursiveDeleteChildren(node.children[i]);
+    Tree.prototype.recursiveDeleteChildren = function (iSet) {
+        if (!iSet.isLeaf()) {
+            for (var i=0; i < iSet.moves.length; i++) {
+                this.recursiveDeleteChildren(iSet.moves[i].child);
             }
         }
-        node.delete();
+        iSet.delete();
     };
 
     /**
