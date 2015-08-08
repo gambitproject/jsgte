@@ -349,6 +349,13 @@ GTE.TREE = (function (parentModule) {
         }
     };
 
+    Tree.prototype.updatePlayerNames = function (player) {
+        var nodes = this.getPlayerNodes(player.id);
+        for (var i = 0; i < nodes.length; i++) {
+            nodes[i].updatePlayerName();
+        }
+    };
+
     // Add class to parent module
     parentModule.Tree = Tree;
 
