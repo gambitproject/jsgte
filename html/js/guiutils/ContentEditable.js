@@ -57,8 +57,8 @@ GTE.UI.Widgets = (function (parentModule) {
         });
         this.textdiv.addEventListener('keydown', function(e) {
             if(e.which == 9) {
-                if (thisContentEditable.functionOnEnter !== null){
-                    thisContentEditable.functionOnEnter();
+                if (thisContentEditable.functionOnSave !== null){
+                    thisContentEditable.functionOnSave();
                 }
             }
         });
@@ -73,8 +73,8 @@ GTE.UI.Widgets = (function (parentModule) {
                 e.preventDefault();
                 this.blur();
                 window.getSelection().removeAllRanges();
-                if (thisContentEditable.functionOnEnter !== null){
-                    thisContentEditable.functionOnEnter();
+                if (thisContentEditable.functionOnSave !== null){
+                    thisContentEditable.functionOnSave();
                 }
                 return false;
             }
@@ -98,8 +98,8 @@ GTE.UI.Widgets = (function (parentModule) {
         }
     };
 
-    ContentEditable.prototype.onEnter = function (fun) {
-        this.functionOnEnter = fun;
+    ContentEditable.prototype.onSave = function (fun) {
+        this.functionOnSave = fun;
         return this;
     };
 
