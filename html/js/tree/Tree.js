@@ -816,6 +816,10 @@ GTE.TREE = (function (parentModule) {
         }
     };
 
+    Tree.prototype.updateMoveNames = function (move) {
+        console.log("IMPLEMENT");
+    };
+
     // Add class to parent module
     parentModule.Tree = Tree;
 
