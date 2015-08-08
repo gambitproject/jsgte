@@ -9,10 +9,10 @@ GTE.UI.Widgets = (function (parentModule) {
         this.myforeign = document.createElementNS('http://www.w3.org/2000/svg', 'foreignObject');
         var textdivContainer = document.createElement("div");
         var textdiv = document.createElement("div");
-        var textnode = document.createTextNode(text);
+        this.textnode = document.createTextNode(text);
         textdivContainer.appendChild(textdiv);
         textdivContainer.className = "content-editable-container";
-        textdiv.appendChild(textnode);
+        textdiv.appendChild(this.textnode);
         textdiv.className = "content-editable";
         if (growingOfText === GTE.CONSTANTS.CONTENT_EDITABLE_GROW_TO_LEFT) { textdiv.className += " growToLeft";}
         textdiv.setAttribute("contenteditable", "true");
@@ -93,6 +93,15 @@ GTE.UI.Widgets = (function (parentModule) {
     ContentEditable.prototype.onEnter = function (fun) {
         this.functionOnEnter = fun;
         return this;
+    };
+
+    ContentEditable.prototype.getText = function () {
+        return this.textnode.data;
+    };
+
+    ContentEditable.prototype.setText = function (text) {
+        this.textnode.data = text;
+        return this.textnode.data;
     };
 
     if (parentModule === undefined) {

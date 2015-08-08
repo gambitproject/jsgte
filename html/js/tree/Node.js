@@ -77,7 +77,8 @@ GTE.TREE = (function (parentModule) {
                 GTE.CONSTANTS.CONTENT_EDITABLE_GROW_TO_RIGHT,
                 thisPlayer.name)
                 .onEnter(function () {
-                    window.alert("sssave");
+                    thisPlayer.changeName(this.getText());
+                    GTE.tree.updatePlayerNames(thisPlayer);
                 });
         if (this.player.id === 0 && !GTE.tree.showChanceName) {
             this.playerNameText.hide();
@@ -93,6 +94,10 @@ GTE.TREE = (function (parentModule) {
         } else {
             this.playerNameText.hide();
         }
+    };
+
+    Node.prototype.updatePlayerName = function () {
+        this.playerNameText.setText(this.player.name);
     };
 
     /**
