@@ -4,7 +4,7 @@ GTE.TREE = (function (parentModule) {
     /**
     * Creates a new Node.
     * @class
-    * @param {Node} [parent] Parent node. If null, this is root.
+    * @param {Node} parent Parent node. If null, this is root.
     */
     function Node(parent, player) {
         this.player = player;
