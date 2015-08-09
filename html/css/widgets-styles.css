@@ -12,7 +12,7 @@
     width: 300px;
 }
 
-.content-editable.growToLeft{
+.content-editable.grow-to-left{
     text-align: right;
     /*float: right;*/
 }
