@@ -71,6 +71,16 @@ GTE.UI = (function (parentModule) {
     };
 
     /**
+    * Handles player buttons onclicks
+    * @param {Number} playerId Player to be selected
+    */
+    Tools.prototype.buttonPlayerHandler = function(playerId) {
+        return function () {
+            GTE.tools.selectPlayer(parseInt(playerId));
+        };
+    };
+
+    /**
     * Function that adds a player button to the toolbar
     */
     Tools.prototype.addPlayer = function () {
@@ -94,11 +104,7 @@ GTE.UI = (function (parentModule) {
         // Get the newly added button
         lastPlayer = playerButtons.lastElementChild;
         // And add a click event that will call the selectPlayer function
-        lastPlayer.firstElementChild.addEventListener("click", function () {
-            var player = parseInt(this.getAttribute("player"));
-            GTE.tools.selectPlayer(player);
-            return false;
-        });
+        lastPlayer.firstElementChild.onclick = this.buttonPlayerHandler(player.id);
     };
 
     /**
