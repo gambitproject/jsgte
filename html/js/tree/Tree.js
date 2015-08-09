@@ -201,8 +201,6 @@ GTE.TREE = (function (parentModule) {
     /**
     * Creates a new player with a random unique colour and adds it to the list
     * of players
-    * @param  {String}  [name]  The name of the player. If null, it will be the same
-    *                           as the player id
     * @param  {String} [colour] Hex code of the player's colour
     * @return {Player} player   Created player
     */
@@ -266,6 +264,10 @@ GTE.TREE = (function (parentModule) {
         node.assignPlayer(this.players[GTE.tools.getActivePlayer()]);
     };
 
+    /**
+    * Deassigns a given player's nodes
+    * @param {Number} playerId Player Id that should get its nodes deassigned
+    */
     Tree.prototype.deassignNodesWithPlayer = function (playerId) {
         var nodes = this.getAllNodes();
         for (var i = 0; i < nodes.length; i++) {
@@ -293,6 +295,9 @@ GTE.TREE = (function (parentModule) {
         return true;
     };
 
+    /**
+    * Hides tree's leaves
+    */
     Tree.prototype.hideLeaves = function () {
         var numberLeaves = this.numberLeaves();
         for (var i = 0; i < numberLeaves; i++) {
@@ -300,6 +305,9 @@ GTE.TREE = (function (parentModule) {
         }
     };
 
+    /**
+    * Shows tree's leaves
+    */
     Tree.prototype.showLeaves = function () {
         var numberLeaves = this.numberLeaves();
         for (var i = 0; i < numberLeaves; i++) {
@@ -315,12 +323,25 @@ GTE.TREE = (function (parentModule) {
         return this.players[GTE.tools.getActivePlayer()];
     };
 
+    /**
+    * Gets all nodes in tree
+    * @return {List} listOfNodes List of tree's nodes
+    */
     Tree.prototype.getAllNodes = function () {
         var listOfNodes = [];
         this.recursiveGetAllNodes(this.root, listOfNodes);
         return listOfNodes;
     };
 
+    /**
+    * Recursive function that gets all nodes in tree
+    * Stopping criteria: that the current node is a leaf
+    * Recursive expansion: to all of the node's children
+    * @param {Node} node        Node to expand through
+    * @param {List} listOfNodes List where nodes should be added and that will
+    *                           be returned by the non recursive function that
+    *                           calls this function
+    */
     Tree.prototype.recursiveGetAllNodes = function (node, listOfNodes) {
         for (var i = 0; i < node.children.length; i++) {
             this.recursiveGetAllNodes(node.children[i], listOfNodes);
@@ -328,6 +349,11 @@ GTE.TREE = (function (parentModule) {
         listOfNodes.push(node);
     };
 
+    /**
+    * Get all player's nodes accross the tree
+    * @param {Number} playerId Id of the player
+    * @return {List} playerNodes List of nodes that belong to that player
+    */
     Tree.prototype.getPlayerNodes = function (playerId) {
         var allNodes = this.getAllNodes();
         var playerNodes = [];
@@ -340,6 +366,9 @@ GTE.TREE = (function (parentModule) {
         return playerNodes;
     };
 
+    /**
+    * Toggles visibility of the chance name
+    */
     Tree.prototype.toggleChanceName = function () {
         this.showChanceName = !this.showChanceName;
         // Get all chance nodes
@@ -349,9 +378,15 @@ GTE.TREE = (function (parentModule) {
         }
     };
 
+    /**
+    * Updates a given player names accross the tree
+    * @param {Player} player Player to be re drawn
+    */
     Tree.prototype.updatePlayerNames = function (player) {
+        // Get all player's nodes
         var nodes = this.getPlayerNodes(player.id);
         for (var i = 0; i < nodes.length; i++) {
+            // Update the text widget
             nodes[i].updatePlayerName();
         }
     };
