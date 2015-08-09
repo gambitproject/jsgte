@@ -88,12 +88,14 @@ GTE.UI = (function (parentModule) {
             // Create a new player
             var player = GTE.tree.newPlayer();
             if (player !== null) {
-                if (player.id == 2) {
+                if (player.id == GTE.CONSTANTS.MIN_PLAYERS) {
                     document.getElementById("button-player-less").className =
-                        document.getElementById("button-player-less").className.replace(/\bdisabled\b/,'');
+                        document.getElementById("button-player-less").className
+                                                    .replace(/\bdisabled\b/,'');
                 }
                 if (player.id == GTE.CONSTANTS.MAX_PLAYERS - 1) {
-                    document.getElementById("button-player-more").className += " " + "disabled";
+                    document.getElementById("button-player-more")
+                                                .className += " " + "disabled";
                 }
                 // Get the last player button
                 var playerButtons = document.getElementById("player-buttons");
@@ -118,21 +120,22 @@ GTE.UI = (function (parentModule) {
     * Function that removes last player from the Toolbar
     */
     Tools.prototype.removePlayer = function () {
-        if (GTE.tree.numberOfPlayers() > 2) {
+        if (GTE.tree.numberOfPlayers() > GTE.CONSTANTS.MIN_PLAYERS) {
             // Remove last player from the list of players
             var playerId = GTE.tree.removeLastPlayer();
             // Activate more players button again
             if (playerId == GTE.CONSTANTS.MAX_PLAYERS - 1) {
                 document.getElementById("button-player-more").className =
-                    document.getElementById("button-player-more").className.replace(/\bdisabled\b/,'');
+                    document.getElementById("button-player-more").className
+                                                    .replace(/\bdisabled\b/,'');
             }
             // Remove button
             var playerButtons = document.getElementById("player-buttons");
             var lastPlayer = playerButtons.lastElementChild;
             lastPlayer.parentNode.removeChild(lastPlayer);
-            // If there are only three players (Chance, Player 1 and Player 2),
+            // If there are only two players (Chance, Player 1),
             // disable the remove button
-            if (playerId === 2) {
+            if (playerId === GTE.CONSTANTS.MIN_PLAYERS) {
                 document.getElementById("button-player-less").className += " disabled";
             }
             // If the removed player was the active one, select the previous one
