@@ -244,7 +244,7 @@ GTE.TREE = (function (parentModule) {
     * Removes last player from the list of players
     */
     Tree.prototype.removeLastPlayer = function () {
-        if (this.players.length === 3) {
+        if (this.players.length === 2) {
             return -1;
         }
         var playerId = this.players.length-1;

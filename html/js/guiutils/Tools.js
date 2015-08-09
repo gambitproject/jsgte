@@ -86,7 +86,7 @@ GTE.UI = (function (parentModule) {
     Tools.prototype.addPlayer = function () {
         // Create a new player
         var player = GTE.tree.newPlayer();
-        if (player.id === 3) {
+        if (player.id == 2) {
             document.getElementById("button-player-less").className =
                 document.getElementById("button-player-less").className.replace(/\bdisabled\b/,'');
         }
@@ -120,7 +120,7 @@ GTE.UI = (function (parentModule) {
             lastPlayer.parentNode.removeChild(lastPlayer);
             // If there are only three players (Chance, Player 1 and Player 2),
             // disable the remove button
-            if (playerId === 3) {
+            if (playerId === 2) {
                 document.getElementById("button-player-less").className += " disabled";
             }
             // If the removed player was the active one, select the previous one
