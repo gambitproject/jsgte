@@ -88,12 +88,12 @@ GTE.UI = (function (parentModule) {
             // Create a new player
             var player = GTE.tree.newPlayer();
             if (player !== null) {
-                if (player.id == GTE.CONSTANTS.MIN_PLAYERS) {
+                if (player.id == GTE.CONSTANTS.MIN_PLAYERS + 1) {
                     document.getElementById("button-player-less").className =
                         document.getElementById("button-player-less").className
                                                     .replace(/\bdisabled\b/,'');
                 }
-                if (player.id == GTE.CONSTANTS.MAX_PLAYERS - 1) {
+                if (player.id == GTE.CONSTANTS.MAX_PLAYERS) {
                     document.getElementById("button-player-more")
                                                 .className += " " + "disabled";
                 }
@@ -124,7 +124,7 @@ GTE.UI = (function (parentModule) {
             // Remove last player from the list of players
             var playerId = GTE.tree.removeLastPlayer();
             // Activate more players button again
-            if (playerId == GTE.CONSTANTS.MAX_PLAYERS - 1) {
+            if (playerId == GTE.CONSTANTS.MAX_PLAYERS) {
                 document.getElementById("button-player-more").className =
                     document.getElementById("button-player-more").className
                                                     .replace(/\bdisabled\b/,'');
@@ -135,7 +135,7 @@ GTE.UI = (function (parentModule) {
             lastPlayer.parentNode.removeChild(lastPlayer);
             // If there are only two players (Chance, Player 1),
             // disable the remove button
-            if (playerId === GTE.CONSTANTS.MIN_PLAYERS) {
+            if (playerId === GTE.CONSTANTS.MIN_PLAYERS + 1) {
                 document.getElementById("button-player-less").className += " disabled";
             }
             // If the removed player was the active one, select the previous one
