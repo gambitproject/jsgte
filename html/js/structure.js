@@ -20,7 +20,7 @@ var GTE = (function () {
       CONTENT_EDITABLE_GROW_TO_LEFT: -1,
       TEXT_NODE_MARGIN: 30,
       MAX_PLAYERS: 10,
-      MIN_PLAYERS: 2
+      MIN_PLAYERS: 1
     };
 
     GTE.MODE = 0;

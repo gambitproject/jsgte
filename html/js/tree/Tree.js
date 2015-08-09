@@ -205,9 +205,6 @@ GTE.TREE = (function (parentModule) {
     * @return {Player} player   Created player
     */
     Tree.prototype.newPlayer = function (colour) {
-        if (this.players.length === GTE.CONSTANTS.MAX_PLAYERS) {
-            return null;
-        }
         // Player ID is incremental
         var id;
         if (this.players.length >= 1) {
@@ -392,11 +389,11 @@ GTE.TREE = (function (parentModule) {
     };
 
     /**
-    * Returns number of players
+    * Returns number of players. Does not include the chance player
     * @param {Numbers} numberOfPlayers Number of players
     */
     Tree.prototype.numberOfPlayers = function () {
-        return this.players.length;
+        return this.players.length - 1;
     };
 
     // Add class to parent module
