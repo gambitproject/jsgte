@@ -75,7 +75,12 @@ GTE.TREE = (function (parentModule) {
                 thisPlayer.name)
                 .colour(thisPlayer.colour)
                 .onSave(function () {
-                    thisPlayer.changeName(this.getText());
+                    var text = this.getText().trim();
+                    if (text === "") {
+                        window.alert("Player name should not be empty.");
+                    } else {
+                        thisPlayer.changeName(text);
+                    }
                     GTE.tree.updatePlayerNames(thisPlayer);
                 });
         if (this.player.id === 0 && !GTE.tree.showChanceName) {

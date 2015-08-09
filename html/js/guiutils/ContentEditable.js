@@ -152,7 +152,7 @@ GTE.UI.Widgets = (function (parentModule) {
     * @return {String} text Current text
     */
     ContentEditable.prototype.getText = function () {
-        return this.textnode.data;
+        return this.textdiv.innerHTML;
     };
 
     /**
@@ -161,7 +161,7 @@ GTE.UI.Widgets = (function (parentModule) {
     * @return {String} currentText Current text after set
     */
     ContentEditable.prototype.setText = function (text) {
-        this.textnode.data = text;
+        this.textdiv.innerHTML = text;
         return this.getText();
     };
 
