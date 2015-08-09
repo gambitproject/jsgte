@@ -101,21 +101,35 @@ GTE.UI = (function (parentModule) {
         });
     };
 
+    /**
+    * Function that removes last player from the Toolbar
+    */
     Tools.prototype.removePlayer = function () {
+        // Remove last player from the list of players
         var playerId = GTE.tree.removeLastPlayer();
         if (playerId !== -1) {
+            // Remove button
             var playerButtons = document.getElementById("player-buttons");
             var lastPlayer = playerButtons.lastElementChild;
             lastPlayer.parentNode.removeChild(lastPlayer);
+            // If there are only three players (Chance, Player 1 and Player 2),
+            // disable the remove button
             if (playerId === 3) {
                 document.getElementById("button-player-less").className += " disabled";
             }
+            // If the removed player was the active one, select the previous one
             if (playerId === this.activePlayer) {
                 this.selectPlayer(this.activePlayer-1);
             }
         }
     };
 
+    /**
+    * Returns the colour correspondent to a given index. It is used to get the
+    * player colour. Player id would be the same as colourIndex
+    * @param  {Number} colourIndex  Colour index in the list of colours
+    * @return {Colour} colour       Colour hex code
+    */
     Tools.prototype.getColour = function (colourIndex) {
         return GTE.COLOURS[Object.keys(GTE.COLOURS)[colourIndex]];
     };
@@ -127,7 +141,6 @@ GTE.UI = (function (parentModule) {
     Tools.prototype.getActivePlayer = function () {
         return this.activePlayer;
     };
-
 
     // Add class to parent module
     parentModule.Tools = Tools;
