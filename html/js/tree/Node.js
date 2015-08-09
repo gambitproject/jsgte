@@ -75,7 +75,7 @@ GTE.TREE = (function (parentModule) {
                 thisPlayer.name)
                 .colour(thisPlayer.colour)
                 .onSave(function () {
-                    var text = this.getText().trim();
+                    var text = this.getText().replace(/&nbsp;/gi,'').trim();
                     if (text === "") {
                         window.alert("Player name should not be empty.");
                     } else {

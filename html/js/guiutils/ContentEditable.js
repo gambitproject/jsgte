@@ -70,12 +70,12 @@ GTE.UI.Widgets = (function (parentModule) {
             previousWidth = newWidth;
         });
 
-        // keydown event is used to detect when the TAB key is pressed
-        this.textdiv.addEventListener('keydown', function(e) {
-            if(e.which == 9) {
-                if (thisContentEditable.functionOnSave !== null){
-                    thisContentEditable.functionOnSave();
-                }
+        // blur event is used to detect when the contenteditable loses focus
+        this.textdiv.addEventListener('blur', function(e) {
+            console.log("blur");
+            if (thisContentEditable.functionOnSave !== null){
+                // Save the object specifi on functionOnSave
+                thisContentEditable.functionOnSave();
             }
         });
 
@@ -90,14 +90,10 @@ GTE.UI.Widgets = (function (parentModule) {
             }
             if(e.which == 13) {
                 // If RETURN is pressed
-                // Blur the input
+                // Blur the input instead of adding a line break
                 e.preventDefault();
                 this.blur();
                 window.getSelection().removeAllRanges();
-                if (thisContentEditable.functionOnSave !== null){
-                    // Save the object specifi on functionOnSave
-                    thisContentEditable.functionOnSave();
-                }
                 return false;
             }
         });
