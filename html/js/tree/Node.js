@@ -62,15 +62,12 @@ GTE.TREE = (function (parentModule) {
         }
     };
 
+    /**
+    * Draws the player. It needs to be done within the Node so that there is
+    * an instance of ContentEditable per Node
+    */
     Node.prototype.drawPlayer = function () {
         var thisPlayer = this.player;
-        // this.playerNameText = GTE.canvas.plain(thisPlayer.name)
-        //     .x(this.x + GTE.CONSTANTS.TEXT_NODE_MARGIN)
-        //     .y(this.y)
-        //     .fill(thisPlayer.colour)
-        //     .click(function() {
-        //         thisPlayer.onClick();
-        //     });
         this.playerNameText = new GTE.UI.Widgets.ContentEditable(
                 this.x + GTE.CONSTANTS.TEXT_NODE_MARGIN,
                 this.y,
@@ -97,6 +94,10 @@ GTE.TREE = (function (parentModule) {
         }
     };
 
+    /**
+    * Updates player name. It sets the content editable text to the current
+    * player name
+    */
     Node.prototype.updatePlayerName = function () {
         this.playerNameText.setText(this.player.name);
     };
@@ -143,7 +144,6 @@ GTE.TREE = (function (parentModule) {
                 break;
         }
     };
-
 
     /**
     * Function that adds child to node
@@ -206,10 +206,16 @@ GTE.TREE = (function (parentModule) {
         this.player = player;
     };
 
+    /**
+    * Hides the node shape
+    */
     Node.prototype.hide = function () {
         this.shape.hide();
     };
 
+    /**
+    * Shows the node shape
+    */
     Node.prototype.show = function () {
         this.shape.show();
     };
