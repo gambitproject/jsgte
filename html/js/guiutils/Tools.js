@@ -84,36 +84,48 @@ GTE.UI = (function (parentModule) {
     * Function that adds a player button to the toolbar
     */
     Tools.prototype.addPlayer = function () {
-        // Create a new player
-        var player = GTE.tree.newPlayer();
-        if (player.id == 2) {
-            document.getElementById("button-player-less").className =
-                document.getElementById("button-player-less").className.replace(/\bdisabled\b/,'');
+        if (GTE.tree.numberOfPlayers() < GTE.CONSTANTS.MAX_PLAYERS) {
+            // Create a new player
+            var player = GTE.tree.newPlayer();
+            if (player !== null) {
+                if (player.id == 2) {
+                    document.getElementById("button-player-less").className =
+                        document.getElementById("button-player-less").className.replace(/\bdisabled\b/,'');
+                }
+                if (player.id == GTE.CONSTANTS.MAX_PLAYERS - 1) {
+                    document.getElementById("button-player-more").className += " " + "disabled";
+                }
+                // Get the last player button
+                var playerButtons = document.getElementById("player-buttons");
+                var lastPlayer = playerButtons.lastElementChild;
+                // Insert a new button after the last button
+                lastPlayer.insertAdjacentHTML("afterend",
+                    "<li><button style='color:"+ player.colour +
+                    "' id='button-player-" + player.id +
+                    "' class='button button--sacnite button--inverted button-player'" +
+                    " alt='Player " + player.id +
+                    "' player='" + player.id +
+                    "'><i class='icon-user'></i><span>" + player.id + "</span></button></li>");
+                // Get the newly added button
+                lastPlayer = playerButtons.lastElementChild;
+                // And add a click event that will call the selectPlayer function
+                lastPlayer.firstElementChild.onclick = this.buttonPlayerHandler(player.id);
+            }
         }
-        // Get the last player button
-        var playerButtons = document.getElementById("player-buttons");
-        var lastPlayer = playerButtons.lastElementChild;
-        // Insert a new button after the last button
-        lastPlayer.insertAdjacentHTML("afterend",
-            "<li><button style='color:"+ player.colour +
-            "' id='button-player-" + player.id +
-            "' class='button button--sacnite button--inverted button-player'" +
-            " alt='Player " + player.id +
-            "' player='" + player.id +
-            "'><i class='icon-user'></i><span>" + player.id + "</span></button></li>");
-        // Get the newly added button
-        lastPlayer = playerButtons.lastElementChild;
-        // And add a click event that will call the selectPlayer function
-        lastPlayer.firstElementChild.onclick = this.buttonPlayerHandler(player.id);
     };
 
     /**
     * Function that removes last player from the Toolbar
     */
     Tools.prototype.removePlayer = function () {
-        // Remove last player from the list of players
-        var playerId = GTE.tree.removeLastPlayer();
-        if (playerId !== -1) {
+        if (GTE.tree.numberOfPlayers() > 2) {
+            // Remove last player from the list of players
+            var playerId = GTE.tree.removeLastPlayer();
+            // Activate more players button again
+            if (playerId == GTE.CONSTANTS.MAX_PLAYERS - 1) {
+                document.getElementById("button-player-more").className =
+                    document.getElementById("button-player-more").className.replace(/\bdisabled\b/,'');
+            }
             // Remove button
             var playerButtons = document.getElementById("player-buttons");
             var lastPlayer = playerButtons.lastElementChild;

@@ -205,6 +205,9 @@ GTE.TREE = (function (parentModule) {
     * @return {Player} player   Created player
     */
     Tree.prototype.newPlayer = function (colour) {
+        if (this.players.length === GTE.CONSTANTS.MAX_PLAYERS) {
+            return null;
+        }
         // Player ID is incremental
         var id;
         if (this.players.length >= 1) {
@@ -244,9 +247,6 @@ GTE.TREE = (function (parentModule) {
     * Removes last player from the list of players
     */
     Tree.prototype.removeLastPlayer = function () {
-        if (this.players.length === 2) {
-            return -1;
-        }
         var playerId = this.players.length-1;
         this.players.splice(playerId, 1);
         this.deassignNodesWithPlayer(playerId);
@@ -389,6 +389,14 @@ GTE.TREE = (function (parentModule) {
             // Update the text widget
             nodes[i].updatePlayerName();
         }
+    };
+
+    /**
+    * Returns number of players
+    * @param {Numbers} numberOfPlayers Number of players
+    */
+    Tree.prototype.numberOfPlayers = function () {
+        return this.players.length;
     };
 
     // Add class to parent module
