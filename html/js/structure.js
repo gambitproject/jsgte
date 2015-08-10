@@ -20,7 +20,9 @@ var GTE = (function () {
       CONTENT_EDITABLE_GROW_TO_RIGHT: 1,
       CONTENT_EDITABLE_GROW_TO_LEFT: -1,
       ISET_HEIGHT: 50,
-      TEXT_NODE_MARGIN: 30
+      TEXT_NODE_MARGIN: 30,
+      MAX_PLAYERS: 10,
+      MIN_PLAYERS: 1
     };
 
     GTE.MODE = 0;
@@ -38,22 +40,26 @@ var GTE = (function () {
         BLACK: "#000000",
         RED: "#FF0000",
         BLUE: "#0000FF",
-        DARKGREEN: "#006400",
-        AQUA: "#00FFFF",
+        GREEN: "#008000",
+        ORANGE: "#FFA500",
         BROWN: "#A52A2A",
-        DARKBLUE: "#00008B",
-        DARKCYAN: "#008B8B",
+        LIME: "#00FF00",
         DARKGREY: "#A9A9A9",
         DARKKHAKI: "#BDB76B",
-        DARKOLIVEGREEN: "#556B2F",
         DARKORANGE: "#FF8C00",
         DARKORCHID: "#9932CC",
         DARKRED: "#8B0000",
         DARKSALMON: "#E9967A",
+        DARKCYAN: "#008B8B",
+        DARKOLIVEGREEN: "#556B2F",
+        DARKBLUE: "#00008B",
+        DARKGREEN: "#006400",
+        PURPLE: "#800080",
         DARKVIOLET: "#9400D3",
+        YELLOW: "#FFFF00",
         FUCHSIA: "#FF00FF",
+        AQUA: "#00FFFF",
         GOLD: "#FFD700",
-        GREEN: "#008000",
         INDIGO: "#4B0082",
         KHAKI: "#F0E68C",
         LIGHTBLUE: "#ADD8E6",
@@ -61,17 +67,13 @@ var GTE = (function () {
         LIGHTGREEN: "#90EE90",
         LIGHTGREY: "#D3D3D3",
         LIGHTPINK: "#FFB6C1",
-        LIME: "#00FF00",
         MAGENTA: "#FF00FF",
         MAROON: "#800000",
         NAVY: "#000080",
         OLIVE: "#808000",
-        ORANGE: "#FFA500",
         PINK: "#FFC0CB",
-        PURPLE: "#800080",
         VIOLET: "#800080",
-        SILVER: "#C0C0C0",
-        YELLOW: "#FFFF00"
+        SILVER: "#C0C0C0"
     };
     if (Object.freeze) {
       Object.freeze(GTE.COLOURS);

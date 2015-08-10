@@ -166,7 +166,7 @@ GTE.TREE = (function (parentModule) {
             .click(function() {
                 thisPlayer.onClick();
             });
-        if (this.player.id === 0 && !GTE.tree.showChanceName) {
+        if (thisPlayer.id === 0 && !GTE.tree.showChanceName) {
             this.playerNameText.hide();
         }
     };
