@@ -4,7 +4,7 @@ GTE.TREE = (function (parentModule) {
     /**
     * Creates a new Node.
     * @class
-    * @param {Node} [parent] Parent node. If null, this is root.
+    * @param {Node} parent Parent node. If null, this is root.
     */
     function Node(parent, player, reachedBy, iset) {
         this.player = player || null;
@@ -122,29 +122,36 @@ GTE.TREE = (function (parentModule) {
         var thisNode = this;
         this.reachedByText = new GTE.UI.Widgets.ContentEditable(
                 middleX, middleY, growingDirectionOfText, this.reachedBy.name)
-                .onEnter(function () {
-                    thisNode.reachedBy.changeName(this.getText());
+                .onSave(function () {
+                    var text = this.getText().replace(/&nbsp;/gi,'').trim();
+                    if (text === "") {
+                        window.alert("Move name should not be empty.");
+                    } else {
+                        thisNode.reachedBy.changeName(text);
+                    }
                     GTE.tree.updateMoveNames(thisNode.reachedBy);
                 });
     };
 
+    /**
+    * Draws the player. It needs to be done within the Node so that there is
+    * an instance of ContentEditable per Node
+    */
     Node.prototype.drawPlayer = function () {
         var thisPlayer = this.player;
-        // this.playerNameText = GTE.canvas.plain(thisPlayer.name)
-        //     .x(this.x + GTE.CONSTANTS.TEXT_NODE_MARGIN)
-        //     .y(this.y)
-        //     .fill(thisPlayer.colour)
-        //     .click(function() {
-        //         thisPlayer.onClick();
-        //     });
         this.playerNameText = new GTE.UI.Widgets.ContentEditable(
                 this.x + GTE.CONSTANTS.TEXT_NODE_MARGIN,
                 this.y,
                 GTE.CONSTANTS.CONTENT_EDITABLE_GROW_TO_RIGHT,
                 thisPlayer.name)
                 .colour(thisPlayer.colour)
-                .onEnter(function () {
-                    thisPlayer.changeName(this.getText());
+                .onSave(function () {
+                    var text = this.getText().replace(/&nbsp;/gi,'').trim();
+                    if (text === "") {
+                        window.alert("Player name should not be empty.");
+                    } else {
+                        thisPlayer.changeName(text);
+                    }
                     GTE.tree.updatePlayerNames(thisPlayer);
                 });
         if (this.player.id === 0 && !GTE.tree.showChanceName) {
@@ -163,6 +170,10 @@ GTE.TREE = (function (parentModule) {
         }
     };
 
+    /**
+    * Updates player name. It sets the content editable text to the current
+    * player name
+    */
     Node.prototype.updatePlayerName = function () {
         this.playerNameText.setText(this.player.name);
     };
@@ -355,10 +366,16 @@ GTE.TREE = (function (parentModule) {
         this.player = player;
     };
 
+    /**
+    * Hides the node shape
+    */
     Node.prototype.hide = function () {
         this.shape.hide();
     };
 
+    /**
+    * Shows the node shape
+    */
     Node.prototype.show = function () {
         this.shape.show();
     };

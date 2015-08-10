@@ -94,51 +94,86 @@ GTE.UI = (function (parentModule) {
     };
 
     /**
+    * Handles player buttons onclicks
+    * @param {Number} playerId Player to be selected
+    */
+    Tools.prototype.buttonPlayerHandler = function(playerId) {
+        return function () {
+            GTE.tools.selectPlayer(parseInt(playerId));
+        };
+    };
+
+    /**
     * Function that adds a player button to the toolbar
     */
     Tools.prototype.addPlayer = function () {
-        // Create a new player
-        var player = GTE.tree.newPlayer();
-        if (player.id === 3) {
-            document.getElementById("button-player-less").className =
-                document.getElementById("button-player-less").className.replace(/\bdisabled\b/,'');
+        if (GTE.tree.numberOfPlayers() < GTE.CONSTANTS.MAX_PLAYERS) {
+            // Create a new player
+            var player = GTE.tree.newPlayer();
+            if (player !== null) {
+                if (player.id == GTE.CONSTANTS.MIN_PLAYERS + 1) {
+                    document.getElementById("button-player-less").className =
+                        document.getElementById("button-player-less").className
+                                                    .replace(/\bdisabled\b/,'');
+                }
+                if (player.id == GTE.CONSTANTS.MAX_PLAYERS) {
+                    document.getElementById("button-player-more")
+                                                .className += " " + "disabled";
+                }
+                // Get the last player button
+                var playerButtons = document.getElementById("player-buttons");
+                var lastPlayer = playerButtons.lastElementChild;
+                // Insert a new button after the last button
+                lastPlayer.insertAdjacentHTML("afterend",
+                    "<li><button style='color:"+ player.colour +
+                    "' id='button-player-" + player.id +
+                    "' class='button button--sacnite button--inverted button-player'" +
+                    " alt='Player " + player.id +
+                    "' player='" + player.id +
+                    "'><i class='icon-user'></i><span>" + player.id + "</span></button></li>");
+                // Get the newly added button
+                lastPlayer = playerButtons.lastElementChild;
+                // And add a click event that will call the selectPlayer function
+                lastPlayer.firstElementChild.onclick = this.buttonPlayerHandler(player.id);
+            }
         }
-        // Get the last player button
-        var playerButtons = document.getElementById("player-buttons");
-        var lastPlayer = playerButtons.lastElementChild;
-        // Insert a new button after the last button
-        lastPlayer.insertAdjacentHTML("afterend",
-            "<li><button style='color:"+ player.colour +
-            "' id='button-player-" + player.id +
-            "' class='button button--sacnite button--inverted button-player'" +
-            " alt='Player " + player.id +
-            "' player='" + player.id +
-            "'><i class='icon-user'></i><span>" + player.id + "</span></button></li>");
-        // Get the newly added button
-        lastPlayer = playerButtons.lastElementChild;
-        // And add a click event that will call the selectPlayer function
-        lastPlayer.firstElementChild.addEventListener("click", function () {
-            var player = parseInt(this.getAttribute("player"));
-            GTE.tools.selectPlayer(player);
-            return false;
-        });
     };
 
+    /**
+    * Function that removes last player from the Toolbar
+    */
     Tools.prototype.removePlayer = function () {
-        var playerId = GTE.tree.removeLastPlayer();
-        if (playerId !== -1) {
+        if (GTE.tree.numberOfPlayers() > GTE.CONSTANTS.MIN_PLAYERS) {
+            // Remove last player from the list of players
+            var playerId = GTE.tree.removeLastPlayer();
+            // Activate more players button again
+            if (playerId == GTE.CONSTANTS.MAX_PLAYERS) {
+                document.getElementById("button-player-more").className =
+                    document.getElementById("button-player-more").className
+                                                    .replace(/\bdisabled\b/,'');
+            }
+            // Remove button
             var playerButtons = document.getElementById("player-buttons");
             var lastPlayer = playerButtons.lastElementChild;
             lastPlayer.parentNode.removeChild(lastPlayer);
-            if (playerId === 3) {
+            // If there are only two players (Chance, Player 1),
+            // disable the remove button
+            if (playerId === GTE.CONSTANTS.MIN_PLAYERS + 1) {
                 document.getElementById("button-player-less").className += " disabled";
             }
+            // If the removed player was the active one, select the previous one
             if (playerId === this.activePlayer) {
                 this.selectPlayer(this.activePlayer-1);
             }
         }
     };
 
+    /**
+    * Returns the colour correspondent to a given index. It is used to get the
+    * player colour. Player id would be the same as colourIndex
+    * @param  {Number} colourIndex  Colour index in the list of colours
+    * @return {Colour} colour       Colour hex code
+    */
     Tools.prototype.getColour = function (colourIndex) {
         return GTE.COLOURS[Object.keys(GTE.COLOURS)[colourIndex]];
     };

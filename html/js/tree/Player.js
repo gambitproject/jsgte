@@ -41,19 +41,6 @@ GTE.TREE = (function (parentModule) {
         }
     };
 
-    Player.prototype.onClick = function () {
-        var newName = window.prompt("Enter the new name");
-        if (newName !== null) {
-            newName = newName.trim();
-            if (newName === "") {
-                window.alert("Player name should not be empty.");
-            } else {
-                this.changeName(newName);
-            }
-        }
-        GTE.tree.draw();
-    };
-
     // Add class to parent module
     parentModule.Player = Player;
 
