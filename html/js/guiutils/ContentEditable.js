@@ -12,7 +12,7 @@ GTE.UI.Widgets = (function (parentModule) {
         // edit the text inside the div as a normal input field.
         this.myforeign = document.createElementNS('http://www.w3.org/2000/svg', 'foreignObject');
         this.myforeign.setAttribute("height", "22px");
-        this.myforeign.classList.add("foreign"); //to make div fit text
+        this.myforeign.classList.add("content-editable-foreign"); //to make div fit text
 
         // Create a plain HTML text element with the parameter text
         this.textnode = document.createTextNode(text);
@@ -26,7 +26,8 @@ GTE.UI.Widgets = (function (parentModule) {
         }
         this.textdiv.setAttribute("contenteditable", "true");
         this.textdiv.setAttribute("width", "auto");
-        this.textdiv.classList.add("inside-foreign"); //to make div fit text
+        //to make div fit text
+        this.textdiv.classList.add("content-editable-inside-foreign");
 
         if (growingOfText === GTE.CONSTANTS.CONTENT_EDITABLE_GROW_TO_LEFT) {
             // If text is at left of line in the case of the moves, translate
