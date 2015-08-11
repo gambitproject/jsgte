@@ -852,8 +852,27 @@ GTE.TREE = (function (parentModule) {
         }
     };
 
+    /**
+    * Updates given move names accross the tree
+    * @param {Move} move Move to be re drawn
+    */
     Tree.prototype.updateMoveNames = function (move) {
-        console.log("IMPLEMENT");
+        // Get all nodes reached by given move
+        var nodes = this.getNodesReachedByMove(move);
+        for (var i = 0; i < nodes.length; i++) {
+            nodes[i].updateMoveName();
+        }
+    };
+
+    Tree.prototype.getNodesReachedByMove = function (move) {
+        var nodes = move.atISet.getChildrenNodes();
+        var ret = [];
+        for (var i = 0; i < nodes.length; i++) {
+            if (nodes[i].reachedBy === move) {
+                ret.push(nodes[i]);
+            }
+        }
+        return ret;
     };
 
     /**
@@ -862,6 +881,16 @@ GTE.TREE = (function (parentModule) {
     */
     Tree.prototype.numberOfPlayers = function () {
         return this.players.length - 1;
+    };
+
+    Tree.prototype.checkMoveNameIsUnique = function (text) {
+        var moves = this.getAllMoves();
+        for (var i = 0; i < moves.length; i++) {
+            if (moves[i].name === text) {
+                return false;
+            }
+        }
+        return true;
     };
 
     // Add class to parent module

@@ -62,8 +62,12 @@ GTE.TREE = (function (parentModule) {
     };
 
     Move.prototype.changeName = function (text) {
-        this.name = text;
-        return this.name;
+        if (GTE.tree.checkMoveNameIsUnique(text)) {
+            this.name = text;
+            return this.name;
+        } else {
+            return null;
+        }
     };
 
     // /**
