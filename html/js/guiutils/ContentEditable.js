@@ -4,6 +4,10 @@ GTE.UI.Widgets = (function (parentModule) {
     /**
     * Creates a new ContentEditable object.
     * @class
+    * @param {Number} x             Widget's x coordinate
+    * @param {Number} y             Widget's y coordinate
+    * @param {Number} growingOfText Growing direction of text
+    * @param {String} text          Widget's text
     */
     function ContentEditable(x, y, growingOfText, text) {
         // Foreigns are needed in order to insert normal HTML elements within a
