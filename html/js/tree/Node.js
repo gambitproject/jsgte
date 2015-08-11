@@ -68,21 +68,8 @@ GTE.TREE = (function (parentModule) {
     */
     Node.prototype.drawPlayer = function () {
         var thisPlayer = this.player;
-        this.playerNameText = new GTE.UI.Widgets.ContentEditable(
-                this.x + GTE.CONSTANTS.TEXT_NODE_MARGIN,
-                this.y,
-                GTE.CONSTANTS.CONTENT_EDITABLE_GROW_TO_RIGHT,
-                thisPlayer.name)
-                .colour(thisPlayer.colour)
-                .onSave(function () {
-                    var text = this.getText().replace(/&nbsp;/gi,'').trim();
-                    if (text === "") {
-                        window.alert("Player name should not be empty.");
-                    } else {
-                        thisPlayer.changeName(text);
-                    }
-                    GTE.tree.updatePlayerNames(thisPlayer);
-                });
+        this.playerNameText = thisPlayer.draw(
+            this.x + GTE.CONSTANTS.TEXT_NODE_MARGIN, this.y);
         if (this.player.id === 0 && !GTE.tree.showChanceName) {
             this.playerNameText.hide();
         }
