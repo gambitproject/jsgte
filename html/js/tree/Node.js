@@ -380,6 +380,10 @@ GTE.TREE = (function (parentModule) {
         this.shape.show();
     };
 
+    Node.prototype.updateMoveName = function () {
+        this.reachedByText.setText(this.reachedBy.name);
+    };
+
     // Add class to parent module
     parentModule.Node = Node;
 
