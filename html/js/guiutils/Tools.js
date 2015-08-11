@@ -106,6 +106,7 @@ GTE.UI = (function (parentModule) {
                     "' id='button-player-" + player.id +
                     "' class='button button--sacnite button--inverted button-player'" +
                     " alt='Player " + player.id +
+                    " title='Player " + player.id +
                     "' player='" + player.id +
                     "'><i class='icon-user'></i><span>" + player.id + "</span></button></li>");
                 // Get the newly added button
