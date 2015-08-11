@@ -1,14 +1,10 @@
-.foreign {
+.content-editable-foreign {
     text-align: left ;
     height: 22px;
 }
-.inside-foreign {
+.content-editable-inside-foreign {
     display: inline-block;
     min-width: 30px;
-}
-
-.content-editable-container {
-    width: 300px;
 }
 
 .content-editable.grow-to-left{
