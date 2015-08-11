@@ -41,6 +41,23 @@ GTE.TREE = (function (parentModule) {
         }
     };
 
+    Player.prototype.draw = function (x, y) {
+        var thisPlayer = this;
+        return new GTE.UI.Widgets.ContentEditable(x, y,
+                GTE.CONSTANTS.CONTENT_EDITABLE_GROW_TO_RIGHT,
+                thisPlayer.name)
+                .colour(thisPlayer.colour)
+                .onSave(function () {
+                    var text = this.getText().replace(/&nbsp;/gi,'').trim();
+                    if (text === "") {
+                        window.alert("Player name should not be empty.");
+                    } else {
+                        thisPlayer.changeName(text);
+                    }
+                    GTE.tree.updatePlayerNames(thisPlayer);
+                });
+    };
+
     // Add class to parent module
     parentModule.Player = Player;
 
