@@ -844,7 +844,11 @@ GTE.TREE = (function (parentModule) {
         var nodes = this.getPlayerNodes(player.id);
         for (var i = 0; i < nodes.length; i++) {
             // Update the text widget
-            nodes[i].updatePlayerName();
+            if (nodes[i].iset !== null && nodes[i].iset.firstNode === nodes[i]) {
+                nodes[i].iset.updatePlayerName();
+            } else {
+                nodes[i].updatePlayerName();
+            }
         }
     };
 

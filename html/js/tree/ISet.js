@@ -149,23 +149,33 @@ GTE.TREE = (function (parentModule) {
             });
         }
         if (this.getPlayer()) {
-            if (this.lastNode !== this.firstNode) {
-                this.drawPlayer();
-            } else {
-                this.firstNode.drawPlayer();
-            }
+            this.drawPlayer();
         }
     };
 
     ISet.prototype.drawPlayer = function () {
         var thisPlayer = this.getPlayer();
-        this.playerNameText = GTE.canvas.plain(thisPlayer.name)
-            .x((this.lastNode.x + GTE.CONSTANTS.CIRCLE_SIZE - this.firstNode.x)/2 + this.firstNode.x)
-            .y(this.firstNode.y)
-            .fill(thisPlayer.colour)
-            .click(function() {
-                thisPlayer.onClick();
-            });
+        var x;
+        if (this.isSingleton()) {
+            x = this.firstNode.x + GTE.CONSTANTS.TEXT_NODE_MARGIN;
+        } else {
+            x = (this.lastNode.x + GTE.CONSTANTS.CIRCLE_SIZE - this.firstNode.x)/2 + this.firstNode.x;
+        }
+        this.playerNameText = new GTE.UI.Widgets.ContentEditable(
+                x,
+                this.firstNode.y,
+                GTE.CONSTANTS.CONTENT_EDITABLE_GROW_TO_RIGHT,
+                thisPlayer.name)
+                .colour(thisPlayer.colour)
+                .onSave(function () {
+                    var text = this.getText().replace(/&nbsp;/gi,'').trim();
+                    if (text === "") {
+                        window.alert("Player name should not be empty.");
+                    } else {
+                        thisPlayer.changeName(text);
+                    }
+                    GTE.tree.updatePlayerNames(thisPlayer);
+                });
         if (thisPlayer.id === 0 && !GTE.tree.showChanceName) {
             this.playerNameText.hide();
         }
@@ -403,6 +413,14 @@ GTE.TREE = (function (parentModule) {
 
     ISet.prototype.getPlayer = function () {
         return this.firstNode.player;
+    };
+
+    ISet.prototype.updatePlayerName = function () {
+        this.playerNameText.setText(this.getPlayer().name);
+    };
+
+    ISet.prototype.isSingleton = function () {
+        return this.firstNode === this.lastNode;
     };
 
     // Add class to parent module
