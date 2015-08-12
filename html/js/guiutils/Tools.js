@@ -51,7 +51,7 @@ GTE.UI = (function (parentModule) {
             case GTE.MODES.DELETE:
                 buttonToSwitch = "button-remove";
                 break;
-            case GTE.MODES.PLAYERS:
+            case GTE.MODES.PLAYER_ASSIGNMENT:
                 buttonToSwitch = "button-player-" + this.activePlayer;
                 break;
             default:
@@ -60,10 +60,14 @@ GTE.UI = (function (parentModule) {
         document.getElementById(buttonToSwitch).className += " " + "active";
 
         GTE.MODE = modeToSwitch;
-        if (GTE.MODE === GTE.MODES.PLAYERS) {
+        if (GTE.MODE === GTE.MODES.PLAYER_ASSIGNMENT) {
             GTE.tree.hideLeaves();
         } else {
             GTE.tree.showLeaves();
+        }
+
+        if (GTE.MODE !== GTE.MODES.PLAYER_ASSIGNMENT) {
+            this.activePlayer = -1;
         }
     };
 
@@ -74,7 +78,7 @@ GTE.UI = (function (parentModule) {
     Tools.prototype.selectPlayer = function (player) {
         // Set player as active player and mode to PLAYERS mode
         this.activePlayer = player;
-        this.switchMode(GTE.MODES.PLAYERS);
+        this.switchMode(GTE.MODES.PLAYER_ASSIGNMENT);
     };
 
     /**
