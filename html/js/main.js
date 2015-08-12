@@ -24,7 +24,8 @@
 
     var playerButtons = document.getElementsByClassName("button-player");
     for (var i = 0; i < playerButtons.length; i++) {
-        playerButtons[i].onclick = GTE.tools.buttonPlayerHandler(playerButtons[i].getAttribute("player"));
+        playerButtons[i].addEventListener("click",
+            GTE.tools.buttonPlayerHandler(playerButtons[i].getAttribute("player")));
     }
 
     document.getElementById("button-player-more").addEventListener("click", function(){

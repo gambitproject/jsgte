@@ -119,7 +119,8 @@ GTE.UI = (function (parentModule) {
                 // Get the newly added button
                 lastPlayer = playerButtons.lastElementChild;
                 // And add a click event that will call the selectPlayer function
-                lastPlayer.firstElementChild.onclick = this.buttonPlayerHandler(player.id);
+                lastPlayer.firstElementChild.addEventListener("click",
+                                        this.buttonPlayerHandler(player.id));
             }
         }
     };
