@@ -56,12 +56,17 @@ GTE.TREE = (function (parentModule) {
                 thisPlayer.name)
                 .colour(thisPlayer.colour)
                 .onSave(function () {
-                    var text = this.getText().replace(/&nbsp;/gi,'').trim();
+                    // Removes all blankspaces. Substitutes &nbsp; characters
+                    // with spaces and then trims the text so that there are no
+                    // spaces both at the begin and end of the text
+                    var text = this.getText().replace(/&nbsp;/gi,' ').trim();
                     if (text === "") {
                         window.alert("Player name should not be empty.");
                     } else {
                         thisPlayer.changeName(text);
                     }
+                    // Redraw all content editables that represent this Player
+                    // across the tree
                     GTE.tree.updatePlayerNames(thisPlayer);
                 });
     };
