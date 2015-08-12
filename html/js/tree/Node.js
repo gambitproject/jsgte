@@ -79,7 +79,7 @@ GTE.TREE = (function (parentModule) {
     /**
     * Toggles the visibility of the default name text
     */
-    Node.prototype.togglePlayerName = function () {
+    Node.prototype.togglePlayerNameVisibility = function () {
         if (this.playerNameText.visible() === false) {
             this.playerNameText.show();
         } else {
