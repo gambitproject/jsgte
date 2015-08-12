@@ -198,9 +198,10 @@ GTE.TREE = (function (parentModule) {
     };
 
     /**
-    * Creates a new player with a random unique colour and adds it to the list
+    * Creates a new player with a unique colour and adds it to the list
     * of players
-    * @param  {String} [colour] Hex code of the player's colour
+    * @param  {String} [colour] Hex code of the player's colour. If not specified
+    *                           get this player's colour from the list of colours
     * @return {Player} player   Created player
     */
     Tree.prototype.newPlayer = function (colour) {
@@ -241,6 +242,7 @@ GTE.TREE = (function (parentModule) {
 
     /**
     * Removes last player from the list of players
+    * @return {Number} playerId ID of the removed player
     */
     Tree.prototype.removeLastPlayer = function () {
         var playerId = this.players.length-1;
