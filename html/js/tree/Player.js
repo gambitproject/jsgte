@@ -5,16 +5,15 @@ GTE.TREE = (function (parentModule) {
     /**
     * Creates a new Player.
     * @class
-    * @param {String} name Player's name.
+    * @param {Number} id     Player's id.
+    * @param {String} colour Player's hex colour.
     */
     function Player(id, colour) {
         this.id = id;
         if (this.id === this.CHANCE) {
             this.name = GTE.PLAYERS.DEFAULT_CHANCE_NAME;
-            this.defaultName = GTE.PLAYERS.DEFAULT_CHANCE_NAME;
         } else {
             this.name = "" + this.id;
-            this.defaultName = "" + this.id;
         }
         this.colour = colour;
     }
