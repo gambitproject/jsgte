@@ -22,7 +22,8 @@ GTE.TREE = (function (parentModule) {
     * ToString function
     */
     Player.prototype.toString = function () {
-        return "Player: " + this.name;
+        return "Player: " + "id: " + this.id + "; name: " + this.name +
+        "; colour: " + this.colour;
     };
 
     /**
