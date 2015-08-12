@@ -79,7 +79,7 @@ GTE.UI = (function (parentModule) {
 
     /**
     * Handles player buttons onclicks
-    * @param {Number} playerId Player to be selected
+    * @param {Number|String} playerId Player to be selected
     */
     Tools.prototype.buttonPlayerHandler = function(playerId) {
         return function () {
