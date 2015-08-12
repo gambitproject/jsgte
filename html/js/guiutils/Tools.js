@@ -14,13 +14,20 @@ GTE.UI = (function (parentModule) {
     * It creates a new Tree and draws it
     */
     Tools.prototype.newTree = function() {
+        this.resetPlayers();
+        this.activePlayer = -1;
         var root = new GTE.TREE.Node(null);
         var child1 = new GTE.TREE.Node(root);
         var child2 = new GTE.TREE.Node(root);
         GTE.tree = new GTE.TREE.Tree(root);
+
+        // Add a second Player
+        this.addPlayer();
+
         GTE.tree.updatePositions();
         // Create a node and draw it
         GTE.tree.draw();
+        this.switchMode(GTE.MODES.ADD);
     };
 
     /**
@@ -120,7 +127,7 @@ GTE.UI = (function (parentModule) {
     /**
     * Function that removes last player from the Toolbar
     */
-    Tools.prototype.removePlayer = function () {
+    Tools.prototype.removeLastPlayer = function () {
         if (GTE.tree.numberOfPlayers() > GTE.CONSTANTS.MIN_PLAYERS) {
             // Remove last player from the list of players
             var playerId = GTE.tree.removeLastPlayer();
@@ -132,17 +139,8 @@ GTE.UI = (function (parentModule) {
             }
             // Remove button
             var playerButtons = document.getElementById("player-buttons");
-            var lastPlayer = playerButtons.lastElementChild;
-            lastPlayer.parentNode.removeChild(lastPlayer);
-            // If there are only two players (Chance, Player 1),
-            // disable the remove button
-            if (playerId === GTE.CONSTANTS.MIN_PLAYERS + 1) {
-                document.getElementById("button-player-less").className += " disabled";
-            }
-            // If the removed player was the active one, select the previous one
-            if (playerId === this.activePlayer) {
-                this.selectPlayer(this.activePlayer-1);
-            }
+            var lastPlayer = playerButtons.lastElementChild.lastElementChild;
+            this.removePlayerButton(lastPlayer);
         }
     };
 
@@ -162,6 +160,33 @@ GTE.UI = (function (parentModule) {
     */
     Tools.prototype.getActivePlayer = function () {
         return this.activePlayer;
+    };
+
+    Tools.prototype.removePlayerButton = function (button) {
+        var playerId = parseInt(button.getAttribute("player"));
+        // get the <li>
+        var parent = button.parentNode;
+        // remove the <li> from the <ul>
+        parent.parentNode.removeChild(parent);
+        // If there are only two players (Chance, Player 1),
+        // disable the remove button
+        if (playerId === GTE.CONSTANTS.MIN_PLAYERS + 1) {
+            document.getElementById("button-player-less").className += " disabled";
+        }
+        // If the removed player was the active one, select the previous one
+        if (playerId === this.activePlayer) {
+            this.selectPlayer(this.activePlayer-1);
+        }
+    };
+
+    /**
+    * Removes all players from the toolbar
+    */
+    Tools.prototype.resetPlayers = function () {
+        var buttons = document.getElementsByClassName("button-player");
+        while(buttons.length > 2) {
+            this.removePlayerButton(buttons[buttons.length-1]);
+        }
     };
 
     // Add class to parent module
