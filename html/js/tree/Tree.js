@@ -372,7 +372,7 @@ GTE.TREE = (function (parentModule) {
         // Get all chance nodes
         var nodes = this.getPlayerNodes(0);
         for (var i = 0; i < nodes.length; i++) {
-            nodes[i].togglePlayerName();
+            nodes[i].togglePlayerNameVisibility();
         }
     };
 
