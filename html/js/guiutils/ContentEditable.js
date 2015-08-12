@@ -135,10 +135,10 @@ GTE.UI.Widgets = (function (parentModule) {
     };
 
     /**
-    * Function that specifies the function to be run on save (i.e. when TAB or
-    * RETURN key is pressed). It saves the function pointer specified on params
-    * as this.functionOnSave. When the Object detects a TAB or RETURN, it will
-    * run the function saved in this.functionOnSave.
+    * Function that specifies the function to be run on save (when the input
+    * gets out of focus). It saves the function pointer specified on params
+    * as this.functionOnSave. When the Object detects a blur event on the input,
+    * it will run the function saved in this.functionOnSave.
     * @param {Function} fun Function to be run on save
     * @return {ContentEditable} this Returns this instance
     */
