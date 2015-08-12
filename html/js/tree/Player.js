@@ -42,6 +42,13 @@ GTE.TREE = (function (parentModule) {
         }
     };
 
+    /**
+    * Draws the player in a Content Editable
+    * @param  {Number}          x               Content editable's x coordinate
+    * @param  {Number}          y               Content editable's y coordinate
+    * @return {ContentEditable} contentEditable New contentEditable widget that
+    *                                           contains player's name
+    */
     Player.prototype.draw = function (x, y) {
         var thisPlayer = this;
         return new GTE.UI.Widgets.ContentEditable(x, y,
