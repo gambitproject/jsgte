@@ -13,7 +13,6 @@ GTE.TREE = (function (parentModule) {
         this.players = [];
         this.newPlayer(GTE.COLOURS.BLACK);
         this.newPlayer(GTE.COLOURS.RED);
-        this.newPlayer(GTE.COLOURS.BLUE);
 
         this.showChanceName = true;
     }

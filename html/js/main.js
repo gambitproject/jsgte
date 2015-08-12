@@ -33,7 +33,7 @@
     });
 
     document.getElementById("button-player-less").addEventListener("click", function(){
-        GTE.tools.removePlayer();
+        GTE.tools.removeLastPlayer();
         return false;
     });
 
