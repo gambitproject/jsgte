@@ -1,6 +1,7 @@
 GTE.TREE = (function (parentModule) {
     "use strict";
 
+    Player.CHANCE = 0;
     /**
     * Creates a new Player.
     * @class
@@ -8,7 +9,7 @@ GTE.TREE = (function (parentModule) {
     */
     function Player(id, colour) {
         this.id = id;
-        if (this.id === 0) {
+        if (this.id === this.CHANCE) {
             this.name = GTE.PLAYERS.DEFAULT_CHANCE_NAME;
             this.defaultName = GTE.PLAYERS.DEFAULT_CHANCE_NAME;
         } else {

@@ -209,7 +209,7 @@ GTE.TREE = (function (parentModule) {
         if (this.players.length >= 1) {
             id = this.players[this.players.length-1].id+1;
         } else {
-            id = 0;
+            id = GTE.TREE.Player.CHANCE;
         }
 
         colour = colour || GTE.tools.getColour(this.players.length);

@@ -38,7 +38,7 @@ GTE.TREE = (function (parentModule) {
             this.reachedBy.draw();
         }
         var thisNode = this;
-        if (this.player && this.player.id === 0){
+        if (this.player && this.player.id === GTE.TREE.Player.CHANCE){
             this.shape = GTE.canvas.rect(
                           GTE.CONSTANTS.CIRCLE_SIZE, GTE.CONSTANTS.CIRCLE_SIZE);
         } else {
@@ -70,7 +70,7 @@ GTE.TREE = (function (parentModule) {
         var thisPlayer = this.player;
         this.playerNameText = thisPlayer.draw(
             this.x + GTE.CONSTANTS.TEXT_NODE_MARGIN, this.y);
-        if (this.player.id === 0 && !GTE.tree.showChanceName) {
+        if (this.player.id === GTE.TREE.Player.CHANCE && !GTE.tree.showChanceName) {
             this.playerNameText.hide();
         }
     };
@@ -122,8 +122,8 @@ GTE.TREE = (function (parentModule) {
                     // If player name is empty and default name is hidden,
                     // show the default name
                     if (this.player !== undefined) {
-                        if (GTE.tree.getActivePlayer().id === 0 &&
-                                this.player.id === 0) {
+                        if (GTE.tree.getActivePlayer().id === GTE.TREE.Player.CHANCE &&
+                                this.player.id === GTE.TREE.Player.CHANCE) {
                             GTE.tree.toggleChanceName();
                             break;
                         }
