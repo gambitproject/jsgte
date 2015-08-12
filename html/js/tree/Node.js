@@ -58,7 +58,7 @@ GTE.TREE = (function (parentModule) {
             this.shape.fill(GTE.COLOURS.BLACK);
         }
 
-        if (GTE.MODE === GTE.MODES.PLAYERS && this.isLeaf()) {
+        if (GTE.MODE === GTE.MODES.PLAYER_ASSIGNMENT && this.isLeaf()) {
             this.shape.hide();
         }
     };
@@ -118,7 +118,7 @@ GTE.TREE = (function (parentModule) {
                 }
                 GTE.tree.draw();
                 break;
-            case GTE.MODES.PLAYERS:
+            case GTE.MODES.PLAYER_ASSIGNMENT:
                 if (!this.isLeaf()) {
                     // If player name is empty and default name is hidden,
                     // show the default name
