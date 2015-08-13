@@ -357,6 +357,7 @@ GTE.TREE = (function (parentModule) {
         var playerNodes = [];
         for (var i = 0; i < allNodes.length; i++) {
             if (allNodes[i].player !== undefined &&
+                allNodes[i].player !== null &&
                 allNodes[i].player.id === playerId) {
                 playerNodes.push(allNodes[i]);
             }
