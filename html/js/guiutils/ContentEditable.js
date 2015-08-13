@@ -4,6 +4,10 @@ GTE.UI.Widgets = (function (parentModule) {
     /**
     * Creates a new ContentEditable object.
     * @class
+    * @param {Number} x             Widget's x coordinate
+    * @param {Number} y             Widget's y coordinate
+    * @param {Number} growingOfText Growing direction of text
+    * @param {String} text          Widget's text
     */
     function ContentEditable(x, y, growingOfText, text) {
         // Foreigns are needed in order to insert normal HTML elements within a
@@ -12,7 +16,7 @@ GTE.UI.Widgets = (function (parentModule) {
         // edit the text inside the div as a normal input field.
         this.myforeign = document.createElementNS('http://www.w3.org/2000/svg', 'foreignObject');
         this.myforeign.setAttribute("height", "22px");
-        this.myforeign.classList.add("foreign"); //to make div fit text
+        this.myforeign.classList.add("content-editable-foreign"); //to make div fit text
 
         // Create a plain HTML text element with the parameter text
         this.textnode = document.createTextNode(text);
@@ -26,7 +30,8 @@ GTE.UI.Widgets = (function (parentModule) {
         }
         this.textdiv.setAttribute("contenteditable", "true");
         this.textdiv.setAttribute("width", "auto");
-        this.textdiv.classList.add("inside-foreign"); //to make div fit text
+        //to make div fit text
+        this.textdiv.classList.add("content-editable-inside-foreign");
 
         if (growingOfText === GTE.CONSTANTS.CONTENT_EDITABLE_GROW_TO_LEFT) {
             // If text is at left of line in the case of the moves, translate
@@ -57,6 +62,14 @@ GTE.UI.Widgets = (function (parentModule) {
         // Save this for further use
         var thisContentEditable = this;
         this.textdiv.addEventListener('input', function(e) {
+            // Check text is not longer than max
+            var max = 30;
+            if(this.innerHTML.length > max) {
+                this.innerHTML = this.innerHTML.slice(0, max);
+                e.preventDefault();
+                this.blur();
+                window.getSelection().removeAllRanges();
+            }
             // Set the new width based on the text width
             newWidth = thisContentEditable.textdiv.scrollWidth +
                             GTE.CONSTANTS.CONTENT_EDITABLE_FOREIGN_EXTRA_WIDTH;
@@ -73,7 +86,7 @@ GTE.UI.Widgets = (function (parentModule) {
         // blur event is used to detect when the contenteditable loses focus
         this.textdiv.addEventListener('blur', function(e) {
             if (thisContentEditable.functionOnSave !== null){
-                // Save the object specifi on functionOnSave
+                // Run functionOnSave
                 thisContentEditable.functionOnSave();
             }
         });
@@ -81,12 +94,7 @@ GTE.UI.Widgets = (function (parentModule) {
         // keypress is used to detect the RETURN key and to apply a max number
         // of characters allowed
         this.textdiv.addEventListener('keypress', function(e) {
-            var max = 30;
             // TODO #21
-            // Check for max number of chars
-            if(e.which != 8 && this.innerHTML.length > max) {
-               e.preventDefault();
-            }
             if(e.which == 13) {
                 // If RETURN is pressed
                 // Blur the input instead of adding a line break
@@ -130,10 +138,10 @@ GTE.UI.Widgets = (function (parentModule) {
     };
 
     /**
-    * Function that specifies the function to be run on save (i.e. when TAB or
-    * RETURN key is pressed). It saves the function pointer specified on params
-    * as this.functionOnSave. When the Object detects a TAB or RETURN, it will
-    * run the function saved in this.functionOnSave.
+    * Function that specifies the function to be run on save (when the input
+    * gets out of focus). It saves the function pointer specified on params
+    * as this.functionOnSave. When the Object detects a blur event on the input,
+    * it will run the function saved in this.functionOnSave.
     * @param {Function} fun Function to be run on save
     * @return {ContentEditable} this Returns this instance
     */

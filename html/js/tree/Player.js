@@ -1,19 +1,19 @@
 GTE.TREE = (function (parentModule) {
     "use strict";
 
+    Player.CHANCE = 0;
     /**
     * Creates a new Player.
     * @class
-    * @param {String} name Player's name.
+    * @param {Number} id     Player's id.
+    * @param {String} colour Player's hex colour.
     */
     function Player(id, colour) {
         this.id = id;
-        if (this.id === 0) {
+        if (this.id === this.CHANCE) {
             this.name = GTE.PLAYERS.DEFAULT_CHANCE_NAME;
-            this.defaultName = GTE.PLAYERS.DEFAULT_CHANCE_NAME;
         } else {
             this.name = "" + this.id;
-            this.defaultName = "" + this.id;
         }
         this.colour = colour;
     }
@@ -22,7 +22,8 @@ GTE.TREE = (function (parentModule) {
     * ToString function
     */
     Player.prototype.toString = function () {
-        return "Player: " + this.name;
+        return "Player: " + "id: " + this.id + "; name: " + this.name +
+        "; colour: " + this.colour;
     };
 
     /**
@@ -41,6 +42,13 @@ GTE.TREE = (function (parentModule) {
         }
     };
 
+    /**
+    * Draws the player in a Content Editable
+    * @param  {Number}          x               Content editable's x coordinate
+    * @param  {Number}          y               Content editable's y coordinate
+    * @return {ContentEditable} contentEditable New contentEditable widget that
+    *                                           contains player's name
+    */
     Player.prototype.draw = function (x, y) {
         var thisPlayer = this;
         return new GTE.UI.Widgets.ContentEditable(x, y,
@@ -48,12 +56,17 @@ GTE.TREE = (function (parentModule) {
                 thisPlayer.name)
                 .colour(thisPlayer.colour)
                 .onSave(function () {
-                    var text = this.getText().replace(/&nbsp;/gi,'').trim();
+                    // Removes all blankspaces. Substitutes &nbsp; characters
+                    // with spaces and then trims the text so that there are no
+                    // spaces both at the begin and end of the text
+                    var text = this.getText().replace(/&nbsp;/gi,' ').trim();
                     if (text === "") {
                         window.alert("Player name should not be empty.");
                     } else {
                         thisPlayer.changeName(text);
                     }
+                    // Redraw all content editables that represent this Player
+                    // across the tree
                     GTE.tree.updatePlayerNames(thisPlayer);
                 });
     };

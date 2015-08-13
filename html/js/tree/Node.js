@@ -4,7 +4,8 @@ GTE.TREE = (function (parentModule) {
     /**
     * Creates a new Node.
     * @class
-    * @param {Node} parent Parent node. If null, this is root.
+    * @param {Node}   parent Parent node. If null, this is root.
+    * @param {Player} player Node's player
     */
     function Node(parent, player, reachedBy, iset) {
         this.player = player || null;
@@ -49,7 +50,7 @@ GTE.TREE = (function (parentModule) {
             this.drawReachedBy();
         }
         var thisNode = this;
-        if (this.player && this.player.id === 0){
+        if (this.player && this.player.id === GTE.TREE.Player.CHANCE){
             this.shape = GTE.canvas.rect(
                           GTE.CONSTANTS.CIRCLE_SIZE, GTE.CONSTANTS.CIRCLE_SIZE);
         } else {
@@ -74,7 +75,7 @@ GTE.TREE = (function (parentModule) {
             }
         }
 
-        if ((GTE.MODE === GTE.MODES.PLAYERS ||
+        if ((GTE.MODE === GTE.MODES.PLAYER_ASSIGNMENT ||
             GTE.MODE === GTE.MODES.MERGE ||
             GTE.MODE === GTE.MODES.MERGE) &&
             this.isLeaf()) {
@@ -141,7 +142,7 @@ GTE.TREE = (function (parentModule) {
         var thisPlayer = this.player;
         this.playerNameText = thisPlayer.draw(
             this.x + GTE.CONSTANTS.TEXT_NODE_MARGIN, this.y);
-        if (this.player.id === 0 && !GTE.tree.showChanceName) {
+        if (this.player.id === GTE.TREE.Player.CHANCE && !GTE.tree.showChanceName) {
             this.playerNameText.hide();
         }
     };
@@ -149,7 +150,7 @@ GTE.TREE = (function (parentModule) {
     /**
     * Toggles the visibility of the default name text
     */
-    Node.prototype.togglePlayerName = function () {
+    Node.prototype.togglePlayerNameVisibility = function () {
         if (this.playerNameText.visible() === false) {
             this.playerNameText.show();
         } else {
@@ -207,13 +208,13 @@ GTE.TREE = (function (parentModule) {
                 // This is controlled by the information set
                 this.iset.onClick();
                 break;
-            case GTE.MODES.PLAYERS:
+            case GTE.MODES.PLAYER_ASSIGNMENT:
                 if (!this.isLeaf()) {
                     // If player name is empty and default name is hidden,
                     // show the default name
                     if (this.player !== null && this.player !== undefined) {
-                        if (GTE.tree.getActivePlayer().id === 0 &&
-                                this.player.id === 0) {
+                        if (GTE.tree.getActivePlayer().id === GTE.TREE.Player.CHANCE &&
+                                this.player.id === GTE.TREE.Player.CHANCE) {
                             GTE.tree.toggleChanceName();
                             break;
                         }

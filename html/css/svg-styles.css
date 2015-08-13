@@ -1,6 +1,3 @@
-.node {
-    /*fill: #000;*/
-}
 .node:hover {
     fill: #808080;
 }
