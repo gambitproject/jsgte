@@ -84,54 +84,9 @@ GTE.TREE = (function (parentModule) {
     };
 
     Node.prototype.drawReachedBy = function () {
-        var circleRadius = GTE.CONSTANTS.CIRCLE_SIZE/2;
-        this.line = GTE.canvas.line(this.parent.x + circleRadius,
-                                    this.parent.y + circleRadius,
-                                    this.x + circleRadius,
-                                    this.y + circleRadius)
-                              .stroke({ width: GTE.CONSTANTS.LINE_THICKNESS });
-        var middleX = ((this.x + circleRadius) - (this.parent.x + circleRadius))/2+
-                        (this.parent.x);
-        var middleY = ((this.y + circleRadius) - (this.parent.y + circleRadius))/2+
-                        (this.parent.y);
-
-        // Compute a unit vector perpendicular to the line and get point
-        // where the label has to be drawn at a distance CONTENT_EDITABLE_MARGIN_TO_LINE
-        var dx;
-        var dy;
-        if (this.x > this.parent.x) {
-            dx = this.x-this.parent.x;
-            dy = this.y-this.parent.y;
-        } else {
-            dx = this.parent.x-this.x;
-            dy = this.parent.y-this.y;
-        }
-        var distance = Math.sqrt(dx*dx + dy*dy);
-        dx = dx/distance;
-        dy = dy/distance;
-        if (this.x < this.parent.x ) {
-            middleX = middleX - (GTE.CONSTANTS.CONTENT_EDITABLE_MARGIN_TO_LINE/2)*dy;
-        } else {
-            middleX = middleX + (GTE.CONSTANTS.CONTENT_EDITABLE_MARGIN_TO_LINE/2)*dy;
-        }
-        middleY = middleY - (GTE.CONSTANTS.CONTENT_EDITABLE_MARGIN_TO_LINE/2)*dx;
-
-        var growingDirectionOfText = GTE.CONSTANTS.CONTENT_EDITABLE_GROW_TO_RIGHT;
-        if (this.x <= this.parent.x ) {
-            growingDirectionOfText = GTE.CONSTANTS.CONTENT_EDITABLE_GROW_TO_LEFT;
-        }
-        var thisNode = this;
-        this.reachedByText = new GTE.UI.Widgets.ContentEditable(
-                middleX, middleY, growingDirectionOfText, this.reachedBy.name)
-                .onSave(function () {
-                    var text = this.getText().replace(/&nbsp;/gi,'').trim();
-                    if (text === "") {
-                        window.alert("Move name should not be empty.");
-                    } else {
-                        thisNode.reachedBy.changeName(text);
-                    }
-                    GTE.tree.updateMoveNames(thisNode.reachedBy);
-                });
+        var ret = this.reachedBy.draw(this.parent, this);
+        this.line = ret.line;
+        this.reachedByText = ret.contentEditable;
     };
 
     /**
