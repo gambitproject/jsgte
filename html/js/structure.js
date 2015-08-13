@@ -29,8 +29,9 @@ var GTE = (function () {
     GTE.MODES = {
       ADD: 0,
       DELETE: 1,
-      MERGE: 2,
-      DISSOLVE: 3,
+      PLAYER_ASSIGNMENT: 2,
+      MERGE: 3,
+      DISSOLVE: 4
     };
     if (Object.freeze) {
       Object.freeze(GTE.MODES);
