@@ -122,7 +122,7 @@ GTE.TREE = (function (parentModule) {
                 if (!this.isLeaf()) {
                     // If player name is empty and default name is hidden,
                     // show the default name
-                    if (this.player !== undefined) {
+                    if (this.player !== undefined && this.player !== null) {
                         if (GTE.tree.getActivePlayer().id === GTE.TREE.Player.CHANCE &&
                                 this.player.id === GTE.TREE.Player.CHANCE) {
                             GTE.tree.toggleChanceName();
