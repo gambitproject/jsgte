@@ -62,6 +62,14 @@ GTE.UI.Widgets = (function (parentModule) {
         // Save this for further use
         var thisContentEditable = this;
         this.textdiv.addEventListener('input', function(e) {
+            // Check text is not longer than max
+            var max = 30;
+            if(this.innerHTML.length > max) {
+                this.innerHTML = this.innerHTML.slice(0, max);
+                e.preventDefault();
+                this.blur();
+                window.getSelection().removeAllRanges();
+            }
             // Set the new width based on the text width
             newWidth = thisContentEditable.textdiv.scrollWidth +
                             GTE.CONSTANTS.CONTENT_EDITABLE_FOREIGN_EXTRA_WIDTH;
@@ -86,12 +94,7 @@ GTE.UI.Widgets = (function (parentModule) {
         // keypress is used to detect the RETURN key and to apply a max number
         // of characters allowed
         this.textdiv.addEventListener('keypress', function(e) {
-            var max = 30;
             // TODO #21
-            // Check for max number of chars
-            if(e.which != 8 && this.innerHTML.length > max) {
-               e.preventDefault();
-            }
             if(e.which == 13) {
                 // If RETURN is pressed
                 // Blur the input instead of adding a line break
