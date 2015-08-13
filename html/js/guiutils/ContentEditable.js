@@ -10,6 +10,9 @@ GTE.UI.Widgets = (function (parentModule) {
     * @param {String} text          Widget's text
     */
     function ContentEditable(x, y, growingOfText, text) {
+        this.x = x;
+        this.y = y;
+        this.growingOfText = growingOfText;
         // Foreigns are needed in order to insert normal HTML elements within a
         // SVG object. The idea behind the ContentEditable object is to introduce
         // a div with the contenteditable attribute on true so that the user can
@@ -37,12 +40,12 @@ GTE.UI.Widgets = (function (parentModule) {
             // If text is at left of line in the case of the moves, translate
             // will set the left top corner of the text at the X position.
             // If X is not adjusted, the text will be on top of the line.
-            x -= GTE.CONSTANTS.CONTENT_EDITABLE_OFFSET_LEFT;
+            this.x -= GTE.CONSTANTS.CONTENT_EDITABLE_OFFSET_LEFT;
         } else {
-            x -= GTE.CONSTANTS.CONTENT_EDITABLE_OFFSET_RIGHT;
+            this.x += GTE.CONSTANTS.CONTENT_EDITABLE_OFFSET_RIGHT;
         }
         // Translate the foreign and append it to the svg
-        this.myforeign.setAttributeNS(null, "transform", "translate(" + x + " " + y + ")");
+        this.myforeign.setAttributeNS(null, "transform", "translate(" + this.x + " " + this.y + ")");
         document.getElementsByTagName('svg')[0].appendChild(this.myforeign);
         this.myforeign.appendChild(this.textdiv);
 
@@ -55,10 +58,18 @@ GTE.UI.Widgets = (function (parentModule) {
         // firefox. If foreign width is the same as the this.textdiv width, firefox
         // will render the flashy line outside the visible area. Making the
         // foreign a little bit bigger does the trick
-        var newWidth = this.textdiv.scrollWidth +
+        this.width = this.textdiv.scrollWidth +
                             GTE.CONSTANTS.CONTENT_EDITABLE_FOREIGN_EXTRA_WIDTH;
-        this.myforeign.setAttribute("width", newWidth);
-        var previousWidth = newWidth;
+        this.previousWidth = GTE.CONSTANTS.CONTENT_EDITABLE_INSIDE_FOREIGN_MIN_WIDTH;
+
+        this.myforeign.setAttribute("width", this.width);
+        if (growingOfText === GTE.CONSTANTS.CONTENT_EDITABLE_GROW_TO_LEFT) {
+            // Calculate how much has the foreign grown
+            this.x -= (this.width - this.previousWidth);
+            // Translate the foreign object that amount to the left
+            this.myforeign.setAttributeNS(null, "transform", "translate(" + this.x + " " + this.y + ")");
+        }
+        this.previousWidth = this.width;
         // Save this for further use
         var thisContentEditable = this;
         this.textdiv.addEventListener('input', function(e) {
@@ -71,16 +82,18 @@ GTE.UI.Widgets = (function (parentModule) {
                 window.getSelection().removeAllRanges();
             }
             // Set the new width based on the text width
-            newWidth = thisContentEditable.textdiv.scrollWidth +
+            thisContentEditable.width = thisContentEditable.textdiv.scrollWidth +
                             GTE.CONSTANTS.CONTENT_EDITABLE_FOREIGN_EXTRA_WIDTH;
-            thisContentEditable.myforeign.setAttribute("width", newWidth);
+            thisContentEditable.myforeign.setAttribute("width", thisContentEditable.width);
             if (growingOfText === GTE.CONSTANTS.CONTENT_EDITABLE_GROW_TO_LEFT) {
                 // Calculate how much has the foreign grown
-                x -= newWidth - previousWidth;
+                thisContentEditable.x -=
+                    (thisContentEditable.width - thisContentEditable.previousWidth);
                 // Translate the foreign object that amount to the left
-                thisContentEditable.myforeign.setAttributeNS(null, "transform", "translate(" + x + " " + y + ")");
+                thisContentEditable.myforeign.setAttributeNS(null, "transform",
+                    "translate(" + thisContentEditable.x + " " + thisContentEditable.y + ")");
             }
-            previousWidth = newWidth;
+            thisContentEditable.previousWidth = thisContentEditable.width;
         });
 
         // blur event is used to detect when the contenteditable loses focus
@@ -165,6 +178,18 @@ GTE.UI.Widgets = (function (parentModule) {
     */
     ContentEditable.prototype.setText = function (text) {
         this.textdiv.innerHTML = text;
+        // Set the new width based on the text width
+        this.width = this.textdiv.scrollWidth +
+                            GTE.CONSTANTS.CONTENT_EDITABLE_FOREIGN_EXTRA_WIDTH;
+        this.myforeign.setAttribute("width", this.width);
+        if (this.growingOfText === GTE.CONSTANTS.CONTENT_EDITABLE_GROW_TO_LEFT) {
+            // Calculate how much has the foreign grown
+            this.x -= (this.width - this.previousWidth);
+            // Translate the foreign object that amount to the left
+            this.myforeign.setAttributeNS(null, "transform", "translate(" + this.x + " " + this.y + ")");
+        }
+        this.previousWidth = this.width;
+
         return this.getText();
     };
 
