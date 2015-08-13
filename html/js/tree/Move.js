@@ -70,51 +70,66 @@ GTE.TREE = (function (parentModule) {
         }
     };
 
-    // /**
-    // * Draws the line and creates a editable label
-    // * @param {Node} parent Parent node
-    // * @param {Node} child Child node
-    // */
-    // Move.prototype.draw = function(parent, child) {
-    //     var circleRadius = GTE.CONSTANTS.CIRCLE_SIZE/2;
-    //     this.line = GTE.canvas.line(parent.x + circleRadius,
-    //                                 parent.y + circleRadius,
-    //                                 child.x + circleRadius,
-    //                                 child.y + circleRadius)
-    //                           .stroke({ width: GTE.CONSTANTS.LINE_THICKNESS });
-    //     var middleX = ((child.x + circleRadius) - (parent.x + circleRadius))/2+
-    //                     (parent.x);
-    //     var middleY = ((child.y + circleRadius) - (parent.y + circleRadius))/2+
-    //                     (parent.y);
-    //
-    //     // Compute a unit vector perpendicular to the line and get point
-    //     // where the label has to be drawn at a distance CONTENT_EDITABLE_MARGIN_TO_LINE
-    //     var dx;
-    //     var dy;
-    //     if (child.x > parent.x) {
-    //         dx = child.x-parent.x;
-    //         dy = child.y-parent.y;
-    //     } else {
-    //         dx = parent.x-child.x;
-    //         dy = parent.y-child.y;
-    //     }
-    //     var distance = Math.sqrt(dx*dx + dy*dy);
-    //     dx = dx/distance;
-    //     dy = dy/distance;
-    //     if (child.x < parent.x ) {
-    //         middleX = middleX - (GTE.CONSTANTS.CONTENT_EDITABLE_MARGIN_TO_LINE/2)*dy;
-    //     } else {
-    //         middleX = middleX + (GTE.CONSTANTS.CONTENT_EDITABLE_MARGIN_TO_LINE/2)*dy;
-    //     }
-    //     middleY = middleY - (GTE.CONSTANTS.CONTENT_EDITABLE_MARGIN_TO_LINE/2)*dx;
-    //
-    //     // TODO: create variables for growing left and right
-    //     var growingDirectionOfText = 1;
-    //     if (child.x <= parent.x ) {
-    //         growingDirectionOfText = -1;
-    //     }
-    //     var contentEditable = new GTE.UI.Widgets.ContentEditable(middleX, middleY, growingDirectionOfText, this.name);
-    // };
+    /**
+    * Draws the line and creates a editable label
+    * @param {Node} parent Parent node
+    * @param {Node} child Child node
+    */
+    Move.prototype.draw = function(parent, child) {
+        var circleRadius = GTE.CONSTANTS.CIRCLE_SIZE/2;
+        var line = GTE.canvas.line(parent.x + circleRadius,
+                                    parent.y + circleRadius,
+                                    child.x + circleRadius,
+                                    child.y + circleRadius)
+                              .stroke({ width: GTE.CONSTANTS.LINE_THICKNESS });
+        var middleX = ((child.x + circleRadius) - (parent.x + circleRadius))/2+
+                        (parent.x);
+        var middleY = ((child.y + circleRadius) - (parent.y + circleRadius))/2+
+                        (parent.y);
+
+        // Compute a unit vector perpendicular to the line and get point
+        // where the label has to be drawn at a distance CONTENT_EDITABLE_MARGIN_TO_LINE
+        var dx;
+        var dy;
+        if (child.x > parent.x) {
+            dx = child.x-parent.x;
+            dy = child.y-parent.y;
+        } else {
+            dx = parent.x-child.x;
+            dy = parent.y-child.y;
+        }
+        var distance = Math.sqrt(dx*dx + dy*dy);
+        dx = dx/distance;
+        dy = dy/distance;
+        if (child.x < parent.x ) {
+            middleX = middleX - (GTE.CONSTANTS.CONTENT_EDITABLE_MARGIN_TO_LINE/2)*dy;
+        } else {
+            middleX = middleX + (GTE.CONSTANTS.CONTENT_EDITABLE_MARGIN_TO_LINE/2)*dy;
+        }
+        middleY = middleY - (GTE.CONSTANTS.CONTENT_EDITABLE_MARGIN_TO_LINE/2)*dx;
+
+        var growingDirectionOfText = GTE.CONSTANTS.CONTENT_EDITABLE_GROW_TO_RIGHT;
+        if (child.x <= parent.x ) {
+            growingDirectionOfText = GTE.CONSTANTS.CONTENT_EDITABLE_GROW_TO_LEFT;
+        }
+        var thisMove = this;
+        var contentEditable = new GTE.UI.Widgets.ContentEditable(
+                middleX, middleY, growingDirectionOfText, this.name)
+                .onSave(function () {
+                    var text = this.getText().replace(/&nbsp;/gi,'').trim();
+                    if (text === "") {
+                        window.alert("Move name should not be empty.");
+                    } else {
+                        thisMove.changeName(text);
+                    }
+                    GTE.tree.updateMoveNames(thisMove);
+                });
+
+        return {
+            contentEditable: contentEditable,
+            line: line
+        };
+    };
 
     // Add class to parent module
     parentModule.Move = Move;
