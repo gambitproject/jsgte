@@ -13,7 +13,6 @@ GTE.TREE = (function (parentModule) {
         this.players = [];
         this.newPlayer(GTE.COLOURS.BLACK);
         this.newPlayer(GTE.COLOURS.RED);
-        this.newPlayer(GTE.COLOURS.BLUE);
 
         this.showChanceName = true;
     }
@@ -199,9 +198,10 @@ GTE.TREE = (function (parentModule) {
     };
 
     /**
-    * Creates a new player with a random unique colour and adds it to the list
+    * Creates a new player with a unique colour and adds it to the list
     * of players
-    * @param  {String} [colour] Hex code of the player's colour
+    * @param  {String} [colour] Hex code of the player's colour. If not specified
+    *                           get this player's colour from the list of colours
     * @return {Player} player   Created player
     */
     Tree.prototype.newPlayer = function (colour) {
@@ -210,7 +210,7 @@ GTE.TREE = (function (parentModule) {
         if (this.players.length >= 1) {
             id = this.players[this.players.length-1].id+1;
         } else {
-            id = 0;
+            id = GTE.TREE.Player.CHANCE;
         }
 
         colour = colour || GTE.tools.getColour(this.players.length);
@@ -242,6 +242,7 @@ GTE.TREE = (function (parentModule) {
 
     /**
     * Removes last player from the list of players
+    * @return {Number} playerId ID of the removed player
     */
     Tree.prototype.removeLastPlayer = function () {
         var playerId = this.players.length-1;
@@ -356,6 +357,7 @@ GTE.TREE = (function (parentModule) {
         var playerNodes = [];
         for (var i = 0; i < allNodes.length; i++) {
             if (allNodes[i].player !== undefined &&
+                allNodes[i].player !== null &&
                 allNodes[i].player.id === playerId) {
                 playerNodes.push(allNodes[i]);
             }
@@ -371,7 +373,7 @@ GTE.TREE = (function (parentModule) {
         // Get all chance nodes
         var nodes = this.getPlayerNodes(0);
         for (var i = 0; i < nodes.length; i++) {
-            nodes[i].togglePlayerName();
+            nodes[i].togglePlayerNameVisibility();
         }
     };
 

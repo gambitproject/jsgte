@@ -14,13 +14,20 @@ GTE.UI = (function (parentModule) {
     * It creates a new Tree and draws it
     */
     Tools.prototype.newTree = function() {
+        this.resetPlayers();
+        this.activePlayer = -1;
         var root = new GTE.TREE.Node(null);
         var child1 = new GTE.TREE.Node(root);
         var child2 = new GTE.TREE.Node(root);
         GTE.tree = new GTE.TREE.Tree(root);
+
+        // Add a second Player
+        this.addPlayer();
+
         GTE.tree.updatePositions();
         // Create a node and draw it
         GTE.tree.draw();
+        this.switchMode(GTE.MODES.ADD);
     };
 
     /**
@@ -44,7 +51,7 @@ GTE.UI = (function (parentModule) {
             case GTE.MODES.DELETE:
                 buttonToSwitch = "button-remove";
                 break;
-            case GTE.MODES.PLAYERS:
+            case GTE.MODES.PLAYER_ASSIGNMENT:
                 buttonToSwitch = "button-player-" + this.activePlayer;
                 break;
             default:
@@ -53,10 +60,14 @@ GTE.UI = (function (parentModule) {
         document.getElementById(buttonToSwitch).className += " " + "active";
 
         GTE.MODE = modeToSwitch;
-        if (GTE.MODE === GTE.MODES.PLAYERS) {
+        if (GTE.MODE === GTE.MODES.PLAYER_ASSIGNMENT) {
             GTE.tree.hideLeaves();
         } else {
             GTE.tree.showLeaves();
+        }
+
+        if (GTE.MODE !== GTE.MODES.PLAYER_ASSIGNMENT) {
+            this.activePlayer = -1;
         }
     };
 
@@ -67,12 +78,12 @@ GTE.UI = (function (parentModule) {
     Tools.prototype.selectPlayer = function (player) {
         // Set player as active player and mode to PLAYERS mode
         this.activePlayer = player;
-        this.switchMode(GTE.MODES.PLAYERS);
+        this.switchMode(GTE.MODES.PLAYER_ASSIGNMENT);
     };
 
     /**
     * Handles player buttons onclicks
-    * @param {Number} playerId Player to be selected
+    * @param {Number|String} playerId Player to be selected
     */
     Tools.prototype.buttonPlayerHandler = function(playerId) {
         return function () {
@@ -106,12 +117,14 @@ GTE.UI = (function (parentModule) {
                     "' id='button-player-" + player.id +
                     "' class='button button--sacnite button--inverted button-player'" +
                     " alt='Player " + player.id +
+                    "' title='Player " + player.id +
                     "' player='" + player.id +
                     "'><i class='icon-user'></i><span>" + player.id + "</span></button></li>");
                 // Get the newly added button
                 lastPlayer = playerButtons.lastElementChild;
                 // And add a click event that will call the selectPlayer function
-                lastPlayer.firstElementChild.onclick = this.buttonPlayerHandler(player.id);
+                lastPlayer.firstElementChild.addEventListener("click",
+                                        this.buttonPlayerHandler(player.id));
             }
         }
     };
@@ -119,7 +132,7 @@ GTE.UI = (function (parentModule) {
     /**
     * Function that removes last player from the Toolbar
     */
-    Tools.prototype.removePlayer = function () {
+    Tools.prototype.removeLastPlayer = function () {
         if (GTE.tree.numberOfPlayers() > GTE.CONSTANTS.MIN_PLAYERS) {
             // Remove last player from the list of players
             var playerId = GTE.tree.removeLastPlayer();
@@ -131,17 +144,8 @@ GTE.UI = (function (parentModule) {
             }
             // Remove button
             var playerButtons = document.getElementById("player-buttons");
-            var lastPlayer = playerButtons.lastElementChild;
-            lastPlayer.parentNode.removeChild(lastPlayer);
-            // If there are only two players (Chance, Player 1),
-            // disable the remove button
-            if (playerId === GTE.CONSTANTS.MIN_PLAYERS + 1) {
-                document.getElementById("button-player-less").className += " disabled";
-            }
-            // If the removed player was the active one, select the previous one
-            if (playerId === this.activePlayer) {
-                this.selectPlayer(this.activePlayer-1);
-            }
+            var lastPlayer = playerButtons.lastElementChild.lastElementChild;
+            this.removePlayerButton(lastPlayer);
         }
     };
 
@@ -161,6 +165,33 @@ GTE.UI = (function (parentModule) {
     */
     Tools.prototype.getActivePlayer = function () {
         return this.activePlayer;
+    };
+
+    Tools.prototype.removePlayerButton = function (button) {
+        var playerId = parseInt(button.getAttribute("player"));
+        // get the <li>
+        var parent = button.parentNode;
+        // remove the <li> from the <ul>
+        parent.parentNode.removeChild(parent);
+        // If there are only two players (Chance, Player 1),
+        // disable the remove button
+        if (playerId === GTE.CONSTANTS.MIN_PLAYERS + 1) {
+            document.getElementById("button-player-less").className += " disabled";
+        }
+        // If the removed player was the active one, select the previous one
+        if (playerId === this.activePlayer) {
+            this.selectPlayer(this.activePlayer-1);
+        }
+    };
+
+    /**
+    * Removes all players from the toolbar
+    */
+    Tools.prototype.resetPlayers = function () {
+        var buttons = document.getElementsByClassName("button-player");
+        while(buttons.length > 2) {
+            this.removePlayerButton(buttons[buttons.length-1]);
+        }
     };
 
     // Add class to parent module
