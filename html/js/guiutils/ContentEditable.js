@@ -45,7 +45,7 @@ GTE.UI.Widgets = (function (parentModule) {
             this.x += GTE.CONSTANTS.CONTENT_EDITABLE_OFFSET_RIGHT;
         }
         // Translate the foreign and append it to the svg
-        this.myforeign.setAttributeNS(null, "transform", "translate(" + this.x + " " + this.y + ")");
+        this.translate();
         document.getElementsByTagName('svg')[0].appendChild(this.myforeign);
         this.myforeign.appendChild(this.textdiv);
 
@@ -67,7 +67,7 @@ GTE.UI.Widgets = (function (parentModule) {
             // Calculate how much has the foreign grown
             this.x -= (this.width - this.previousWidth);
             // Translate the foreign object that amount to the left
-            this.myforeign.setAttributeNS(null, "transform", "translate(" + this.x + " " + this.y + ")");
+            this.translate();
         }
         this.previousWidth = this.width;
         // Save this for further use
@@ -90,8 +90,7 @@ GTE.UI.Widgets = (function (parentModule) {
                 thisContentEditable.x -=
                     (thisContentEditable.width - thisContentEditable.previousWidth);
                 // Translate the foreign object that amount to the left
-                thisContentEditable.myforeign.setAttributeNS(null, "transform",
-                    "translate(" + thisContentEditable.x + " " + thisContentEditable.y + ")");
+                thisContentEditable.translate();
             }
             thisContentEditable.previousWidth = thisContentEditable.width;
         });
@@ -186,11 +185,17 @@ GTE.UI.Widgets = (function (parentModule) {
             // Calculate how much has the foreign grown
             this.x -= (this.width - this.previousWidth);
             // Translate the foreign object that amount to the left
-            this.myforeign.setAttributeNS(null, "transform", "translate(" + this.x + " " + this.y + ")");
+            this.translate();
         }
         this.previousWidth = this.width;
 
         return this.getText();
+    };
+
+    ContentEditable.prototype.translate = function (x, y) {
+        this.x = x || this.x;
+        this.y = y || this.y;
+        this.myforeign.setAttributeNS(null, "transform", "translate(" + this.x + " " + this.y + ")");
     };
 
     /**
