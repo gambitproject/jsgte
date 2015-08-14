@@ -156,7 +156,8 @@ GTE.TREE = (function (parentModule) {
         if (this.isSingleton()) {
             x = this.firstNode.x + GTE.CONSTANTS.TEXT_NODE_MARGIN;
         } else {
-            x = (this.lastNode.x + GTE.CONSTANTS.CIRCLE_SIZE - this.firstNode.x)/2 + this.firstNode.x;
+            x = (this.lastNode.x + GTE.CONSTANTS.CIRCLE_SIZE - this.firstNode.x)/2 +
+                    this.firstNode.x - (this.playerNameText.width/2);
         }
         this.playerNameText = thisPlayer.draw(x, this.firstNode.y);
         if (thisPlayer.id === 0 && !GTE.tree.showChanceName) {
@@ -360,10 +361,6 @@ GTE.TREE = (function (parentModule) {
         }
     };
 
-    ISet.prototype.recursiveGetISetsBelow = function () {
-
-    };
-
     ISet.compare = function (a, b) {
         if (parseInt(a.firstNode.x) <= parseInt(b.firstNode.x)) {
             return -1;
@@ -403,6 +400,11 @@ GTE.TREE = (function (parentModule) {
 
     ISet.prototype.updatePlayerName = function () {
         this.playerNameText.setText(this.getPlayer().name);
+        if (!this.isSingleton()) {
+            var x = (this.lastNode.x + GTE.CONSTANTS.CIRCLE_SIZE - this.firstNode.x)/2 +
+                    this.firstNode.x - (this.playerNameText.width/2);
+            this.playerNameText.translate(x);
+        }
     };
 
     ISet.prototype.isSingleton = function () {
