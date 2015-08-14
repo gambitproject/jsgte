@@ -465,9 +465,7 @@ GTE.TREE = (function (parentModule) {
     Tree.prototype.addChildISetTo = function (parentISet) {
         // Create new information set
         var newISet = this.addNewISet();
-        // Get nodes that belong to parentISet as isets don't keep reference of nodes
-        var nodesInParentISet = parentISet.getNodes();
-        parentISet.addChildISet(newISet, nodesInParentISet);
+        parentISet.addChildISet(newISet);
         this.positionsUpdated = false;
     };
 

@@ -73,16 +73,13 @@ GTE.TREE = (function (parentModule) {
     * @param {Array} nodesInThis Array that contains the nodes that belong to
     *                            this iset
     */
-    ISet.prototype.addChildISet = function (childISet, nodesInThis) {
+    ISet.prototype.addChildISet = function (childISet) {
         // Create two new moves
-        this.addNewMove();
-        this.addNewMove();
-
+        var move = this.addNewMove();
+        var nodesInThis = this.getNodes();
         // Add one node per move per node in set
         for (var i = 0; i < nodesInThis.length; i++) {
-            for (var j = 0; j < this.numberOfMoves(); j++) {
-                childISet.addNewNode(nodesInThis[i], null, this.moves[j]);
-            }
+            childISet.addNewNode(nodesInThis[i], null, move);
         }
     };
 
@@ -270,6 +267,9 @@ GTE.TREE = (function (parentModule) {
         switch (GTE.MODE) {
             case GTE.MODES.ADD:
                 if (this.numberOfMoves() === 0) {
+                    // If no children, add two, since one child only doesn't
+                    // make sense
+                    GTE.tree.addChildISetTo(this);
                     GTE.tree.addChildISetTo(this);
                 } else {
                     var childrenIsets = this.getChildrenISets();
