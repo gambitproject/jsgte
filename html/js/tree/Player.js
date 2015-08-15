@@ -10,7 +10,7 @@ GTE.TREE = (function (parentModule) {
     */
     function Player(id, colour) {
         this.id = id;
-        if (this.id === this.CHANCE) {
+        if (this.id === Player.CHANCE) {
             this.name = GTE.PLAYERS.DEFAULT_CHANCE_NAME;
         } else {
             this.name = "" + this.id;
