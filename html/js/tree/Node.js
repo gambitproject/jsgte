@@ -115,6 +115,7 @@ GTE.TREE = (function (parentModule) {
                     this.delete();
                 } else {
                     GTE.tree.deleteChildrenOf(this);
+                    this.deassignPlayer();
                 }
                 GTE.tree.draw();
                 break;
@@ -211,6 +212,10 @@ GTE.TREE = (function (parentModule) {
     */
     Node.prototype.show = function () {
         this.shape.show();
+    };
+
+    Node.prototype.deassignPlayer = function () {
+        this.player = null;
     };
 
     // Add class to parent module
