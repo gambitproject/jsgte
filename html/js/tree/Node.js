@@ -327,6 +327,10 @@ GTE.TREE = (function (parentModule) {
         this.reachedByText.setText(this.reachedBy.name);
     };
 
+    Node.prototype.deassignPlayer = function () {
+        this.player = null;
+    };
+
     // Add class to parent module
     parentModule.Node = Node;
 

@@ -395,9 +395,10 @@ GTE.TREE = (function (parentModule) {
         // If it has children, delete all of them
         if (!node.isLeaf()) {
             this.deleteChildrenOf(node);
+            node.deassignPlayer();
         }
-        // Delete node. This will also remove the node from the iset
-        node.delete();
+        // Remove the node from the iset
+        isetThatContainsNode.removeNode(node);
         if (isetThatContainsNode !== null) {
             // If iset is empty delete it
             if (isetThatContainsNode.getNodes().length === 0) {
@@ -698,7 +699,7 @@ GTE.TREE = (function (parentModule) {
         for (var i = 0; i < nodes.length; i++) {
             if (nodes[i].player !== null && nodes[i].player !== undefined) {
                 if (nodes[i].player.id === playerId) {
-                    nodes[i].player = null;
+                    nodes[i].deassignPlayer();
                 }
             }
         }
