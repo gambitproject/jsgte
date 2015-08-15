@@ -116,7 +116,7 @@ GTE.TREE = (function (parentModule) {
         var contentEditable = new GTE.UI.Widgets.ContentEditable(
                 middleX, middleY, growingDirectionOfText, this.name)
                 .onSave(function () {
-                    var text = this.getText().replace(/&nbsp;/gi,'').trim();
+                    var text = this.getCleanedText();
                     if (text === "") {
                         window.alert("Move name should not be empty.");
                     } else {
