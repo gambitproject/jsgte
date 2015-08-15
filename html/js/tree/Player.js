@@ -59,7 +59,7 @@ GTE.TREE = (function (parentModule) {
                     // Removes all blankspaces. Substitutes &nbsp; characters
                     // with spaces and then trims the text so that there are no
                     // spaces both at the begin and end of the text
-                    var text = this.getText().replace(/&nbsp;/gi,' ').trim();
+                    var text = this.getCleanedText();
                     if (text === "") {
                         window.alert("Player name should not be empty.");
                     } else {
