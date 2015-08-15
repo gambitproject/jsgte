@@ -5,6 +5,8 @@
 .content-editable-inside-foreign {
     display: inline-block;
     min-width: 30px;
+    overflow: hidden;
+    white-space: nowrap;
 }
 
 .content-editable.grow-to-left{
