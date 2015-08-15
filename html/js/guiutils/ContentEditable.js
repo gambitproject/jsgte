@@ -162,6 +162,12 @@ GTE.UI.Widgets = (function (parentModule) {
         return this;
     };
 
+    ContentEditable.prototype.getCleanedText = function () {
+        return this.getText().replace(/&nbsp;/gi,' ')
+                        .replace(/<br>/gi, '')
+                        .replace(/<\/br>/gi, '').trim();
+    };
+
     /**
     * Returns the current displayed text
     * @return {String} text Current text
