@@ -397,20 +397,8 @@ GTE.TREE = (function (parentModule) {
             this.deleteChildrenOf(node);
             node.deassignPlayer();
         }
-        // Remove the node from the iset
-        isetThatContainsNode.removeNode(node);
-        if (isetThatContainsNode !== null) {
-            // If iset is empty delete it
-            if (isetThatContainsNode.getNodes().length === 0) {
-                this.deleteISetFromList(isetThatContainsNode);
-            }
-        }
-        if (parent.iset !== null) {
-            // Check integrity of parent iset
-            this.checkISetIntegrity(parent.iset);
-        }
-        // Check the tree for collisions
-        this.recursiveCheckForCollisions(this.root);
+        // Remove the node from the Tree
+        node.delete();
     };
 
     /**
@@ -891,6 +879,38 @@ GTE.TREE = (function (parentModule) {
             }
         }
         return true;
+    };
+
+    /**
+    * Gets everything below a given information set
+    * @param  {ISet} iset             Information set to get everything below from
+    * @return {List} everythingBelow  Everything below given iset
+    */
+    Tree.prototype.getEverythingBelowISet = function (iset) {
+        // Create the list that will be returned
+        var everythingBelow = [];
+        // Get nodes in given iset and call the recursive function for each
+        var nodesInIset = iset.getNodes();
+        for (var i = 0; i < nodesInIset.length; i++) {
+            this.recursiveGetEverythingBelowISet(nodesInIset[i], everythingBelow);
+        }
+        return everythingBelow;
+    };
+
+    /**
+    * Recursive function that fills an array with all the nodes below a given ISet
+    * Stopping criteria: that the current node is a leaf
+    * Recursive expansion: to all of the node's children
+    * @param  {ISet} iset             Information set to get everything below from
+    * @param  {List} everythingBelow  List that will be filled
+    */
+    Tree.prototype.recursiveGetEverythingBelowISet = function (node, everythingBelow) {
+        // For each child, call this funcion
+        var children = node.getChildren();
+        for (var i = 0; i < children.length; i++) {
+            everythingBelow.push(children[i]);
+            this.recursiveGetEverythingBelowISet(children[i], everythingBelow);
+        }
     };
 
     // Add class to parent module
