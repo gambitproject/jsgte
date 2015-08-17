@@ -20,6 +20,9 @@ GTE.TREE = (function (parentModule) {
         return "Move: " + "parent: " + this.parent + "; child: " + this.child;
     };
 
+    /**
+    * Drawing function
+    */
     Move.prototype.draw = function() {
         var circleRadius = GTE.CONSTANTS.CIRCLE_SIZE/2;
         this.line = GTE.canvas.line(this.parent.x + circleRadius, this.parent.y + circleRadius, this.child.x + circleRadius, this.child.y +circleRadius)

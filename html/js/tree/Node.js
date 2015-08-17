@@ -4,9 +4,11 @@ GTE.TREE = (function (parentModule) {
     /**
     * Creates a new Node.
     * @class
-    * @param {Node} [parent] Parent node. If null, this is root.
+    * @param {Node}   parent Parent node. If null, this is root.
+    * @param {Player} player Node's player
     */
-    function Node(parent) {
+    function Node(parent, player) {
+        this.player = player;
         this.parent = parent;
         this.children = [];
 
@@ -37,37 +39,105 @@ GTE.TREE = (function (parentModule) {
             this.reachedBy.draw();
         }
         var thisNode = this;
-        var circle = GTE.canvas.circle(GTE.CONSTANTS.CIRCLE_SIZE)
-            .addClass('node')
-            .x(this.x)
-            .y(this.y)
-            .click(function() {
-                thisNode.onClick();
-            });
+        if (this.player && this.player.id === GTE.TREE.Player.CHANCE){
+            this.shape = GTE.canvas.rect(
+                          GTE.CONSTANTS.CIRCLE_SIZE, GTE.CONSTANTS.CIRCLE_SIZE);
+        } else {
+            this.shape = GTE.canvas.circle(GTE.CONSTANTS.CIRCLE_SIZE);
+        }
+        this.shape.addClass('node')
+                  .x(this.x)
+                  .y(this.y)
+                  .click(function() {
+                      thisNode.onClick();
+                  });
+        if (this.player) {
+            this.shape.fill(this.player.colour);
+            this.drawPlayer();
+        } else {
+            this.shape.fill(GTE.COLOURS.BLACK);
+        }
+
+        if (GTE.MODE === GTE.MODES.PLAYER_ASSIGNMENT && this.isLeaf()) {
+            this.shape.hide();
+        }
+    };
+
+    /**
+    * Draws the player. It needs to be done within the Node so that there is
+    * an instance of ContentEditable per Node
+    */
+    Node.prototype.drawPlayer = function () {
+        var thisPlayer = this.player;
+        this.playerNameText = thisPlayer.draw(
+            this.x + GTE.CONSTANTS.TEXT_NODE_MARGIN, this.y);
+        if (this.player.id === GTE.TREE.Player.CHANCE && !GTE.tree.showChanceName) {
+            this.playerNameText.hide();
+        }
+    };
+
+    /**
+    * Toggles the visibility of the default name text
+    */
+    Node.prototype.togglePlayerNameVisibility = function () {
+        if (this.playerNameText.visible() === false) {
+            this.playerNameText.show();
+        } else {
+            this.playerNameText.hide();
+        }
+    };
+
+    /**
+    * Updates player name. It sets the content editable text to the current
+    * player name
+    */
+    Node.prototype.updatePlayerName = function () {
+        this.playerNameText.setText(this.player.name);
     };
 
     /**
     * Function that defines the behaviour of the node on click
     */
     Node.prototype.onClick = function () {
-        if (GTE.MODE === GTE.MODES.ADD){
-            if (this.isLeaf()) {
-                // Always start with two nodes
+        switch (GTE.MODE) {
+            case GTE.MODES.ADD:
+                if (this.isLeaf()) {
+                    // Always start with two nodes
+                    GTE.tree.addChildNodeTo(this);
+                }
                 GTE.tree.addChildNodeTo(this);
-            }
-            GTE.tree.addChildNodeTo(this);
-        } else {
-            // If it is a leaf, delete itself, if not, delete all children
-            if (this.isLeaf()) {
-                this.delete();
-            } else {
-                GTE.tree.deleteChildrenOf(this);
-            }
+                // Tell the tree to redraw itself
+                GTE.tree.draw();
+                break;
+            case GTE.MODES.DELETE:
+                // If it is a leaf, delete itself, if not, delete all children
+                if (this.isLeaf()) {
+                    this.delete();
+                } else {
+                    GTE.tree.deleteChildrenOf(this);
+                    this.deassignPlayer();
+                }
+                GTE.tree.draw();
+                break;
+            case GTE.MODES.PLAYER_ASSIGNMENT:
+                if (!this.isLeaf()) {
+                    // If player name is empty and default name is hidden,
+                    // show the default name
+                    if (this.player !== undefined && this.player !== null) {
+                        if (GTE.tree.getActivePlayer().id === GTE.TREE.Player.CHANCE &&
+                                this.player.id === GTE.TREE.Player.CHANCE) {
+                            GTE.tree.toggleChanceName();
+                            break;
+                        }
+                    }
+                    GTE.tree.assignSelectedPlayerToNode(this);
+                    GTE.tree.draw();
+                }
+                break;
+            default:
+                break;
         }
-        // Tell the tree to redraw itself
-        GTE.tree.draw();
     };
-
 
     /**
     * Function that adds child to node
@@ -121,6 +191,31 @@ GTE.TREE = (function (parentModule) {
     Node.prototype.delete = function () {
         this.changeParent(null);
         GTE.tree.positionsUpdated = false;
+    };
+
+    /** Assigns a specific player to current node
+    * @param {Player} player Player that will be assigned to the node
+    */
+    Node.prototype.assignPlayer = function (player) {
+        this.player = player;
+    };
+
+    /**
+    * Hides the node shape
+    */
+    Node.prototype.hide = function () {
+        this.shape.hide();
+    };
+
+    /**
+    * Shows the node shape
+    */
+    Node.prototype.show = function () {
+        this.shape.show();
+    };
+
+    Node.prototype.deassignPlayer = function () {
+        this.player = null;
     };
 
     // Add class to parent module
