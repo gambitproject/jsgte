@@ -1,0 +1,19 @@
+.content-editable-foreign {
+    text-align: left ;
+    height: 22px;
+}
+.content-editable-inside-foreign {
+    display: inline-block;
+    min-width: 30px;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.content-editable.grow-to-left{
+    text-align: right;
+}
+[contenteditable="true"]:active,
+[contenteditable="true"]:focus{
+    border:none;
+    outline:none;
+}

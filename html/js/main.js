@@ -22,4 +22,20 @@
         return false;
     });
 
+    var playerButtons = document.getElementsByClassName("button-player");
+    for (var i = 0; i < playerButtons.length; i++) {
+        playerButtons[i].addEventListener("click",
+            GTE.tools.buttonPlayerHandler(playerButtons[i].getAttribute("player")));
+    }
+
+    document.getElementById("button-player-more").addEventListener("click", function(){
+        GTE.tools.addPlayer();
+        return false;
+    });
+
+    document.getElementById("button-player-less").addEventListener("click", function(){
+        GTE.tools.removeLastPlayer();
+        return false;
+    });
+
 }());
