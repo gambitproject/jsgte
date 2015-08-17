@@ -289,8 +289,25 @@ GTE.TREE = (function (parentModule) {
                 GTE.tree.draw();
                 break;
             case GTE.MODES.DELETE:
-                // Do not do anything. Nodes are the only things that can be deleted
-                // ISets are dissolved, not deleted
+                var children = this.getChildrenNodes();
+                if (children.length === 0) {
+                    // Delete node
+                    GTE.tree.deleteNode(this.firstNode);
+                } else {
+                    // Delete all children
+                    for (var i = 0; i < children.length; i++) {
+                        // deleteNode() will delete everything below as well
+                        GTE.tree.deleteNode(children[i]);
+                    }
+                    // This iset's nodes will turn into leaves and...
+                    // leaves cannot have players!!!
+                    var nodesInIset = this.getNodes();
+                    for (i = 0; i < nodesInIset.length; i++) {
+                        nodesInIset[i].deassignPlayer();
+                    }
+                    // Dissolve current iset
+                    this.dissolve();
+                }
                 break;
             case GTE.MODES.MERGE:
                 this.select();
@@ -347,6 +364,10 @@ GTE.TREE = (function (parentModule) {
     * Function that dissolves current iset
     */
     ISet.prototype.dissolve = function () {
+        // Remove Moves
+        for (var i = 0; i < this.moves.length; i++) {
+            this.removeMove(this.moves[i]);
+        }
         var nodes = this.getNodes();
         if (nodes.length > 1) {
             this.delete();
@@ -409,6 +430,16 @@ GTE.TREE = (function (parentModule) {
 
     ISet.prototype.isSingleton = function () {
         return this.firstNode === this.lastNode;
+    };
+
+    /*
+    * Removes child from the information set, which means that if the information
+    * set is a singleton, the move that leads to the node will be removed
+    */
+    ISet.prototype.removeChild = function (node) {
+        if (this.isSingleton()) {
+            this.removeMove(node.reachedBy);
+        }
     };
 
     // Add class to parent module

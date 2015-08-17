@@ -151,7 +151,17 @@ GTE.TREE = (function (parentModule) {
                 GTE.tree.draw();
                 break;
             case GTE.MODES.DELETE:
-                GTE.tree.deleteNode(this);
+                if (this.iset === null) {
+                    // If it is a leaf, delete itself, if not, delete all children
+                    if (this.isLeaf()) {
+                        this.delete();
+                    } else {
+                        GTE.tree.deleteChildrenOf(this);
+                        this.deassignPlayer();
+                    }
+                } else {
+                    this.iset.onClick();
+                }
                 // Tell the tree to redraw itself
                 GTE.tree.draw();
                 break;
@@ -201,6 +211,9 @@ GTE.TREE = (function (parentModule) {
         var indexInList = this.children.indexOf(nodeToDelete);
         if (indexInList > -1) {
             this.children.splice(indexInList, 1);
+        }
+        if (this.iset !== null) {
+            this.iset.removeChild(nodeToDelete);
         }
     };
 
@@ -291,9 +304,6 @@ GTE.TREE = (function (parentModule) {
     */
     Node.prototype.delete = function () {
         // Delete all references to current node
-        if (this.parent.iset !== null) {
-            this.parent.iset.removeMove(this.reachedBy);
-        }
         this.changeParent(null);
         if (this.iset !== null) {
             this.iset.removeNode(this);
@@ -329,6 +339,10 @@ GTE.TREE = (function (parentModule) {
 
     Node.prototype.deassignPlayer = function () {
         this.player = null;
+    };
+
+    Node.prototype.getChildren = function () {
+        return this.children;
     };
 
     // Add class to parent module
