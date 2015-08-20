@@ -12,6 +12,7 @@ GTE.TREE = (function (parentModule) {
         this.firstNode = null;
         this.lastNode = null;
         this.numberOfNodes = 0;
+        this.maxNodesDepth = -1;
     }
 
     /**
@@ -189,37 +190,48 @@ GTE.TREE = (function (parentModule) {
     //     this.depth = Math.max(this.depth, parentsMaxDepth+1);
     // };
 
-    // ISet.prototype.allign = function () {
-    //     var nodesInSameISet = this.getNodes();
-    //     // If it is singleton
-    //     if (nodesInSameISet.length !== 1) {
-    //         var levels = [];
-    //         var node;
-    //         // Iterate over the nodes in same iset and get the deepest level of all
-    //         for (var i = 0; i < nodesInSameISet.length; i++) {
-    //             node = nodesInSameISet[i];
-    //             if (levels.indexOf(node.level) === -1) {
-    //                 levels.push(node.level);
-    //             }
-    //         }
-    //         levels.sort();
-    //         var y = levels[levels.length-1] * GTE.CONSTANTS.DIST_BETWEEN_LEVELS;
-    //         while (nodesInSameISet.length > 0) {
-    //             node = nodesInSameISet.pop();
-    //             if (node.level < levels[levels.length-1]) {
-    //                 GTE.tree.moveDownEverythingBelowNode(node,
-    //                         y - node.level * GTE.CONSTANTS.DIST_BETWEEN_LEVELS);
-    //             }
-    //         }
-    //         // if (levels.length > 1 && levels[levels.length-1] !== this.level) {
-    //         //     GTE.tree.recursiveMoveDownEverythingBelowNode(this,
-    //         //                 y - this.level * GTE.CONSTANTS.DIST_BETWEEN_LEVELS);
-    //         // }
-    //         if (y > this.y) {
-    //             this.y = y;
-    //         }
-    //     }
-    // };
+    ISet.prototype.align = function () {
+        console.log("align information set with moves " + this.moves);
+        // If it is not singleton
+        if (this.isSingleton()) {
+            if (this.firstNode.depth == -1) {
+                this.firstNode.depth = this.firstNode.level;
+            }
+        } else {
+            var nodesInSameISet = this.getNodes();
+            for (var i = 0; i < nodesInSameISet.length; i++) {
+                if (nodesInSameISet[i].reachedBy !== null) {
+                    console.log("Setting depth for " + nodesInSameISet[i].reachedBy.name);
+                }
+                nodesInSameISet[i].depth = this.maxLevel;
+                if (nodesInSameISet[i].depth > nodesInSameISet[i].level) {
+                    GTE.tree.moveDownEverythingBelowNode(nodesInSameISet[i]);
+                }
+            }
+
+            // var y = levels[levels.length-1] * GTE.CONSTANTS.DIST_BETWEEN_LEVELS;
+            // while (nodesInSameISet.length > 0) {
+            //     node = nodesInSameISet.pop();
+            //     if (node.level < levels[levels.length-1]) {
+            //         GTE.tree.moveDownEverythingBelowNode(node,
+            //                 y - node.level * GTE.CONSTANTS.DIST_BETWEEN_LEVELS);
+            //     }
+            // }
+
+
+
+            // if (levels.length > 1 && levels[levels.length-1] !== this.level) {
+            //     GTE.tree.recursiveMoveDownEverythingBelowNode(this,
+            //                 y - this.level * GTE.CONSTANTS.DIST_BETWEEN_LEVELS);
+            // }
+
+            // if (y > this.y) {
+            //     this.y = y;
+            // }
+
+            GTE.tree.debugDepths();
+        }
+    };
 
 
 
