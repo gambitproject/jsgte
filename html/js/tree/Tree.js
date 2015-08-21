@@ -13,7 +13,7 @@ GTE.TREE = (function (parentModule) {
         this.selected = [];
         this.depths = [];
         this.leaves = [];
-        this.isetsByLevel = [];
+        // this.isetsByLevel = [];
         // this.nodesByLevel = [];
         // this.nodesByDepth = [];
 
@@ -34,6 +34,20 @@ GTE.TREE = (function (parentModule) {
         }
         if (!this.positionsUpdated) {
             this.updatePositions();
+        }
+        console.log(this.depths);
+
+        if (this.isets.length > 0) {
+            this.sortOutCollisions();
+        }
+        this.updateDepths();
+        console.log(this.depths);
+        console.log("-----------");
+
+        if (!this.positionsUpdated) {
+            this.recursiveCalculateYs(this.root);
+            this.centerParents(this.root);
+            this.positionsUpdated = true;
         }
         this.clear();
         if (this.isets.length >= 0) {
@@ -119,13 +133,16 @@ GTE.TREE = (function (parentModule) {
     /**
     * Function that updates the different structures used while drawing
     */
-    Tree.prototype.updateDataStructures = function () {
-        this.leaves = [];
-        this.isetsByLevel = [];
+    Tree.prototype.updateLeaves = function () {
+        // this.isetsByLevel = [];
         // this.nodesByLevel = [];
         // this.nodesByDepth = [];
-        this.depths = [];
-        this.recursiveUpdateDataStructures(this.root);
+
+        // Create a estructure that holds isets depending on the depth
+        // of its nodes and sort it
+        this.leaves = [];
+        this.recursiveupdateLeaves(this.root);
+        this.updateLeavesPositions();
     };
 
     /**
@@ -134,7 +151,7 @@ GTE.TREE = (function (parentModule) {
     * Recursive expansion: to all of the node's children
     * @param {Node} node Node to start from
     */
-    Tree.prototype.recursiveUpdateDataStructures = function (node) {
+    Tree.prototype.recursiveupdateLeaves = function (node) {
         // if (node.iset !== null) {
         //     if (this.isetsByLevel[node.level] === undefined) {
         //         this.isetsByLevel[node.level] = [];
@@ -147,16 +164,25 @@ GTE.TREE = (function (parentModule) {
         //     this.nodesByLevel[node.level] = [];
         // }
         // this.nodesByLevel[node.level].push(node);
-        if (this.depths[node.depth] === undefined) {
-            this.depths[node.depth] = [];
-        }
-        this.depths[node.depth].push(node);
         if (node.isLeaf()) {
             this.leaves.push(node);
         } else {
             for (var i = 0; i < node.children.length; i++) {
-                this.recursiveUpdateDataStructures(node.children[i]);
+                this.recursiveupdateLeaves(node.children[i]);
             }
+        }
+    };
+
+    Tree.prototype.updateDepths = function () {
+        this.depths = [];
+        for (var i = 0; i < this.isets.length; i++) {
+            if (this.depths[this.isets[i].maxNodesDepth] === undefined) {
+                this.depths[this.isets[i].maxNodesDepth] = [];
+            }
+            this.depths[this.isets[i].maxNodesDepth].push(this.isets[i]);
+        }
+        for (i = 0; i < this.depths.length; i++) {
+            this.depths[i].sort(GTE.TREE.ISet.compare);
         }
     };
 
@@ -166,15 +192,10 @@ GTE.TREE = (function (parentModule) {
     * have changed
     */
     Tree.prototype.updatePositions = function () {
-        this.updateDataStructures();
-        this.updateLeavesPositions();
+        this.updateLeaves();
         this.recursiveUpdatePositions(this.root);
-        // this.updateDepths();
+        this.updateDepths();
         // this.recursiveCheckForCollisions(this.root);
-        this.recursiveCalculateYs(this.root);
-        this.centerParents(this.root);
-        this.positionsUpdated = true;
-
     };
 
     /**
@@ -307,25 +328,58 @@ GTE.TREE = (function (parentModule) {
     * @param {Node} node Node that will be moved
     */
     Tree.prototype.moveDownEverythingBelowNode = function (node, howMuch) {
+        console.log("Moving down everything below " + node.reachedBy.name);
         var iSetsToMoveDown = this.getISetsToMoveDown(node);
         for (var i = 0; i < iSetsToMoveDown.length; i++) {
             var nodesInIset = iSetsToMoveDown[i].getNodes();
             for (var j = 0; j < nodesInIset.length; j++) {
                 console.log("Moving down " + nodesInIset[j].reachedBy.name);
-                if (iSetsToMoveDown[i].maxLevel == -1 &&
+                if (iSetsToMoveDown[i].maxNodesDepth == -1 &&
                         nodesInIset[j].parent.depth == -1) {
                     console.log("nodesInIset[j].parent.depth == -1");
                     nodesInIset[j].depth = nodesInIset[j].level + 1;
                 } else {
                     console.log("nodesInIset[j].parent.depth != -1");
                     console.log("nodesInIset[j].parent.depth + 1 " + (nodesInIset[j].parent.depth + 1));
-                    console.log("iSetsToMoveDown[i].maxLevel " + iSetsToMoveDown[i].maxLevel);
+                    console.log("iSetsToMoveDown[i].maxNodesDepth " + iSetsToMoveDown[i].maxNodesDepth);
                     nodesInIset[j].depth = Math.max(
-                        nodesInIset[j].parent.depth + 1, iSetsToMoveDown[i].maxLevel);
+                        nodesInIset[j].parent.depth + 1, iSetsToMoveDown[i].maxNodesDepth);
                 }
                 console.log("Depth set to " + nodesInIset[j].depth);
-                if (nodesInIset[j].depth > iSetsToMoveDown[i].maxLevel) {
-                    iSetsToMoveDown[i].maxLevel = nodesInIset[j].depth;
+                if (nodesInIset[j].depth > iSetsToMoveDown[i].maxNodesDepth) {
+                    iSetsToMoveDown[i].maxNodesDepth = nodesInIset[j].depth;
+                }
+            }
+        }
+    };
+
+    Tree.prototype.moveDownISetAndEverythingBelow = function (iset) {
+        console.log("Moving down " + iset + " and everything below.");
+        var dirtyISetsToMoveDown = [];
+        var nodesInIset = iset.getNodes();
+        for (var i = 0; i < nodesInIset.length; i++) {
+            dirtyISetsToMoveDown = dirtyISetsToMoveDown.concat(
+                                        this.getISetsToMoveDown(nodesInIset[i]));
+        }
+        dirtyISetsToMoveDown.push(iset);
+
+        var iSetsToMoveDown = [];
+        for (i = 0; i < dirtyISetsToMoveDown.length; i++) {
+            if (iSetsToMoveDown.indexOf(dirtyISetsToMoveDown[i]) === -1){
+                iSetsToMoveDown.push(dirtyISetsToMoveDown[i]);
+            }
+        }
+
+        for (i = 0; i < iSetsToMoveDown.length; i++) {
+            nodesInIset = iSetsToMoveDown[i].getNodes();
+            for (var j = 0; j < nodesInIset.length; j++) {
+                console.log("Moving down " + nodesInIset[j].reachedBy.name);
+                console.log("nodesInIset[j].parent.depth + 1 " + (nodesInIset[j].parent.depth + 1));
+                console.log("iSetsToMoveDown[i].maxNodesDepth " + iSetsToMoveDown[i].maxNodesDepth);
+                nodesInIset[j].depth++;
+                console.log("Depth set to " + nodesInIset[j].depth);
+                if (nodesInIset[j].depth > iSetsToMoveDown[i].maxNodesDepth) {
+                    iSetsToMoveDown[i].maxNodesDepth = nodesInIset[j].depth;
                 }
             }
         }
@@ -526,7 +580,7 @@ GTE.TREE = (function (parentModule) {
         var depths = [];
         this.recursiveGetNodesThatBelongTo(this.root, iset, returnArray, depths);
         depths.sort();
-        iset.maxLevel = depths[depths.length-1];
+        iset.maxNodesDepth = depths[depths.length-1];
         return returnArray;
     };
 
@@ -933,6 +987,32 @@ GTE.TREE = (function (parentModule) {
         // align all isets
         for (i = 0; i < this.isets.length; i++) {
             this.isets[i].align();
+        }
+    };
+
+    Tree.prototype.sortOutCollisions = function () {
+        console.log("sorting out collisions");
+        for (var i = 0; i < this.depths.length; i++) {
+            var currentDepth = this.depths[i];
+            for (var j = 0; j < currentDepth.length; j++) {
+                var currentISet = currentDepth[j];
+                if (currentISet.isSingleton()) {
+                    continue;
+                }
+                // Check currentISet against the ones on its right
+                for (var k = j+1; k < currentDepth.length; k++) {
+                    var toCheckAgainst = currentDepth[k];
+                    if (currentISet.firstNode.x < toCheckAgainst.firstNode.x &&
+                        toCheckAgainst.firstNode.x < currentISet.lastNode.x) {
+                        console.log("Collision between " + currentISet + " and " + toCheckAgainst);
+                        // TODO: IF toCheckAgainst DOES NOt have children, move down
+                        // currentISet instead
+                        // Remove the ones moved down from the currentDepthlist, they
+                        // are not at this level anymore
+                        this.moveDownISetAndEverythingBelow(toCheckAgainst);
+                    }
+                }
+            }
         }
     };
 
