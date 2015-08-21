@@ -203,7 +203,7 @@ GTE.TREE = (function (parentModule) {
                 if (nodesInSameISet[i].reachedBy !== null) {
                     console.log("Setting depth for " + nodesInSameISet[i].reachedBy.name);
                 }
-                nodesInSameISet[i].depth = this.maxLevel;
+                nodesInSameISet[i].depth = this.maxNodesDepth;
                 if (nodesInSameISet[i].depth > nodesInSameISet[i].level) {
                     GTE.tree.moveDownEverythingBelowNode(nodesInSameISet[i]);
                 }
@@ -452,6 +452,15 @@ GTE.TREE = (function (parentModule) {
         if (this.isSingleton()) {
             this.removeMove(node.reachedBy);
         }
+    };
+
+    ISet.compare = function (a, b) {
+        if (parseInt(a.firstNode.x) <= parseInt(b.firstNode.x)) {
+            return -1;
+        } else {
+            return 1;
+        }
+        return 0;
     };
 
     // Add class to parent module
