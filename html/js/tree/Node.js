@@ -28,6 +28,7 @@ GTE.TREE = (function (parentModule) {
     Node.prototype.toString = function () {
         return "Node: " + "children.length: " + this.children.length +
                "; level: " + this.level + "; reachedBy: " + this.reachedBy +
+               "; depth: " + this.depth +
                "; iset: " + this.iset;
     };
 

@@ -50,7 +50,7 @@ GTE.TREE = (function (parentModule) {
             this.positionsUpdated = true;
         }
         this.clear();
-        if (this.isets.length >= 0) {
+        if (this.isets.length > 0) {
             this.drawISets();
         }
         this.drawNodes();
@@ -182,7 +182,7 @@ GTE.TREE = (function (parentModule) {
             this.depths[this.isets[i].maxNodesDepth].push(this.isets[i]);
         }
         for (i = 0; i < this.depths.length; i++) {
-            this.depths[i].sort(GTE.TREE.ISet.compare);
+            this.depths[i].sort(GTE.TREE.ISet.compareX);
         }
     };
 
@@ -329,28 +329,26 @@ GTE.TREE = (function (parentModule) {
     */
     Tree.prototype.moveDownEverythingBelowNode = function (node, howMuch) {
         console.log("Moving down everything below " + node.reachedBy.name);
-        var iSetsToMoveDown = this.getISetsToMoveDown(node);
-        for (var i = 0; i < iSetsToMoveDown.length; i++) {
-            var nodesInIset = iSetsToMoveDown[i].getNodes();
-            for (var j = 0; j < nodesInIset.length; j++) {
-                console.log("Moving down " + nodesInIset[j].reachedBy.name);
-                if (iSetsToMoveDown[i].maxNodesDepth == -1 &&
-                        nodesInIset[j].parent.depth == -1) {
-                    console.log("nodesInIset[j].parent.depth == -1");
-                    nodesInIset[j].depth = nodesInIset[j].level + 1;
-                } else {
-                    console.log("nodesInIset[j].parent.depth != -1");
-                    console.log("nodesInIset[j].parent.depth + 1 " + (nodesInIset[j].parent.depth + 1));
-                    console.log("iSetsToMoveDown[i].maxNodesDepth " + iSetsToMoveDown[i].maxNodesDepth);
-                    nodesInIset[j].depth = Math.max(
-                        nodesInIset[j].parent.depth + 1, iSetsToMoveDown[i].maxNodesDepth);
-                }
-                console.log("Depth set to " + nodesInIset[j].depth);
-                if (nodesInIset[j].depth > iSetsToMoveDown[i].maxNodesDepth) {
-                    iSetsToMoveDown[i].maxNodesDepth = nodesInIset[j].depth;
+        var nodesToMoveDown = this.getNodesToMoveDown(node);
+        for (var i = 0; i < nodesToMoveDown.length; i++) {
+            console.log("Moving down " + nodesToMoveDown[i].reachedBy.name);
+            if (nodesToMoveDown[i].parent.depth == -1) {
+                console.log("ERROR THIS SHOULDNT HAPPEN. PARENT SHOULD HAVE DEPTH SET");
+                // nodesInIset[j].depth = nodesInIset[j].level + 1;
+            } else {
+                nodesToMoveDown[i].depth = Math.max(
+                    nodesToMoveDown[i].parent.depth + 1, nodesToMoveDown[i].iset.maxNodesDepth);
+            }
+            console.log("Depth set to " + nodesToMoveDown[i].depth);
+            if (nodesToMoveDown[i].depth > nodesToMoveDown[i].iset.maxNodesDepth) {
+                nodesToMoveDown[i].iset.maxNodesDepth = nodesToMoveDown[i].depth;
+                var nodesInSameISet = nodesToMoveDown[i].iset.getNodes();
+                for (var j = 0; j < nodesInSameISet.length; j++) {
+                    nodesInSameISet[j].depth = nodesToMoveDown[i].iset.maxNodesDepth;
                 }
             }
         }
+        console.log("Stopped moving down");
     };
 
     Tree.prototype.moveDownISetAndEverythingBelow = function (iset) {
@@ -373,11 +371,7 @@ GTE.TREE = (function (parentModule) {
         for (i = 0; i < iSetsToMoveDown.length; i++) {
             nodesInIset = iSetsToMoveDown[i].getNodes();
             for (var j = 0; j < nodesInIset.length; j++) {
-                console.log("Moving down " + nodesInIset[j].reachedBy.name);
-                console.log("nodesInIset[j].parent.depth + 1 " + (nodesInIset[j].parent.depth + 1));
-                console.log("iSetsToMoveDown[i].maxNodesDepth " + iSetsToMoveDown[i].maxNodesDepth);
                 nodesInIset[j].depth++;
-                console.log("Depth set to " + nodesInIset[j].depth);
                 if (nodesInIset[j].depth > iSetsToMoveDown[i].maxNodesDepth) {
                     iSetsToMoveDown[i].maxNodesDepth = nodesInIset[j].depth;
                 }
@@ -390,7 +384,21 @@ GTE.TREE = (function (parentModule) {
         for (var i = 0; i < isets.length; i++) {
             isets[i].getISetsBelow(isets);
         }
+        isets.sort(GTE.TREE.ISet.compareY);
         return isets;
+    };
+
+    Tree.prototype.getNodesToMoveDown = function (node) {
+        var nodes = [];
+        this.recursiveGetNodesToMoveDown(node, nodes);
+        return nodes;
+    };
+
+    Tree.prototype.recursiveGetNodesToMoveDown = function (node, nodes) {
+        for (var i = 0; i < node.children.length; i++) {
+            nodes.push(node.children[i]);
+            this.recursiveGetNodesToMoveDown(node.children[i], nodes);
+        }
     };
 
     /**
@@ -577,10 +585,7 @@ GTE.TREE = (function (parentModule) {
     */
     Tree.prototype.getNodesThatBelongTo = function(iset) {
         var returnArray = [];
-        var depths = [];
-        this.recursiveGetNodesThatBelongTo(this.root, iset, returnArray, depths);
-        depths.sort();
-        iset.maxNodesDepth = depths[depths.length-1];
+        this.recursiveGetNodesThatBelongTo(this.root, iset, returnArray);
         return returnArray;
     };
 
@@ -593,17 +598,14 @@ GTE.TREE = (function (parentModule) {
     * @param {Array} returnArray Array that will be returned by the main function
     */
     Tree.prototype.recursiveGetNodesThatBelongTo = function(
-                                            node, iset, returnArray, depths) {
+                                            node, iset, returnArray) {
         if (node.iset === iset) {
             returnArray.push(node);
-            if (depths.indexOf(Math.max(node.depth, node.level)) === -1) {
-                depths.push(Math.max(node.depth, node.level));
-            }
         }
         if (!node.isLeaf()) {
             for (var i = 0; i < node.children.length; i++) {
                 this.recursiveGetNodesThatBelongTo(
-                                    node.children[i], iset, returnArray, depths);
+                                    node.children[i], iset, returnArray);
             }
         }
     };
@@ -977,12 +979,18 @@ GTE.TREE = (function (parentModule) {
     };
 
     Tree.prototype.align = function () {
-        console.log("aligning tree");
         // Reset all the nodes depths
         var nodes = this.getAllNodes();
         for (var i = 0; i < nodes.length; i++) {
             nodes[i].depth = -1;
         }
+
+        // Calculate max depths for every iset
+        for (i = 0; i < this.isets.length; i++) {
+            this.isets[i].calculateMaxDepth();
+        }
+        // Sort the isets by maxNodesDepth
+        this.isets.sort(GTE.TREE.ISet.compareY);
 
         // align all isets
         for (i = 0; i < this.isets.length; i++) {
