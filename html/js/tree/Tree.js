@@ -373,7 +373,15 @@ GTE.TREE = (function (parentModule) {
             for (var j = 0; j < nodesInIset.length; j++) {
                 nodesInIset[j].depth++;
                 if (nodesInIset[j].depth > iSetsToMoveDown[i].maxNodesDepth) {
+                    // Delete from the depths array at old maxNodesDepth
+                    var index = this.depths[iSetsToMoveDown[i].maxNodesDepth].indexOf(iSetsToMoveDown[i]);
+                    this.depths[iSetsToMoveDown[i].maxNodesDepth].splice(index, 1);
                     iSetsToMoveDown[i].maxNodesDepth = nodesInIset[j].depth;
+                    // Push to depths array at new maxNodesDepth
+                    if (this.depths[iSetsToMoveDown[i].maxNodesDepth] === undefined) {
+                        this.depths[iSetsToMoveDown[i].maxNodesDepth] = [];
+                    }
+                    this.depths[iSetsToMoveDown[i].maxNodesDepth].push(iSetsToMoveDown[i]);
                 }
             }
         }
@@ -1001,21 +1009,20 @@ GTE.TREE = (function (parentModule) {
     Tree.prototype.sortOutCollisions = function () {
         console.log("sorting out collisions");
         for (var i = 0; i < this.depths.length; i++) {
-            var currentDepth = this.depths[i];
-            for (var j = 0; j < currentDepth.length; j++) {
-                var currentISet = currentDepth[j];
+            for (var j = 0; j < this.depths[i].length; j++) {
+                var currentISet = this.depths[i][j];
                 if (currentISet.isSingleton()) {
                     continue;
                 }
                 // Check currentISet against the ones on its right
-                for (var k = j+1; k < currentDepth.length; k++) {
-                    var toCheckAgainst = currentDepth[k];
+                for (var k = j+1; k < this.depths[i].length; k++) {
+                    var toCheckAgainst = this.depths[i][k];
                     if (currentISet.firstNode.x < toCheckAgainst.firstNode.x &&
                         toCheckAgainst.firstNode.x < currentISet.lastNode.x) {
                         console.log("Collision between " + currentISet + " and " + toCheckAgainst);
                         // TODO: IF toCheckAgainst DOES NOt have children, move down
                         // currentISet instead
-                        // Remove the ones moved down from the currentDepthlist, they
+                        // Remove the ones moved down from the this.depths[i] list, they
                         // are not at this level anymore
                         this.moveDownISetAndEverythingBelow(toCheckAgainst);
                     }
