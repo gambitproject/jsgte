@@ -327,12 +327,6 @@ GTE.TREE = (function (parentModule) {
                         // deleteNode() will delete everything below as well
                         GTE.tree.deleteNode(children[i]);
                     }
-                    // This iset's nodes will turn into leaves and...
-                    // leaves cannot have players!!!
-                    var nodesInIset = this.getNodes();
-                    for (i = 0; i < nodesInIset.length; i++) {
-                        nodesInIset[i].deassignPlayer();
-                    }
                     // Dissolve current iset
                     this.dissolve();
                 }
