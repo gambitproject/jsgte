@@ -470,6 +470,11 @@ GTE.TREE = (function (parentModule) {
         }
         // Remove the node from the Tree
         node.delete();
+        // Check if old parent is a leaf
+        if (parent.isLeaf()) {
+            // Deassign the player
+            parent.deassignPlayer();
+        }
     };
 
     /**
