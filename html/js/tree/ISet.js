@@ -60,7 +60,7 @@ GTE.TREE = (function (parentModule) {
             this.numberOfNodes++;
             this.dirty = true;
             this.updateFirstAndLast();
-            // Assign moves to children
+            // Reaches the children through the moves in the iset
             for (var i = 0; i < node.children.length; i++) {
                 node.children[i].reachedBy = this.moves[i];
             }
@@ -74,8 +74,8 @@ GTE.TREE = (function (parentModule) {
     * Function that adds a new node to the tree. It creates it and checks
     * if the node is the first or last in its information set
     * @param {Node} parent Node that will be set as parent to the new one
+    * @param {Player} player Player to which the node will be assigned
     * @param {Move} reachedBy Move that leads to this new node
-    * @param {ISet} iset Information set that will contain it
     * @return {Node} newNode New node that has been created
     */
     ISet.prototype.addNewNode = function (parent, player, reachedBy) {
@@ -89,8 +89,6 @@ GTE.TREE = (function (parentModule) {
     * nodes
     * @param {ISet} childISet New information set that current information set
     *                         will be connected to through moves
-    * @param {Array} nodesInThis Array that contains the nodes that belong to
-    *                            this iset
     */
     ISet.prototype.addChildISet = function (childISet) {
         // Create two new moves
@@ -109,7 +107,7 @@ GTE.TREE = (function (parentModule) {
     ISet.prototype.getChildrenISets = function () {
         // Get children nodes
         var childrenNodes = this.getChildrenNodes();
-        // Check number of different isets in children
+        // Avoid duplicates
         var childrenISets = [];
         for (var i = 0; i < childrenNodes.length; i++) {
             if (childrenISets.indexOf(childrenNodes[i].iset) === -1) {
@@ -124,6 +122,7 @@ GTE.TREE = (function (parentModule) {
     * @return {Array} nodes Nodes that belong to current iset
     */
     ISet.prototype.getNodes = function () {
+        // If it's dirty look for this iset nodes in GTE.tree
         if (this.dirty) {
             this.nodes = GTE.tree.getNodesThatBelongTo(this);
             this.dirty = false;
@@ -173,6 +172,9 @@ GTE.TREE = (function (parentModule) {
         }
     };
 
+    /**
+    * Draws the player
+    */
     ISet.prototype.drawPlayer = function () {
         var thisPlayer = this.getPlayer();
         var x;
@@ -189,68 +191,28 @@ GTE.TREE = (function (parentModule) {
     };
 
     /**
-    * Calculates the y of the iset depending on the level. It needs to check for
-    * the positions of the other nodes in the same iset
+    * Aligns the information set. Sets the nodes in the information set at the same depth.
     */
-    // ISet.prototype.calculateY = function () {
-    //     var nodesInSameISet = this.getNodes();
-    //     this.y = nodesInSameISet[0].level * GTE.CONSTANTS.DIST_BETWEEN_LEVELS;
-    // };
-
-    // ISet.prototype.calculateDepth = function () {
-    //     this.depth = -1;
-    //     var nodesInSameISet = this.getNodes();
-    //     for (var i = 0; i < nodesInSameISet.length; i++) {
-    //         this.depth = Math.max(this.depth, nodesInSameISet[i].level);
-    //     }
-    //     // Get maximum parents depth
-    //     var parents = this.getParentISets();
-    //     var parentsMaxDepth = -1;
-    //     for (i = 0; i < parents.length; i++) {
-    //         parentsMaxDepth = Math.max(parentsMaxDepth, parents[i].depth);
-    //     }
-    //     this.depth = Math.max(this.depth, parentsMaxDepth+1);
-    // };
-
     ISet.prototype.align = function () {
-        console.log("align information set with moves " + this.moves);
         // If it is not singleton
         if (this.isSingleton()) {
+            // And the depth of the node is not yet set
             if (this.firstNode.depth == -1) {
+                // The depth of the node is the same as the level
                 this.firstNode.depth = this.firstNode.level;
             }
         } else {
             var nodesInSameISet = this.getNodes();
             for (var i = 0; i < nodesInSameISet.length; i++) {
-                if (nodesInSameISet[i].reachedBy !== null) {
-                    console.log("Setting depth for " + nodesInSameISet[i].reachedBy.name);
-                }
+                // Set the depth of the node to the depth of the deepest
+                // node in the iset. This maximum depth is calculated when
+                // before in Tree.align().
                 nodesInSameISet[i].depth = this.maxNodesDepth;
-                console.log("Depth set to " + nodesInSameISet[i].depth);
+                // If the node is being pushed down
                 if (nodesInSameISet[i].depth > nodesInSameISet[i].level) {
                     GTE.tree.moveDownEverythingBelowNode(nodesInSameISet[i]);
                 }
             }
-
-            // var y = levels[levels.length-1] * GTE.CONSTANTS.DIST_BETWEEN_LEVELS;
-            // while (nodesInSameISet.length > 0) {
-            //     node = nodesInSameISet.pop();
-            //     if (node.level < levels[levels.length-1]) {
-            //         GTE.tree.moveDownEverythingBelowNode(node,
-            //                 y - node.level * GTE.CONSTANTS.DIST_BETWEEN_LEVELS);
-            //     }
-            // }
-
-
-
-            // if (levels.length > 1 && levels[levels.length-1] !== this.level) {
-            //     GTE.tree.recursiveMoveDownEverythingBelowNode(this,
-            //                 y - this.level * GTE.CONSTANTS.DIST_BETWEEN_LEVELS);
-            // }
-
-            // if (y > this.y) {
-            //     this.y = y;
-            // }
 
             GTE.tree.debugDepths();
         }
@@ -394,6 +356,11 @@ GTE.TREE = (function (parentModule) {
         }
     };
 
+    /**
+    * Get all the isets below a given iset. It adds isets below nodes in iset to a given
+    * isets array
+    * @param {Array} isets ISets array that will be filled up with the isets below current
+    */
     ISet.prototype.getISetsBelow = function (isets) {
         var nodes = this.getNodes();
         for (var i = 0; i < nodes.length; i++) {
@@ -401,36 +368,20 @@ GTE.TREE = (function (parentModule) {
         }
     };
 
-    ISet.prototype.hasChildren = function () {
-        var nodes = this.getNodes();
-        for (var i = 0; i < nodes.length; i++) {
-            if (nodes[i].children.length > 0) {
-                return true;
-            }
-        }
-        return false;
-    };
-
-    ISet.prototype.getParentISets = function () {
-        var nodes = this.getNodes();
-        var parents = [];
-        for (var i = 0; i < nodes.length; i++) {
-            if (nodes[i].parent !== null) {
-                var parentISet = nodes[i].parent.iset;
-                if (parents.indexOf(parentISet) === -1) {
-                    parents.push(parentISet);
-                }
-            }
-        }
-        return parents;
-    };
-
+    /**
+    * Gets first node's player: the iset player
+    * @return {Player} player Player that has this information set nodes assigned
+    */
     ISet.prototype.getPlayer = function () {
         return this.firstNode.player;
     };
 
+    /**
+    * Updates the player text widget
+    */
     ISet.prototype.updatePlayerName = function () {
         this.playerNameText.setText(this.getPlayer().name);
+        // If there is more than one node, draw the name in the middle point of the iset
         if (!this.isSingleton()) {
             var x = (this.lastNode.x + GTE.CONSTANTS.CIRCLE_SIZE - this.firstNode.x)/2 +
                     this.firstNode.x - (this.playerNameText.width/2);
@@ -438,13 +389,18 @@ GTE.TREE = (function (parentModule) {
         }
     };
 
+    /**
+    * Checks if there is more than one node in the information set
+    * @return {Boolean} True if there is only one node
+    */
     ISet.prototype.isSingleton = function () {
         return this.firstNode === this.lastNode;
     };
 
-    /*
+    /**
     * Removes child from the information set, which means that if the information
     * set is a singleton, the move that leads to the node will be removed
+    * @param {Node} node Child node to remove
     */
     ISet.prototype.removeChild = function (node) {
         if (this.isSingleton()) {
@@ -452,6 +408,12 @@ GTE.TREE = (function (parentModule) {
         }
     };
 
+    /**
+    * Compare function used for sort() function. It sorts isets depending on its x position
+    * @param  {ISet}   a ISet a to be compared
+    * @param  {ISet}   b ISet b to be compared
+    * @return {Number} Returns -1 if a <= b, 1 if a > b
+    */
     ISet.compareX = function (a, b) {
         if (parseInt(a.firstNode.x) <= parseInt(b.firstNode.x)) {
             return -1;
@@ -461,6 +423,12 @@ GTE.TREE = (function (parentModule) {
         return 0;
     };
 
+    /**
+    * Compare function used for sort() function. It sorts isets depending on its max depth
+    * @param  {ISet}   a ISet a to be compared
+    * @param  {ISet}   b ISet b to be compared
+    * @return {Number} Returns -1 if a <= b, 1 if a > b
+    */
     ISet.compareY = function (a, b) {
         if (parseInt(a.maxNodesDepth) <= parseInt(b.maxNodesDepth)) {
             return -1;
@@ -470,20 +438,22 @@ GTE.TREE = (function (parentModule) {
         return 0;
     };
 
+    /**
+    * Calculates the max depth for all the nodes in the information set. It sets this maximum
+    * depth as this.maxNodesDepth for further reference
+    * @return {Number} this.maxNodesDepth Max depth for all the nodes in the information set
+    */
     ISet.prototype.calculateMaxDepth = function () {
         var nodes = this.getNodes();
         var depths = [];
         for (var i = 0; i < nodes.length; i++) {
             var max = Math.max(nodes[i].depth, nodes[i].level);
-            console.log("Getting node " + nodes[i] + " with max " + max);
             if (depths.indexOf(max) === -1) {
                 depths.push(max);
             }
         }
         depths.sort();
         this.maxNodesDepth = depths[depths.length-1];
-        console.log("Depths for " + this + " " + depths);
-
         return this.maxNodesDepth;
     };
 
