@@ -214,6 +214,11 @@ GTE.TREE = (function (parentModule) {
             this.children.splice(indexInList, 1);
         }
         if (this.iset !== null) {
+            // Create a new singleton iset containing this node
+            // When a child is deleted, the iset is not consistent anymore, since
+            // different nodes in the same iset cannot have different number of
+            // children
+            GTE.tree.convertToSingleton(this);
             this.iset.removeChild(nodeToDelete);
         }
     };
@@ -270,21 +275,6 @@ GTE.TREE = (function (parentModule) {
     };
 
     /**
-    * Creates a new singleton information set with given node.
-    * It creates a new move for each node's children
-    */
-    Node.prototype.createSingletonISetWithNode = function () {
-        // Remove current node from current iset
-        this.iset.removeNode(this);
-        // Create a new iset and add current node to it
-        GTE.tree.addNewISet().addNode(this);
-        // Add as many moves as node's children
-        for (var i = 0; i < this.children.length; i++) {
-            this.children[i].reachedBy = this.iset.addNewMove();
-        }
-    };
-
-    /**
     * Changes current information set to a given one
     * @param {ISet} newISet New information set for current node
     */
@@ -293,11 +283,6 @@ GTE.TREE = (function (parentModule) {
         this.iset.removeNode(this);
         // Add the node to the new information set
         newISet.addNode(this);
-        // Set the new moves for current children
-        // children[] and moves[] will have the same length
-        for (var i = 0; i < this.children.length; i++) {
-            this.children[i].reachedBy = newISet.moves[i];
-        }
     };
 
     /**

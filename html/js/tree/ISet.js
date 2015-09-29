@@ -1,3 +1,4 @@
+/*jshint multistr: true */
 GTE.TREE = (function (parentModule) {
     "use strict";
 
@@ -54,10 +55,19 @@ GTE.TREE = (function (parentModule) {
     * @param {Node} node Node that will be added to current information set
     */
     ISet.prototype.addNode = function (node) {
-        node.iset = this;
-        this.numberOfNodes++;
-        this.dirty = true;
-        this.updateFirstAndLast();
+        if (node.children.length === this.moves.length) {
+            node.iset = this;
+            this.numberOfNodes++;
+            this.dirty = true;
+            this.updateFirstAndLast();
+            // Assign moves to children
+            for (var i = 0; i < node.children.length; i++) {
+                node.children[i].reachedBy = this.moves[i];
+            }
+        } else {
+            console.log("ERROR: Could not add node to information set. Number of \
+            moves and number of children differ.");
+        }
     };
 
     /**
