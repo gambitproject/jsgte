@@ -445,14 +445,25 @@ GTE.TREE = (function (parentModule) {
         return newISet;
     };
 
+
+    Tree.prototype.createSingletonISet = function (node) {
+        var newISet = this.addNewISet();
+        // Add as many moves as node's children
+        for (var i = 0; i < node.children.length; i++) {
+            newISet.addNewMove();
+        }
+        if (node.iset !== null) {
+            node.changeISet(newISet);
+        } else {
+            newISet.addNode(node);
+        }
+        return newISet;
+    };
+
+
     Tree.prototype.createSingletonISets = function (nodes) {
         for (var i = 0; i < nodes.length; i++) {
-            var newISet = this.addNewISet();
-            newISet.addNode(nodes[i]);
-            // Add as many moves as node's children
-            for (var j = 0; j < nodes[i].children.length; j++) {
-                nodes[i].children[j].reachedBy = newISet.addNewMove();
-            }
+            this.createSingletonISet(nodes[i]);
         }
     };
 
@@ -502,11 +513,7 @@ GTE.TREE = (function (parentModule) {
             if (iset.moves.length !== nodesInIset[i].children.length) {
                 // This node is not consistent
                 // Create a new iset for this node
-                nodesInIset[i].createSingletonISetWithNode();
-                // Create a new move that reaches each children of the node
-                for (var j = 0; j < nodesInIset[i].children.length; j++) {
-                    nodesInIset[i].children[j].reachedBy = nodesInIset[i].iset.addNewMove();
-                }
+                this.createSingletonISet(nodesInIset[i]);
             }
         }
     };
@@ -1042,6 +1049,14 @@ GTE.TREE = (function (parentModule) {
             if (nodes[i].reachedBy !== null) {
                 console.log(nodes[i].reachedBy.name + " " + nodes[i].depth);
             }
+        }
+    };
+
+    Tree.prototype.convertToSingleton = function (node) {
+        if (!node.iset.isSingleton()) {
+            var oldISet = node.iset;
+            // Create a new information set containing given node
+            this.createSingletonISet(node);
         }
     };
 
