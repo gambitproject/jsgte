@@ -190,10 +190,19 @@ GTE.UI = (function (parentModule) {
         return this.activePlayer;
     };
 
+    /**
+    * Checks if it is possible to switch to information sets modes. This function is basically
+    * a wrapper that checks that all nodes have a player assigned.
+    * @return {Boolean} True if it is possible to switch to information set mode
+    */
     Tools.prototype.ableToSwitchToISetMode = function () {
         return GTE.tree.recursiveCheckAllNodesHavePlayer();
     };
 
+    /**
+    * Removes the player button from the toolbar
+    * @param {Button} button Button HTML object to remove
+    */
     Tools.prototype.removePlayerButton = function (button) {
         var playerId = parseInt(button.getAttribute("player"));
         // get the <li>
