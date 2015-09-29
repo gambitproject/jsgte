@@ -80,9 +80,7 @@ GTE.TREE = (function (parentModule) {
     */
     ISet.prototype.addNewNode = function (parent, player, reachedBy) {
         var newNode = new GTE.TREE.Node(parent, player, reachedBy, this);
-        this.numberOfNodes++;
-        this.dirty = true;
-        this.updateFirstAndLast();
+        this.addNode(newNode);
         return newNode;
     };
 
