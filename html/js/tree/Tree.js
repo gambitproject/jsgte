@@ -542,15 +542,12 @@ GTE.TREE = (function (parentModule) {
     };
 
     /**
-    * Creates a new move for a given parent information set and adds as many
-    * nodes needed in a given child information set. It connects the nodes in
-    * parent information set with this new nodes in child information set by
-    * through a new move
+    * Creates a new move for a given parent information set and adds a node as
+    * child for each member of the information set. It creates a new move and
+    * reaches the new children through it
     * @param  {ISet} parentISet ISet that will get the new move
-    * @param  {ISet} [childISet] ISet that will get the new nodes. If null, a
-    *                            new information set will be created
     */
-    Tree.prototype.addNodesToChildISet = function (parentISet, childISet) {
+    Tree.prototype.addChildNodeToISet = function (parentISet) {
         // Create a new move
         var newMove = parentISet.addNewMove();
         // Get the nodes in parent information set
@@ -558,7 +555,7 @@ GTE.TREE = (function (parentModule) {
         // Iterate over the nodes in the parent and create a child node
         // for each of them. This new node will be connected by the new move
         for (var i = 0; i < nodesInParentISet.length; i++) {
-            (childISet || this.addNewISet()).addNewNode(nodesInParentISet[i], null, newMove);
+            this.addNewISet().addNewNode(nodesInParentISet[i], null, newMove);
         }
         this.positionsUpdated = false;
     };

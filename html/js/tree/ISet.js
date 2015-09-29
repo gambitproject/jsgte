@@ -311,18 +311,7 @@ GTE.TREE = (function (parentModule) {
                     GTE.tree.addChildISetTo(this);
                     GTE.tree.addChildISetTo(this);
                 } else {
-                    var childrenIsets = this.getChildrenISets();
-                    // // If there is more than one children iset or there is only one,
-                    // // but it already has moves, add children nodes as single node
-                    // // isets
-                    // if (childrenIsets.length > 1 || childrenIsets[0].moves.length > 0) {
-                    // Add new isets as singletons by not specifying an iset
-                    GTE.tree.addNodesToChildISet(this);
-                    // } else {
-                        // // If there is a single child iset and it has no moves
-                        // // Add new nodes to child iset
-                        // GTE.tree.addNodesToChildISet(this, childrenIsets[0]);
-                    // }
+                    GTE.tree.addChildNodeToISet(this);
                 }// Tell the tree to redraw itself
                 GTE.tree.draw();
                 break;
