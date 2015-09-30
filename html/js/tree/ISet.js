@@ -213,8 +213,6 @@ GTE.TREE = (function (parentModule) {
                     GTE.tree.moveDownEverythingBelowNode(nodesInSameISet[i]);
                 }
             }
-
-            GTE.tree.debugDepths();
         }
     };
 
@@ -359,13 +357,14 @@ GTE.TREE = (function (parentModule) {
     /**
     * Get all the isets below a given iset. It adds isets below nodes in iset to a given
     * isets array
-    * @param {Array} isets ISets array that will be filled up with the isets below current
     */
-    ISet.prototype.getISetsBelow = function (isets) {
+    ISet.prototype.getISetsBelow = function () {
         var nodes = this.getNodes();
+        var isets = [];
         for (var i = 0; i < nodes.length; i++) {
-            nodes[i].getISetsBelow(isets);
+            isets.concat(nodes[i].getISetsBelow());
         }
+        return isets;
     };
 
     /**

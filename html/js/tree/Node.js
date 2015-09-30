@@ -243,12 +243,13 @@ GTE.TREE = (function (parentModule) {
 
     /**
     * Gets all the information sets below this node
-    * @param {Array} isets Return array that contains all the isets
     */
-    Node.prototype.getISetsBelow = function (isets) {
+    Node.prototype.getISetsBelow = function () {
+        var isets = []
         for (var i = 0; i < this.children.length; i++) {
             this.recursiveGetISetsBelow(this.children[i], isets);
         }
+        return isets;
     };
 
     /**
