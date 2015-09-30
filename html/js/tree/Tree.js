@@ -271,6 +271,7 @@ GTE.TREE = (function (parentModule) {
                         this.depths[iSetsToMoveDown[i].maxNodesDepth] = [];
                     }
                     this.depths[iSetsToMoveDown[i].maxNodesDepth].push(iSetsToMoveDown[i]);
+                    this.depths[iSetsToMoveDown[i].maxNodesDepth].sort(GTE.TREE.ISet.compareX);
                 }
             }
         }
