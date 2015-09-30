@@ -84,6 +84,9 @@ GTE.TREE = (function (parentModule) {
         }
     };
 
+    /**
+    * Draws move that reaches this node
+    */
     Node.prototype.drawReachedBy = function () {
         var ret = this.reachedBy.draw(this.parent, this);
         this.line = ret.line;
@@ -223,6 +226,11 @@ GTE.TREE = (function (parentModule) {
         }
     };
 
+    /**
+    * Gets information sets that are connected to this node
+    * @return {Array} isets Array that contains all the information sets connected to This
+    *                       node.
+    */
     Node.prototype.getChildrenISets = function () {
         var isets = [];
         for (var i = 0; i < this.children.length; i++) {
@@ -233,12 +241,23 @@ GTE.TREE = (function (parentModule) {
         return isets;
     };
 
+    /**
+    * Gets all the information sets below this node
+    * @param {Array} isets Return array that contains all the isets
+    */
     Node.prototype.getISetsBelow = function (isets) {
         for (var i = 0; i < this.children.length; i++) {
             this.recursiveGetISetsBelow(this.children[i], isets);
         }
     };
 
+    /**
+    * Recursive function that gets all the information sets below this node
+    * Stopping criteria: that the current node is a leaf
+    * Recursive expansion: to all of the node's children
+    * @param {Node}  node Node to get isets below from
+    * @param {Array} isets Return array that contains all the isets
+    */
     Node.prototype.recursiveGetISetsBelow = function (node, isets) {
         var iset = node.iset;
         if (isets.indexOf(iset) === -1) {
@@ -319,14 +338,24 @@ GTE.TREE = (function (parentModule) {
         this.shape.show();
     };
 
+    /**
+    * Updates Move name widget text
+    */
     Node.prototype.updateMoveName = function () {
         this.reachedByText.setText(this.reachedBy.name);
     };
 
+    /**
+    * Deassigns player
+    */
     Node.prototype.deassignPlayer = function () {
         this.player = null;
     };
 
+    /**
+    * Get node's children
+    * @return {Array} Node's children
+    */
     Node.prototype.getChildren = function () {
         return this.children;
     };
