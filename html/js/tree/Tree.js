@@ -281,9 +281,16 @@ GTE.TREE = (function (parentModule) {
     * @param {Node} node Parent on top of everything that has to be moved down
     */
     Tree.prototype.getISetsToMoveDown = function (node) {
-        var isets = node.getChildrenISets();
-        for (var i = 0; i < isets.length; i++) {
-            isets[i].getISetsBelow(isets);
+        var dirtyISetsToMoveDown = node.getChildrenISets();
+        for (var i = 0; i < dirtyISetsToMoveDown.length; i++) {
+            dirtyISetsToMoveDown.concat(dirtyISetsToMoveDown[i].getISetsBelow());
+        }
+        // Look for duplicates
+        var isets = [];
+        for (i = 0; i < dirtyISetsToMoveDown.length; i++) {
+            if (isets.indexOf(dirtyISetsToMoveDown[i]) === -1){
+                isets.push(dirtyISetsToMoveDown[i]);
+            }
         }
         isets.sort(GTE.TREE.ISet.compareY);
         return isets;
