@@ -12,6 +12,7 @@ var GTE = (function () {
       DIST_BETWEEN_LEVELS: 150,
       LINE_THICKNESS: 3,
       MAX_HORIZONTAL_DISTANCE_BW_NODES: 250,
+      VERTICAL_SHIFTING_ON_COLLISIONS: 50,
       CONTENT_EDITABLE_OFFSET_LEFT: 31,
       CONTENT_EDITABLE_OFFSET_RIGHT: 10,
       CONTENT_EDITABLE_MARGIN_TO_LINE: 22,
@@ -19,6 +20,7 @@ var GTE = (function () {
       CONTENT_EDITABLE_GROW_TO_RIGHT: 1,
       CONTENT_EDITABLE_GROW_TO_LEFT: -1,
       CONTENT_EDITABLE_INSIDE_FOREIGN_MIN_WIDTH: 30,
+      ISET_HEIGHT: 50,
       TEXT_NODE_MARGIN: 30,
       MAX_PLAYERS: 10,
       MIN_PLAYERS: 1
@@ -28,7 +30,9 @@ var GTE = (function () {
     GTE.MODES = {
       ADD: 0,
       DELETE: 1,
-      PLAYER_ASSIGNMENT: 2
+      PLAYER_ASSIGNMENT: 2,
+      MERGE: 3,
+      DISSOLVE: 4
     };
     if (Object.freeze) {
       Object.freeze(GTE.MODES);
