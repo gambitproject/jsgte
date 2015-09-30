@@ -61,6 +61,10 @@ GTE.TREE = (function (parentModule) {
         return str;
     };
 
+    /**
+    * Changes the name of the move
+    * @param {String} text New move's name
+    */
     Move.prototype.changeName = function (text) {
         if (GTE.tree.checkMoveNameIsUnique(text)) {
             this.name = text;
