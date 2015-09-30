@@ -13,10 +13,6 @@ GTE.TREE = (function (parentModule) {
         this.selected = [];
         this.depths = [];
         this.leaves = [];
-        // this.isetsByLevel = [];
-        // this.nodesByLevel = [];
-        // this.nodesByDepth = [];
-
         this.players = [];
         this.newPlayer(GTE.COLOURS.BLACK);
         this.newPlayer(GTE.COLOURS.RED);
@@ -35,14 +31,11 @@ GTE.TREE = (function (parentModule) {
         if (!this.positionsUpdated) {
             this.updatePositions();
         }
-        console.log(this.depths);
 
         if (this.isets.length > 0) {
             this.sortOutCollisions();
         }
         this.updateDepths();
-        console.log(this.depths);
-        console.log("-----------");
 
         if (!this.positionsUpdated) {
             this.recursiveCalculateYs(this.root);
@@ -134,10 +127,6 @@ GTE.TREE = (function (parentModule) {
     * Function that updates the different structures used while drawing
     */
     Tree.prototype.updateLeaves = function () {
-        // this.isetsByLevel = [];
-        // this.nodesByLevel = [];
-        // this.nodesByDepth = [];
-
         // Create a estructure that holds isets depending on the depth
         // of its nodes and sort it
         this.leaves = [];
@@ -152,18 +141,6 @@ GTE.TREE = (function (parentModule) {
     * @param {Node} node Node to start from
     */
     Tree.prototype.recursiveupdateLeaves = function (node) {
-        // if (node.iset !== null) {
-        //     if (this.isetsByLevel[node.level] === undefined) {
-        //         this.isetsByLevel[node.level] = [];
-        //     }
-        //     if (this.isetsByLevel[node.level].indexOf(node.iset) === -1){
-        //         this.isetsByLevel[node.level].push(node.iset);
-        //     }
-        // }
-        // if (this.nodesByLevel[node.level] === undefined) {
-        //     this.nodesByLevel[node.level] = [];
-        // }
-        // this.nodesByLevel[node.level].push(node);
         if (node.isLeaf()) {
             this.leaves.push(node);
         } else {
@@ -173,6 +150,9 @@ GTE.TREE = (function (parentModule) {
         }
     };
 
+    /**
+    * Recursive function that updated the depths array in the tree
+    */
     Tree.prototype.updateDepths = function () {
         this.depths = [];
         for (var i = 0; i < this.isets.length; i++) {
@@ -195,7 +175,6 @@ GTE.TREE = (function (parentModule) {
         this.updateLeaves();
         this.recursiveUpdatePositions(this.root);
         this.updateDepths();
-        // this.recursiveCheckForCollisions(this.root);
     };
 
     /**
@@ -217,21 +196,12 @@ GTE.TREE = (function (parentModule) {
         }
     };
 
-    // Tree.prototype.updateDepths = function () {
-    //     this.depths = [];
-    //     for (var i = 0; i < this.nodesByDepth.length; i++) {
-    //         for (var j = 0; j < this.nodesByDepth[i].length; j++) {
-    //             this.nodesByDepth[i][j].calculateDepth();
-    //             if (this.depths[this.nodesByDepth[i][j].depth] === undefined){
-    //                 this.depths[this.nodesByDepth[i][j].depth] = [];
-    //             }
-    //             if (this.depths[this.nodesByDepth[i][j].depth].indexOf(this.nodesByDepth[i][j]) === -1) {
-    //                 this.depths[this.nodesByDepth[i][j].depth].push(this.nodesByDepth[i][j]);
-    //             }
-    //         }
-    //     }
-    // };
-
+    /**
+    * Recursive function that updates the y positions of the nodes
+    * Stopping criteria: that the current node is a leaf
+    * Recursive expansion: to all of the node's children
+    * @param {Node} node Node to expand through
+    */
     Tree.prototype.recursiveCalculateYs = function (node) {
         for (var i = 0; i < node.children.length; i++) {
             this.recursiveCalculateYs(node.children[i]);
@@ -243,103 +213,19 @@ GTE.TREE = (function (parentModule) {
         }
     };
 
-    Tree.prototype.recursiveCheckForCollisions = function () {
-        // Iterate over the depths array
-        // for (var i = 0; i < this.depths.length; i++) {
-        //     this.depths[i].sort(function (a, b) {
-        //         if (parseInt(a.firstNode.x) <= parseInt(b.firstNode.x)) {
-        //             return -1;
-        //         } else {
-        //             return 1;
-        //         }
-        //         return 0;
-        //     });
-        //     for (var j = 0; j < this.depths[i].length; j++) {
-        //         // For every iset check if there are nodes in the same depth but
-        //         // different iset that collide with that iset
-        //         var currentIset = this.depths[i][j];
-        //         for (var k = j+1; k < this.depths[i].length; k++) {
-        //             if ((currentIset.firstNode.x <= this.depths[i][k].firstNode.x) &&
-        //                 (this.depths[i][k].lastNode.x <= currentIset.lastNode.x)) {
-        //                     this.moveDownEverythingBelow(this.depths[i][k]);
-        //             }
-        //         }
-        //     }
-        // }
-    };
-
     /**
-    * Recursive function that checks for collisions between leaves and isets.
-    * It checks if any leaf is positioned between first and last node of the iset
-    * In that case, it will move everything down so that the leaves don't collide
-    * Stopping criteria: that the current node is a leaf
-    * Recursive expansion: to all of the node's children
-    * @param {Node} node Node that will be checked
+    * Function that moves everything below a node down
+    * @param {Node} node Everything below this node will be moved down
     */
-    Tree.prototype.recursiveCheckForCollisionsOld = function (node) {
-        if (!node.isLeaf()) {
-            for (var i = 0; i < node.children.length; i++) {
-                this.recursiveCheckForCollisions(node.children[i]);
-            }
-        }
-        // It is only needed to check if current node is the last one
-        // in its iset
-        if (node.iset.lastNode === node) {
-            // Check if iset collides with any other node at different iset
-            for (var j = 0; j < this.isets.length; j++) {
-                if (this.isets[j] !== node.iset) {
-                    var nodesInISet = this.isets[j].getNodes();
-                    // Iterate over the nodes in the iset
-                    for (var k = 0; k < nodesInISet.length; k++) {
-                        if (node.iset.firstNode.x < nodesInISet[k].x &&
-                        nodesInISet[k].x < node.iset.lastNode.x) {
-                            if (nodesInISet[k].iset.y === node.iset.y) {
-                                // They collide
-                                // If it collides move everything below a little bit down
-                                this.moveDownEverythingBelowNode(node,
-                                        GTE.CONSTANTS.VERTICAL_SHIFTING_ON_COLLISIONS);
-                                // Only one collision is sufficient to move everything
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    };
-
-    /**
-    * Function that will shift everything below a given level down
-    * @param {ISet} iset ISet that collides
-    * @param {Number} level Level to start moving down from
-    */
-    Tree.prototype.moveDownEverythingBelowISet = function (iset, level, howMuch) {
-        iset.y += howMuch;
-        var iSetsBelow = iset.getISetsBelow();
-        for (var i = 0; i < iSetsBelow.length; i++) {
-            this.moveDownEverythingBelowISet(iSetsBelow[i], level, howMuch);
-        }
-    };
-
-    /**
-    * Recursive function that moves everything below down
-    * Stopping criteria: that the current node is a leaf
-    * Recursive expansion: to all of the node's children
-    * @param {Node} node Node that will be moved
-    */
-    Tree.prototype.moveDownEverythingBelowNode = function (node, howMuch) {
-        console.log("Moving down everything below " + node.reachedBy.name);
+    Tree.prototype.moveDownEverythingBelowNode = function (node) {
         var nodesToMoveDown = this.getNodesToMoveDown(node);
         for (var i = 0; i < nodesToMoveDown.length; i++) {
-            console.log("Moving down " + nodesToMoveDown[i].reachedBy.name);
             if (nodesToMoveDown[i].parent.depth == -1) {
                 console.log("ERROR THIS SHOULDNT HAPPEN. PARENT SHOULD HAVE DEPTH SET");
-                // nodesInIset[j].depth = nodesInIset[j].level + 1;
             } else {
                 nodesToMoveDown[i].depth = Math.max(
                     nodesToMoveDown[i].parent.depth + 1, nodesToMoveDown[i].iset.maxNodesDepth);
             }
-            console.log("Depth set to " + nodesToMoveDown[i].depth);
             if (nodesToMoveDown[i].depth > nodesToMoveDown[i].iset.maxNodesDepth) {
                 nodesToMoveDown[i].iset.maxNodesDepth = nodesToMoveDown[i].depth;
                 var nodesInSameISet = nodesToMoveDown[i].iset.getNodes();
@@ -348,11 +234,14 @@ GTE.TREE = (function (parentModule) {
                 }
             }
         }
-        console.log("Stopped moving down");
     };
 
+    /**
+    * Function that moves an iset and everything below down
+    * @param {ISet} iset ISet that will be moved down. Everything below this ISet
+    *                    will also be moved down
+    */
     Tree.prototype.moveDownISetAndEverythingBelow = function (iset) {
-        console.log("Moving down " + iset + " and everything below.");
         var dirtyISetsToMoveDown = [];
         var nodesInIset = iset.getNodes();
         for (var i = 0; i < nodesInIset.length; i++) {
@@ -387,6 +276,10 @@ GTE.TREE = (function (parentModule) {
         }
     };
 
+    /**
+    * Function that gets the information sets that have to be moved down
+    * @param {Node} node Parent on top of everything that has to be moved down
+    */
     Tree.prototype.getISetsToMoveDown = function (node) {
         var isets = node.getChildrenISets();
         for (var i = 0; i < isets.length; i++) {
@@ -396,12 +289,23 @@ GTE.TREE = (function (parentModule) {
         return isets;
     };
 
+    /**
+    * Function that gets the nodes that have to be moved down
+    * @param {Node} node Parent on top of everything that has to be moved down
+    */
     Tree.prototype.getNodesToMoveDown = function (node) {
         var nodes = [];
         this.recursiveGetNodesToMoveDown(node, nodes);
         return nodes;
     };
 
+    /**
+    * Recursive function that gets all the nodes that have to be moved down
+    * Stopping criteria: that the current node is a leaf
+    * Recursive expansion: to all of the node's children
+    * @param {Node}  node  Node expand through
+    * @param {Array} nodes Array of nodes that contains the nodes will be moved down
+    */
     Tree.prototype.recursiveGetNodesToMoveDown = function (node, nodes) {
         for (var i = 0; i < node.children.length; i++) {
             nodes.push(node.children[i]);
@@ -429,7 +333,6 @@ GTE.TREE = (function (parentModule) {
             for (var i = 0; i < numberLeaves; i++) {
                 this.leaves[i].x = (widthPerNode*i)+(widthPerNode/2) -
                                         GTE.CONSTANTS.CIRCLE_SIZE/2 + offset;
-                // this.leaves[i].y = this.leaves[i].depth * GTE.CONSTANTS.DIST_BETWEEN_LEVELS;
             }
         }
     };
@@ -445,7 +348,13 @@ GTE.TREE = (function (parentModule) {
         return newISet;
     };
 
-
+    /**
+    * Function that creates a new singleton information set that will contain
+    * the node. It creates as many moves as children has the node. The node is
+    * added to the new information set.
+    * @param  {Node} node    Node that will be contained in the singleton iset
+    * @return {ISet} newISet New information set that has been created
+    */
     Tree.prototype.createSingletonISet = function (node) {
         var newISet = this.addNewISet();
         // Add as many moves as node's children
@@ -460,7 +369,13 @@ GTE.TREE = (function (parentModule) {
         return newISet;
     };
 
-
+    /**
+    * Function that creates a new singleton information set that will contain
+    * the node. It creates as many moves as children has the node. The node is
+    * added to the new information set.
+    * @param  {Node} node    Node that will be contained in the singleton iset
+    * @return {ISet} newISet New information set that has been created
+    */
     Tree.prototype.createSingletonISets = function (nodes) {
         for (var i = 0; i < nodes.length; i++) {
             this.createSingletonISet(nodes[i]);
@@ -532,7 +447,7 @@ GTE.TREE = (function (parentModule) {
     /**
     * Creates two new moves for a given ISet and the new ISet that
     * the moves will lead to
-    * @param  {ISet} parentISet ISet that will get two new moves
+    * @param {ISet} parentISet ISet that will get two new moves
     */
     Tree.prototype.addChildISetTo = function (parentISet) {
         // Create new information set
@@ -545,7 +460,7 @@ GTE.TREE = (function (parentModule) {
     * Creates a new move for a given parent information set and adds a node as
     * child for each member of the information set. It creates a new move and
     * reaches the new children through it
-    * @param  {ISet} parentISet ISet that will get the new move
+    * @param {ISet} parentISet ISet that will get the new move
     */
     Tree.prototype.addChildNodeToISet = function (parentISet) {
         // Create a new move
@@ -679,6 +594,10 @@ GTE.TREE = (function (parentModule) {
         this.positionsUpdated = false;
     };
 
+    /**
+    * Centers a node's parents
+    * @param {Node} node Node whose parents will be centered
+    */
     Tree.prototype.centerParents = function (node) {
         if (!node.isLeaf()) {
             for (var i = 0; i < node.children.length; i++) {
@@ -819,7 +738,15 @@ GTE.TREE = (function (parentModule) {
         return this.players[GTE.tools.getActivePlayer()];
     };
 
+    /**
+    * Recursive function that checks taht all nodes in the tree have a player
+    * assigned.
+    * Stopping criteria: that the current node is a leaf
+    * Recursive expansion: to all of the node's children
+    * @param {Node} [node] Node to start drawing from
+    */
     Tree.prototype.recursiveCheckAllNodesHavePlayer = function (node) {
+        // In case there is no arguments start from root
         if (node === undefined) {
             node = this.root;
         }
@@ -834,6 +761,9 @@ GTE.TREE = (function (parentModule) {
         return true;
     };
 
+    /**
+    * Creates a new singleton information set for each node
+    */
     Tree.prototype.initializeISets = function () {
         var nodes = this.getAllNodes();
         this.createSingletonISets(nodes);
@@ -846,16 +776,7 @@ GTE.TREE = (function (parentModule) {
     */
     Tree.prototype.getAllNodes = function () {
         var listOfNodes = [];
-        // if (this.depths !== null && this.depths !== undefined) {
-        //     // Iterate over the list of depths
-        //     for (var i = 0; i < this.depths.length; i++) {
-        //         for (var j = 0; j < this.depths[i].length; j++) {
-        //             listOfNodes.push(this.depths[i][j]);
-        //         }
-        //     }
-        // } else {
-            this.recursiveGetAllNodes(this.root, listOfNodes);
-        // }
+        this.recursiveGetAllNodes(this.root, listOfNodes);
         return listOfNodes;
     };
 
@@ -934,6 +855,11 @@ GTE.TREE = (function (parentModule) {
         }
     };
 
+    /**
+    * Gets all the nodes that are reached by a certain move
+    * @param  {Move}  move Certain move that nodes should reached by
+    * @return {Array} ret  Array of nodes that are reached by that move
+    */
     Tree.prototype.getNodesReachedByMove = function (move) {
         var nodes = move.atISet.getChildrenNodes();
         var ret = [];
@@ -947,12 +873,17 @@ GTE.TREE = (function (parentModule) {
 
     /**
     * Returns number of players. Does not include the chance player
-    * @param {Numbers} numberOfPlayers Number of players
+    * @return {Number} Number of players
     */
     Tree.prototype.numberOfPlayers = function () {
         return this.players.length - 1;
     };
 
+    /**
+    * Checks that a move name is unique throughout the Tree
+    * @param  {String}  text Move name to check is unique
+    * @return {Boolean}      True if the name is unique
+    */
     Tree.prototype.checkMoveNameIsUnique = function (text) {
         var moves = this.getAllMoves();
         for (var i = 0; i < moves.length; i++) {
@@ -983,7 +914,7 @@ GTE.TREE = (function (parentModule) {
     * Recursive function that fills an array with all the nodes below a given ISet
     * Stopping criteria: that the current node is a leaf
     * Recursive expansion: to all of the node's children
-    * @param  {ISet} iset             Information set to get everything below from
+    * @param  {Node} node             Node to expand through
     * @param  {List} everythingBelow  List that will be filled
     */
     Tree.prototype.recursiveGetEverythingBelowISet = function (node, everythingBelow) {
@@ -995,6 +926,9 @@ GTE.TREE = (function (parentModule) {
         }
     };
 
+    /**
+    * Function that aligns the nodes in every information set across the tree
+    */
     Tree.prototype.align = function () {
         // Reset all the nodes depths
         var nodes = this.getAllNodes();
@@ -1015,8 +949,10 @@ GTE.TREE = (function (parentModule) {
         }
     };
 
+    /**
+    * Function that sort outs the collisions across the tree
+    */
     Tree.prototype.sortOutCollisions = function () {
-        console.log("sorting out collisions");
         for (var i = 0; i < this.depths.length; i++) {
             for (var j = 0; j < this.depths[i].length; j++) {
                 var currentISet = this.depths[i][j];
@@ -1028,7 +964,6 @@ GTE.TREE = (function (parentModule) {
                     var toCheckAgainst = this.depths[i][k];
                     if (currentISet.firstNode.x < toCheckAgainst.firstNode.x &&
                         toCheckAgainst.firstNode.x < currentISet.lastNode.x) {
-                        console.log("Collision between " + currentISet + " and " + toCheckAgainst);
                         // TODO: IF toCheckAgainst DOES NOt have children, move down
                         // currentISet instead
                         // Remove the ones moved down from the this.depths[i] list, they
@@ -1040,15 +975,10 @@ GTE.TREE = (function (parentModule) {
         }
     };
 
-    Tree.prototype.debugDepths = function () {
-        var nodes = this.getAllNodes();
-        for (var i = 0; i < nodes.length; i++) {
-            if (nodes[i].reachedBy !== null) {
-                console.log(nodes[i].reachedBy.name + " " + nodes[i].depth);
-            }
-        }
-    };
-
+    /**
+    * Function that converts a node to a singleton information set
+    * @param {Node} node Node to be converted
+    */
     Tree.prototype.convertToSingleton = function (node) {
         if (!node.iset.isSingleton()) {
             var oldISet = node.iset;
