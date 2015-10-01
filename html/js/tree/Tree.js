@@ -962,14 +962,18 @@ GTE.TREE = (function (parentModule) {
     */
     Tree.prototype.sortOutCollisions = function () {
         for (var i = 0; i < this.depths.length; i++) {
-            for (var j = 0; j < this.depths[i].length; j++) {
-                var currentISet = this.depths[i][j];
+            // Save current depth. this.depths will be updated during the moving
+            // so iterating over the array that is being modified would throw errors
+            // like some isets being skipped
+            var currentDepth = this.depths[i].slice(0);
+            for (var j = 0; j < currentDepth.length; j++) {
+                var currentISet = currentDepth[j];
                 if (currentISet.isSingleton()) {
                     continue;
                 }
                 // Check currentISet against the ones on its right
-                for (var k = j+1; k < this.depths[i].length; k++) {
-                    var toCheckAgainst = this.depths[i][k];
+                for (var k = j+1; k < currentDepth.length; k++) {
+                    var toCheckAgainst = currentDepth[k];
                     if (currentISet.firstNode.x < toCheckAgainst.firstNode.x &&
                         toCheckAgainst.firstNode.x < currentISet.lastNode.x) {
                         // TODO: IF toCheckAgainst DOES NOt have children, move down
