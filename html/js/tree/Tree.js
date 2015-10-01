@@ -367,7 +367,11 @@ GTE.TREE = (function (parentModule) {
         var newISet = this.addNewISet();
         // Add as many moves as node's children
         for (var i = 0; i < node.children.length; i++) {
-            newISet.addNewMove();
+            // We cannot do this.getPlayer().id because, the neither the iset does
+            // not have a firstNode assigned. We could move this piece of code
+            // after node.changeISet(newISet) or newISet.addNode(node) but moves
+            // have to be created before the addNode() function is called
+            newISet.addNewMove(node.player.id);
         }
         if (node.iset !== null) {
             node.changeISet(newISet);
@@ -460,6 +464,21 @@ GTE.TREE = (function (parentModule) {
     Tree.prototype.addChildISetTo = function (parentISet) {
         // Create new information set
         var newISet = this.addNewISet();
+        if (parentISet.getPlayer() === null) {
+            // Assign parentISet player. Player will be parentISet grandparent player
+            var playerToAssign;
+            if (parentISet.firstNode.parent.parent !== null) {
+                playerToAssign = parentISet.firstNode.parent.parent.player;
+            } else {
+                // When adding a child to a root's child
+                if (this.players[2] !== null) {
+                    playerToAssign = this.players[2];
+                } else {
+                    playerToAssign = this.players[1];
+                }
+            }
+            parentISet.firstNode.assignPlayer(playerToAssign);
+        }
         parentISet.addChildISet(newISet);
         this.positionsUpdated = false;
     };
@@ -554,12 +573,23 @@ GTE.TREE = (function (parentModule) {
     * Finds out the next move name
     * @return {String} name Next move name
     */
-    Tree.prototype.getNextMoveName = function () {
+    Tree.prototype.getNextMoveName = function (oddOrEven) {
         // Get all moves
-        var listOfMoves = this.getAllMoves();
-        if (listOfMoves.length === 0) return "A";
-        var lastMoveName = listOfMoves[listOfMoves.length-1].name;
-        var name =  GTE.TREE.Move.generateName(lastMoveName);
+        var listOfMoves = this.getAllMoves(oddOrEven);
+        if (listOfMoves.length === 0) {
+            if (oddOrEven === 1) {
+                return "A";
+            } else {
+                return "a";
+            }
+        }
+        var lastMoveName = listOfMoves[listOfMoves.length-1].originalName;
+        var capitalized = false;
+        // If the player number is odd, capitalize the move name
+        if (oddOrEven === 1) {
+            capitalized = true;
+        }
+        var name =  GTE.TREE.Move.generateName(lastMoveName, capitalized);
         return name;
     };
 
@@ -567,12 +597,17 @@ GTE.TREE = (function (parentModule) {
     * Gets all the moves used in the tree
     * @return {Array} listOfMoves Array that contains all the moves in the tree
     */
-    Tree.prototype.getAllMoves = function () {
+    Tree.prototype.getAllMoves = function (oddOrEven) {
         var listOfMoves = [];
         // Iterate over the list of isets and get its moves
         for (var i = 0; i < this.isets.length; i++) {
-            for (var j = 0; j < this.isets[i].moves.length; j++) {
-                listOfMoves.push(this.isets[i].moves[j]);
+            if (this.isets[i].moves.length > 0) {
+                var comparison = this.isets[i].moves[0].name.toUpperCase() === this.isets[i].moves[0].name;
+                if (comparison == oddOrEven) {
+                    for (var j = 0; j < this.isets[i].moves.length; j++) {
+                        listOfMoves.push(this.isets[i].moves[j]);
+                    }
+                }
             }
         }
         // Sort the list alphabetically
@@ -773,18 +808,24 @@ GTE.TREE = (function (parentModule) {
     * Creates a new singleton information set for each node
     */
     Tree.prototype.initializeISets = function () {
-        var nodes = this.getAllNodes();
+        // Get nodes breadth first
+        var nodes = this.getAllNodes(true);
         this.createSingletonISets(nodes);
         this.draw();
     };
 
     /**
     * Gets all nodes in tree
-    * @return {List} listOfNodes List of tree's nodes
+    * @param  {Boolean} breadthFirst Whether the list should be breadthFirst or not
+    * @return {List}    listOfNodes  List of tree's nodes
     */
-    Tree.prototype.getAllNodes = function () {
+    Tree.prototype.getAllNodes = function (breadthFirst) {
         var listOfNodes = [];
-        this.recursiveGetAllNodes(this.root, listOfNodes);
+        if (breadthFirst) {
+            listOfNodes = this.getAllNodesBreadthFirst();
+        } else {
+            this.recursiveGetAllNodes(this.root, listOfNodes);
+        }
         return listOfNodes;
     };
 
@@ -802,6 +843,24 @@ GTE.TREE = (function (parentModule) {
             this.recursiveGetAllNodes(node.children[i], listOfNodes);
         }
         listOfNodes.push(node);
+    };
+
+    /**
+    * Gets all nodes in tree in a breadth first traversal
+    * @return {List} listOfNodes List of all the nodes in the tree
+    */
+    Tree.prototype.getAllNodesBreadthFirst = function () {
+        var queue = [];
+        var listOfNodes = [];
+        queue.push(this.root);
+        while (queue.length > 0) {
+            var aux = queue.shift();
+            listOfNodes.push(aux);
+            for (var i = 0; i < aux.children.length; i++) {
+                queue.push(aux.children[i]);
+            }
+        }
+        return listOfNodes;
     };
 
     /**

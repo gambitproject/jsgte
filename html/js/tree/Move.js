@@ -7,6 +7,7 @@ GTE.TREE = (function (parentModule) {
     * @param {ISet} atISet Parent information set where this move emanates from.
     */
     function Move (name, atISet) {
+        this.originalName = name;
         this.name = name;
         this.atISet = atISet;
         this.line = {};
@@ -26,15 +27,15 @@ GTE.TREE = (function (parentModule) {
     * @param {Move} b Move B that will be compared
     */
     Move.compare = function (a,b) {
-        if (a.name.length !== b.name.length) {
-            if (a.name.length < b.name.length)
+        if (a.originalName.length !== b.originalName.length) {
+            if (a.originalName.length < b.originalName.length)
                 return -1;
-            if (a.name.length > b.name.length)
+            if (a.originalName.length > b.originalName.length)
                 return 1;
         } else {
-            if (a.name < b.name)
+            if (a.originalName < b.originalName)
                 return -1;
-            if (a.name > b.name)
+            if (a.originalName > b.originalName)
                 return 1;
         }
         return 0;
@@ -42,21 +43,27 @@ GTE.TREE = (function (parentModule) {
 
     /**
     * Public static function that increments a given name
-    * @param {String} str A Move name that will be incremented
+    * @param {String}  str         A Move name that will be incremented
+    * @param {Boolean} capitalized Whether the name should be capitalized or not
     */
-    Move.generateName = function (str) {
+    Move.generateName = function (str, capitalized) {
+        // Convert to lowercase always to normalize the process
+        str = str.toLowerCase();
         for (var i = str.length-1; i >= 0 ; i--) {
             var nextChar = String.fromCharCode(str.charCodeAt(i) + 1);
-            if (nextChar === "[") {
-                nextChar = "A";
+            if (nextChar === "{") {
+                nextChar = "a";
                 str = str.substr(0, i) + nextChar + str.substr(i+1, str.length);
                 if (i === 0) {
-                    str = "A" + str;
+                    str = "a" + str;
                 }
             } else {
                 str = str.substr(0, i) + nextChar + str.substr(i+1, str.length);
                 break;
             }
+        }
+        if (capitalized === true) {
+            return str.toUpperCase();
         }
         return str;
     };
