@@ -41,11 +41,14 @@ GTE.TREE = (function (parentModule) {
 
     /**
     * Adds a new move to current information set
-    * @return {Move} newMove Move that has been created
+    * @param  {Number} [playerId] Player ID of the player that will have the new move
+    * @return {Move}   newMove  Move that has been created
     */
-    ISet.prototype.addNewMove = function () {
+    ISet.prototype.addNewMove = function (playerId) {
         // Create a new move and add to the list of moves
-        var newMove = new GTE.TREE.Move(GTE.tree.getNextMoveName(), this);
+        var oddOrEvenPlayer = (playerId||this.getPlayer().id) % 2; // 1 if odd
+        var newMove = new GTE.TREE.Move(
+                            GTE.tree.getNextMoveName(oddOrEvenPlayer), this);
         this.moves.push(newMove);
         return newMove;
     };
@@ -91,7 +94,7 @@ GTE.TREE = (function (parentModule) {
     *                         will be connected to through moves
     */
     ISet.prototype.addChildISet = function (childISet) {
-        // Create two new moves
+        // Create a new move
         var move = this.addNewMove();
         var nodesInThis = this.getNodes();
         // Add one node per move per node in set
@@ -288,6 +291,25 @@ GTE.TREE = (function (parentModule) {
                     this.dissolve();
                 }
                 break;
+            case GTE.MODES.PLAYER_ASSIGNMENT:
+                // If player name is empty and default name is hidden,
+                // show the default name
+                if (GTE.tree.getActivePlayer().id === GTE.TREE.Player.CHANCE &&
+                        this.getPlayer().id === GTE.TREE.Player.CHANCE) {
+                    GTE.tree.toggleChanceName();
+                    break;
+                }
+
+                // Change the player of every node in the iset
+                var nodes = this.getNodes();
+                for (var j = 0; j < nodes.length; j++) {
+                    GTE.tree.assignSelectedPlayerToNode(nodes[j]);
+                }
+                // Reassign moves (create new moves and assign them to the
+                // children nodes as reachedBy)
+                this.reassignMoves();
+                GTE.tree.draw();
+                break;
             case GTE.MODES.MERGE:
                 this.select();
                 break;
@@ -299,6 +321,24 @@ GTE.TREE = (function (parentModule) {
                 break;
         }
 
+    };
+
+    /**
+    * Deletes current moves and creates new ones. It then updates children reachedBys
+    */
+    ISet.prototype.reassignMoves = function () {
+        var numberOfMoves = this.moves.length;
+        if (numberOfMoves > 0 ) {
+            this.moves = [];
+            for (var j = 0; j < numberOfMoves; j++) {
+                this.addNewMove();
+            }
+            // Reassign children
+            var nodes = this.getNodes();
+            for (j = 0; j < nodes.length; j++) {
+                nodes[j].updateChildrenReachedBy();
+            }
+        }
     };
 
     /**

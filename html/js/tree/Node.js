@@ -179,17 +179,22 @@ GTE.TREE = (function (parentModule) {
                 break;
             case GTE.MODES.PLAYER_ASSIGNMENT:
                 if (!this.isLeaf()) {
-                    // If player name is empty and default name is hidden,
-                    // show the default name
-                    if (this.player !== null && this.player !== undefined) {
-                        if (GTE.tree.getActivePlayer().id === GTE.TREE.Player.CHANCE &&
-                                this.player.id === GTE.TREE.Player.CHANCE) {
-                            GTE.tree.toggleChanceName();
-                            break;
+                    // If there is an iset, let the iset handle the click
+                    if (this.iset !== null) {
+                        this.iset.onClick();
+                    } else {
+                        // If player name is empty and default name is hidden,
+                        // show the default name
+                        if (this.player !== null && this.player !== undefined) {
+                            if (GTE.tree.getActivePlayer().id === GTE.TREE.Player.CHANCE &&
+                                    this.player.id === GTE.TREE.Player.CHANCE) {
+                                GTE.tree.toggleChanceName();
+                                break;
+                            }
                         }
+                        GTE.tree.assignSelectedPlayerToNode(this);
+                        GTE.tree.draw();
                     }
-                    GTE.tree.assignSelectedPlayerToNode(this);
-                    GTE.tree.draw();
                 }
                 break;
             default:
@@ -359,6 +364,19 @@ GTE.TREE = (function (parentModule) {
     */
     Node.prototype.getChildren = function () {
         return this.children;
+    };
+
+    /**
+    * Update this node children's reachedBys to match the moves in the ISet
+    */
+    Node.prototype.updateChildrenReachedBy = function () {
+        if (this.iset.moves.length === this.children.length) {
+            for (var i = 0; i < this.children.length; i++) {
+                this.children[i].reachedBy = this.iset.moves[i];
+            }
+        } else {
+            console.log("ERROR: MOVES NUMBER DIFFER FROM CHILDREN NUMBER");
+        }
     };
 
     // Add class to parent module
