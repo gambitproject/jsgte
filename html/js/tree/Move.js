@@ -92,7 +92,7 @@ GTE.TREE = (function (parentModule) {
                                     parent.y + circleRadius,
                                     child.x + circleRadius,
                                     child.y + circleRadius)
-                              .stroke({ width: GTE.CONSTANTS.LINE_THICKNESS });
+                              .stroke({ color: parent.player.colour, width: GTE.CONSTANTS.LINE_THICKNESS });
         var middleX = ((child.x + circleRadius) - (parent.x + circleRadius))/2+
                         (parent.x);
         var middleY = ((child.y + circleRadius) - (parent.y + circleRadius))/2+
@@ -126,6 +126,7 @@ GTE.TREE = (function (parentModule) {
         var thisMove = this;
         var contentEditable = new GTE.UI.Widgets.ContentEditable(
                 middleX, middleY, growingDirectionOfText, this.name)
+                .colour(parent.player.colour)
                 .onSave(function () {
                     var text = this.getCleanedText();
                     if (text === "") {
