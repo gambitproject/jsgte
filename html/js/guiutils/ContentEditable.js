@@ -8,8 +8,9 @@ GTE.UI.Widgets = (function (parentModule) {
     * @param {Number} y             Widget's y coordinate
     * @param {Number} growingOfText Growing direction of text
     * @param {String} text          Widget's text
+    * @param {Colour} colour        Widget's colour
     */
-    function ContentEditable(x, y, growingOfText, text) {
+    function ContentEditable(x, y, growingOfText, text, colour) {
         this.x = x;
         this.y = y;
         this.growingOfText = growingOfText;
@@ -198,6 +199,19 @@ GTE.UI.Widgets = (function (parentModule) {
         return this.getText();
     };
 
+    /**
+    * Sets contentEditable's colour
+    * @param {Colour} colour Colour to be set
+    */
+    ContentEditable.prototype.setColour = function (colour) {
+        this.textdiv.style.color = colour;
+    };
+
+    /**
+    * Translates contentEditable
+    * @param {Number} x X position
+    * @param {Number} y Y position
+    */
     ContentEditable.prototype.translate = function (x, y) {
         this.x = x || this.x;
         this.y = y || this.y;
