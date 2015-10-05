@@ -151,6 +151,19 @@ GTE.UI.Widgets = (function (parentModule) {
     };
 
     /**
+    * Function that toggles the ContentEditable
+    * @return {Boolean} visible Returns true if object is visible
+    */
+    ContentEditable.prototype.toggle = function () {
+        if (this.visible() === false) {
+            this.show();
+        } else {
+            this.hide();
+        }
+        return this.visible();
+    };
+
+    /**
     * Function that specifies the function to be run on save (when the input
     * gets out of focus). It saves the function pointer specified on params
     * as this.functionOnSave. When the Object detects a blur event on the input,

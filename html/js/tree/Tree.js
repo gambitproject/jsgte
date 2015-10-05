@@ -812,6 +812,8 @@ GTE.TREE = (function (parentModule) {
         var nodes = this.getAllNodes(true);
         this.createSingletonISets(nodes);
         this.draw();
+        // Clean memory
+        this.cleanMemoryAfterISetInitialization();
     };
 
     /**
@@ -882,14 +884,39 @@ GTE.TREE = (function (parentModule) {
     };
 
     /**
+    * Get all player's isets accross the tree
+    * @param  {Number} playerId    Id of the player
+    * @return {List}   playerNodes List of isets that belong to that player
+    */
+    Tree.prototype.getPlayerISets = function (playerId) {
+        var playerISets = [];
+        for (var i = 0; i < this.isets.length; i++) {
+            if (this.isets[i].getPlayer() !== undefined &&
+                this.isets[i].getPlayer() !== null &&
+                this.isets[i].getPlayer().id === playerId) {
+                playerISets.push(this.isets[i]);
+            }
+        }
+        return playerISets;
+    };
+
+    /**
     * Toggles visibility of the chance name
     */
     Tree.prototype.toggleChanceName = function () {
         this.showChanceName = !this.showChanceName;
-        // Get all chance nodes
-        var nodes = this.getPlayerNodes(0);
-        for (var i = 0; i < nodes.length; i++) {
-            nodes[i].togglePlayerNameVisibility();
+        if (this.isets.length !== 0) {
+            // Get all chance isets
+            var isets = this.getPlayerISets(0);
+            for (var i = 0; i < isets.length; i++) {
+                isets[i].togglePlayerNameVisibility();
+            }
+        }  else {
+            // Get all chance nodes
+            var nodes = this.getPlayerNodes(0);
+            for (var i = 0; i < nodes.length; i++) {
+                nodes[i].togglePlayerNameVisibility();
+            }
         }
     };
 
@@ -1057,6 +1084,17 @@ GTE.TREE = (function (parentModule) {
             this.createSingletonISet(node);
         }
     };
+
+    /**
+    * Function that cleans memory after singleton iset initialization
+    */
+    Tree.prototype.cleanMemoryAfterISetInitialization = function () {
+        var nodes  = this.getAllNodes();
+        for (var i = 0; i < nodes.length; i++) {
+            nodes[i].cleanAfterISetCreation();
+        }
+    };
+
 
     // Add class to parent module
     parentModule.Tree = Tree;
