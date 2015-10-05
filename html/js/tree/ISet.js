@@ -46,7 +46,10 @@ GTE.TREE = (function (parentModule) {
     */
     ISet.prototype.addNewMove = function (playerId) {
         // Create a new move and add to the list of moves
-        var oddOrEvenPlayer = (playerId||this.getPlayer().id) % 2; // 1 if odd
+        if (playerId === null || playerId === undefined) {
+            playerId = this.getPlayer().id;
+        }
+        var oddOrEvenPlayer = playerId % 2; // 1 if odd
         var newMove = new GTE.TREE.Move(
                             GTE.tree.getNextMoveName(oddOrEvenPlayer), this);
         this.moves.push(newMove);
@@ -292,14 +295,6 @@ GTE.TREE = (function (parentModule) {
                 }
                 break;
             case GTE.MODES.PLAYER_ASSIGNMENT:
-                // If player name is empty and default name is hidden,
-                // show the default name
-                if (GTE.tree.getActivePlayer().id === GTE.TREE.Player.CHANCE &&
-                        this.getPlayer().id === GTE.TREE.Player.CHANCE) {
-                    GTE.tree.toggleChanceName();
-                    break;
-                }
-
                 // Change the player of every node in the iset
                 var nodes = this.getNodes();
                 for (var j = 0; j < nodes.length; j++) {
@@ -494,6 +489,14 @@ GTE.TREE = (function (parentModule) {
         depths.sort();
         this.maxNodesDepth = depths[depths.length-1];
         return this.maxNodesDepth;
+    };
+
+    /**
+    * Toggles the visibility of the name text
+    */
+    ISet.prototype.togglePlayerNameVisibility = function () {
+        // ACUERDATE DE BORRAR LO INNECESARIO DE LOS NODSO!!!
+        this.playerNameText.toggle();
     };
 
     // Add class to parent module
