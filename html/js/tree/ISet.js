@@ -163,7 +163,7 @@ GTE.TREE = (function (parentModule) {
                         (this.firstNode.x - GTE.CONSTANTS.CIRCLE_SIZE);
 
             this.shape = GTE.canvas.rect(width, GTE.CONSTANTS.ISET_HEIGHT)
-                                    .stroke({ color: '#000', width: 2 })
+                                    .stroke({ color: this.getPlayer().colour, width: 2 })
                                     .radius(GTE.CONSTANTS.ISET_HEIGHT/2)
                                     .addClass('iset');
             this.shape.translate(this.firstNode.x - GTE.CONSTANTS.CIRCLE_SIZE,
