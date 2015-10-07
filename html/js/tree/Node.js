@@ -25,6 +25,7 @@ GTE.TREE = (function (parentModule) {
         this.y = null;
         this.shape = null;
         this.playerNameText = null;
+        this.reachedByText = null;
     }
 
     /**
@@ -207,11 +208,9 @@ GTE.TREE = (function (parentModule) {
     /**
     * Function that adds child to node
     * @param {Node} node Node to add as child
-    * @return {Move} The move that has been created for this child
     */
     Node.prototype.addChild = function (node) {
         this.children.push(node);
-        return new GTE.TREE.Move(this, node);
     };
 
     /**

@@ -6,6 +6,7 @@ var GTE = (function () {
     var GTE = {};
     GTE.UI = {};
     GTE.TREE = {};
+    GTE.TREE.UTILS = {};
 
     GTE.CONSTANTS = {
       CIRCLE_SIZE: 20,

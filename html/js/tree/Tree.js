@@ -470,10 +470,13 @@ GTE.TREE = (function (parentModule) {
             if (parentISet.firstNode.parent.parent !== null) {
                 playerToAssign = parentISet.firstNode.parent.parent.player;
             } else {
-                // When adding a child to a root's child
-                if (this.players[2] !== null) {
-                    playerToAssign = this.players[2];
+                // When adding a child to a root's child increment the player
+                var rootPlayerId = parentISet.firstNode.parent.player.id;
+                if (this.players[rootPlayerId+1] !== null &&
+                    this.players[rootPlayerId+1] !== undefined){
+                    playerToAssign = this.players[rootPlayerId+1];
                 } else {
+                    // If incremented player doesn't exist, use 1 to avoid errors
                     playerToAssign = this.players[1];
                 }
             }
@@ -602,10 +605,15 @@ GTE.TREE = (function (parentModule) {
         // Iterate over the list of isets and get its moves
         for (var i = 0; i < this.isets.length; i++) {
             if (this.isets[i].moves.length > 0) {
-                var comparison = this.isets[i].moves[0].name.toUpperCase() === this.isets[i].moves[0].name;
-                if (comparison == oddOrEven) {
-                    for (var j = 0; j < this.isets[i].moves.length; j++) {
-                        listOfMoves.push(this.isets[i].moves[j]);
+                // Don't include the chance isets into the list
+                if (this.isets[i].getPlayer() !== null && this.isets[i].getPlayer().id === 0){
+                    continue;
+                } else {
+                    var comparison = this.isets[i].moves[0].name.toUpperCase() === this.isets[i].moves[0].name;
+                    if (comparison == oddOrEven) {
+                        for (var j = 0; j < this.isets[i].moves.length; j++) {
+                            listOfMoves.push(this.isets[i].moves[j]);
+                        }
                     }
                 }
             }
