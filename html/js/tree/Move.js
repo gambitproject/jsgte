@@ -124,7 +124,7 @@ GTE.TREE = (function (parentModule) {
             growingDirectionOfText = GTE.CONSTANTS.CONTENT_EDITABLE_GROW_TO_LEFT;
         }
         var contentEditable = new GTE.UI.Widgets.ContentEditable(
-                        middleX, middleY, growingDirectionOfText, this.name)
+                        middleX, middleY, growingDirectionOfText, this.name, "move")
                         .colour(parent.player.colour);
 
         // ChanceMove inherits from Move so in order not to having to rewrite this

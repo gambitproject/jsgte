@@ -53,7 +53,7 @@ GTE.TREE = (function (parentModule) {
         var thisPlayer = this;
         return new GTE.UI.Widgets.ContentEditable(x, y,
                 GTE.CONSTANTS.CONTENT_EDITABLE_GROW_TO_RIGHT,
-                thisPlayer.name)
+                thisPlayer.name, "player")
                 .colour(thisPlayer.colour)
                 .onSave(function () {
                     // Removes all blankspaces. Substitutes &nbsp; characters
