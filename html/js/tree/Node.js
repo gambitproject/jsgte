@@ -20,6 +20,12 @@ GTE.TREE = (function (parentModule) {
             this.level = this.parent.level + 1;
         }
         this.depth = this.level;
+        this.line = null;
+        this.x = null;
+        this.y = null;
+        this.shape = null;
+        this.playerNameText = null;
+        this.reachedByText = null;
     }
 
     /**
@@ -107,14 +113,10 @@ GTE.TREE = (function (parentModule) {
     };
 
     /**
-    * Toggles the visibility of the default name text
+    * Toggles the visibility of the name text
     */
     Node.prototype.togglePlayerNameVisibility = function () {
-        if (this.playerNameText.visible() === false) {
-            this.playerNameText.show();
-        } else {
-            this.playerNameText.hide();
-        }
+        this.playerNameText.toggle();
     };
 
     /**
@@ -179,19 +181,20 @@ GTE.TREE = (function (parentModule) {
                 break;
             case GTE.MODES.PLAYER_ASSIGNMENT:
                 if (!this.isLeaf()) {
+                    // If player name is empty and default name is hidden,
+                    // show the default name
+                    if (this.player !== null && this.player !== undefined) {
+                        if (GTE.tree.getActivePlayer().id === GTE.TREE.Player.CHANCE &&
+                                this.player.id === GTE.TREE.Player.CHANCE) {
+                            GTE.tree.toggleChanceName();
+                            break;
+                        }
+                    }
                     // If there is an iset, let the iset handle the click
                     if (this.iset !== null) {
                         this.iset.onClick();
                     } else {
-                        // If player name is empty and default name is hidden,
-                        // show the default name
-                        if (this.player !== null && this.player !== undefined) {
-                            if (GTE.tree.getActivePlayer().id === GTE.TREE.Player.CHANCE &&
-                                    this.player.id === GTE.TREE.Player.CHANCE) {
-                                GTE.tree.toggleChanceName();
-                                break;
-                            }
-                        }
+
                         GTE.tree.assignSelectedPlayerToNode(this);
                         GTE.tree.draw();
                     }
@@ -205,11 +208,9 @@ GTE.TREE = (function (parentModule) {
     /**
     * Function that adds child to node
     * @param {Node} node Node to add as child
-    * @return {Move} The move that has been created for this child
     */
     Node.prototype.addChild = function (node) {
         this.children.push(node);
-        return new GTE.TREE.Move(this, node);
     };
 
     /**
@@ -376,6 +377,15 @@ GTE.TREE = (function (parentModule) {
             }
         } else {
             console.log("ERROR: MOVES NUMBER DIFFER FROM CHILDREN NUMBER");
+        }
+    };
+
+    /**
+    * Removes from memory unused properties
+    */
+    Node.prototype.cleanAfterISetCreation = function () {
+        if (this.iset !== null) {
+            this.playerNameText = null;
         }
     };
 

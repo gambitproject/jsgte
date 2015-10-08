@@ -470,10 +470,13 @@ GTE.TREE = (function (parentModule) {
             if (parentISet.firstNode.parent.parent !== null) {
                 playerToAssign = parentISet.firstNode.parent.parent.player;
             } else {
-                // When adding a child to a root's child
-                if (this.players[2] !== null) {
-                    playerToAssign = this.players[2];
+                // When adding a child to a root's child increment the player
+                var rootPlayerId = parentISet.firstNode.parent.player.id;
+                if (this.players[rootPlayerId+1] !== null &&
+                    this.players[rootPlayerId+1] !== undefined){
+                    playerToAssign = this.players[rootPlayerId+1];
                 } else {
+                    // If incremented player doesn't exist, use 1 to avoid errors
                     playerToAssign = this.players[1];
                 }
             }
@@ -602,10 +605,15 @@ GTE.TREE = (function (parentModule) {
         // Iterate over the list of isets and get its moves
         for (var i = 0; i < this.isets.length; i++) {
             if (this.isets[i].moves.length > 0) {
-                var comparison = this.isets[i].moves[0].name.toUpperCase() === this.isets[i].moves[0].name;
-                if (comparison == oddOrEven) {
-                    for (var j = 0; j < this.isets[i].moves.length; j++) {
-                        listOfMoves.push(this.isets[i].moves[j]);
+                // Don't include the chance isets into the list
+                if (this.isets[i].getPlayer() !== null && this.isets[i].getPlayer().id === 0){
+                    continue;
+                } else {
+                    var comparison = this.isets[i].moves[0].name.toUpperCase() === this.isets[i].moves[0].name;
+                    if (comparison == oddOrEven) {
+                        for (var j = 0; j < this.isets[i].moves.length; j++) {
+                            listOfMoves.push(this.isets[i].moves[j]);
+                        }
                     }
                 }
             }
@@ -812,6 +820,8 @@ GTE.TREE = (function (parentModule) {
         var nodes = this.getAllNodes(true);
         this.createSingletonISets(nodes);
         this.draw();
+        // Clean memory
+        this.cleanMemoryAfterISetInitialization();
     };
 
     /**
@@ -882,14 +892,39 @@ GTE.TREE = (function (parentModule) {
     };
 
     /**
+    * Get all player's isets accross the tree
+    * @param  {Number} playerId    Id of the player
+    * @return {List}   playerNodes List of isets that belong to that player
+    */
+    Tree.prototype.getPlayerISets = function (playerId) {
+        var playerISets = [];
+        for (var i = 0; i < this.isets.length; i++) {
+            if (this.isets[i].getPlayer() !== undefined &&
+                this.isets[i].getPlayer() !== null &&
+                this.isets[i].getPlayer().id === playerId) {
+                playerISets.push(this.isets[i]);
+            }
+        }
+        return playerISets;
+    };
+
+    /**
     * Toggles visibility of the chance name
     */
     Tree.prototype.toggleChanceName = function () {
         this.showChanceName = !this.showChanceName;
-        // Get all chance nodes
-        var nodes = this.getPlayerNodes(0);
-        for (var i = 0; i < nodes.length; i++) {
-            nodes[i].togglePlayerNameVisibility();
+        if (this.isets.length !== 0) {
+            // Get all chance isets
+            var isets = this.getPlayerISets(0);
+            for (var i = 0; i < isets.length; i++) {
+                isets[i].togglePlayerNameVisibility();
+            }
+        }  else {
+            // Get all chance nodes
+            var nodes = this.getPlayerNodes(0);
+            for (var i = 0; i < nodes.length; i++) {
+                nodes[i].togglePlayerNameVisibility();
+            }
         }
     };
 
@@ -1057,6 +1092,17 @@ GTE.TREE = (function (parentModule) {
             this.createSingletonISet(node);
         }
     };
+
+    /**
+    * Function that cleans memory after singleton iset initialization
+    */
+    Tree.prototype.cleanMemoryAfterISetInitialization = function () {
+        var nodes  = this.getAllNodes();
+        for (var i = 0; i < nodes.length; i++) {
+            nodes[i].cleanAfterISetCreation();
+        }
+    };
+
 
     // Add class to parent module
     parentModule.Tree = Tree;

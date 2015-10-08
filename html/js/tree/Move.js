@@ -92,7 +92,7 @@ GTE.TREE = (function (parentModule) {
                                     parent.y + circleRadius,
                                     child.x + circleRadius,
                                     child.y + circleRadius)
-                              .stroke({ width: GTE.CONSTANTS.LINE_THICKNESS });
+                              .stroke({ color: parent.player.colour, width: GTE.CONSTANTS.LINE_THICKNESS });
         var middleX = ((child.x + circleRadius) - (parent.x + circleRadius))/2+
                         (parent.x);
         var middleY = ((child.y + circleRadius) - (parent.y + circleRadius))/2+
@@ -123,23 +123,45 @@ GTE.TREE = (function (parentModule) {
         if (child.x <= parent.x ) {
             growingDirectionOfText = GTE.CONSTANTS.CONTENT_EDITABLE_GROW_TO_LEFT;
         }
-        var thisMove = this;
         var contentEditable = new GTE.UI.Widgets.ContentEditable(
-                middleX, middleY, growingDirectionOfText, this.name)
-                .onSave(function () {
-                    var text = this.getCleanedText();
-                    if (text === "") {
-                        window.alert("Move name should not be empty.");
-                    } else {
-                        thisMove.changeName(text);
-                    }
-                    GTE.tree.updateMoveNames(thisMove);
-                });
+                        middleX, middleY, growingDirectionOfText, this.name)
+                        .colour(parent.player.colour);
+
+        // ChanceMove inherits from Move so in order not to having to rewrite this
+        // whole function, create a function with all that needs to be modified
+        // by ChanceMove
+        this.setOnSaveFunction(contentEditable);
 
         return {
             contentEditable: contentEditable,
             line: line
         };
+    };
+
+    /**
+    * Sets the onSave function that is trigger when the contentEditable is saved
+    * @param {ContentEditable} contentEditable Move's ContentEditable
+    */
+    Move.prototype.setOnSaveFunction = function (contentEditable) {
+        var thisMove = this;
+        contentEditable.onSave(
+            function () {
+                var text = this.getCleanedText();
+                if (text === "") {
+                    window.alert("Move name should not be empty.");
+                } else {
+                    thisMove.changeName(text);
+                }
+                GTE.tree.updateMoveNames(thisMove);
+        });
+    };
+
+    /**
+    * Get current move position within the set of moves
+    * @return {Number} index This move's index in the array of moves
+    */
+    Move.prototype.getMovePosition = function () {
+        return this.atISet.moves.indexOf(this);
     };
 
     // Add class to parent module

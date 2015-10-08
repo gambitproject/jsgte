@@ -5,7 +5,6 @@ GTE.TREE = (function (parentModule) {
     /**
     * Creates a new information set.
     * @class
-    * @param {Number} numberOfNodes Number of nodes in this information set
     */
     function ISet() {
         this.moves = [];
@@ -46,9 +45,24 @@ GTE.TREE = (function (parentModule) {
     */
     ISet.prototype.addNewMove = function (playerId) {
         // Create a new move and add to the list of moves
-        var oddOrEvenPlayer = (playerId||this.getPlayer().id) % 2; // 1 if odd
-        var newMove = new GTE.TREE.Move(
-                            GTE.tree.getNextMoveName(oddOrEvenPlayer), this);
+        if (playerId === null || playerId === undefined) {
+            playerId = this.getPlayer().id;
+        }
+        var oddOrEvenPlayer = playerId % 2; // 1 if odd
+        var newMove;
+        if (playerId === 0) {
+            // If chance player, calculate probabilities
+            var numberOfMoves = this.moves.length + 1;
+            var distributedProbability = 1/numberOfMoves;
+            // Distribute probabilities across the moves
+            for (var i = 0; i < this.moves.length; i++) {
+                this.moves[i].setProbability(distributedProbability);
+            }
+            newMove = new GTE.TREE.ChanceMove(distributedProbability, this);
+        } else {
+            newMove = new GTE.TREE.Move(
+                                GTE.tree.getNextMoveName(oddOrEvenPlayer), this);
+        }
         this.moves.push(newMove);
         return newMove;
     };
@@ -160,7 +174,7 @@ GTE.TREE = (function (parentModule) {
                         (this.firstNode.x - GTE.CONSTANTS.CIRCLE_SIZE);
 
             this.shape = GTE.canvas.rect(width, GTE.CONSTANTS.ISET_HEIGHT)
-                                    .stroke({ color: '#000', width: 2 })
+                                    .stroke({ color: this.getPlayer().colour, width: 2 })
                                     .radius(GTE.CONSTANTS.ISET_HEIGHT/2)
                                     .addClass('iset');
             this.shape.translate(this.firstNode.x - GTE.CONSTANTS.CIRCLE_SIZE,
@@ -292,14 +306,6 @@ GTE.TREE = (function (parentModule) {
                 }
                 break;
             case GTE.MODES.PLAYER_ASSIGNMENT:
-                // If player name is empty and default name is hidden,
-                // show the default name
-                if (GTE.tree.getActivePlayer().id === GTE.TREE.Player.CHANCE &&
-                        this.getPlayer().id === GTE.TREE.Player.CHANCE) {
-                    GTE.tree.toggleChanceName();
-                    break;
-                }
-
                 // Change the player of every node in the iset
                 var nodes = this.getNodes();
                 for (var j = 0; j < nodes.length; j++) {
@@ -412,7 +418,11 @@ GTE.TREE = (function (parentModule) {
     * @return {Player} player Player that has this information set nodes assigned
     */
     ISet.prototype.getPlayer = function () {
-        return this.firstNode.player;
+        if (this.firstNode !== null) {
+            return this.firstNode.player;
+        } else {
+            return null;
+        }
     };
 
     /**
@@ -494,6 +504,56 @@ GTE.TREE = (function (parentModule) {
         depths.sort();
         this.maxNodesDepth = depths[depths.length-1];
         return this.maxNodesDepth;
+    };
+
+    /**
+    * Toggles the visibility of the name text
+    */
+    ISet.prototype.togglePlayerNameVisibility = function () {
+        this.playerNameText.toggle();
+    };
+
+    /**
+    * Rearranges this iset's chance moves' probabilities
+    * @param {Number} position Depending of the position of the move that was
+    *                          originally modified, the way the probabilities are
+    *                          rearranged differs.
+    */
+    ISet.prototype.rearrangeProbabilities = function (position) {
+        // Define a variable that will store the sum of probability from the leftmost
+        // move to the one in "position"
+        var probabilityToSet;
+        // If the move that was originally modified is the rightmost move
+        if (position === this.moves.length - 1) {
+            // Assign the spare probability across the other moves of the iset
+            probabilityToSet = (1-this.moves[position].probability)/(this.moves.length -1);
+            for (var i = 0; i < this.moves.length-1; i++) {
+                this.moves[i].setProbability(probabilityToSet);
+            }
+        } else {
+            // Otherwise rearrange to the right
+            var totalProbabilityUpToPosition = 0;
+            for (var j = 0; j < this.moves.length; j++) {
+                // Sum up all the probabilities to the left of position. Include position
+                if (j <= position) {
+                    totalProbabilityUpToPosition += this.moves[j].probability;
+                    if (j === position) {
+                        // Distribute the spare probability across the moves to the right
+                        probabilityToSet = (1-totalProbabilityUpToPosition)/(this.moves.length-1-position);
+                    }
+                } else {
+                    // Rearrange probabilities to the right of position
+                    this.moves[j].setProbability(probabilityToSet);
+                }
+            }
+        }
+        // Update all the moves content editables text
+        // ContentEditables are saved inside the node so get all the children
+        // nodes and update the text
+        var nodes = this.getChildrenNodes();
+        for (var k = 0; k < nodes.length; k++) {
+            nodes[k].updateMoveName();
+        }
     };
 
     // Add class to parent module
