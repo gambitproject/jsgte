@@ -8,9 +8,9 @@ GTE.UI.Widgets = (function (parentModule) {
     * @param {Number} y             Widget's y coordinate
     * @param {Number} growingOfText Growing direction of text
     * @param {String} text          Widget's text
-    * @param {Colour} colour        Widget's colour
+    * @param {String} cssClass      Widget's cssClass
     */
-    function ContentEditable(x, y, growingOfText, text, colour) {
+    function ContentEditable(x, y, growingOfText, text, cssClass) {
         this.x = x;
         this.y = y;
         this.growingOfText = growingOfText;
@@ -29,6 +29,9 @@ GTE.UI.Widgets = (function (parentModule) {
         this.textdiv.style.color = this.colour;
         this.textdiv.appendChild(this.textnode);
         this.textdiv.className = "content-editable";
+        if (cssClass !== undefined) {
+            this.textdiv.className += " " + cssClass;
+        }
         if (growingOfText === GTE.CONSTANTS.CONTENT_EDITABLE_GROW_TO_LEFT) {
             this.textdiv.className += " grow-to-left";
         }
