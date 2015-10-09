@@ -317,7 +317,9 @@ GTE.TREE = (function (parentModule) {
                 GTE.tree.draw();
                 break;
             case GTE.MODES.MERGE:
-                this.select();
+                if (this.getPlayer().id !== 0) {
+                    this.select();
+                }
                 break;
             case GTE.MODES.DISSOLVE:
                 this.dissolve();
