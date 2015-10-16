@@ -76,12 +76,17 @@ GTE.TREE = (function (parentModule) {
         }
     };
 
+    /**
+    * Updates payoffs across the tree
+    */
     Tree.prototype.updatePayoffs = function () {
+        // Clear old payoffs. This means to remove payoffs from those nodes that
+        // have been deleted or that are not leaves anymore
         for (var i = 1; i < this.players.length; i++) {
             this.players[i].clearOldPayoffs();
         }
 
-        // Look for new leaves
+        // Look for new leaves. newLeaves will contain new leaves added to the tree
         var thisTree = this;
         var newLeaves = this.leaves.filter(
             function(current){
@@ -90,9 +95,11 @@ GTE.TREE = (function (parentModule) {
                             return current_b == current;
                         }).length === 0;
         });
+        // Create one new payoff per player and per new leaf
         for (i = 1; i < this.players.length; i++) {
             for (var j = 0; j < newLeaves.length; j++) {
-                this.players[i].payoffs.push(new GTE.TREE.Payoff(newLeaves[j], this.players[i]));
+                this.players[i].payoffs.push(
+                            new GTE.TREE.Payoff(newLeaves[j], this.players[i]));
             }
         }
     };
@@ -101,7 +108,9 @@ GTE.TREE = (function (parentModule) {
     * Function that draws the payoffs in the global canvas
     */
     Tree.prototype.drawPayoffs = function () {
+        // Remove old payoffs and create new ones
         this.updatePayoffs();
+        // Draw each payoff across the tree
         for (var i = 1; i < this.players.length; i++) {
             this.players[i].drawPayoffs();
         }
@@ -428,10 +437,15 @@ GTE.TREE = (function (parentModule) {
         }
     };
 
+    /**
+    * Function that is ran the first time that a information set tool is selected
+    */
     Tree.prototype.createPayoffs = function () {
+        // Create one payoff for each player and each leaf
         for (var i = 1; i < this.players.length; i++) {
             for (var j = 0; j < this.leaves.length; j++) {
-                this.players[i].payoffs.push(new GTE.TREE.Payoff(this.leaves[j], this.players[i]));
+                this.players[i].payoffs.push(
+                        new GTE.TREE.Payoff(this.leaves[j], this.players[i]));
             }
         }
     };
