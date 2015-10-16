@@ -83,12 +83,14 @@ GTE.TREE = (function (parentModule) {
 
         // Look for new leaves
         var thisTree = this;
-        var newLeaves = this.leaves.filter(function(current){
-            return thisTree.oldLeaves.filter(function(current_b){
-                return current_b == current
-            }).length == 0
+        var newLeaves = this.leaves.filter(
+            function(current){
+                return thisTree.oldLeaves.filter(
+                        function(current_b){
+                            return current_b == current;
+                        }).length === 0;
         });
-        for (var i = 1; i < this.players.length; i++) {
+        for (i = 1; i < this.players.length; i++) {
             for (var j = 0; j < newLeaves.length; j++) {
                 this.players[i].payoffs.push(new GTE.TREE.Payoff(newLeaves[j], this.players[i]));
             }
@@ -970,8 +972,8 @@ GTE.TREE = (function (parentModule) {
         }  else {
             // Get all chance nodes
             var nodes = this.getPlayerNodes(0);
-            for (var i = 0; i < nodes.length; i++) {
-                nodes[i].togglePlayerNameVisibility();
+            for (var j = 0; j < nodes.length; j++) {
+                nodes[j].togglePlayerNameVisibility();
             }
         }
     };
