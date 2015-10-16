@@ -741,6 +741,13 @@ GTE.TREE = (function (parentModule) {
             }
             // Add the player to the list
             this.players.push(player);
+            // If there are payoffs, add new player payoffs
+            if (this.isets.length !== 0) {
+                for (var j = 0; j < this.leaves.length; j++) {
+                    player.payoffs.push(new GTE.TREE.Payoff(this.leaves[j], player));
+                }
+                player.drawPayoffs();
+            }
         } catch (err) {
             console.log("EXCEPTION: " + err);
             return null;
