@@ -45,6 +45,7 @@ GTE.TREE = (function (parentModule) {
         this.clear();
         if (this.isets.length > 0) {
             this.drawISets();
+            this.drawPayoffs();
         }
         this.drawNodes();
     };
@@ -71,6 +72,15 @@ GTE.TREE = (function (parentModule) {
     Tree.prototype.drawISets = function () {
         for (var i = 0; i < this.isets.length; i++) {
             this.isets[i].draw();
+        }
+    };
+
+    /**
+    * Function that draws the payoffs in the global canvas
+    */
+    Tree.prototype.drawPayoffs = function () {
+        for (var i = 0; i < this.players.length; i++) {
+            this.players[i].drawPayoffs();
         }
     };
 
@@ -391,6 +401,14 @@ GTE.TREE = (function (parentModule) {
     Tree.prototype.createSingletonISets = function (nodes) {
         for (var i = 0; i < nodes.length; i++) {
             this.createSingletonISet(nodes[i]);
+        }
+    };
+
+    Tree.prototype.createPayoffs = function () {
+        for (var i = 1; i < this.players.length; i++) {
+            for (var j = 0; j < this.leaves.length; j++) {
+                this.players[i].payoffs.push(new GTE.TREE.Payoff(this.leaves[j], this.players[i]));
+            }
         }
     };
 
@@ -819,6 +837,7 @@ GTE.TREE = (function (parentModule) {
         // Get nodes breadth first
         var nodes = this.getAllNodes(true);
         this.createSingletonISets(nodes);
+        this.createPayoffs();
         this.draw();
         // Clean memory
         this.cleanMemoryAfterISetInitialization();
