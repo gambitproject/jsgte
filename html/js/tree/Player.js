@@ -16,6 +16,7 @@ GTE.TREE = (function (parentModule) {
             this.name = "" + this.id;
         }
         this.colour = colour;
+        this.payoffs = [];
     }
 
     /**
@@ -69,6 +70,12 @@ GTE.TREE = (function (parentModule) {
                     // across the tree
                     GTE.tree.updatePlayerNames(thisPlayer);
                 });
+    };
+
+    Player.prototype.drawPayoffs = function () {
+        for (var i = 0; i < this.payoffs.length; i++) {
+            this.payoffs[i].draw();
+        }
     };
 
     // Add class to parent module
