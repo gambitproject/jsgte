@@ -41,14 +41,20 @@ GTE.TREE = (function (parentModule) {
     ChanceMove.prototype.changeName = function (text) {
         // Parse probability from text
         var split = text.split('/');
-        var probability = parseInt(split[0], 10) / parseInt(split[1], 10);
-        if (probability >= 1) {
-            alert("Probabilities must be smaller than 1.");
-            return null;
-        } else {
-            this.setProbability(probability);
-            // Rearrange the rest of the chance moves in the iset
-            this.atISet.rearrangeProbabilities(this.getMovePosition());
+        if (split.length === 2) {
+            var probability = parseInt(split[0], 10) / parseInt(split[1], 10);
+            if (probability >= 1) {
+                alert("Probabilities must be smaller than 1.");
+                return null;
+            } else {
+                this.setProbability(probability);
+                // Rearrange the rest of the chance moves in the iset
+                this.atISet.rearrangeProbabilities(this.getMovePosition());
+                return this.probability;
+            }
+        } else { // If something different to a fraction is set
+            alert("Probabilities should be either a decimal number or a fraction.");
+            this.changeName(this.name);
             return this.probability;
         }
     };
@@ -63,7 +69,8 @@ GTE.TREE = (function (parentModule) {
             function () {
                 var text = this.getCleanedText();
                 if (text === "") {
-                    window.alert("Move name should not be empty.");
+                    window.alert("Probabilities cannot be empty.");
+                    thisMove.changeName(thisMove.name);
                 } else {
                     thisMove.changeName(text);
                 }
