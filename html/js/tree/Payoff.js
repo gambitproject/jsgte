@@ -48,27 +48,25 @@ GTE.TREE = (function(parentModule) {
      * Changes the text of the editable label
      */
     Payoff.prototype.changeText = function(text) {
-            var value = parseFloat(text, 10); // Remove leading 0
-            var split = text.split('/');
-            if (split.length === 2) {
-                value = parseInt(split[0], 10) / parseInt(split[1], 10);
-            }
-            if (!isNaN(value)) {
-                this.setValue(value);
-                if (value % 1 !== 0) {
-                    this.text = new GTE.TREE.UTILS.Fraction(value, false).toString();
-                } else {
-                    this.text = this.value;
-                }
-                if (this.editable !== null) {
-                    this.editable.setText(this.text);
-                }
+        var value = parseFloat(text, 10); // Remove leading 0
+        var split = text.split('/');
+        if (split.length === 2) {
+            value = parseInt(split[0], 10) / parseInt(split[1], 10);
+        }
+        if (!isNaN(value)) {
+            this.setValue(value);
+            if (value % 1 !== 0) {
+                this.text = new GTE.TREE.UTILS.Fraction(value, false).toString();
             } else {
-                window.alert("Payoff should be a number.");
-                this.changeText(this.text);
+                this.text = this.value;
             }
-
-        console.log(this.value);
+            if (this.editable !== null) {
+                this.editable.setText(this.text);
+            }
+        } else {
+            window.alert("Payoff should be a number.");
+            this.changeText(this.text);
+        }
         return this.value;
     };
 
