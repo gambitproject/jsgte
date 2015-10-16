@@ -72,23 +72,27 @@ GTE.TREE = (function (parentModule) {
                 });
     };
 
+    /**
+    * Draws the player's payoffs
+    */
     Player.prototype.drawPayoffs = function () {
         for (var i = 0; i < this.payoffs.length; i++) {
             this.payoffs[i].draw();
         }
     };
 
-    Player.prototype.clearPayoffs = function () {
-        this.payoffs = [];
-    };
-
+    /**
+    * When adding or deleting nodes from the tree, some nodes could stop being
+    * a leaf. This player payoffs will have a payoff.leaf that is not a leaf
+    * anymore or that has been deleted. This function checks that every payoff.leaf
+    * still exists and it's still a leaf
+    */
     Player.prototype.clearOldPayoffs = function () {
         for (var i = 0; i < this.payoffs.length; i++) {
             // If node has been deleted or is not a leaf anymore
             if (this.payoffs[i].leaf.deleted || !this.payoffs[i].leaf.isLeaf()) {
                 this.payoffs.splice(i, 1);
                 i--;
-                continue;
             }
         }
     };
