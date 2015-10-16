@@ -26,6 +26,7 @@ GTE.TREE = (function (parentModule) {
         this.shape = null;
         this.playerNameText = null;
         this.reachedByText = null;
+        this.deleted = false;
     }
 
     /**
@@ -150,11 +151,11 @@ GTE.TREE = (function (parentModule) {
                         GTE.tree.addChildNodeTo(this);
                     }
                     GTE.tree.addChildNodeTo(this);
+                    // Tell the tree to redraw itself
+                    GTE.tree.draw();
                 } else {
                     this.iset.onClick();
                 }
-                // Tell the tree to redraw itself
-                GTE.tree.draw();
                 break;
             case GTE.MODES.DELETE:
                 if (this.iset === null) {
@@ -165,11 +166,11 @@ GTE.TREE = (function (parentModule) {
                         GTE.tree.deleteChildrenOf(this);
                         this.deassignPlayer();
                     }
+                    // Tell the tree to redraw itself
+                    GTE.tree.draw();
                 } else {
                     this.iset.onClick();
                 }
-                // Tell the tree to redraw itself
-                GTE.tree.draw();
                 break;
             case GTE.MODES.MERGE:
                 // This is controlled by the information set
@@ -321,6 +322,7 @@ GTE.TREE = (function (parentModule) {
             this.iset.removeNode(this);
         }
         this.reachedBy = null;
+        this.deleted = true;
         GTE.tree.positionsUpdated = false;
     };
 

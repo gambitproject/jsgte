@@ -78,6 +78,21 @@ GTE.TREE = (function (parentModule) {
         }
     };
 
+    Player.prototype.clearPayoffs = function () {
+        this.payoffs = [];
+    };
+
+    Player.prototype.clearOldPayoffs = function () {
+        for (var i = 0; i < this.payoffs.length; i++) {
+            // If node has been deleted or is not a leaf anymore
+            if (this.payoffs[i].leaf.deleted || !this.payoffs[i].leaf.isLeaf()) {
+                this.payoffs.splice(i, 1);
+                i--;
+                continue;
+            }
+        }
+    };
+
     // Add class to parent module
     parentModule.Player = Player;
 

@@ -13,6 +13,7 @@ GTE.TREE = (function (parentModule) {
         this.selected = [];
         this.depths = [];
         this.leaves = [];
+        this.oldLeaves = [];
         this.players = [];
         this.newPlayer(GTE.COLOURS.BLACK);
         this.newPlayer(GTE.COLOURS.RED);
@@ -75,11 +76,31 @@ GTE.TREE = (function (parentModule) {
         }
     };
 
+    Tree.prototype.updatePayoffs = function () {
+        for (var i = 1; i < this.players.length; i++) {
+            this.players[i].clearOldPayoffs();
+        }
+
+        // Look for new leaves
+        var thisTree = this;
+        var newLeaves = this.leaves.filter(function(current){
+            return thisTree.oldLeaves.filter(function(current_b){
+                return current_b == current
+            }).length == 0
+        });
+        for (var i = 1; i < this.players.length; i++) {
+            for (var j = 0; j < newLeaves.length; j++) {
+                this.players[i].payoffs.push(new GTE.TREE.Payoff(newLeaves[j], this.players[i]));
+            }
+        }
+    };
+
     /**
     * Function that draws the payoffs in the global canvas
     */
     Tree.prototype.drawPayoffs = function () {
-        for (var i = 0; i < this.players.length; i++) {
+        this.updatePayoffs();
+        for (var i = 1; i < this.players.length; i++) {
             this.players[i].drawPayoffs();
         }
     };
@@ -139,6 +160,7 @@ GTE.TREE = (function (parentModule) {
     Tree.prototype.updateLeaves = function () {
         // Create a estructure that holds isets depending on the depth
         // of its nodes and sort it
+        this.oldLeaves = this.leaves;
         this.leaves = [];
         this.recursiveupdateLeaves(this.root);
         this.updateLeavesPositions();
