@@ -142,7 +142,7 @@ GTE.UI = (function (parentModule) {
                     " alt='Player " + player.id +
                     "' title='Player " + player.id +
                     "' player='" + player.id +
-                    "'><i class='icon-user'></i><span>" + player.id + "</span></button></li>");
+                    "'><i class='icon-user'></i></button></li>");
                 // Get the newly added button
                 lastPlayer = playerButtons.lastElementChild;
                 // And add a click event that will call the selectPlayer function
