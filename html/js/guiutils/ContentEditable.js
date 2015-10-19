@@ -154,7 +154,7 @@ GTE.UI.Widgets = (function (parentModule) {
     };
 
     /**
-    * Function that toggles the ContentEditable
+    * Function that toggles the visibility of the ContentEditable
     * @return {Boolean} visible Returns true if object is visible
     */
     ContentEditable.prototype.toggle = function () {
