@@ -55,7 +55,7 @@ GTE.UI = (function (parentModule) {
                 buttonToSwitch = "button-player-" + this.activePlayer;
                 break;
             case GTE.MODES.MERGE:
-                if (this.ableToSwitchToISetMode()) {
+                if (this.ableToSwitchToISetEditingMode()) {
                     buttonToSwitch = "button-merge";
                     // If iset tools have never been chosen
                     if (!this.isetToolsRan) {
@@ -69,7 +69,7 @@ GTE.UI = (function (parentModule) {
                 }
                 break;
             case GTE.MODES.DISSOLVE:
-                if (this.ableToSwitchToISetMode()) {
+                if (this.ableToSwitchToISetEditingMode()) {
                     buttonToSwitch = "button-dissolve";
                 } else {
                     window.alert("Assign a player to every node first.");
@@ -142,7 +142,7 @@ GTE.UI = (function (parentModule) {
                     " alt='Player " + player.id +
                     "' title='Player " + player.id +
                     "' player='" + player.id +
-                    "'><i class='icon-user'></i><span>" + player.id + "</span></button></li>");
+                    "'><i class='icon-user'></i></button></li>");
                 // Get the newly added button
                 lastPlayer = playerButtons.lastElementChild;
                 // And add a click event that will call the selectPlayer function
@@ -195,7 +195,7 @@ GTE.UI = (function (parentModule) {
     * a wrapper that checks that all nodes have a player assigned.
     * @return {Boolean} True if it is possible to switch to information set mode
     */
-    Tools.prototype.ableToSwitchToISetMode = function () {
+    Tools.prototype.ableToSwitchToISetEditingMode = function () {
         return GTE.tree.recursiveCheckAllNodesHavePlayer();
     };
 
