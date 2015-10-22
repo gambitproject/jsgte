@@ -49,7 +49,6 @@ GTE.TREE = (function(parentModule) {
                 // Find the smallest number S and largest number L of children
                 // for the nodes in the line
                 var smallestAndLargest = this.findSmallestAndLargest();
-                console.log(smallestAndLargest);
                 // If S < L, add children to those nodes so that ALL nodes have L children now.
                 if (smallestAndLargest.smallest < smallestAndLargest.largest) {
                     for (var i = 0; i < this.nodesInLine.length; i++) {
@@ -63,6 +62,25 @@ GTE.TREE = (function(parentModule) {
                 else if (smallestAndLargest.largest === 0 || smallestAndLargest.smallest === smallestAndLargest.largest) {
                     for (var j = 0; j < this.nodesInLine.length; j++) {
                         this.nodesInLine[j].onClick();
+                    }
+                }
+                break;
+            case GTE.MODES.DELETE:
+                // if ANY of the nodes in the multiaction line have children,
+                // delete all their children but keep the node itself as part
+                // of the tree (i.e. even if some nodes are leaves already,
+                // do not delete them). otherwise (that is, ALL nodes in the
+                // multiaction line are leaves), delete all these leaves.
+                var allLeaves = true;
+                for (var k = 0; k < this.nodesInLine.length; k++) {
+                    if (this.nodesInLine[k].children.length > 0) {
+                        allLeaves = false;
+                        this.nodesInLine[k].onClick();
+                    }
+                }
+                if (allLeaves) {
+                    for (k = 0; k < this.nodesInLine.length; k++) {
+                        this.nodesInLine[k].onClick();
                     }
                 }
                 break;
