@@ -52,17 +52,18 @@ GTE.TREE = (function(parentModule) {
                 console.log(smallestAndLargest);
                 // If S < L, add children to those nodes so that ALL nodes have L children now.
                 if (smallestAndLargest.smallest < smallestAndLargest.largest) {
-
-                }
-                // If L = 0, add two children to each node on the multiaction line, else
-                else if (smallestAndLargest.largest === 0) {
                     for (var i = 0; i < this.nodesInLine.length; i++) {
-                        this.nodesInLine[i].onClick();
+                        while (this.nodesInLine[i].children.length < smallestAndLargest.largest) {
+                            this.nodesInLine[i].onClick();
+                        }
                     }
                 }
+                // If L = 0, add two children to each node on the multiaction line, else
                 // If S = L, add one child to each node on the multiaction line.
-                else if (smallestAndLargest.smallest === smallestAndLargest.largest) {
-
+                else if (smallestAndLargest.largest === 0 || smallestAndLargest.smallest === smallestAndLargest.largest) {
+                    for (var j = 0; j < this.nodesInLine.length; j++) {
+                        this.nodesInLine[j].onClick();
+                    }
                 }
                 break;
         }
