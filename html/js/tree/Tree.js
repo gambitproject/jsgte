@@ -680,8 +680,9 @@ GTE.TREE = (function (parentModule) {
 
     /**
     * Merges two isets
-    * @param {ISet} a Information set A
-    * @param {ISet} b Information set B
+    * @param  {ISet} a Information set A
+    * @param  {ISet} b Information set B
+    * @return {ISet}   Merged information set
     */
     Tree.prototype.merge = function (a, b) {
         if (a.numberOfMoves() !== b.numberOfMoves()) {
@@ -698,6 +699,7 @@ GTE.TREE = (function (parentModule) {
             }
         }
         this.positionsUpdated = false;
+        return b;
     };
 
     /**
