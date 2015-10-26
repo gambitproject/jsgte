@@ -84,6 +84,38 @@ GTE.TREE = (function(parentModule) {
                     }
                 }
                 break;
+            case GTE.MODES.PLAYER_ASSIGNMENT:
+                // set all nodes on the multiaction line to belong to the
+                // current player (which may be chance)
+                for (var l = 0; l < this.nodesInLine.length; l++) {
+                    this.nodesInLine[l].onClick();
+                }
+                break;
+            case GTE.MODES.MERGE:
+                // note that this mode button only works if every node belongs
+                // to a player already.
+                // now if all nodes on that level belong to the same player
+                // AND have the same number of children, they could be united
+                // into one information set. if that is not the case,
+                // i.e. the nodes on the level belong to different players,
+                // then one could merge CONSECUTIVE nodes on this level that
+                // have the same player and same number of children into
+                // information sets. I am not sure this is a very time-saving
+                // activity, hence postpone this.
+                var playerInLoop = null;
+                var numberOfChildrenInLoop = -1;
+                var isetInLoop = null;
+                for (var m = 0; m < this.nodesInLine.length; m++) {
+                    if (playerInLoop === this.nodesInLine[m].player &&
+                        numberOfChildrenInLoop === this.nodesInLine[m].children.length) {
+                        isetInLoop = GTE.tree.merge(isetInLoop, this.nodesInLine[m].iset);
+                    }
+                    isetInLoop = this.nodesInLine[m].iset;
+                    numberOfChildrenInLoop = this.nodesInLine[m].children.length;
+                    playerInLoop = this.nodesInLine[m].player;
+                }
+                GTE.tree.draw();
+                break;
         }
     };
 
