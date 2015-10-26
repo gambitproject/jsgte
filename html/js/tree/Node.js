@@ -85,7 +85,7 @@ GTE.TREE = (function (parentModule) {
 
         if ((GTE.MODE === GTE.MODES.PLAYER_ASSIGNMENT ||
             GTE.MODE === GTE.MODES.MERGE ||
-            GTE.MODE === GTE.MODES.MERGE) &&
+            GTE.MODE === GTE.MODES.DISSOLVE) &&
             this.isLeaf()) {
             this.shape.hide();
         }
