@@ -17,6 +17,7 @@ GTE.TREE = (function (parentModule) {
         this.depths = [];
         this.leaves = [];
         this.players = [];
+        this.multiActionLines = [];
         this.newPlayer(GTE.COLOURS.BLACK);
         this.newPlayer(GTE.COLOURS.RED);
 
@@ -90,6 +91,7 @@ GTE.TREE = (function (parentModule) {
     * Draws the multiaction lines across the tree
     */
     Tree.prototype.drawMultiactionLines = function () {
+        this.multiActionLines = [];
         for (var i = 0; i < this.depths.length; i++) {
             // If there is only one node/iset do not draw
             if (this.depths[i].length === 1) {
@@ -118,7 +120,14 @@ GTE.TREE = (function (parentModule) {
             }
 
             var multiAction = new GTE.TREE.MultiAction(i, nodesInLine);
+            this.multiActionLines.push(multiAction);
             multiAction.draw();
+            if (multiAction.containsLeaves &&
+                (GTE.MODE === GTE.MODES.PLAYER_ASSIGNMENT ||
+                GTE.MODE === GTE.MODES.MERGE ||
+                GTE.MODE === GTE.MODES.DISSOLVE)) {
+                multiAction.hide();
+            }
         }
     };
 
@@ -825,6 +834,12 @@ GTE.TREE = (function (parentModule) {
         var numberLeaves = this.numberLeaves();
         for (var i = 0; i < numberLeaves; i++) {
             this.leaves[i].hide();
+        }
+        // Also hide all the multiaction lines that contain at least one leaf
+        for (var i = 0; i < this.multiActionLines.length; i++) {
+            if (this.multiActionLines[i].containsLeaves) {
+                this.multiActionLines[i].hide();
+            }
         }
     };
 

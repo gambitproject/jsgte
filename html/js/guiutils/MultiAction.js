@@ -10,6 +10,13 @@ GTE.TREE = (function(parentModule) {
         this.nodesInLine = nodesInLine;
         this.x1 = nodesInLine[0].x;
         this.x2 = nodesInLine[nodesInLine.length - 1].x;
+        this.containsLeaves = false;
+        for (var i = 0; i < this.nodesInLine.length; i++) {
+            if (this.nodesInLine[i].isLeaf()) {
+                this.containsLeaves = true;
+                break;
+            }
+        }
         this.level = level;
         this.y = this.level * GTE.CONSTANTS.DIST_BETWEEN_LEVELS +
             GTE.CONSTANTS.CIRCLE_SIZE / 2;
@@ -43,7 +50,6 @@ GTE.TREE = (function(parentModule) {
     };
 
     MultiAction.prototype.onClick = function() {
-        console.log("click");
         switch (GTE.MODE) {
             case GTE.MODES.ADD:
                 // Find the smallest number S and largest number L of children
@@ -134,6 +140,10 @@ GTE.TREE = (function(parentModule) {
             smallest: smallest,
             largest: largest
         };
+    };
+
+    MultiAction.prototype.hide = function() {
+        this.shape.hide();
     };
 
     // Add class to parent module
