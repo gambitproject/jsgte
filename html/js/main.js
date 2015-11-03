@@ -49,8 +49,20 @@
     });
 
     document.getElementById("button-settings").addEventListener("click", function(){
-        GTE.tools.settings();
+        var el = document.getElementById("settings");
+        el.style.visibility = (el.style.visibility == "visible") ? "hidden" : "visible";
         return false;
+    });
+
+    document.getElementById("button-settings-close").addEventListener("click", function(){
+        var el = document.getElementById("settings");
+        el.style.visibility = (el.style.visibility == "visible") ? "hidden" : "visible";
+        return false;
+    });
+
+    document.getElementById("form-settings").addEventListener("submit", function(e){
+        e.preventDefault();
+        console.log("Guardando");
     });
 
 }());
