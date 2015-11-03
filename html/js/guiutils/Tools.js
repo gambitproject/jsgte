@@ -229,11 +229,6 @@ GTE.UI = (function (parentModule) {
             this.removePlayerButton(buttons[buttons.length-1]);
         }
     };
-
-    Tools.prototype.settings = function() {
-        window.alert("Settings");
-    };
-
     // Add class to parent module
     parentModule.Tools = Tools;
 
