@@ -84,7 +84,7 @@ GTE.TREE = (function (parentModule) {
 
         if ((GTE.MODE === GTE.MODES.PLAYER_ASSIGNMENT ||
             GTE.MODE === GTE.MODES.MERGE ||
-            GTE.MODE === GTE.MODES.MERGE) &&
+            GTE.MODE === GTE.MODES.DISSOLVE) &&
             this.isLeaf()) {
             this.shape.hide();
         }
@@ -387,6 +387,10 @@ GTE.TREE = (function (parentModule) {
         if (this.iset !== null) {
             this.playerNameText = null;
         }
+    };
+
+    Node.prototype.getPathToRoot = function () {
+        return GTE.tree.getPathToRoot(this);
     };
 
     // Add class to parent module

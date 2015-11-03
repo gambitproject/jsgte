@@ -371,9 +371,11 @@ GTE.TREE = (function (parentModule) {
     */
     ISet.prototype.select = function () {
         if (GTE.tree.selected.length > 0 ) {
-            // There are two selected nodes. Merge
             var firstSelected = GTE.tree.selected.pop();
-            GTE.tree.merge(firstSelected, this);
+            // There are two selected nodes. Merge
+            if (this !== firstSelected) {
+                GTE.tree.merge(firstSelected, this);
+            }
             GTE.tree.draw();
         } else {
             if (this.shape !== null) {
