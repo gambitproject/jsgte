@@ -414,6 +414,10 @@ GTE.TREE = (function (parentModule) {
         return 0;
     };
 
+    Node.prototype.getPathToRoot = function () {
+        return GTE.tree.getPathToRoot(this);
+    };
+
     // Add class to parent module
     parentModule.Node = Node;
 
