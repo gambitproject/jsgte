@@ -48,4 +48,9 @@
         return false;
     });
 
+    document.getElementById("button-settings").addEventListener("click", function(){
+        GTE.tools.settings();
+        return false;
+    });
+
 }());

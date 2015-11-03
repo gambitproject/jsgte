@@ -230,6 +230,10 @@ GTE.UI = (function (parentModule) {
         }
     };
 
+    Tools.prototype.settings = function() {
+        window.alert("Settings");
+    };
+
     // Add class to parent module
     parentModule.Tools = Tools;
 
