@@ -691,6 +691,12 @@ GTE.TREE = (function (parentModule) {
         } else if (a.getPlayer() !== b.getPlayer()) {
             window.alert("Couldn't merge the information sets." +
                 "Please select two information sets that belong to same player.");
+        } else if (this.iSetsSharePathFromRoot(a, b)) {
+            window.alert("Couldn't merge the information sets." +
+            "Please select two information sets that do not share a path from root.");
+        } else if (a.firstNode === this.root && b.firstNode === this.root) {
+            window.alert("Couldn't merge the information sets." +
+            "Please select two information sets that do not share a path from root.");
         }else {
             // Add Node A to Node B ISet
             var nodesInA = a.getNodes();
@@ -699,6 +705,56 @@ GTE.TREE = (function (parentModule) {
             }
         }
         this.positionsUpdated = false;
+    };
+
+    Tree.prototype.iSetsSharePathFromRoot = function (a, b) {
+        // Get path to root for each node in both isets
+        var pathsA = [];
+        var pathsB = [];
+
+        var nodesInA = a.getNodes();
+        var nodesInB = b.getNodes();
+        for (var i = 0; i < nodesInA.length; i++) {
+            pathsA.push(nodesInA[i].getPathToRoot());
+        }
+        for (var j = 0; j < nodesInB.length; j++) {
+            pathsB.push(nodesInB[j].getPathToRoot());
+        }
+
+        var compareLenghts = function (a, b) {
+            if (a.length <= b.length) {
+                return -1;
+            } else {
+                return 1;
+            }
+            return 0;
+        };
+
+        // Sort the paths by length
+        pathsA.sort(compareLenghts);
+        pathsB.sort(compareLenghts);
+
+        // Check if the shortest path is contained in the others
+        for (i = 0; i < pathsA.length; i++) {
+            for (j = 0; j < pathsB.length; j++) {
+                var indexA = pathsA[i].pop();
+                var indexB;
+                while (indexA) {
+                    indexB = pathsB[j].pop();
+                    if (indexA === indexB) {
+                        if (pathsA[i].length === 0 || pathsB[j].length === 0) {
+                            return true;
+                        }
+                        indexA = pathsA[i].pop();
+                    } else {
+                        break;
+                    }
+                }
+            }
+        }
+
+        // Otherwise return false
+        return false;
     };
 
     /**
@@ -1167,6 +1223,17 @@ GTE.TREE = (function (parentModule) {
         }
     };
 
+    Tree.prototype.getPathToRoot = function(node) {
+        // We need to save the whole move in the path
+        // and not only the name because chance nodes
+        // cannot be compared by name
+        var path = [];
+        while(node.reachedBy != null) {
+            path.push(node.reachedBy);
+            node = node.parent;
+        }
+        return path;
+    };
 
     // Add class to parent module
     parentModule.Tree = Tree;
