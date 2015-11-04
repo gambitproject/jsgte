@@ -25,7 +25,7 @@ GTE.TREE = (function (parentModule) {
     * Takes care of updating the positions, clearing the canvas and drawing in it
     */
     Tree.prototype.draw = function(forced){
-        var forced = forced || false;
+        forced = forced || false;
         if (this.isets.length > 0) {
             this.align();
         }
