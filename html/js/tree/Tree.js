@@ -979,8 +979,8 @@ GTE.TREE = (function (parentModule) {
         }  else {
             // Get all chance nodes
             var nodes = this.getPlayerNodes(0);
-            for (var i = 0; i < nodes.length; i++) {
-                nodes[i].togglePlayerNameVisibility();
+            for (var j = 0; j < nodes.length; j++) {
+                nodes[j].togglePlayerNameVisibility();
             }
         }
     };
@@ -1165,7 +1165,7 @@ GTE.TREE = (function (parentModule) {
         // and not only the name because chance nodes
         // cannot be compared by name
         var path = [];
-        while(node.reachedBy != null) {
+        while(node.reachedBy !== null) {
             path.push(node.reachedBy);
             node = node.parent;
         }
