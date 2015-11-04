@@ -3,6 +3,27 @@
     // Get global canvas and store it in GTE
     // GTE is initialized by the library
     GTE.canvas = SVG('canvas').size("100%", "100%").attr({'style': 'background: #fff'});
+    // Initialize settings
+    var setSettingsToDefaults = function() {
+        GTE.STORAGE.settingsCircleSize = GTE.CONSTANTS.CIRCLE_SIZE;
+        GTE.STORAGE.settingsLineThickness = GTE.CONSTANTS.LINE_THICKNESS;
+        GTE.STORAGE.settingsDistLevels = GTE.CONSTANTS.DIST_BETWEEN_LEVELS;
+    }
+
+    var setSettingsForm = function() {
+        document.getElementsByName("circle-size")[0].value = GTE.STORAGE.settingsCircleSize;
+        document.getElementsByName("stroke-width")[0].value = GTE.STORAGE.settingsLineThickness;
+        document.getElementsByName("dist-levels")[0].value = GTE.STORAGE.settingsDistLevels;
+    }
+
+    GTE.STORAGE = window.localStorage;
+
+    if (GTE.STORAGE.length === 0) {
+        setSettingsToDefaults();
+    }
+
+    setSettingsForm();
+
     GTE.tools = new GTE.UI.Tools();
     // Always start with root and two children
     GTE.tools.newTree();
@@ -62,7 +83,30 @@
 
     document.getElementById("form-settings").addEventListener("submit", function(e){
         e.preventDefault();
-        console.log("Guardando");
+        // Save settings
+        GTE.STORAGE.settingsCircleSize =
+                    parseInt(document.getElementsByName("circle-size")[0].value);
+        GTE.STORAGE.settingsLineThickness =
+                    parseInt(document.getElementsByName("stroke-width")[0].value);
+        GTE.STORAGE.settingsDistLevels =
+                    parseInt(document.getElementsByName("dist-levels")[0].value);
+        // Redraw tree
+        GTE.tree.draw(true);
+        // Hide the modal
+        var el = document.getElementById("settings");
+        el.style.visibility = (el.style.visibility == "visible") ? "hidden" : "visible";
+        return false;
+    });
+
+    document.getElementById("button-settings-reset").addEventListener("click", function() {
+        // Clear localStorage and reset settings
+        localStorage.clear();
+        setSettingsToDefaults();
+        // Reset form
+        setSettingsForm();
+        // Redraw tree
+        GTE.tree.draw(true);
+        return false;
     });
 
 }());
