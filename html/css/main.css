@@ -316,6 +316,42 @@ a {
     text-align:center;
 }
 
+#settings ul {
+    width: 100%;
+    list-style-type:none;
+    list-style-position:outside;
+    margin:0px;
+    padding:0px;
+}
+
+#settings li{
+    padding:12px;
+    border-bottom:1px solid #eee;
+}
+
+#settings li label {
+    width:206px;
+    margin-top: 3px;
+    display:inline-block;
+    text-align: left;
+    float:left;
+    padding:3px;
+    box-sizing: border-box;
+}
+
+#settings li input {
+    height:20px;
+    width:50px;
+    padding:5px 8px;
+}
+
+.contact_form textarea {padding:8px; width:300px;}
+.contact_form button {margin-left:156px;}
+
+#settings li:last-child {
+    border-bottom:0;
+}
+
 .close {
 	background: #606061;
 	color: #FFFFFF;
