@@ -3,18 +3,25 @@
     // Get global canvas and store it in GTE
     // GTE is initialized by the library
     GTE.canvas = SVG('canvas').size("100%", "100%").attr({'style': 'background: #fff'});
+    GTE.tools = new GTE.UI.Tools();
     // Initialize settings
     var setSettingsToDefaults = function() {
         GTE.STORAGE.settingsCircleSize = GTE.CONSTANTS.CIRCLE_SIZE;
         GTE.STORAGE.settingsLineThickness = GTE.CONSTANTS.LINE_THICKNESS;
         GTE.STORAGE.settingsDistLevels = GTE.CONSTANTS.DIST_BETWEEN_LEVELS;
-    }
+    };
 
     var setSettingsForm = function() {
         document.getElementsByName("circle-size")[0].value = GTE.STORAGE.settingsCircleSize;
         document.getElementsByName("stroke-width")[0].value = GTE.STORAGE.settingsLineThickness;
         document.getElementsByName("dist-levels")[0].value = GTE.STORAGE.settingsDistLevels;
-    }
+        for (var i = 1; i <= GTE.CONSTANTS.MAX_PLAYERS; i++) {
+            var picker = document.createElement("input");
+            picker.type = "color";
+            picker.value = GTE.tools.getColour(i);
+            document.getElementById("player-colours").appendChild(picker);
+        }
+    };
 
     GTE.STORAGE = window.localStorage;
 
@@ -24,7 +31,6 @@
 
     setSettingsForm();
 
-    GTE.tools = new GTE.UI.Tools();
     // Always start with root and two children
     GTE.tools.newTree();
 

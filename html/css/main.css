@@ -345,11 +345,17 @@ a {
     padding:5px 8px;
 }
 
-.contact_form textarea {padding:8px; width:300px;}
-.contact_form button {margin-left:156px;}
+#settings li input[type="color"]{
+    width:20px;
+    padding:0;
+}
 
 #settings li:last-child {
     border-bottom:0;
+}
+
+#player-colours label {
+    width: 150px !important;
 }
 
 .close {
