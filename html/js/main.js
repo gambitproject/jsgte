@@ -36,8 +36,12 @@
         document.getElementsByName("circle-size")[0].value = GTE.STORAGE.settingsCircleSize;
         document.getElementsByName("stroke-width")[0].value = GTE.STORAGE.settingsLineThickness;
         document.getElementsByName("dist-levels")[0].value = GTE.STORAGE.settingsDistLevels;
+        document.getElementsByName("chance-colour")[0].value = storedColours[0];
         var playerColourInputs = document.getElementsByName("player-color");
-        if (playerColourInputs.length > 0) {
+
+        // This function is both called on the form reset and when setting up the form
+        if (playerColourInputs.length > 0) { // If form is already set up
+            GTE.tree.changePlayerColour(0, storedColours[0]);
             for (var i = 1; i <= GTE.CONSTANTS.MAX_PLAYERS; i++) {
                 playerColourInputs[i-1].value = storedColours[i];
                 GTE.tree.changePlayerColour(i, storedColours[i]);
@@ -129,9 +133,10 @@
                     parseInt(document.getElementsByName("stroke-width")[0].value);
         GTE.STORAGE.settingsDistLevels =
                     parseInt(document.getElementsByName("dist-levels")[0].value);
+        var chanceColour = document.getElementsByName("chance-colour")[0].value;
         var playerColours = [];
-        var colorNames = Object.keys(GTE.COLOURS);
-        playerColours.push(GTE.COLOURS[colorNames[0]]);
+        playerColours.push(chanceColour);
+        GTE.tree.changePlayerColour(0, chanceColour);
         var oldPlayerColours = JSON.parse(GTE.STORAGE.settingsPlayersColours);
         for (var i = 1; i <= GTE.CONSTANTS.MAX_PLAYERS; i++) {
             var colour = document.getElementById("settings-player-color-" + i).value;

@@ -21,6 +21,7 @@ GTE.UI = (function (parentModule) {
         var child2 = new GTE.TREE.Node(root);
         GTE.tree = new GTE.TREE.Tree(root);
 
+        this.addChancePlayer();
         this.addPlayer();
         // Add a second Player
         this.addPlayer();
@@ -152,6 +153,21 @@ GTE.UI = (function (parentModule) {
             }
         }
     };
+
+    Tools.prototype.addChancePlayer = function () {
+        var player = GTE.tree.newPlayer(GTE.tools.getColour(0));
+        if (player !== null) {
+            var playerButtons = document.getElementById("player-buttons");
+            playerButtons.innerHTML =
+                "<li><button style='color:"+ player.colour +
+                "' id='button-player-" + player.id +
+                "' class='button button--sacnite button--inverted button-player'" +
+                " alt='Chance player' title='Chance'" +
+                "' player='" + player.id +
+                "'><i class='icon-dice'></i></button></li>";
+        }
+    };
+
 
     /**
     * Function that removes last player from the Toolbar
