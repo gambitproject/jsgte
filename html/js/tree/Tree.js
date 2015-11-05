@@ -15,7 +15,6 @@ GTE.TREE = (function (parentModule) {
         this.leaves = [];
         this.players = [];
         this.newPlayer(GTE.COLOURS.BLACK);
-        this.newPlayer(GTE.COLOURS.RED);
 
         this.showChanceName = true;
     }
@@ -1170,6 +1169,15 @@ GTE.TREE = (function (parentModule) {
             node = node.parent;
         }
         return path;
+    };
+
+    Tree.prototype.changePlayerColour = function(playerId, colour) {
+        var player = this.players[playerId];
+        if (player) {
+            player.changeColour(colour);
+            GTE.tools.changePlayerColour(playerId, colour);
+        }
+
     };
 
     // Add class to parent module

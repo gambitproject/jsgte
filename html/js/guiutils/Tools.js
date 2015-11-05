@@ -21,6 +21,7 @@ GTE.UI = (function (parentModule) {
         var child2 = new GTE.TREE.Node(root);
         GTE.tree = new GTE.TREE.Tree(root);
 
+        this.addPlayer();
         // Add a second Player
         this.addPlayer();
 
@@ -229,6 +230,12 @@ GTE.UI = (function (parentModule) {
             this.removePlayerButton(buttons[buttons.length-1]);
         }
     };
+
+    Tools.prototype.changePlayerColour = function (playerId, colour) {
+        var playerButton = document.getElementById("button-player-" + playerId);
+        playerButton.style.color = colour;
+    };
+
     // Add class to parent module
     parentModule.Tools = Tools;
 
