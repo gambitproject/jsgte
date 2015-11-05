@@ -11,7 +11,8 @@
         GTE.STORAGE.settingsDistLevels = GTE.CONSTANTS.DIST_BETWEEN_LEVELS;
         var colorNames = Object.keys(GTE.COLOURS);
         var colours = [];
-        for (var i = 0; i < colorNames.length; i++) {
+        colours.push(GTE.COLOURS[colorNames[0]]);
+        for (var i = 1; i <= GTE.CONSTANTS.MAX_PLAYERS; i++) {
             colours.push(GTE.COLOURS[colorNames[i]]);
         }
         GTE.STORAGE.settingsPlayersColours = JSON.stringify(colours);
@@ -35,14 +36,23 @@
         document.getElementsByName("circle-size")[0].value = GTE.STORAGE.settingsCircleSize;
         document.getElementsByName("stroke-width")[0].value = GTE.STORAGE.settingsLineThickness;
         document.getElementsByName("dist-levels")[0].value = GTE.STORAGE.settingsDistLevels;
-        for (var i = 1; i <= GTE.CONSTANTS.MAX_PLAYERS; i++) {
-            var picker = document.createElement("input");
-            picker.id = "settings-player-color-" + i;
-            picker.type = "color";
-            picker.value = storedColours[i-1];
-            picker.setAttribute("player", i);
+        var playerColourInputs = document.getElementsByName("player-color");
+        if (playerColourInputs.length > 0) {
+            for (var i = 1; i <= GTE.CONSTANTS.MAX_PLAYERS; i++) {
+                playerColourInputs[i-1].value = storedColours[i];
+                GTE.tree.changePlayerColour(i, storedColours[i]);
+            }
+        } else {
+            for (i = 1; i <= GTE.CONSTANTS.MAX_PLAYERS; i++) {
+                var picker = document.createElement("input");
+                picker.id = "settings-player-color-" + i;
+                picker.type = "color";
+                picker.value = storedColours[i];
+                picker.name = "player-color";
+                picker.setAttribute("player", i);
 
-            document.getElementById("player-colours").appendChild(picker);
+                document.getElementById("player-colours").appendChild(picker);
+            }
         }
     };
 
@@ -120,8 +130,15 @@
         GTE.STORAGE.settingsDistLevels =
                     parseInt(document.getElementsByName("dist-levels")[0].value);
         var playerColours = [];
+        var colorNames = Object.keys(GTE.COLOURS);
+        playerColours.push(GTE.COLOURS[colorNames[0]]);
+        var oldPlayerColours = JSON.parse(GTE.STORAGE.settingsPlayersColours);
         for (var i = 1; i <= GTE.CONSTANTS.MAX_PLAYERS; i++) {
-            playerColours.push(document.getElementById("settings-player-color-" + i).value);
+            var colour = document.getElementById("settings-player-color-" + i).value;
+            playerColours.push(colour);
+            if (oldPlayerColours[i] !== playerColours[i]) {
+                GTE.tree.changePlayerColour(i, colour);
+            }
         }
         GTE.STORAGE.settingsPlayersColours = JSON.stringify(playerColours);
         // Redraw tree

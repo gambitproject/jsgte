@@ -180,7 +180,8 @@ GTE.UI = (function (parentModule) {
     * @return {Colour} colour       Colour hex code
     */
     Tools.prototype.getColour = function (colourIndex) {
-        return GTE.COLOURS[Object.keys(GTE.COLOURS)[colourIndex]];
+        var colours = JSON.parse(GTE.STORAGE.settingsPlayersColours);
+        return colours[colourIndex];
     };
 
     /**
