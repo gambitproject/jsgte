@@ -9,16 +9,39 @@
         GTE.STORAGE.settingsCircleSize = GTE.CONSTANTS.CIRCLE_SIZE;
         GTE.STORAGE.settingsLineThickness = GTE.CONSTANTS.LINE_THICKNESS;
         GTE.STORAGE.settingsDistLevels = GTE.CONSTANTS.DIST_BETWEEN_LEVELS;
+        var colorNames = Object.keys(GTE.COLOURS);
+        var colours = [];
+        for (var i = 0; i < colorNames.length; i++) {
+            colours.push(GTE.COLOURS[colorNames[i]]);
+        }
+        GTE.STORAGE.settingsPlayersColours = JSON.stringify(colours);
     };
 
+    // var playerListener = function(picker) {
+    //     var closeControl = true;
+    //     picker.addEventListener("focus", function() {
+    //         // Focus is fired both when the picker opens and closes
+    //         // closeControl variable is used to control whether the
+    //         // picker is opening or closing
+    //         closeControl = !closeControl;
+    //         if (closeControl) {
+    //             GTE.tree.changePlayerColour(picker.getAttribute("player"), picker.value);
+    //         }
+    //     });
+    // };
+
     var setSettingsForm = function() {
+        var storedColours = JSON.parse(GTE.STORAGE.settingsPlayersColours);
         document.getElementsByName("circle-size")[0].value = GTE.STORAGE.settingsCircleSize;
         document.getElementsByName("stroke-width")[0].value = GTE.STORAGE.settingsLineThickness;
         document.getElementsByName("dist-levels")[0].value = GTE.STORAGE.settingsDistLevels;
         for (var i = 1; i <= GTE.CONSTANTS.MAX_PLAYERS; i++) {
             var picker = document.createElement("input");
+            picker.id = "settings-player-color-" + i;
             picker.type = "color";
-            picker.value = GTE.tools.getColour(i);
+            picker.value = storedColours[i-1];
+            picker.setAttribute("player", i);
+
             document.getElementById("player-colours").appendChild(picker);
         }
     };
@@ -96,6 +119,11 @@
                     parseInt(document.getElementsByName("stroke-width")[0].value);
         GTE.STORAGE.settingsDistLevels =
                     parseInt(document.getElementsByName("dist-levels")[0].value);
+        var playerColours = [];
+        for (var i = 1; i <= GTE.CONSTANTS.MAX_PLAYERS; i++) {
+            playerColours.push(document.getElementById("settings-player-color-" + i).value);
+        }
+        GTE.STORAGE.settingsPlayersColours = JSON.stringify(playerColours);
         // Redraw tree
         GTE.tree.draw(true);
         // Hide the modal
