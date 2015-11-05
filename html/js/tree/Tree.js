@@ -1173,11 +1173,10 @@ GTE.TREE = (function (parentModule) {
 
     Tree.prototype.changePlayerColour = function(playerId, colour) {
         var player = this.players[playerId];
-        if (player) {
+        if (player && player.colour !== colour) {
             player.changeColour(colour);
             GTE.tools.changePlayerColour(playerId, colour);
         }
-
     };
 
     // Add class to parent module

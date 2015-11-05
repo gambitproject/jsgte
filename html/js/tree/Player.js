@@ -72,7 +72,7 @@ GTE.TREE = (function (parentModule) {
     };
 
     Player.prototype.changeColour = function(colour) {
-        console.log(colour);
+        this.colour = colour;
     };
 
     // Add class to parent module
