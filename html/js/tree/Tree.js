@@ -14,7 +14,6 @@ GTE.TREE = (function (parentModule) {
         this.depths = [];
         this.leaves = [];
         this.players = [];
-        this.newPlayer(GTE.COLOURS.BLACK);
 
         this.showChanceName = true;
     }
