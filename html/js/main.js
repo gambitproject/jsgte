@@ -16,6 +16,7 @@
             colours.push(GTE.COLOURS[colorNames[i]]);
         }
         GTE.STORAGE.settingsPlayersColours = JSON.stringify(colours);
+        GTE.STORAGE.settingsOrientation = GTE.CONSTANTS.DEFAULT_ORIENTATION;
     };
 
     // var playerListener = function(picker) {
@@ -37,6 +38,8 @@
         document.getElementsByName("stroke-width")[0].value = GTE.STORAGE.settingsLineThickness;
         document.getElementsByName("dist-levels")[0].value = GTE.STORAGE.settingsDistLevels;
         document.getElementsByName("chance-colour")[0].value = storedColours[0];
+        document.getElementById("orientation").getElementsByTagName("input")[GTE.STORAGE.settingsOrientation].checked = true;
+
         var playerColourInputs = document.getElementsByName("player-color");
 
         // This function is both called on the form reset and when setting up the form
@@ -47,13 +50,13 @@
                 GTE.tree.changePlayerColour(i, storedColours[i]);
             }
         } else {
-            for (i = 1; i <= GTE.CONSTANTS.MAX_PLAYERS; i++) {
+            for (var j = 1; j <= GTE.CONSTANTS.MAX_PLAYERS; j++) {
                 var picker = document.createElement("input");
-                picker.id = "settings-player-color-" + i;
+                picker.id = "settings-player-color-" + j;
                 picker.type = "color";
-                picker.value = storedColours[i];
+                picker.value = storedColours[j];
                 picker.name = "player-color";
-                picker.setAttribute("player", i);
+                picker.setAttribute("player", j);
 
                 document.getElementById("player-colours").appendChild(picker);
             }
@@ -121,6 +124,8 @@
     document.getElementById("button-settings-close").addEventListener("click", function(){
         var el = document.getElementById("settings");
         el.style.visibility = (el.style.visibility == "visible") ? "hidden" : "visible";
+        // Reset form to saved settings
+        setSettingsForm();
         return false;
     });
 
@@ -133,6 +138,8 @@
                     parseInt(document.getElementsByName("stroke-width")[0].value);
         GTE.STORAGE.settingsDistLevels =
                     parseInt(document.getElementsByName("dist-levels")[0].value);
+        GTE.STORAGE.settingsOrientation =
+                    parseInt(document.querySelector('input[name=orientation]:checked').value);
         var chanceColour = document.getElementsByName("chance-colour")[0].value;
         var playerColours = [];
         playerColours.push(chanceColour);

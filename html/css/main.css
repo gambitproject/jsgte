@@ -350,12 +350,21 @@ a {
     padding:0;
 }
 
+#settings li input[name="orientation"]{
+    width:20px;
+    padding:0;
+}
+
 #settings li:last-child {
     border-bottom:0;
 }
 
 #player-colours label {
     width: 150px !important;
+}
+
+#orientation label {
+    width: 85px !important;
 }
 
 .close {
