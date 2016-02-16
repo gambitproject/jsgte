@@ -48,12 +48,12 @@ GTE.TREE = (function (parentModule) {
         // The line has to be drawn before so that the circle is drawn on top of it
         // Draw line if there are is no iset in parent
         if (this.parent !== null && this.reachedBy === null) {
-            var circleRadius = GTE.CONSTANTS.CIRCLE_SIZE/2;
+            var circleRadius = parseInt(GTE.STORAGE.settingsCircleSize)/2;
             this.line = GTE.canvas.line(this.parent.x + circleRadius,
                                         this.parent.y + circleRadius,
                                         this.x + circleRadius,
                                         this.y + circleRadius)
-                                    .stroke({ width: GTE.CONSTANTS.LINE_THICKNESS });
+                                    .stroke({ width: parseInt(GTE.STORAGE.settingsLineThickness) });
 
         }else if (this.reachedBy !== null) {
             this.drawReachedBy();
@@ -61,9 +61,9 @@ GTE.TREE = (function (parentModule) {
         var thisNode = this;
         if (this.player && this.player.id === GTE.TREE.Player.CHANCE){
             this.shape = GTE.canvas.rect(
-                          GTE.CONSTANTS.CIRCLE_SIZE, GTE.CONSTANTS.CIRCLE_SIZE);
+                          parseInt(GTE.STORAGE.settingsCircleSize), parseInt(GTE.STORAGE.settingsCircleSize));
         } else {
-            this.shape = GTE.canvas.circle(GTE.CONSTANTS.CIRCLE_SIZE);
+            this.shape = GTE.canvas.circle(parseInt(GTE.STORAGE.settingsCircleSize));
         }
         this.shape.addClass('node')
                   .x(this.x)

@@ -21,6 +21,8 @@ GTE.UI = (function (parentModule) {
         var child2 = new GTE.TREE.Node(root);
         GTE.tree = new GTE.TREE.Tree(root);
 
+        this.addChancePlayer();
+        this.addPlayer();
         // Add a second Player
         this.addPlayer();
 
@@ -152,6 +154,21 @@ GTE.UI = (function (parentModule) {
         }
     };
 
+    Tools.prototype.addChancePlayer = function () {
+        var player = GTE.tree.newPlayer(GTE.tools.getColour(0));
+        if (player !== null) {
+            var playerButtons = document.getElementById("player-buttons");
+            playerButtons.innerHTML =
+                "<li><button style='color:"+ player.colour +
+                "' id='button-player-" + player.id +
+                "' class='button button--sacnite button--inverted button-player'" +
+                " alt='Chance player' title='Chance'" +
+                "' player='" + player.id +
+                "'><i class='icon-dice'></i></button></li>";
+        }
+    };
+
+
     /**
     * Function that removes last player from the Toolbar
     */
@@ -179,7 +196,8 @@ GTE.UI = (function (parentModule) {
     * @return {Colour} colour       Colour hex code
     */
     Tools.prototype.getColour = function (colourIndex) {
-        return GTE.COLOURS[Object.keys(GTE.COLOURS)[colourIndex]];
+        var colours = JSON.parse(GTE.STORAGE.settingsPlayersColours);
+        return colours[colourIndex];
     };
 
     /**
@@ -228,6 +246,11 @@ GTE.UI = (function (parentModule) {
         while(buttons.length > 2) {
             this.removePlayerButton(buttons[buttons.length-1]);
         }
+    };
+
+    Tools.prototype.changePlayerColour = function (playerId, colour) {
+        var playerButton = document.getElementById("button-player-" + playerId);
+        playerButton.style.color = colour;
     };
 
     // Add class to parent module

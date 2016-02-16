@@ -72,6 +72,10 @@ GTE.TREE = (function (parentModule) {
                 });
     };
 
+    Player.prototype.changeColour = function(colour) {
+        this.colour = colour;
+    };
+
     /**
     * Draws the player's payoffs
     */
