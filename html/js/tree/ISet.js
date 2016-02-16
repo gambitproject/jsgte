@@ -169,7 +169,7 @@ GTE.TREE = (function (parentModule) {
     * Draws the information set
     */
     ISet.prototype.draw = function () {
-        if (this.lastNode !== this.firstNode) {
+        if (!this.isSingleton()) {
             var width = (this.lastNode.x + GTE.CONSTANTS.CIRCLE_SIZE*2) -
                         (this.firstNode.x - GTE.CONSTANTS.CIRCLE_SIZE);
 
@@ -385,7 +385,7 @@ GTE.TREE = (function (parentModule) {
             }
             var nodes = this.getNodes();
             for (var i = 0; i < nodes.length; i++) {
-                nodes[i].shape.toggleClass('selected');
+                nodes[i].select();
             }
             GTE.tree.selected.push(this);
         }
