@@ -18,6 +18,7 @@ GTE.TREE = (function (parentModule) {
         this.leaves = [];
         this.oldLeaves = [];
         this.players = [];
+
         this.multiActionLines = [];
         this.newPlayer(GTE.COLOURS.BLACK);
         this.newPlayer(GTE.COLOURS.RED);
@@ -29,11 +30,12 @@ GTE.TREE = (function (parentModule) {
     * Function that draws the Game in the global canvas
     * Takes care of updating the positions, clearing the canvas and drawing in it
     */
-    Tree.prototype.draw = function(){
+    Tree.prototype.draw = function(forced){
+        forced = forced || false;
         if (this.isets.length > 0) {
             this.align();
         }
-        if (!this.positionsUpdated) {
+        if (!this.positionsUpdated || forced) {
             this.updatePositions();
         }
 
@@ -41,7 +43,7 @@ GTE.TREE = (function (parentModule) {
             this.sortOutCollisions();
         }
 
-        if (!this.positionsUpdated) {
+        if (!this.positionsUpdated || forced) {
             this.recursiveCalculateYs(this.root);
             this.centerParents(this.root);
             this.positionsUpdated = true;
@@ -313,8 +315,8 @@ GTE.TREE = (function (parentModule) {
         for (var i = 0; i < node.children.length; i++) {
             this.recursiveCalculateYs(node.children[i]);
         }
-        node.y = node.depth * GTE.CONSTANTS.DIST_BETWEEN_LEVELS;
-        if ((node.y + GTE.CONSTANTS.CIRCLE_SIZE) > GTE.canvas.viewbox().height) {
+        node.y = node.depth * parseInt(GTE.STORAGE.settingsDistLevels);
+        if ((node.y + parseInt(GTE.STORAGE.settingsCircleSize)) > GTE.canvas.viewbox().height) {
             this.zoomOut();
             this.updatePositions();
         }
@@ -441,13 +443,13 @@ GTE.TREE = (function (parentModule) {
             // Calculate the offset so the nodes are centered on the screen
             offset = (GTE.canvas.viewbox().width-widthPerNode*numberLeaves)/2;
         }
-        if (widthPerNode < GTE.CONSTANTS.CIRCLE_SIZE) {
+        if (widthPerNode < parseInt(GTE.STORAGE.settingsCircleSize)) {
             this.zoomOut();
             this.updateLeavesPositions();
         } else {
             for (var i = 0; i < numberLeaves; i++) {
                 this.leaves[i].x = (widthPerNode*i)+(widthPerNode/2) -
-                                        GTE.CONSTANTS.CIRCLE_SIZE/2 + offset;
+                                        parseInt(GTE.STORAGE.settingsCircleSize)/2 + offset;
             }
         }
     };
@@ -1308,6 +1310,14 @@ GTE.TREE = (function (parentModule) {
             node = node.parent;
         }
         return path;
+    };
+
+    Tree.prototype.changePlayerColour = function(playerId, colour) {
+        var player = this.players[playerId];
+        if (player && player.colour !== colour) {
+            player.changeColour(colour);
+            GTE.tools.changePlayerColour(playerId, colour);
+        }
     };
 
     // Add class to parent module
