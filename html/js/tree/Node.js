@@ -21,6 +21,7 @@ GTE.TREE = (function (parentModule) {
         }
         this.depth = this.level;
         this.line = null;
+        this.shape = null;
         this.x = null;
         this.y = null;
         this.shape = null;
@@ -387,6 +388,30 @@ GTE.TREE = (function (parentModule) {
         if (this.iset !== null) {
             this.playerNameText = null;
         }
+    };
+
+    /**
+    * Marks current node as selected
+    */
+    Node.prototype.select = function () {
+        if (this.shape !== null) {
+            this.shape.toggleClass('selected');
+        }
+    };
+
+    /**
+    * Compare function used for sort() function. It sorts nodes depending on its x position
+    * @param  {Node}   a Node a to be compared
+    * @param  {Node}   b Node b to be compared
+    * @return {Number} Returns -1 if a <= b, 1 if a > b
+    */
+    Node.compareX = function (a, b) {
+        if (parseInt(a.x) <= parseInt(b.x)) {
+            return -1;
+        } else {
+            return 1;
+        }
+        return 0;
     };
 
     Node.prototype.getPathToRoot = function () {

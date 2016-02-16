@@ -11,9 +11,16 @@ GTE.TREE = (function (parentModule) {
         this.positionsUpdated = false;
         this.isets = [];
         this.selected = [];
+
+        this.nodes = []; // Never reference directly.
+                         //It might not be updated!! Use this.getAllNodes()
         this.depths = [];
         this.leaves = [];
         this.players = [];
+
+        this.multiActionLines = [];
+        this.newPlayer(GTE.COLOURS.BLACK);
+        this.newPlayer(GTE.COLOURS.RED);
 
         this.showChanceName = true;
     }
@@ -34,7 +41,6 @@ GTE.TREE = (function (parentModule) {
         if (this.isets.length > 0) {
             this.sortOutCollisions();
         }
-        this.updateDepths();
 
         if (!this.positionsUpdated || forced) {
             this.recursiveCalculateYs(this.root);
@@ -42,6 +48,8 @@ GTE.TREE = (function (parentModule) {
             this.positionsUpdated = true;
         }
         this.clear();
+        // Draw MultiAction first so that nodes clicks have higher priority
+        this.drawMultiactionLines();
         if (this.isets.length > 0) {
             this.drawISets();
         }
@@ -79,6 +87,50 @@ GTE.TREE = (function (parentModule) {
     */
     Tree.prototype.drawNodes = function () {
         this.recursiveDrawNodes(this.root);
+    };
+
+    /**
+    * Draws the multiaction lines across the tree
+    */
+    Tree.prototype.drawMultiactionLines = function () {
+        this.multiActionLines = [];
+        for (var i = 0; i < this.depths.length; i++) {
+            // If there is only one node/iset do not draw
+            if (this.depths[i].length === 1) {
+                continue;
+            }
+            var nodesInLine = [];
+            // Only draw multiAction line if no isets or all in line are singleton
+            if (this.depths[i][0] instanceof GTE.TREE.ISet) {
+                // Remember that if there are isets, depths contains isets and
+                // no single nodes
+                var draw = true;
+                for (var j = 0; j < this.depths[i].length; j++) {
+                    if (!this.depths[i][j].isSingleton()) {
+                        draw = false;
+                        break;
+                    }
+                    // Push the only node that this iset contains
+                    nodesInLine.push(this.depths[i][j].getNodes()[0]);
+                }
+                if (!draw) {
+                    // Skip to next level
+                    continue;
+                }
+            } else {
+                nodesInLine = this.depths[i].slice();
+            }
+
+            var multiAction = new GTE.TREE.MultiAction(i, nodesInLine);
+            this.multiActionLines.push(multiAction);
+            multiAction.draw();
+            if (multiAction.containsLeaves &&
+                (GTE.MODE === GTE.MODES.PLAYER_ASSIGNMENT ||
+                GTE.MODE === GTE.MODES.MERGE ||
+                GTE.MODE === GTE.MODES.DISSOLVE)) {
+                multiAction.hide();
+            }
+        }
     };
 
     /**
@@ -153,15 +205,30 @@ GTE.TREE = (function (parentModule) {
     * Recursive function that updated the depths array in the tree
     */
     Tree.prototype.updateDepths = function () {
+        // If there are isets, depths will contain isets, if not, it will
+        // contain nodes
         this.depths = [];
-        for (var i = 0; i < this.isets.length; i++) {
-            if (this.depths[this.isets[i].maxNodesDepth] === undefined) {
-                this.depths[this.isets[i].maxNodesDepth] = [];
+        if (this.isets.length > 0) {
+            for (var i = 0; i < this.isets.length; i++) {
+                if (this.depths[this.isets[i].maxNodesDepth] === undefined) {
+                    this.depths[this.isets[i].maxNodesDepth] = [];
+                }
+                this.depths[this.isets[i].maxNodesDepth].push(this.isets[i]);
             }
-            this.depths[this.isets[i].maxNodesDepth].push(this.isets[i]);
-        }
-        for (i = 0; i < this.depths.length; i++) {
-            this.depths[i].sort(GTE.TREE.ISet.compareX);
+            for (i = 0; i < this.depths.length; i++) {
+                this.depths[i].sort(GTE.TREE.ISet.compareX);
+            }
+        } else {
+            var nodes = this.getAllNodes();
+            for (var j = 0; j < nodes.length; j++) {
+                if (this.depths[nodes[j].depth] === undefined) {
+                    this.depths[nodes[j].depth] = [];
+                }
+                this.depths[nodes[j].depth].push(this.nodes[j]);
+            }
+            for (j = 0; j < this.depths.length; j++) {
+                this.depths[j].sort(GTE.TREE.Node.compareX);
+            }
         }
     };
 
@@ -624,8 +691,9 @@ GTE.TREE = (function (parentModule) {
 
     /**
     * Merges two isets
-    * @param {ISet} a Information set A
-    * @param {ISet} b Information set B
+    * @param  {ISet} a Information set A
+    * @param  {ISet} b Information set B
+    * @return {ISet}   Merged information set
     */
     Tree.prototype.merge = function (a, b) {
         if (a.numberOfMoves() !== b.numberOfMoves()) {
@@ -648,6 +716,7 @@ GTE.TREE = (function (parentModule) {
             }
         }
         this.positionsUpdated = false;
+        return b;
     };
 
     Tree.prototype.iSetsSharePathFromRoot = function (a, b) {
@@ -824,6 +893,12 @@ GTE.TREE = (function (parentModule) {
         for (var i = 0; i < numberLeaves; i++) {
             this.leaves[i].hide();
         }
+        // Also hide all the multiaction lines that contain at least one leaf
+        for (var i = 0; i < this.multiActionLines.length; i++) {
+            if (this.multiActionLines[i].containsLeaves) {
+                this.multiActionLines[i].hide();
+            }
+        }
     };
 
     /**
@@ -885,13 +960,16 @@ GTE.TREE = (function (parentModule) {
     * @return {List}    listOfNodes  List of tree's nodes
     */
     Tree.prototype.getAllNodes = function (breadthFirst) {
-        var listOfNodes = [];
         if (breadthFirst) {
-            listOfNodes = this.getAllNodesBreadthFirst();
+            this.nodes = [];
+            this.nodes = this.getAllNodesBreadthFirst();
         } else {
-            this.recursiveGetAllNodes(this.root, listOfNodes);
+            if (this.nodes.length === 0 || this.positionsUpdated === false) {
+                this.nodes = [];
+                this.recursiveGetAllNodes(this.root, this.nodes);
+            }
         }
-        return listOfNodes;
+        return this.nodes;
     };
 
     /**

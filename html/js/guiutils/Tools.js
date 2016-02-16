@@ -26,7 +26,7 @@ GTE.UI = (function (parentModule) {
         // Add a second Player
         this.addPlayer();
 
-        GTE.tree.updatePositions();
+        // GTE.tree.updatePositions();
         // Create a node and draw it
         GTE.tree.draw();
         this.switchMode(GTE.MODES.ADD);
