@@ -1228,7 +1228,7 @@ GTE.TREE = (function (parentModule) {
         // and not only the name because chance nodes
         // cannot be compared by name
         var path = [];
-        while(node.reachedBy != null) {
+        while(node.reachedBy !== null) {
             path.push(node.reachedBy);
             node = node.parent;
         }
