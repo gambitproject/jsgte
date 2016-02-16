@@ -34,8 +34,6 @@
                 </ul>
                 <ul class="vertical-centered">
                     <div id="player-buttons">
-                        <li><button id="button-player-0" class="button button--sacnite button--inverted button-player" alt="Chance player" title="Chance" player="0"><i class="icon-dice"></i></button></li>
-                        <li><button id="button-player-1" class="button button--sacnite button--inverted red button-player" alt="Player 1" title="Player 1" player="1"><i class="icon-user"></i></button></li>
                     </div>
                     <li><button id="button-player-more" class="button button--sacnite button--inverted" alt="More players" title="More players"><i class="icon-user-plus"></i></button></li>
                     <li><button id="button-player-less" class="button button--sacnite button--inverted" alt="Less players" title="Less players"><i class="icon-user-less"></i></button></li>
@@ -44,19 +42,62 @@
                     <li><button id="button-merge" class="button button--sacnite button--inverted" alt="Merge isets"><i class="icon-link"></i></button></li>
                     <li><button id="button-dissolve" class="button button--sacnite button--inverted" alt="Dissolve iset"><i class="icon-unlink"></i></button></li>
                 </ul>
+                <ul class="vertical-centered">
+                    <li><button id="button-settings" class="button button--sacnite button--inverted" alt="Settings"><i class="icon-cog"></i></button></li>
+                </ul>
             </div>
         </div>
         <div id="canvas">
 
         </div>
+        <div id="settings">
+            <div>
+        		<a id="button-settings-close" title="Close" class="close">X</a>
+        		<h2>Settings</h2>
+        		<form id="form-settings" action="" method="post">
+                    <ul>
+                        <li id="orientation">
+                            <label>Orientation</label>
+                            <input type="radio" name="orientation" value="0" orientation="0">Vertical
+                            <input type="radio" name="orientation" value="1" orientation="1">Horizontal
+                        </li>
+                        <li id="chance-colour">
+                            <label>Chance player colour</label>
+                            <input type="color" name="chance-colour">
+                        </li>
+                        <li id="player-colours">
+                            <label>Player colours</label>
+                        </li>
+                        <li>
+                            <label for="stroke-width">Stroke width</label>
+                            <input type="number" name="stroke-width" value="0">
+                        </li>
+                        <li>
+                            <label for="circle-size">Circle size</label>
+                            <input type="number" name="circle-size" value="0">
+                        </li>
+                        <li>
+                            <label for="dist-levels">Distance between levels</label>
+                            <input type="number" name="dist-levels" value="0">
+                        </li>
+                        <li>
+                            <button id="button-settings-reset" type="button" name="clear">Reset</button>
+                            <button id="button-settings-save" type="submit" name="save">Save</button>
+                        </li>
+                    </ul>
+        		</form>
+        	</div>
+        </div>
         <script src="js/thirdparty/svg.min.js"></script>
         <script src="js/structure.js"></script>
         <script src="js/guiutils/Tools.js"></script>
         <script src="js/guiutils/ContentEditable.js"></script>
+        <script src="js/guiutils/MultiAction.js"></script>
         <script src="js/tree/Utils.js"></script>
         <script src="js/tree/ISet.js"></script>
         <script src="js/tree/Move.js"></script>
         <script src="js/tree/ChanceMove.js"></script>
+        <script src="js/tree/Payoff.js"></script>
         <script src="js/tree/Player.js"></script>
         <script src="js/tree/Tree.js"></script>
         <script src="js/tree/Node.js"></script>

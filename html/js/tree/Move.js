@@ -87,12 +87,12 @@ GTE.TREE = (function (parentModule) {
     * @param {Node} child Child node
     */
     Move.prototype.draw = function(parent, child) {
-        var circleRadius = GTE.CONSTANTS.CIRCLE_SIZE/2;
+        var circleRadius = parseInt(GTE.STORAGE.settingsCircleSize)/2;
         var line = GTE.canvas.line(parent.x + circleRadius,
                                     parent.y + circleRadius,
                                     child.x + circleRadius,
                                     child.y + circleRadius)
-                              .stroke({ color: parent.player.colour, width: GTE.CONSTANTS.LINE_THICKNESS });
+                              .stroke({ color: parent.player.colour, width: parseInt(GTE.STORAGE.settingsLineThickness) });
         var middleX = ((child.x + circleRadius) - (parent.x + circleRadius))/2+
                         (parent.x);
         var middleY = ((child.y + circleRadius) - (parent.y + circleRadius))/2+

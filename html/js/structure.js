@@ -8,6 +8,14 @@ var GTE = (function () {
     GTE.TREE = {};
     GTE.TREE.UTILS = {};
 
+    GTE.ORIENTATIONS = {
+      VERTICAL: 0,
+      HORIZONTAL: 1
+    };
+    if (Object.freeze) {
+      Object.freeze(GTE.ORIENTATIONS);
+    }
+
     GTE.CONSTANTS = {
       CIRCLE_SIZE: 20,
       DIST_BETWEEN_LEVELS: 150,
@@ -24,7 +32,8 @@ var GTE = (function () {
       ISET_HEIGHT: 50,
       TEXT_NODE_MARGIN: 30,
       MAX_PLAYERS: 10,
-      MIN_PLAYERS: 1
+      MIN_PLAYERS: 1,
+      DEFAULT_ORIENTATION: GTE.ORIENTATIONS.VERTICAL
     };
 
     GTE.MODE = 0;
@@ -49,9 +58,7 @@ var GTE = (function () {
         LIME: "#00FF00",
         DARKGREY: "#A9A9A9",
         DARKKHAKI: "#BDB76B",
-        DARKORANGE: "#FF8C00",
         DARKORCHID: "#9932CC",
-        DARKRED: "#8B0000",
         DARKSALMON: "#E9967A",
         DARKCYAN: "#008B8B",
         DARKOLIVEGREEN: "#556B2F",

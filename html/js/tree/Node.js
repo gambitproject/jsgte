@@ -21,11 +21,13 @@ GTE.TREE = (function (parentModule) {
         }
         this.depth = this.level;
         this.line = null;
+        this.shape = null;
         this.x = null;
         this.y = null;
         this.shape = null;
         this.playerNameText = null;
         this.reachedByText = null;
+        this.deleted = false;
     }
 
     /**
@@ -46,12 +48,12 @@ GTE.TREE = (function (parentModule) {
         // The line has to be drawn before so that the circle is drawn on top of it
         // Draw line if there are is no iset in parent
         if (this.parent !== null && this.reachedBy === null) {
-            var circleRadius = GTE.CONSTANTS.CIRCLE_SIZE/2;
+            var circleRadius = parseInt(GTE.STORAGE.settingsCircleSize)/2;
             this.line = GTE.canvas.line(this.parent.x + circleRadius,
                                         this.parent.y + circleRadius,
                                         this.x + circleRadius,
                                         this.y + circleRadius)
-                                    .stroke({ width: GTE.CONSTANTS.LINE_THICKNESS });
+                                    .stroke({ width: parseInt(GTE.STORAGE.settingsLineThickness) });
 
         }else if (this.reachedBy !== null) {
             this.drawReachedBy();
@@ -59,9 +61,9 @@ GTE.TREE = (function (parentModule) {
         var thisNode = this;
         if (this.player && this.player.id === GTE.TREE.Player.CHANCE){
             this.shape = GTE.canvas.rect(
-                          GTE.CONSTANTS.CIRCLE_SIZE, GTE.CONSTANTS.CIRCLE_SIZE);
+                          parseInt(GTE.STORAGE.settingsCircleSize), parseInt(GTE.STORAGE.settingsCircleSize));
         } else {
-            this.shape = GTE.canvas.circle(GTE.CONSTANTS.CIRCLE_SIZE);
+            this.shape = GTE.canvas.circle(parseInt(GTE.STORAGE.settingsCircleSize));
         }
         this.shape.addClass('node')
                   .x(this.x)
@@ -150,11 +152,11 @@ GTE.TREE = (function (parentModule) {
                         GTE.tree.addChildNodeTo(this);
                     }
                     GTE.tree.addChildNodeTo(this);
+                    // Tell the tree to redraw itself
+                    GTE.tree.draw();
                 } else {
                     this.iset.onClick();
                 }
-                // Tell the tree to redraw itself
-                GTE.tree.draw();
                 break;
             case GTE.MODES.DELETE:
                 if (this.iset === null) {
@@ -165,11 +167,11 @@ GTE.TREE = (function (parentModule) {
                         GTE.tree.deleteChildrenOf(this);
                         this.deassignPlayer();
                     }
+                    // Tell the tree to redraw itself
+                    GTE.tree.draw();
                 } else {
                     this.iset.onClick();
                 }
-                // Tell the tree to redraw itself
-                GTE.tree.draw();
                 break;
             case GTE.MODES.MERGE:
                 // This is controlled by the information set
@@ -321,6 +323,7 @@ GTE.TREE = (function (parentModule) {
             this.iset.removeNode(this);
         }
         this.reachedBy = null;
+        this.deleted = true;
         GTE.tree.positionsUpdated = false;
     };
 
@@ -387,6 +390,30 @@ GTE.TREE = (function (parentModule) {
         if (this.iset !== null) {
             this.playerNameText = null;
         }
+    };
+
+    /**
+    * Marks current node as selected
+    */
+    Node.prototype.select = function () {
+        if (this.shape !== null) {
+            this.shape.toggleClass('selected');
+        }
+    };
+
+    /**
+    * Compare function used for sort() function. It sorts nodes depending on its x position
+    * @param  {Node}   a Node a to be compared
+    * @param  {Node}   b Node b to be compared
+    * @return {Number} Returns -1 if a <= b, 1 if a > b
+    */
+    Node.compareX = function (a, b) {
+        if (parseInt(a.x) <= parseInt(b.x)) {
+            return -1;
+        } else {
+            return 1;
+        }
+        return 0;
     };
 
     Node.prototype.getPathToRoot = function () {

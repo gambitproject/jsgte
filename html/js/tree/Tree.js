@@ -11,9 +11,15 @@ GTE.TREE = (function (parentModule) {
         this.positionsUpdated = false;
         this.isets = [];
         this.selected = [];
+
+        this.nodes = []; // Never reference directly.
+                         //It might not be updated!! Use this.getAllNodes()
         this.depths = [];
         this.leaves = [];
+        this.oldLeaves = [];
         this.players = [];
+
+        this.multiActionLines = [];
         this.newPlayer(GTE.COLOURS.BLACK);
         this.newPlayer(GTE.COLOURS.RED);
 
@@ -24,27 +30,30 @@ GTE.TREE = (function (parentModule) {
     * Function that draws the Game in the global canvas
     * Takes care of updating the positions, clearing the canvas and drawing in it
     */
-    Tree.prototype.draw = function(){
+    Tree.prototype.draw = function(forced){
+        forced = forced || false;
         if (this.isets.length > 0) {
             this.align();
         }
-        if (!this.positionsUpdated) {
+        if (!this.positionsUpdated || forced) {
             this.updatePositions();
         }
 
         if (this.isets.length > 0) {
             this.sortOutCollisions();
         }
-        this.updateDepths();
 
-        if (!this.positionsUpdated) {
+        if (!this.positionsUpdated || forced) {
             this.recursiveCalculateYs(this.root);
             this.centerParents(this.root);
             this.positionsUpdated = true;
         }
         this.clear();
+        // Draw MultiAction first so that nodes clicks have higher priority
+        this.drawMultiactionLines();
         if (this.isets.length > 0) {
             this.drawISets();
+            this.drawPayoffs();
         }
         this.drawNodes();
     };
@@ -75,11 +84,95 @@ GTE.TREE = (function (parentModule) {
     };
 
     /**
+    * Updates payoffs across the tree
+    */
+    Tree.prototype.updatePayoffs = function () {
+        // Clear old payoffs. This means to remove payoffs from those nodes that
+        // have been deleted or that are not leaves anymore
+        for (var i = 1; i < this.players.length; i++) {
+            this.players[i].clearOldPayoffs();
+        }
+
+        // Look for new leaves. newLeaves will contain new leaves added to the tree
+        var thisTree = this;
+        var newLeaves = this.leaves.filter(
+            function(current){
+                return thisTree.oldLeaves.filter(
+                        function(current_b){
+                            return current_b == current;
+                        }).length === 0;
+        });
+        // Create one new payoff per player and per new leaf
+        for (i = 1; i < this.players.length; i++) {
+            for (var j = 0; j < newLeaves.length; j++) {
+                this.players[i].payoffs.push(
+                            new GTE.TREE.Payoff(newLeaves[j], this.players[i]));
+            }
+        }
+    };
+
+    /**
+    * Function that draws the payoffs in the global canvas
+    */
+    Tree.prototype.drawPayoffs = function () {
+        // Remove old payoffs and create new ones
+        this.updatePayoffs();
+        // Draw each payoff across the tree
+        for (var i = 1; i < this.players.length; i++) {
+            this.players[i].drawPayoffs();
+        }
+    };
+
+    /**
     * Function that draws the nodes in the global canvas by calling the recursive
     * function that goes along the tree drawing each node
     */
     Tree.prototype.drawNodes = function () {
         this.recursiveDrawNodes(this.root);
+    };
+
+    /**
+    * Draws the multiaction lines across the tree
+    */
+    Tree.prototype.drawMultiactionLines = function () {
+        this.multiActionLines = [];
+        for (var i = 0; i < this.depths.length; i++) {
+            // If there is only one node/iset do not draw
+            if (this.depths[i].length === 1) {
+                continue;
+            }
+            var nodesInLine = [];
+            // Only draw multiAction line if no isets or all in line are singleton
+            if (this.depths[i][0] instanceof GTE.TREE.ISet) {
+                // Remember that if there are isets, depths contains isets and
+                // no single nodes
+                var draw = true;
+                for (var j = 0; j < this.depths[i].length; j++) {
+                    if (!this.depths[i][j].isSingleton()) {
+                        draw = false;
+                        break;
+                    }
+                    // Push the only node that this iset contains
+                    nodesInLine.push(this.depths[i][j].getNodes()[0]);
+                }
+                if (!draw) {
+                    // Skip to next level
+                    continue;
+                }
+            } else {
+                nodesInLine = this.depths[i].slice();
+            }
+
+            var multiAction = new GTE.TREE.MultiAction(i, nodesInLine);
+            this.multiActionLines.push(multiAction);
+            multiAction.draw();
+            if (multiAction.containsLeaves &&
+                (GTE.MODE === GTE.MODES.PLAYER_ASSIGNMENT ||
+                GTE.MODE === GTE.MODES.MERGE ||
+                GTE.MODE === GTE.MODES.DISSOLVE)) {
+                multiAction.hide();
+            }
+        }
     };
 
     /**
@@ -129,6 +222,7 @@ GTE.TREE = (function (parentModule) {
     Tree.prototype.updateLeaves = function () {
         // Create a estructure that holds isets depending on the depth
         // of its nodes and sort it
+        this.oldLeaves = this.leaves;
         this.leaves = [];
         this.recursiveupdateLeaves(this.root);
         this.updateLeavesPositions();
@@ -154,15 +248,30 @@ GTE.TREE = (function (parentModule) {
     * Recursive function that updated the depths array in the tree
     */
     Tree.prototype.updateDepths = function () {
+        // If there are isets, depths will contain isets, if not, it will
+        // contain nodes
         this.depths = [];
-        for (var i = 0; i < this.isets.length; i++) {
-            if (this.depths[this.isets[i].maxNodesDepth] === undefined) {
-                this.depths[this.isets[i].maxNodesDepth] = [];
+        if (this.isets.length > 0) {
+            for (var i = 0; i < this.isets.length; i++) {
+                if (this.depths[this.isets[i].maxNodesDepth] === undefined) {
+                    this.depths[this.isets[i].maxNodesDepth] = [];
+                }
+                this.depths[this.isets[i].maxNodesDepth].push(this.isets[i]);
             }
-            this.depths[this.isets[i].maxNodesDepth].push(this.isets[i]);
-        }
-        for (i = 0; i < this.depths.length; i++) {
-            this.depths[i].sort(GTE.TREE.ISet.compareX);
+            for (i = 0; i < this.depths.length; i++) {
+                this.depths[i].sort(GTE.TREE.ISet.compareX);
+            }
+        } else {
+            var nodes = this.getAllNodes();
+            for (var j = 0; j < nodes.length; j++) {
+                if (this.depths[nodes[j].depth] === undefined) {
+                    this.depths[nodes[j].depth] = [];
+                }
+                this.depths[nodes[j].depth].push(this.nodes[j]);
+            }
+            for (j = 0; j < this.depths.length; j++) {
+                this.depths[j].sort(GTE.TREE.Node.compareX);
+            }
         }
     };
 
@@ -206,8 +315,8 @@ GTE.TREE = (function (parentModule) {
         for (var i = 0; i < node.children.length; i++) {
             this.recursiveCalculateYs(node.children[i]);
         }
-        node.y = node.depth * GTE.CONSTANTS.DIST_BETWEEN_LEVELS;
-        if ((node.y + GTE.CONSTANTS.CIRCLE_SIZE) > GTE.canvas.viewbox().height) {
+        node.y = node.depth * parseInt(GTE.STORAGE.settingsDistLevels);
+        if ((node.y + parseInt(GTE.STORAGE.settingsCircleSize)) > GTE.canvas.viewbox().height) {
             this.zoomOut();
             this.updatePositions();
         }
@@ -334,13 +443,13 @@ GTE.TREE = (function (parentModule) {
             // Calculate the offset so the nodes are centered on the screen
             offset = (GTE.canvas.viewbox().width-widthPerNode*numberLeaves)/2;
         }
-        if (widthPerNode < GTE.CONSTANTS.CIRCLE_SIZE) {
+        if (widthPerNode < parseInt(GTE.STORAGE.settingsCircleSize)) {
             this.zoomOut();
             this.updateLeavesPositions();
         } else {
             for (var i = 0; i < numberLeaves; i++) {
                 this.leaves[i].x = (widthPerNode*i)+(widthPerNode/2) -
-                                        GTE.CONSTANTS.CIRCLE_SIZE/2 + offset;
+                                        parseInt(GTE.STORAGE.settingsCircleSize)/2 + offset;
             }
         }
     };
@@ -391,6 +500,19 @@ GTE.TREE = (function (parentModule) {
     Tree.prototype.createSingletonISets = function (nodes) {
         for (var i = 0; i < nodes.length; i++) {
             this.createSingletonISet(nodes[i]);
+        }
+    };
+
+    /**
+    * Function that is ran the first time that a information set tool is selected
+    */
+    Tree.prototype.createPayoffs = function () {
+        // Create one payoff for each player and each leaf
+        for (var i = 1; i < this.players.length; i++) {
+            for (var j = 0; j < this.leaves.length; j++) {
+                this.players[i].payoffs.push(
+                        new GTE.TREE.Payoff(this.leaves[j], this.players[i]));
+            }
         }
     };
 
@@ -625,8 +747,9 @@ GTE.TREE = (function (parentModule) {
 
     /**
     * Merges two isets
-    * @param {ISet} a Information set A
-    * @param {ISet} b Information set B
+    * @param  {ISet} a Information set A
+    * @param  {ISet} b Information set B
+    * @return {ISet}   Merged information set
     */
     Tree.prototype.merge = function (a, b) {
         if (a.numberOfMoves() !== b.numberOfMoves()) {
@@ -649,6 +772,7 @@ GTE.TREE = (function (parentModule) {
             }
         }
         this.positionsUpdated = false;
+        return b;
     };
 
     Tree.prototype.iSetsSharePathFromRoot = function (a, b) {
@@ -757,6 +881,13 @@ GTE.TREE = (function (parentModule) {
             }
             // Add the player to the list
             this.players.push(player);
+            // If there are payoffs, add new player payoffs
+            if (this.isets.length !== 0) {
+                for (var j = 0; j < this.leaves.length; j++) {
+                    player.payoffs.push(new GTE.TREE.Payoff(this.leaves[j], player));
+                }
+                player.drawPayoffs();
+            }
         } catch (err) {
             console.log("EXCEPTION: " + err);
             return null;
@@ -825,6 +956,12 @@ GTE.TREE = (function (parentModule) {
         for (var i = 0; i < numberLeaves; i++) {
             this.leaves[i].hide();
         }
+        // Also hide all the multiaction lines that contain at least one leaf
+        for (var i = 0; i < this.multiActionLines.length; i++) {
+            if (this.multiActionLines[i].containsLeaves) {
+                this.multiActionLines[i].hide();
+            }
+        }
     };
 
     /**
@@ -875,6 +1012,7 @@ GTE.TREE = (function (parentModule) {
         // Get nodes breadth first
         var nodes = this.getAllNodes(true);
         this.createSingletonISets(nodes);
+        this.createPayoffs();
         this.draw();
         // Clean memory
         this.cleanMemoryAfterISetInitialization();
@@ -886,13 +1024,16 @@ GTE.TREE = (function (parentModule) {
     * @return {List}    listOfNodes  List of tree's nodes
     */
     Tree.prototype.getAllNodes = function (breadthFirst) {
-        var listOfNodes = [];
         if (breadthFirst) {
-            listOfNodes = this.getAllNodesBreadthFirst();
+            this.nodes = [];
+            this.nodes = this.getAllNodesBreadthFirst();
         } else {
-            this.recursiveGetAllNodes(this.root, listOfNodes);
+            if (this.nodes.length === 0 || this.positionsUpdated === false) {
+                this.nodes = [];
+                this.recursiveGetAllNodes(this.root, this.nodes);
+            }
         }
-        return listOfNodes;
+        return this.nodes;
     };
 
     /**
@@ -978,8 +1119,8 @@ GTE.TREE = (function (parentModule) {
         }  else {
             // Get all chance nodes
             var nodes = this.getPlayerNodes(0);
-            for (var i = 0; i < nodes.length; i++) {
-                nodes[i].togglePlayerNameVisibility();
+            for (var j = 0; j < nodes.length; j++) {
+                nodes[j].togglePlayerNameVisibility();
             }
         }
     };
@@ -1164,11 +1305,19 @@ GTE.TREE = (function (parentModule) {
         // and not only the name because chance nodes
         // cannot be compared by name
         var path = [];
-        while(node.reachedBy != null) {
+        while(node.reachedBy !== null) {
             path.push(node.reachedBy);
             node = node.parent;
         }
         return path;
+    };
+
+    Tree.prototype.changePlayerColour = function(playerId, colour) {
+        var player = this.players[playerId];
+        if (player && player.colour !== colour) {
+            player.changeColour(colour);
+            GTE.tools.changePlayerColour(playerId, colour);
+        }
     };
 
     // Add class to parent module

@@ -169,16 +169,16 @@ GTE.TREE = (function (parentModule) {
     * Draws the information set
     */
     ISet.prototype.draw = function () {
-        if (this.lastNode !== this.firstNode) {
-            var width = (this.lastNode.x + GTE.CONSTANTS.CIRCLE_SIZE*2) -
-                        (this.firstNode.x - GTE.CONSTANTS.CIRCLE_SIZE);
+        if (!this.isSingleton()) {
+            var width = (this.lastNode.x + parseInt(GTE.STORAGE.settingsCircleSize)*2) -
+                        (this.firstNode.x - parseInt(GTE.STORAGE.settingsCircleSize));
 
             this.shape = GTE.canvas.rect(width, GTE.CONSTANTS.ISET_HEIGHT)
                                     .stroke({ color: this.getPlayer().colour, width: 2 })
                                     .radius(GTE.CONSTANTS.ISET_HEIGHT/2)
                                     .addClass('iset');
-            this.shape.translate(this.firstNode.x - GTE.CONSTANTS.CIRCLE_SIZE,
-                                this.firstNode.y - GTE.CONSTANTS.CIRCLE_SIZE + 4);
+            this.shape.translate(this.firstNode.x - parseInt(GTE.STORAGE.settingsCircleSize),
+                                this.firstNode.y - parseInt(GTE.STORAGE.settingsCircleSize) + 4);
             var thisISet = this;
             this.shape.click(function() {
                 thisISet.onClick();
@@ -198,7 +198,7 @@ GTE.TREE = (function (parentModule) {
         if (this.isSingleton()) {
             x = this.firstNode.x + GTE.CONSTANTS.TEXT_NODE_MARGIN;
         } else {
-            x = (this.lastNode.x + GTE.CONSTANTS.CIRCLE_SIZE - this.firstNode.x)/2 +
+            x = (this.lastNode.x + parseInt(GTE.STORAGE.settingsCircleSize) - this.firstNode.x)/2 +
                     this.firstNode.x - (this.playerNameText.width/2);
         }
         this.playerNameText = thisPlayer.draw(x, this.firstNode.y);
@@ -304,6 +304,8 @@ GTE.TREE = (function (parentModule) {
                     // Dissolve current iset
                     this.dissolve();
                 }
+                // Tell the tree to redraw itself
+                GTE.tree.draw();
                 break;
             case GTE.MODES.PLAYER_ASSIGNMENT:
                 // Change the player of every node in the iset
@@ -383,7 +385,7 @@ GTE.TREE = (function (parentModule) {
             }
             var nodes = this.getNodes();
             for (var i = 0; i < nodes.length; i++) {
-                nodes[i].shape.toggleClass('selected');
+                nodes[i].select();
             }
             GTE.tree.selected.push(this);
         }
@@ -436,7 +438,7 @@ GTE.TREE = (function (parentModule) {
         this.playerNameText.setText(this.getPlayer().name);
         // If there is more than one node, draw the name in the middle point of the iset
         if (!this.isSingleton()) {
-            var x = (this.lastNode.x + GTE.CONSTANTS.CIRCLE_SIZE - this.firstNode.x)/2 +
+            var x = (this.lastNode.x + parseInt(GTE.STORAGE.settingsCircleSize) - this.firstNode.x)/2 +
                     this.firstNode.x - (this.playerNameText.width/2);
             this.playerNameText.translate(x);
         }
