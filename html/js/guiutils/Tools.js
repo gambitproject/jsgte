@@ -54,13 +54,36 @@ GTE.UI = (function (parentModule) {
             case GTE.MODES.PLAYER_ASSIGNMENT:
                 buttonToSwitch = "button-player-" + this.activePlayer;
                 break;
+            case GTE.MODES.MERGE:
+                if (this.ableToSwitchToISetEditingMode()) {
+                    buttonToSwitch = "button-merge";
+                    // If iset tools have never been chosen
+                    if (!this.isetToolsRan) {
+                        // Assign singleton isets to each node with no iset
+                        GTE.tree.initializeISets();
+                        this.isetToolsRan = true;
+                    }
+                } else {
+                    window.alert("Assign a player to every node first.");
+                    return;
+                }
+                break;
+            case GTE.MODES.DISSOLVE:
+                if (this.ableToSwitchToISetEditingMode()) {
+                    buttonToSwitch = "button-dissolve";
+                } else {
+                    window.alert("Assign a player to every node first.");
+                    return;
+                }
+                break;
             default:
-
         }
         document.getElementById(buttonToSwitch).className += " " + "active";
 
         GTE.MODE = modeToSwitch;
-        if (GTE.MODE === GTE.MODES.PLAYER_ASSIGNMENT) {
+        if (GTE.MODE === GTE.MODES.PLAYER_ASSIGNMENT ||
+            GTE.MODE === GTE.MODES.MERGE ||
+            GTE.MODE === GTE.MODES.DISSOLVE) {
             GTE.tree.hideLeaves();
         } else {
             GTE.tree.showLeaves();
@@ -119,7 +142,7 @@ GTE.UI = (function (parentModule) {
                     " alt='Player " + player.id +
                     "' title='Player " + player.id +
                     "' player='" + player.id +
-                    "'><i class='icon-user'></i><span>" + player.id + "</span></button></li>");
+                    "'><i class='icon-user'></i></button></li>");
                 // Get the newly added button
                 lastPlayer = playerButtons.lastElementChild;
                 // And add a click event that will call the selectPlayer function
@@ -167,6 +190,19 @@ GTE.UI = (function (parentModule) {
         return this.activePlayer;
     };
 
+    /**
+    * Checks if it is possible to switch to information sets modes. This function is basically
+    * a wrapper that checks that all nodes have a player assigned.
+    * @return {Boolean} True if it is possible to switch to information set mode
+    */
+    Tools.prototype.ableToSwitchToISetEditingMode = function () {
+        return GTE.tree.recursiveCheckAllNodesHavePlayer();
+    };
+
+    /**
+    * Removes the player button from the toolbar
+    * @param {Button} button Button HTML object to remove
+    */
     Tools.prototype.removePlayerButton = function (button) {
         var playerId = parseInt(button.getAttribute("player"));
         // get the <li>

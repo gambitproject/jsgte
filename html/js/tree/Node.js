@@ -7,36 +7,54 @@ GTE.TREE = (function (parentModule) {
     * @param {Node}   parent Parent node. If null, this is root.
     * @param {Player} player Node's player
     */
-    function Node(parent, player) {
-        this.player = player;
-        this.parent = parent;
+    function Node(parent, player, reachedBy, iset) {
+        this.player = player || null;
+        this.parent = parent || null;
         this.children = [];
-
-        this.reachedBy = null;
-        if (parent === null) { // If this is root set level to 0
+        this.iset = iset || null;
+        this.reachedBy = reachedBy || null;
+        if (this.parent === null) { // If this is root set level to 0
             this.level = 0;
         } else {
-            this.reachedBy = parent.addChild(this);
-            this.level = parent.level + 1;
+            this.parent.addChild(this);
+            this.level = this.parent.level + 1;
         }
-
-        this.y = this.level * GTE.CONSTANTS.DIST_BETWEEN_LEVELS;
+        this.depth = this.level;
+        this.line = null;
+        this.x = null;
+        this.y = null;
+        this.shape = null;
+        this.playerNameText = null;
+        this.reachedByText = null;
     }
 
     /**
     * ToString function
     */
-    Node.prototype.toString = function nodeToString() {
-        return "Node: " + "children.length: " + this.children.length + "; level: " + this.level + "; move: " + this.reachedBy;
+    Node.prototype.toString = function () {
+        return "Node: " + "children.length: " + this.children.length +
+               "; level: " + this.level + "; reachedBy: " + this.reachedBy +
+               "; depth: " + this.depth +
+               "; iset: " + this.iset;
     };
 
     /**
     * Function that draws the node in the global canvas
     */
     Node.prototype.draw = function () {
+        // TODO #19
         // The line has to be drawn before so that the circle is drawn on top of it
-        if (this.reachedBy !== null) {
-            this.reachedBy.draw();
+        // Draw line if there are is no iset in parent
+        if (this.parent !== null && this.reachedBy === null) {
+            var circleRadius = GTE.CONSTANTS.CIRCLE_SIZE/2;
+            this.line = GTE.canvas.line(this.parent.x + circleRadius,
+                                        this.parent.y + circleRadius,
+                                        this.x + circleRadius,
+                                        this.y + circleRadius)
+                                    .stroke({ width: GTE.CONSTANTS.LINE_THICKNESS });
+
+        }else if (this.reachedBy !== null) {
+            this.drawReachedBy();
         }
         var thisNode = this;
         if (this.player && this.player.id === GTE.TREE.Player.CHANCE){
@@ -53,14 +71,32 @@ GTE.TREE = (function (parentModule) {
                   });
         if (this.player) {
             this.shape.fill(this.player.colour);
-            this.drawPlayer();
         } else {
             this.shape.fill(GTE.COLOURS.BLACK);
         }
 
-        if (GTE.MODE === GTE.MODES.PLAYER_ASSIGNMENT && this.isLeaf()) {
+        if (this.iset === null) {
+            // If if belongs to an iset, the iset will draw the player
+            if (this.player) {
+                this.drawPlayer();
+            }
+        }
+
+        if ((GTE.MODE === GTE.MODES.PLAYER_ASSIGNMENT ||
+            GTE.MODE === GTE.MODES.MERGE ||
+            GTE.MODE === GTE.MODES.DISSOLVE) &&
+            this.isLeaf()) {
             this.shape.hide();
         }
+    };
+
+    /**
+    * Draws move that reaches this node
+    */
+    Node.prototype.drawReachedBy = function () {
+        var ret = this.reachedBy.draw(this.parent, this);
+        this.line = ret.line;
+        this.reachedByText = ret.contentEditable;
     };
 
     /**
@@ -77,14 +113,10 @@ GTE.TREE = (function (parentModule) {
     };
 
     /**
-    * Toggles the visibility of the default name text
+    * Toggles the visibility of the name text
     */
     Node.prototype.togglePlayerNameVisibility = function () {
-        if (this.playerNameText.visible() === false) {
-            this.playerNameText.show();
-        } else {
-            this.playerNameText.hide();
-        }
+        this.playerNameText.toggle();
     };
 
     /**
@@ -101,37 +133,71 @@ GTE.TREE = (function (parentModule) {
     Node.prototype.onClick = function () {
         switch (GTE.MODE) {
             case GTE.MODES.ADD:
-                if (this.isLeaf()) {
-                    // Always start with two nodes
+                // As talked in email "the phases of creating a game tree"
+                // on 26th July 2015, nodes won't have any particular behaviour
+                // by clicking on them. The behaviour will be the same as if
+                // the click was on an iset
+                // // If there are more nodes in the information set
+                // // Remove the node from the iset since the iset will
+                // // not be coherent
+                // if (this.iset.numberOfNodes > 1) {
+                //     this.createSingletonISetWithNode();
+                // }
+                if (this.iset === null) {
+                    if (this.isLeaf()) {
+                        // If no children, add two, since one child only doesn't
+                        // make sense
+                        GTE.tree.addChildNodeTo(this);
+                    }
                     GTE.tree.addChildNodeTo(this);
+                } else {
+                    this.iset.onClick();
                 }
-                GTE.tree.addChildNodeTo(this);
                 // Tell the tree to redraw itself
                 GTE.tree.draw();
                 break;
             case GTE.MODES.DELETE:
-                // If it is a leaf, delete itself, if not, delete all children
-                if (this.isLeaf()) {
-                    this.delete();
+                if (this.iset === null) {
+                    // If it is a leaf, delete itself, if not, delete all children
+                    if (this.isLeaf()) {
+                        this.delete();
+                    } else {
+                        GTE.tree.deleteChildrenOf(this);
+                        this.deassignPlayer();
+                    }
                 } else {
-                    GTE.tree.deleteChildrenOf(this);
-                    this.deassignPlayer();
+                    this.iset.onClick();
                 }
+                // Tell the tree to redraw itself
                 GTE.tree.draw();
+                break;
+            case GTE.MODES.MERGE:
+                // This is controlled by the information set
+                this.iset.onClick();
+                break;
+            case GTE.MODES.DISSOLVE:
+                // This is controlled by the information set
+                this.iset.onClick();
                 break;
             case GTE.MODES.PLAYER_ASSIGNMENT:
                 if (!this.isLeaf()) {
                     // If player name is empty and default name is hidden,
                     // show the default name
-                    if (this.player !== undefined && this.player !== null) {
+                    if (this.player !== null && this.player !== undefined) {
                         if (GTE.tree.getActivePlayer().id === GTE.TREE.Player.CHANCE &&
                                 this.player.id === GTE.TREE.Player.CHANCE) {
                             GTE.tree.toggleChanceName();
                             break;
                         }
                     }
-                    GTE.tree.assignSelectedPlayerToNode(this);
-                    GTE.tree.draw();
+                    // If there is an iset, let the iset handle the click
+                    if (this.iset !== null) {
+                        this.iset.onClick();
+                    } else {
+
+                        GTE.tree.assignSelectedPlayerToNode(this);
+                        GTE.tree.draw();
+                    }
                 }
                 break;
             default:
@@ -142,11 +208,9 @@ GTE.TREE = (function (parentModule) {
     /**
     * Function that adds child to node
     * @param {Node} node Node to add as child
-    * @return {Move} The move that has been created for this child
     */
     Node.prototype.addChild = function (node) {
         this.children.push(node);
-        return new GTE.TREE.Move(this, node);
     };
 
     /**
@@ -157,6 +221,57 @@ GTE.TREE = (function (parentModule) {
         var indexInList = this.children.indexOf(nodeToDelete);
         if (indexInList > -1) {
             this.children.splice(indexInList, 1);
+        }
+        if (this.iset !== null) {
+            // Create a new singleton iset containing this node
+            // When a child is deleted, the iset is not consistent anymore, since
+            // different nodes in the same iset cannot have different number of
+            // children
+            GTE.tree.convertToSingleton(this);
+            this.iset.removeChild(nodeToDelete);
+        }
+    };
+
+    /**
+    * Gets information sets that are connected to this node
+    * @return {Array} isets Array that contains all the information sets connected to This
+    *                       node.
+    */
+    Node.prototype.getChildrenISets = function () {
+        var isets = [];
+        for (var i = 0; i < this.children.length; i++) {
+            if (isets.indexOf(this.children[i].iset) === -1) {
+                isets.push(this.children[i].iset);
+            }
+        }
+        return isets;
+    };
+
+    /**
+    * Gets all the information sets below this node
+    */
+    Node.prototype.getISetsBelow = function () {
+        var isets = [];
+        for (var i = 0; i < this.children.length; i++) {
+            this.recursiveGetISetsBelow(this.children[i], isets);
+        }
+        return isets;
+    };
+
+    /**
+    * Recursive function that gets all the information sets below this node
+    * Stopping criteria: that the current node is a leaf
+    * Recursive expansion: to all of the node's children
+    * @param {Node}  node Node to get isets below from
+    * @param {Array} isets Return array that contains all the isets
+    */
+    Node.prototype.recursiveGetISetsBelow = function (node, isets) {
+        var iset = node.iset;
+        if (isets.indexOf(iset) === -1) {
+            isets.push(iset);
+        }
+        for (var i = 0; i < node.children.length; i++) {
+            this.recursiveGetISetsBelow(node.children[i], isets);
         }
     };
 
@@ -186,10 +301,26 @@ GTE.TREE = (function (parentModule) {
     };
 
     /**
+    * Changes current information set to a given one
+    * @param {ISet} newISet New information set for current node
+    */
+    Node.prototype.changeISet = function (newISet) {
+        // Remove the node for current information set
+        this.iset.removeNode(this);
+        // Add the node to the new information set
+        newISet.addNode(this);
+    };
+
+    /**
     * Function that tells node to delete himself
     */
     Node.prototype.delete = function () {
+        // Delete all references to current node
         this.changeParent(null);
+        if (this.iset !== null) {
+            this.iset.removeNode(this);
+        }
+        this.reachedBy = null;
         GTE.tree.positionsUpdated = false;
     };
 
@@ -214,8 +345,52 @@ GTE.TREE = (function (parentModule) {
         this.shape.show();
     };
 
+    /**
+    * Updates Move name widget text
+    */
+    Node.prototype.updateMoveName = function () {
+        this.reachedByText.setText(this.reachedBy.name);
+    };
+
+    /**
+    * Deassigns player
+    */
     Node.prototype.deassignPlayer = function () {
         this.player = null;
+    };
+
+    /**
+    * Get node's children
+    * @return {Array} Node's children
+    */
+    Node.prototype.getChildren = function () {
+        return this.children;
+    };
+
+    /**
+    * Update this node children's reachedBys to match the moves in the ISet
+    */
+    Node.prototype.updateChildrenReachedBy = function () {
+        if (this.iset.moves.length === this.children.length) {
+            for (var i = 0; i < this.children.length; i++) {
+                this.children[i].reachedBy = this.iset.moves[i];
+            }
+        } else {
+            console.log("ERROR: MOVES NUMBER DIFFER FROM CHILDREN NUMBER");
+        }
+    };
+
+    /**
+    * Removes from memory unused properties
+    */
+    Node.prototype.cleanAfterISetCreation = function () {
+        if (this.iset !== null) {
+            this.playerNameText = null;
+        }
+    };
+
+    Node.prototype.getPathToRoot = function () {
+        return GTE.tree.getPathToRoot(this);
     };
 
     // Add class to parent module
