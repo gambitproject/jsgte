@@ -304,6 +304,8 @@ GTE.TREE = (function (parentModule) {
                     // Dissolve current iset
                     this.dissolve();
                 }
+                // Tell the tree to redraw itself
+                GTE.tree.draw();
                 break;
             case GTE.MODES.PLAYER_ASSIGNMENT:
                 // Change the player of every node in the iset
