@@ -18,11 +18,8 @@ GTE.TREE = (function (parentModule) {
         this.leaves = [];
         this.oldLeaves = [];
         this.players = [];
-
         this.multiActionLines = [];
-        this.newPlayer(GTE.COLOURS.BLACK);
-        this.newPlayer(GTE.COLOURS.RED);
-
+        
         this.showChanceName = true;
     }
 
