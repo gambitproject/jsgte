@@ -24,21 +24,25 @@
             </div>
             <div>
                 <ul class="vertical-centered">
-                    <li><button id="button-new" class="button button--sacnite button--inverted" alt="New game" title="New game"><i class="icon-file"></i><span>+</span></button></li>
+                    <li><button id="button-new" class="button button--sacnite button--inverted" alt="New game" title="New game"><i class="icon-file"></i></button></li>
                 </ul>
             </div>
             <div>
                 <ul class="vertical-centered">
-                    <li><button id="button-add" class="active button button--sacnite button--inverted" alt="Add child node" title="Add child node"><i class="icon-plus-circle"></i><span>+</span></button></li>
-                    <li><button id="button-remove" class="button button--sacnite button--inverted" alt="Remove node" title="Remove node"><i class="icon-minus-circle"></i><span>-</span></button></li>
+                    <li><button id="button-add" class="active button button--sacnite button--inverted" alt="Add child node" title="Add child node"><i class="icon-plus-circle"></i></button></li>
+                    <li><button id="button-remove" class="button button--sacnite button--inverted" alt="Remove node" title="Remove node"><i class="icon-minus-circle"></i></button></li>
                 </ul>
                 <ul class="vertical-centered">
                     <div id="player-buttons">
-                        <li><button id="button-player-0" class="button button--sacnite button--inverted button-player" alt="Chance player" title="Chance" player="0"><i class="icon-dice"></i><span>0</span></button></li>
-                        <li><button id="button-player-1" class="button button--sacnite button--inverted red button-player" alt="Player 1" title="Player 1" player="1"><i class="icon-user"></i><span>1</span></button></li>
+                        <li><button id="button-player-0" class="button button--sacnite button--inverted button-player" alt="Chance player" title="Chance" player="0"><i class="icon-dice"></i></button></li>
+                        <li><button id="button-player-1" class="button button--sacnite button--inverted red button-player" alt="Player 1" title="Player 1" player="1"><i class="icon-user"></i></button></li>
                     </div>
-                    <li><button id="button-player-more" class="button button--sacnite button--inverted" alt="More players" title="More players"><i class="icon-user-plus"></i><span>+</span></button></li>
-                    <li><button id="button-player-less" class="button button--sacnite button--inverted" alt="Less players" title="Less players"><i class="icon-user-less"></i><span>-</span></button></li>
+                    <li><button id="button-player-more" class="button button--sacnite button--inverted" alt="More players" title="More players"><i class="icon-user-plus"></i></button></li>
+                    <li><button id="button-player-less" class="button button--sacnite button--inverted" alt="Less players" title="Less players"><i class="icon-user-less"></i></button></li>
+                </ul>
+                <ul class="vertical-centered">
+                    <li><button id="button-merge" class="button button--sacnite button--inverted" alt="Merge isets"><i class="icon-link"></i></button></li>
+                    <li><button id="button-dissolve" class="button button--sacnite button--inverted" alt="Dissolve iset"><i class="icon-unlink"></i></button></li>
                 </ul>
             </div>
         </div>
@@ -49,7 +53,10 @@
         <script src="js/structure.js"></script>
         <script src="js/guiutils/Tools.js"></script>
         <script src="js/guiutils/ContentEditable.js"></script>
+        <script src="js/tree/Utils.js"></script>
+        <script src="js/tree/ISet.js"></script>
         <script src="js/tree/Move.js"></script>
+        <script src="js/tree/ChanceMove.js"></script>
         <script src="js/tree/Player.js"></script>
         <script src="js/tree/Tree.js"></script>
         <script src="js/tree/Node.js"></script>

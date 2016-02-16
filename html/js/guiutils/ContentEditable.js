@@ -8,8 +8,9 @@ GTE.UI.Widgets = (function (parentModule) {
     * @param {Number} y             Widget's y coordinate
     * @param {Number} growingOfText Growing direction of text
     * @param {String} text          Widget's text
+    * @param {String} cssClass      Widget's cssClass
     */
-    function ContentEditable(x, y, growingOfText, text) {
+    function ContentEditable(x, y, growingOfText, text, cssClass) {
         this.x = x;
         this.y = y;
         this.growingOfText = growingOfText;
@@ -28,6 +29,9 @@ GTE.UI.Widgets = (function (parentModule) {
         this.textdiv.style.color = this.colour;
         this.textdiv.appendChild(this.textnode);
         this.textdiv.className = "content-editable";
+        if (cssClass !== undefined) {
+            this.textdiv.className += " " + cssClass;
+        }
         if (growingOfText === GTE.CONSTANTS.CONTENT_EDITABLE_GROW_TO_LEFT) {
             this.textdiv.className += " grow-to-left";
         }
@@ -150,6 +154,19 @@ GTE.UI.Widgets = (function (parentModule) {
     };
 
     /**
+    * Function that toggles the visibility of the ContentEditable
+    * @return {Boolean} visible Returns true if object is visible
+    */
+    ContentEditable.prototype.toggle = function () {
+        if (this.visible() === false) {
+            this.show();
+        } else {
+            this.hide();
+        }
+        return this.visible();
+    };
+
+    /**
     * Function that specifies the function to be run on save (when the input
     * gets out of focus). It saves the function pointer specified on params
     * as this.functionOnSave. When the Object detects a blur event on the input,
@@ -198,6 +215,19 @@ GTE.UI.Widgets = (function (parentModule) {
         return this.getText();
     };
 
+    /**
+    * Sets contentEditable's colour
+    * @param {Colour} colour Colour to be set
+    */
+    ContentEditable.prototype.setColour = function (colour) {
+        this.textdiv.style.color = colour;
+    };
+
+    /**
+    * Translates contentEditable
+    * @param {Number} x X position
+    * @param {Number} y Y position
+    */
     ContentEditable.prototype.translate = function (x, y) {
         this.x = x || this.x;
         this.y = y || this.y;
