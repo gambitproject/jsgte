@@ -6,5 +6,16 @@ Note: .html files are on their github URL displayed with
 their source code, as all code files on github, and NOT as
 html pages.
 
-So testing them has to be done separately (locally should be
-fine).
+To test them as html pages you can navigate to
+
+http://gambitproject.github.io/jsgte/
+
+To update this when changes happen to master do the following
+
+# pip install ghp-import
+ghp-import -p html
+
+This moves html, which contains index.html to the root of a
+new branch gh-pages. For more details see
+
+https://help.github.com/categories/github-pages-basics/
