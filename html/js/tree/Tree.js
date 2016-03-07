@@ -43,8 +43,20 @@ GTE.TREE = (function (parentModule) {
         if (!this.positionsUpdated || forced) {
             this.recursiveCalculateYs(this.root);
             this.centerParents(this.root);
+            // added by me
+            if(GTE.STORAGE.settingsOrientation == 1){
+                for(var i in GTE.tree.nodes){
+                    GTE.tree.nodes[i].y = (GTE.canvas.viewbox().height - GTE.tree.nodes[i].x);
+                    GTE.tree.nodes[i].x = GTE.tree.nodes[i].depth * parseInt(GTE.STORAGE.settingsDistLevels);
+                }
+            }
+            // added by me =======
+
             this.positionsUpdated = true;
         }
+
+        
+
         this.clear();
         // Draw MultiAction first so that nodes clicks have higher priority
         this.drawMultiactionLines();
@@ -309,11 +321,18 @@ GTE.TREE = (function (parentModule) {
     * @param {Node} node Node to expand through
     */
     Tree.prototype.recursiveCalculateYs = function (node) {
+        var canvasHeight;
+        if(GTE.STORAGE.settingsOrientation == 0){
+            canvasHeight = GTE.canvas.viewbox().height;
+        }
+        if(GTE.STORAGE.settingsOrientation == 1){
+            canvasHeight = GTE.canvas.viewbox().width;
+        }
         for (var i = 0; i < node.children.length; i++) {
             this.recursiveCalculateYs(node.children[i]);
         }
         node.y = node.depth * parseInt(GTE.STORAGE.settingsDistLevels);
-        if ((node.y + parseInt(GTE.STORAGE.settingsCircleSize)) > GTE.canvas.viewbox().height) {
+        if ((node.y + parseInt(GTE.STORAGE.settingsCircleSize)) > canvasHeight) {
             this.zoomOut();
             this.updatePositions();
         }
@@ -431,14 +450,21 @@ GTE.TREE = (function (parentModule) {
     * Updates the positions (x and y) of the Tree leaves
     */
     Tree.prototype.updateLeavesPositions = function () {
+        var canvasWidth;
+        if(GTE.STORAGE.settingsOrientation == 0){
+            canvasWidth = GTE.canvas.viewbox().width;
+        }
+        else if(GTE.STORAGE.settingsOrientation == 1){
+            canvasWidth = GTE.canvas.viewbox().height;
+        }
         var numberLeaves = this.numberLeaves();
-        var widthPerNode = GTE.canvas.viewbox().width/numberLeaves;
+        var widthPerNode = canvasWidth/numberLeaves;
         var offset = 0;
         // Avoid nodes to be too spreaded out
         if (widthPerNode > GTE.CONSTANTS.MAX_HORIZONTAL_DISTANCE_BW_NODES) {
             widthPerNode = GTE.CONSTANTS.MAX_HORIZONTAL_DISTANCE_BW_NODES;
             // Calculate the offset so the nodes are centered on the screen
-            offset = (GTE.canvas.viewbox().width-widthPerNode*numberLeaves)/2;
+            offset = (canvasWidth-widthPerNode*numberLeaves)/2;
         }
         if (widthPerNode < parseInt(GTE.STORAGE.settingsCircleSize)) {
             this.zoomOut();
