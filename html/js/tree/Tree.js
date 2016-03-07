@@ -41,16 +41,16 @@ GTE.TREE = (function (parentModule) {
         }
 
         if (!this.positionsUpdated || forced) {
+            // Calculate x and y assuming vertical orientation
             this.recursiveCalculateYs(this.root);
             this.centerParents(this.root);
-            // added by me
+            // If the orientation is horizontal then adjust the x and y of the Nodes
             if(GTE.STORAGE.settingsOrientation == 1){
                 for(var i in GTE.tree.nodes){
                     GTE.tree.nodes[i].y = (GTE.canvas.viewbox().height - GTE.tree.nodes[i].x);
                     GTE.tree.nodes[i].x = GTE.tree.nodes[i].depth * parseInt(GTE.STORAGE.settingsDistLevels);
                 }
             }
-            // added by me =======
 
             this.positionsUpdated = true;
         }
@@ -322,10 +322,15 @@ GTE.TREE = (function (parentModule) {
     */
     Tree.prototype.recursiveCalculateYs = function (node) {
         var canvasHeight;
+        //If orientation is vertical(0) then all calculation done normally
         if(GTE.STORAGE.settingsOrientation == 0){
             canvasHeight = GTE.canvas.viewbox().height;
         }
-        if(GTE.STORAGE.settingsOrientation == 1){
+        /* 
+        * If orientation is horizontal then all calculations are done by
+        * transforming the grid (i.e considering width to be the height)
+        */
+        else if(GTE.STORAGE.settingsOrientation == 1){
             canvasHeight = GTE.canvas.viewbox().width;
         }
         for (var i = 0; i < node.children.length; i++) {
@@ -451,9 +456,14 @@ GTE.TREE = (function (parentModule) {
     */
     Tree.prototype.updateLeavesPositions = function () {
         var canvasWidth;
+        //If orientation is vertical(0) then all calculation done normally
         if(GTE.STORAGE.settingsOrientation == 0){
             canvasWidth = GTE.canvas.viewbox().width;
         }
+        /* 
+        * If orientation is horizontal then all calculations are done by
+        * transforming the grid (i.e considering height to be the width)
+        */
         else if(GTE.STORAGE.settingsOrientation == 1){
             canvasWidth = GTE.canvas.viewbox().height;
         }
