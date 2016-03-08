@@ -173,20 +173,6 @@ GTE.TREE = (function (parentModule) {
     };
 
     /**
-    * Function that clears the canvas
-    * Takes care of removing the foreigns used during inline editing
-    */
-    Tree.prototype.clear = function(){
-        // Clear canvas
-        GTE.canvas.clear();
-        // Remove labels
-        var foreigns = document.getElementsByTagName("foreignObject");
-        for (var index = foreigns.length - 1; index >= 0; index--) {
-            foreigns[index].parentNode.removeChild(foreigns[index]);
-        }
-    };
-
-    /**
     * Recursive function that draws the Game in the global canvas starting from a node
     * If no param is given it will start from root
     * Stopping criteria: that the current node is a leaf
