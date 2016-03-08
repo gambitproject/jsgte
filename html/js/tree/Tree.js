@@ -47,7 +47,7 @@ GTE.TREE = (function (parentModule) {
             // If the orientation is horizontal then adjust the x and y of the Nodes
             if(GTE.STORAGE.settingsOrientation == 1){
                 for(var i in GTE.tree.nodes){
-                    GTE.tree.nodes[i].y = (GTE.canvas.viewbox().height - GTE.tree.nodes[i].x);
+                    GTE.tree.nodes[i].y = (GTE.canvas.viewbox().height - GTE.tree.nodes[i].x-GTE.STORAGE.settingsCircleSize);
                     GTE.tree.nodes[i].x = GTE.tree.nodes[i].depth * parseInt(GTE.STORAGE.settingsDistLevels);
                 }
             }
