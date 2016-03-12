@@ -46,6 +46,13 @@
                     <li><button id="button-settings" class="button button--sacnite button--inverted" alt="Settings"><i class="icon-cog"></i></button></li>
                 </ul>
             </div>
+
+        </div>
+        <div id = "playerProperties" class = "vertical-centered">
+                <form name= "playerPropertiesForm" method= "post" action= "" onsubmit= "return false">
+                    <label>Player </label><label for="playerNo" id= "playerId"></label><label>'s name:</label><input type="text" id="playerName" name="newName" placeholder= "Enter new name"/><br/>
+                    <input class= submit type="submit" value= "send" style="display:none"/>
+                </form>
         </div>
         <div id="canvas">
 
@@ -88,6 +95,7 @@
         		</form>
         	</div>
         </div>
+        <script src="js/jquery.js"></script>
         <script src="js/thirdparty/svg.min.js"></script>
         <script src="js/structure.js"></script>
         <script src="js/guiutils/Tools.js"></script>
@@ -103,4 +111,5 @@
         <script src="js/tree/Node.js"></script>
         <script src="js/main.js"></script>
     </body>
+
 </html>

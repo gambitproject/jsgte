@@ -113,6 +113,19 @@ GTE.UI = (function (parentModule) {
     Tools.prototype.buttonPlayerHandler = function(playerId) {
         return function () {
             GTE.tools.selectPlayer(parseInt(playerId));
+
+            if($("button.active").attr('player') != 0){
+                document.getElementById('playerProperties').style.display = "block";
+                //makes the playerProperties toolbar visible
+
+                $("label[for='"+"playerNo"+"']").text($("button.active").attr('player'));
+                //changes the label next to the form
+
+            }
+            else{
+                document.getElementById('playerProperties').style.display = "none";
+                //hides the playerProperties toolbar in case the chance button is selected
+            }            
         };
     };
 
@@ -150,8 +163,12 @@ GTE.UI = (function (parentModule) {
                 // And add a click event that will call the selectPlayer function
                 lastPlayer.firstElementChild.addEventListener("click",
                                         this.buttonPlayerHandler(player.id));
+            
             }
+
         }
+        //hide playerProperties toolbar
+        document.getElementById('playerProperties').style.display = "none";
     };
 
     Tools.prototype.addChancePlayer = function () {
@@ -186,6 +203,8 @@ GTE.UI = (function (parentModule) {
             var playerButtons = document.getElementById("player-buttons");
             var lastPlayer = playerButtons.lastElementChild.lastElementChild;
             this.removePlayerButton(lastPlayer);
+            //hide playerProperties toolbar
+            document.getElementById('playerProperties').style.display = "none";
         }
     };
 

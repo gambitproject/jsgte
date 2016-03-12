@@ -31,16 +31,18 @@ GTE.TREE = (function (parentModule) {
     * Changes player's name to a given one
     * @param {String} newName New player's name
     */
-    Player.prototype.changeName = function (newName) {
+    Player.prototype.changeName = function (playerId, newName) {
+        var player = this.players[playerId];
         try {
-            if (newName !== "") {
-                this.name = newName;
+            if (newName !== "") {                
+                player.name = newName;
             } else {
                 throw "Empty name";
             }
         } catch (err) {
             console.log("EXCEPTION: " + err);
         }
+        return false;
     };
 
     /**

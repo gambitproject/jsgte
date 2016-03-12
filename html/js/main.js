@@ -81,43 +81,66 @@
 
     document.getElementById("button-add").addEventListener("click", function(){
         GTE.tools.switchMode(GTE.MODES.ADD);
+        
+        //hide playerProperties toolbar
+        document.getElementById('playerProperties').style.display = "none";
         return false;
     });
 
     document.getElementById("button-remove").addEventListener("click", function(){
         GTE.tools.switchMode(GTE.MODES.DELETE);
+
+        //hide playerProperties toolbar
+        document.getElementById('playerProperties').style.display = "none";
         return false;
     });
 
     document.getElementById("button-merge").addEventListener("click", function(){
         GTE.tools.switchMode(GTE.MODES.MERGE);
+
+        //hide playerProperties toolbar
+        document.getElementById('playerProperties').style.display = "none";
         return false;
     });
 
     document.getElementById("button-dissolve").addEventListener("click", function(){
         GTE.tools.switchMode(GTE.MODES.DISSOLVE);
+
+        //hide playerProperties toolbar
+        document.getElementById('playerProperties').style.display = "none";
         return false;
     });
 
     var playerButtons = document.getElementsByClassName("button-player");
     for (var i = 0; i < playerButtons.length; i++) {
+        
+
         playerButtons[i].addEventListener("click",
             GTE.tools.buttonPlayerHandler(playerButtons[i].getAttribute("player")));
     }
 
     document.getElementById("button-player-more").addEventListener("click", function(){
         GTE.tools.addPlayer();
+
+        //hide playerProperties toolbar
+        document.getElementById('playerProperties').style.display = "none";
         return false;
     });
 
     document.getElementById("button-player-less").addEventListener("click", function(){
         GTE.tools.removeLastPlayer();
+
+        //hide playerProperties toolbar
+        document.getElementById('playerProperties').style.display = "none";
         return false;
     });
 
     document.getElementById("button-settings").addEventListener("click", function(){
         var el = document.getElementById("settings");
         el.style.visibility = (el.style.visibility == "visible") ? "hidden" : "visible";
+
+        //hide playerProperties toolbar
+        document.getElementById('playerProperties').style.display = "none";
         return false;
     });
 
@@ -172,4 +195,10 @@
         return false;
     });
 
+    $('#playerProperties').submit(function () {
+        var newName = document.getElementById("playerName").value
+        var activePlayerId = $("button.active").attr('player');
+        GTE.tree.changePlayerName(activePlayerId, newName); 
+        document.forms["playerPropertiesForm"].reset();
+    });
 }());
