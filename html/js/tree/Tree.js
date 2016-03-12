@@ -1317,6 +1317,22 @@ GTE.TREE = (function (parentModule) {
         }
     };
 
+    Tree.prototype.changePlayerName = function(playerId, newName) {
+        var activePlayer = this.players[playerId];        
+        try {
+            if (newName !== "") {                
+                    activePlayer.name = newName;                    
+            } else {
+                throw "Empty name";
+            }
+        } catch (err) {
+            console.log("EXCEPTION: " + err);
+        }
+
+        GTE.tree.updatePlayerNames(activePlayer);         
+        return false;
+    };
+
     // Add class to parent module
     parentModule.Tree = Tree;
 
