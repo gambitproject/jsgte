@@ -163,7 +163,7 @@ GTE.UI = (function (parentModule) {
                 "' id='button-player-" + player.id +
                 "' class='button button--sacnite button--inverted button-player'" +
                 " alt='Chance player' title='Chance'" +
-                "' player='" + player.id +
+                " player='" + player.id +
                 "'><i class='icon-dice'></i></button></li>";
         }
     };

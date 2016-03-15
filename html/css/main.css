@@ -269,7 +269,7 @@ a {
 .button--sacnite:not(.disabled):hover {
     color: #37474f;
 }
-.button--sacnite.button--inverted:not(.disabled):hover {
+.button--sacnite.button--inverted:not(.disabled):hover i {
     color: #fff;
 }
 .button--sacnite.button--inverted.active {
