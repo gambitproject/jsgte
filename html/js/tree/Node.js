@@ -182,7 +182,7 @@ GTE.TREE = (function (parentModule) {
                     }
                     // Tell the tree to redraw itself
                     GTE.tree.draw();
-                    if(multiAction) {
+                    if (multiAction) {
                         return nodes;
                     } else {
                         var change = new GTE.TREE.Change(GTE.MODE);
@@ -217,10 +217,14 @@ GTE.TREE = (function (parentModule) {
                         this.iset.onClick();
                     } else {
                         var nodes = [];
-                        nodes.push({node : this, oldPlayer : this.player, newPlayer: GTE.tree.players[GTE.tools.getActivePlayer()]});
+                        nodes.push({
+                            node : this,
+                            oldPlayer : this.player,
+                            newPlayer: GTE.tree.players[GTE.tools.getActivePlayer()]
+                        });
                         GTE.tree.assignSelectedPlayerToNode(this);
                         GTE.tree.draw();
-                        if(multiAction) {
+                        if (multiAction) {
                             return nodes;
                         } else {
                             var change = new GTE.TREE.Change(GTE.MODE);

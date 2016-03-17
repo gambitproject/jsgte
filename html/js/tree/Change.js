@@ -19,11 +19,11 @@ GTE.TREE = (function (parentModule) {
     * according to the mode of the change.
     */
     Change.prototype.undo = function () {
-            if(this.mode == 0)
+            if(this.mode === GTE.MODES.ADD)
                 this.deleteNodes();
-            if(this.mode == 1)
+            if(this.mode === GTE.MODES.DELETE)
                 this.addNodes();
-            if(this.mode == 2)
+            if(this.mode === GTE.MODES.PLAYER_ASSIGNMENT)
                 this.assignPlayer();
     };
 
@@ -31,8 +31,9 @@ GTE.TREE = (function (parentModule) {
     * Deletes the nodes that were added in the previous move
     */
     Change.prototype.deleteNodes = function() {
-        for(var i=0;i<this.nodes.length;i++)
+        for(var i = 0 ; i < this.nodes.length; i++) {
             this.nodes[i].delete();
+        }
         GTE.tree.draw();
     };
 
@@ -40,8 +41,9 @@ GTE.TREE = (function (parentModule) {
     * Adds the nodes that were deleted in the previous move
     */
     Change.prototype.addNodes = function() {
-        for(var i=0;i<this.nodes.length;i++) 
+        for(var i = 0; i < this.nodes.length; i++) { 
             this.nodes[i].node.add(this.nodes[i].player,this.nodes[i].parent,this.nodes[i].iset,this.nodes[i].reachedBy);
+        }
         GTE.tree.draw();
     };
 
@@ -49,11 +51,13 @@ GTE.TREE = (function (parentModule) {
     * Assigns players to their values before the previous move
     */
     Change.prototype.assignPlayer = function() {
-        for(var i=0;i<this.nodes.length;i++) {
-            if(this.nodes[i].oldPlayer != null)
+        for(var i = 0;i < this.nodes.length; i++) {
+            if(this.nodes[i].oldPlayer != null) {
                 this.nodes[i].node.assignPlayer(this.nodes[i].oldPlayer);
-            else
+            }
+            else {
                 this.nodes[i].node.deassignPlayer();
+            }
         }
         GTE.tree.draw();
     };
