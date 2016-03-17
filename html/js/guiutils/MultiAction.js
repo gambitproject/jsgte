@@ -104,11 +104,15 @@ GTE.TREE = (function(parentModule) {
                 GTE.TREE.CHANGES.push(change);
                 break;
             case GTE.MODES.PLAYER_ASSIGNMENT:
+                var nodes = [];
                 // set all nodes on the multiaction line to belong to the
                 // current player (which may be chance)
                 for (var l = 0; l < this.nodesInLine.length; l++) {
-                    this.nodesInLine[l].onClick();
+                    nodes = nodes.concat(this.nodesInLine[l].onClick(true));
                 }
+                var change = new GTE.TREE.Change(GTE.MODE);
+                change.nodes = nodes;
+                GTE.TREE.CHANGES.push(change);
                 break;
             case GTE.MODES.MERGE:
                 // note that this mode button only works if every node belongs

@@ -17,7 +17,8 @@ GTE.TREE = (function (parentModule) {
                 this.deleteNodes();
             if(this.mode==1)
                 this.addNodes();
-
+            if(this.mode==2)
+                this.assignPlayer();
     };
 
     Change.prototype.deleteNodes = function() {
@@ -28,7 +29,17 @@ GTE.TREE = (function (parentModule) {
 
     Change.prototype.addNodes = function() {
         for(var i=0;i<this.nodes.length;i++) 
-            this.nodes[i][0].add(this.nodes[i][1],this.nodes[i][2],this.nodes[i][3]);
+            this.nodes[i].node.add(this.nodes[i].player,this.nodes[i].parent,this.nodes[i].iset,this.nodes[i].reachedBy);
+        GTE.tree.draw();
+    };
+
+    Change.prototype.assignPlayer = function() {
+        for(var i=0;i<this.nodes.length;i++) {
+            if(this.nodes[i].oldPlayer != null)
+                this.nodes[i].node.assignPlayer(this.nodes[i].oldPlayer);
+            else
+                this.nodes[i].node.deassignPlayer();
+        }
         GTE.tree.draw();
     };
 

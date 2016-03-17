@@ -215,9 +215,17 @@ GTE.TREE = (function (parentModule) {
                     if (this.iset !== null) {
                         this.iset.onClick();
                     } else {
-
+                        var nodes = [];
+                        nodes.push({node : this, oldPlayer : this.player, newPlayer: GTE.tree.players[GTE.tools.getActivePlayer()]});
                         GTE.tree.assignSelectedPlayerToNode(this);
                         GTE.tree.draw();
+                        if(multiAction) {
+                            return nodes;
+                        } else {
+                            var change = new GTE.TREE.Change(GTE.MODE);
+                            change.nodes = nodes;
+                            GTE.TREE.CHANGES.push(change);
+                        }
                     }
                 }
                 break;
@@ -337,7 +345,7 @@ GTE.TREE = (function (parentModule) {
     */
     Node.prototype.delete = function () {
         // Delete all references to current node
-        var node = [this, this.parent , this.iset, this.reachedBy];
+        var node = {node : this, player : this.player, parent : this.parent, iset : this.iset, reachedBy : this.reachedBy};
         this.changeParent(null);
         if (this.iset !== null) {
             this.iset.removeNode(this);
@@ -347,13 +355,21 @@ GTE.TREE = (function (parentModule) {
         GTE.tree.positionsUpdated = false;
         return node;
     };
-    Node.prototype.add = function (parent,isets,reachedBy) {
+    Node.prototype.add = function (player,parent,iset,reachedBy) {
+        player = player || null;
+        parent = parent || null;
+        iset = iset || null;
+        reachedBy = reachedBy || null;
         // Add references to current node
-        this.changeParent(parent);
-        if (this.iset !== null) {
+        if(parent !== null)
+            this.changeParent(parent);
+        if (iset !== null) {
             this.iset.addNode(this);
         }
-        this.reachedBy = reachedBy;
+        if(reachedBy !== null)
+            this.reachedBy = reachedBy;
+        if(player==null)
+            this.deassignPlayer();
         this.deleted = false;
         GTE.tree.positionsUpdated = false;
     };
