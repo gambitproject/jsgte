@@ -1321,12 +1321,6 @@ GTE.TREE = (function (parentModule) {
         }
     };
 
-    Tree.prototype.undo = function() {
-        if(GTE.TREE.CHANGES.length > 0) {
-            var change = GTE.TREE.CHANGES.pop();
-            change.undo();
-        }
-    };
 
     // Add class to parent module
     parentModule.Tree = Tree;

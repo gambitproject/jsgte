@@ -253,6 +253,12 @@ GTE.UI = (function (parentModule) {
         playerButton.style.color = colour;
     };
 
+    Tools.prototype.undo = function() {
+        if(GTE.TREE.CHANGES.length > 0) {
+            var change = GTE.TREE.CHANGES.pop();
+            change.undo();
+        }
+    };
     // Add class to parent module
     parentModule.Tools = Tools;
 
