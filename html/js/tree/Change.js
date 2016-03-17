@@ -4,35 +4,50 @@ GTE.TREE = (function (parentModule) {
     /**
     * Creates a new instance of change Class.
     * @class
-    * @param {Node}   parent Parent node. If null, this is root.
-    * @param {Player} player Node's player
+    * @param {mode} Represents the mode of the Change.
+    * 0 : Addition of nodes
+    * 1 : Deletion of nodes
+    * 2 : Player Assignment
     */
     function Change(mode) {
         this.mode = mode;
         this.nodes = [];
     }
 
+    /**
+    * Calls the corresponding function to revert to previous state
+    * according to the mode of the change.
+    */
     Change.prototype.undo = function () {
-            if(this.mode==0)
+            if(this.mode == 0)
                 this.deleteNodes();
-            if(this.mode==1)
+            if(this.mode == 1)
                 this.addNodes();
-            if(this.mode==2)
+            if(this.mode == 2)
                 this.assignPlayer();
     };
 
+    /**
+    * Deletes the nodes that were added in the previous move
+    */
     Change.prototype.deleteNodes = function() {
         for(var i=0;i<this.nodes.length;i++)
             this.nodes[i].delete();
         GTE.tree.draw();
     };
 
+    /**
+    * Adds the nodes that were deleted in the previous move
+    */
     Change.prototype.addNodes = function() {
         for(var i=0;i<this.nodes.length;i++) 
             this.nodes[i].node.add(this.nodes[i].player,this.nodes[i].parent,this.nodes[i].iset,this.nodes[i].reachedBy);
         GTE.tree.draw();
     };
 
+    /**
+    * Assigns players to their values before the previous move
+    */
     Change.prototype.assignPlayer = function() {
         for(var i=0;i<this.nodes.length;i++) {
             if(this.nodes[i].oldPlayer != null)

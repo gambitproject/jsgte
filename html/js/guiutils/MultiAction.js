@@ -52,6 +52,8 @@ GTE.TREE = (function(parentModule) {
     MultiAction.prototype.onClick = function() {
         switch (GTE.MODE) {
             case GTE.MODES.ADD:
+
+                // nodes array to store the nodes being affected by this change
                 var nodes = [];
                 // Find the smallest number S and largest number L of children
                 // for the nodes in the line
@@ -87,6 +89,8 @@ GTE.TREE = (function(parentModule) {
                 // multiaction line are leaves), delete all these leaves.
 
                 var allLeaves = true;
+
+                // nodes array to store the nodes being affected by this change
                 var nodes = [];
                 for (var k = 0; k < this.nodesInLine.length; k++) {
                     if (this.nodesInLine[k].children.length > 0) {
@@ -104,6 +108,8 @@ GTE.TREE = (function(parentModule) {
                 GTE.TREE.CHANGES.push(change);
                 break;
             case GTE.MODES.PLAYER_ASSIGNMENT:
+
+                // nodes array to store the nodes being affected by this change
                 var nodes = [];
                 // set all nodes on the multiaction line to belong to the
                 // current player (which may be chance)

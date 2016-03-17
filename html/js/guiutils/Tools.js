@@ -252,7 +252,9 @@ GTE.UI = (function (parentModule) {
         var playerButton = document.getElementById("button-player-" + playerId);
         playerButton.style.color = colour;
     };
-
+    /**
+    * Undo the previous move
+    */
     Tools.prototype.undo = function() {
         if(GTE.TREE.CHANGES.length > 0) {
             var change = GTE.TREE.CHANGES.pop();
