@@ -177,6 +177,7 @@ GTE.TREE = (function (parentModule) {
                         nodes.push(this.delete());
                     } else {
                         nodes = (GTE.tree.deleteChildrenOf(this));
+                        nodes.push({node : this, player : this.player});
                         this.deassignPlayer();
                     }
                     // Tell the tree to redraw itself
@@ -366,10 +367,15 @@ GTE.TREE = (function (parentModule) {
         if (iset !== null) {
             this.iset.addNode(this);
         }
-        if(reachedBy !== null)
+        if(reachedBy !== null) {
             this.reachedBy = reachedBy;
-        if(player==null)
+        }
+        if(player==null) {
             this.deassignPlayer();
+        }
+        else {
+            this.assignPlayer(player);
+        }
         this.deleted = false;
         GTE.tree.positionsUpdated = false;
     };
