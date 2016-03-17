@@ -132,7 +132,8 @@ GTE.TREE = (function (parentModule) {
     /**
     * Function that defines the behaviour of the node on click
     */
-    Node.prototype.onClick = function () {
+    Node.prototype.onClick = function (multiAction) {
+        multiAction = multiAction || null;
         switch (GTE.MODE) {
             case GTE.MODES.ADD:
                 // As talked in email "the phases of creating a game tree"
@@ -146,29 +147,47 @@ GTE.TREE = (function (parentModule) {
                 //     this.createSingletonISetWithNode();
                 // }
                 if (this.iset === null) {
+                    var nodes = [];
                     if (this.isLeaf()) {
                         // If no children, add two, since one child only doesn't
                         // make sense
-                        GTE.tree.addChildNodeTo(this);
+                        var node = GTE.tree.addChildNodeTo(this);
+                        nodes.push(node);
                     }
-                    GTE.tree.addChildNodeTo(this);
+                    var node = GTE.tree.addChildNodeTo(this);
+                    nodes.push(node);
                     // Tell the tree to redraw itself
                     GTE.tree.draw();
+                    if(multiAction) {
+                        return nodes;
+                    } else {
+                        var change = new GTE.TREE.Change(GTE.MODE);
+                        change.nodes = nodes;
+                        GTE.TREE.CHANGES.push(change);
+                    }
                 } else {
                     this.iset.onClick();
                 }
                 break;
             case GTE.MODES.DELETE:
                 if (this.iset === null) {
+                    var nodes = [];
                     // If it is a leaf, delete itself, if not, delete all children
                     if (this.isLeaf()) {
-                        this.delete();
+                        nodes.push(this.delete());
                     } else {
-                        GTE.tree.deleteChildrenOf(this);
+                        nodes = (GTE.tree.deleteChildrenOf(this));
                         this.deassignPlayer();
                     }
                     // Tell the tree to redraw itself
                     GTE.tree.draw();
+                    if(multiAction) {
+                        return nodes;
+                    } else {
+                        var change = new GTE.TREE.Change(GTE.MODE);
+                        change.nodes = nodes;
+                        GTE.TREE.CHANGES.push(change);
+                    }
                 } else {
                     this.iset.onClick();
                 }
@@ -318,12 +337,24 @@ GTE.TREE = (function (parentModule) {
     */
     Node.prototype.delete = function () {
         // Delete all references to current node
+        var node = [this, this.parent , this.iset, this.reachedBy];
         this.changeParent(null);
         if (this.iset !== null) {
             this.iset.removeNode(this);
         }
         this.reachedBy = null;
         this.deleted = true;
+        GTE.tree.positionsUpdated = false;
+        return node;
+    };
+    Node.prototype.add = function (parent,isets,reachedBy) {
+        // Add references to current node
+        this.changeParent(parent);
+        if (this.iset !== null) {
+            this.iset.addNode(this);
+        }
+        this.reachedBy = reachedBy;
+        this.deleted = false;
         GTE.tree.positionsUpdated = false;
     };
 

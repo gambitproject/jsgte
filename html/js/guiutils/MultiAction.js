@@ -52,6 +52,7 @@ GTE.TREE = (function(parentModule) {
     MultiAction.prototype.onClick = function() {
         switch (GTE.MODE) {
             case GTE.MODES.ADD:
+                var nodes = [];
                 // Find the smallest number S and largest number L of children
                 // for the nodes in the line
                 var smallestAndLargest = this.findSmallestAndLargest();
@@ -59,16 +60,23 @@ GTE.TREE = (function(parentModule) {
                 if (smallestAndLargest.smallest < smallestAndLargest.largest) {
                     for (var i = 0; i < this.nodesInLine.length; i++) {
                         while (this.nodesInLine[i].children.length < smallestAndLargest.largest) {
-                            this.nodesInLine[i].onClick();
+                            nodes = nodes.concat(this.nodesInLine[i].onClick(true));
                         }
                     }
+                    var change = new GTE.TREE.Change(GTE.MODE);
+                    change.nodes = nodes;
+                    GTE.TREE.CHANGES.push(change);
                 }
                 // If L = 0, add two children to each node on the multiaction line, else
                 // If S = L, add one child to each node on the multiaction line.
                 else if (smallestAndLargest.largest === 0 || smallestAndLargest.smallest === smallestAndLargest.largest) {
                     for (var j = 0; j < this.nodesInLine.length; j++) {
-                        this.nodesInLine[j].onClick();
+                        nodes = nodes.concat(this.nodesInLine[j].onClick(true));
                     }
+
+                    var change = new GTE.TREE.Change(GTE.MODE);
+                    change.nodes = nodes;
+                    GTE.TREE.CHANGES.push(change);
                 }
                 break;
             case GTE.MODES.DELETE:
@@ -77,18 +85,23 @@ GTE.TREE = (function(parentModule) {
                 // of the tree (i.e. even if some nodes are leaves already,
                 // do not delete them). otherwise (that is, ALL nodes in the
                 // multiaction line are leaves), delete all these leaves.
+
                 var allLeaves = true;
+                var nodes = [];
                 for (var k = 0; k < this.nodesInLine.length; k++) {
                     if (this.nodesInLine[k].children.length > 0) {
                         allLeaves = false;
-                        this.nodesInLine[k].onClick();
+                        nodes = nodes.concat(this.nodesInLine[k].onClick(true));
                     }
                 }
                 if (allLeaves) {
                     for (k = 0; k < this.nodesInLine.length; k++) {
-                        this.nodesInLine[k].onClick();
+                        nodes = nodes.concat(this.nodesInLine[k].onClick(true));
                     }
                 }
+                var change = new GTE.TREE.Change(GTE.MODE);
+                change.nodes = nodes;
+                GTE.TREE.CHANGES.push(change);
                 break;
             case GTE.MODES.PLAYER_ASSIGNMENT:
                 // set all nodes on the multiaction line to belong to the
