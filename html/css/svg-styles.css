@@ -1,6 +1,10 @@
 .node:hover {
     fill: #808080;
 }
+
+.node.hover {
+    fill: #808080;
+}
 .node.selected {
     fill: #14A520;
 }
