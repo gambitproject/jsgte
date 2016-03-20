@@ -71,6 +71,8 @@ GTE.TREE = (function (parentModule) {
                   .click(function() {
                       thisNode.onClick();
                   });
+        if (!this.parent)
+            this.shape.addClass('root');
         if (this.player) {
             this.shape.fill(this.player.colour);
         } else {
