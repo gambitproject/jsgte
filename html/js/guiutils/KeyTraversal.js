@@ -13,7 +13,7 @@ GTE.UI = (function (parentModule) {
     }
     
     /**
-    * Function that switches the current mode key traversal mode
+    * Function that switches the current key traversal mode
     * Valid modes are declared in GTE.KEYMODES 
     * @param {Number} newMode Key mode to be switched to.
     */
@@ -77,7 +77,7 @@ GTE.UI = (function (parentModule) {
         *
         * @param {String} name The tag name of the target canvas object.
         * @param {SVGAnimatedString} startNode Start object to traverse from
-        * @param {SVGAnimatedString} resetValue Default start object
+        * @param {SVGAnimatedString} loopValue Value to hover on after end traversal
         * @param {Boolean} isReverse Determines if traversing backwards
         * @return {SVGAnimatedString} Returns the next object after traversal.
         */
@@ -113,6 +113,7 @@ GTE.UI = (function (parentModule) {
         * @param {String} name The tag name of the SVG object.
         * @param {SVGAnimatedString} currentValue The current hovered object.
         * @param {SVGAnimatedString} rootValue The default object to hover on.
+        * @param {SVGAnimatedString} loopValue Value to hover on after end traversal
         * @param {Boolean} isReverse Whether to traverse backwards if needed.
         * @param {KeyTraversal} self Access to outer scope of this function.
         * @return {SVGAnimatedString} Returns the new object to hover on.
@@ -135,7 +136,7 @@ GTE.UI = (function (parentModule) {
         
         // Will hold the default loop-around value
         var loopValue;
-        // Will hold the root value
+        // Will hold the root value to hover on initially
         var rootValue;
         
         switch(e.which) {
