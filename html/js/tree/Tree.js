@@ -969,6 +969,12 @@ GTE.TREE = (function (parentModule) {
         for (var i = 0; i < numberLeaves; i++) {
             this.leaves[i].show();
         }
+        // Also show all the multiaction lines that contain at least one leaf
+        for (var i = 0; i < this.multiActionLines.length; i++) {
+            if (this.multiActionLines[i].containsLeaves) {
+                this.multiActionLines[i].show();
+            }
+        }
     };
 
     /**
