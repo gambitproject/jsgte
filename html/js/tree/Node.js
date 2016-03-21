@@ -135,6 +135,7 @@ GTE.TREE = (function (parentModule) {
     * Function that defines the behaviour of the node on click
     */
     Node.prototype.onClick = function () {
+        
         switch (GTE.MODE) {
             case GTE.MODES.ADD:
                 // As talked in email "the phases of creating a game tree"

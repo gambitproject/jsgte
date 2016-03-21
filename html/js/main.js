@@ -79,9 +79,6 @@
     GTE.keyTraversal.addListeners();
 
     document.getElementById("button-new").addEventListener("click", function(){
-        // Add listeners whenever a new tree is created
-        if (!GTE.keyTraversal.enabled)
-            GTE.keyTraversal.addListeners();
         GTE.tools.newTree();
         return false;
     });
@@ -97,17 +94,11 @@
     });
 
     document.getElementById("button-merge").addEventListener("click", function(){
-        // Remove listeners whenever isets are introduced
-        if (GTE.keyTraversal.enabled)
-            GTE.keyTraversal.removeListeners();
         GTE.tools.switchMode(GTE.MODES.MERGE);
         return false;
     });
 
     document.getElementById("button-dissolve").addEventListener("click", function(){
-        // Add listeners whenever isets is dissolved
-        if (!GTE.keyTraversal.enabled)
-            GTE.keyTraversal.addListeners();
         GTE.tools.switchMode(GTE.MODES.DISSOLVE);
         return false;
     });

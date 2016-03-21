@@ -19,6 +19,8 @@ GTE.UI = (function (parentModule) {
     */
     KeyTraversal.prototype.switchMode = function(newMode) {
         switch(newMode) {
+            case GTE.KEYMODES.DISABLED:
+                break;
             case GTE.KEYMODES.NODE_TRAVERSAL:
             case GTE.KEYMODES.MULTI_TRAVERSAL:
                 var buttonsToBlur = document.getElementsByTagName('button');
@@ -46,8 +48,8 @@ GTE.UI = (function (parentModule) {
     */
     KeyTraversal.prototype.removeListeners = function() {
         this.enabled = false;
-        document.removeEventListener("keydown", this.keyHandler);
-        document.removeEventListener("click", this.resetCanvasFocuses);
+        document.removeEventListener("keydown", this.keyHandler.bind(this));
+        document.removeEventListener("click", this.resetCanvasFocuses.bind(this));
     }
     
     /**
@@ -70,7 +72,8 @@ GTE.UI = (function (parentModule) {
     */
     KeyTraversal.prototype.keyHandler = function(e) {
         //console.log(e.which);
-        
+        if (this.keyMode == GTE.KEYMODES.DISABLED)
+            return;
         /**
         * Function that traverses canvas tree until it finds an object of a 
         * specified type, else returns a default canvas object.
@@ -168,6 +171,8 @@ GTE.UI = (function (parentModule) {
                 this.activeNode = assignActive(GTE.KEYMODES.NODE_TRAVERSAL, "ellipse", 
                                                this.activeNode, rootValue, loopValue, true, this);
                 
+                if (!this.activeNode)
+                    return;
                 // Add hover to new current node
                 this.activeNode.classList.add("hover");
                 break;
@@ -178,18 +183,23 @@ GTE.UI = (function (parentModule) {
                 if (this.activeMulti != null)
                     this.activeMulti.onmouseout();
                 
-                rootValue = document.querySelector(".multiaction-rect");
-                loopValue = document.querySelector(".multiaction-rect");
-
+                rootValue = document.querySelector(".multiaction-rect.root");
+                loopValue = document.querySelector(".multiaction-rect.root");
+                
+                do {
                 this.activeMulti = assignActive(GTE.KEYMODES.MULTI_TRAVERSAL, "rect", 
                                                 this.activeMulti, rootValue, loopValue, false, this);
+                }
+                while(this.activeMulti != null && this.activeMulti.classList.contains('show'));
                 
+                if (!this.activeMulti)
+                    return;
                 // Add hover to current multi
                 this.activeMulti.onmouseover();
                 break;
                 
             case KeyEvent.DOM_VK_SPACE:
-                
+
                 // Simulate click on object depending on mode
                 if (this.keyMode == GTE.KEYMODES.NODE_TRAVERSAL) {
                     if (this.activeNode != null)

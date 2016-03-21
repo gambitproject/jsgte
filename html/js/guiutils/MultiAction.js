@@ -31,6 +31,8 @@ GTE.TREE = (function(parentModule) {
                 color: '#9d9d9d'
             })
             .addClass('multiaction-rect');
+        if (this.nodesInLine[0].parent.parent == null)
+            this.shape.addClass('root');
         this.shape.translate(this.x1,
             this.y - GTE.CONSTANTS.CIRCLE_SIZE / 2);
         var thisMultiAction = this;

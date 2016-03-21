@@ -45,9 +45,10 @@ var GTE = (function () {
       DISSOLVE: 4
     };
     GTE.KEYMODES = {
-      NO_TRAVERSAL: 0,
-      NODE_TRAVERSAL: 1,
-      MULTI_TRAVERSAL: 2
+      DISABLED: 0,
+      NO_TRAVERSAL: 1,
+      NODE_TRAVERSAL: 2,
+      MULTI_TRAVERSAL: 3
     };
     
     if (Object.freeze) {
