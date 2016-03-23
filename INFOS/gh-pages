@@ -6,3 +6,19 @@ Current JSGTE public address is [http://gambitproject.github.io/jsgte/html/](htt
 1. ```git checkout gh-pages```
 2. ```git merge your_branch -X theirs ```
 3. ```git push origin gh-pages```
+
+see also ../README.md :
+
+To test them as html pages you can navigate to
+
+http://gambitproject.github.io/jsgte/
+
+To update this when changes happen to master do the following
+
+# pip install ghp-import
+ghp-import -p html
+
+This moves html, which contains index.html to the root of a
+new branch gh-pages. For more details see
+
+https://help.github.com/categories/github-pages-basics/
