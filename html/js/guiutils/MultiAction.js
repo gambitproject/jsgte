@@ -8,8 +8,14 @@ GTE.TREE = (function(parentModule) {
     function MultiAction(level, nodesInLine) {
         this.shape = null;
         this.nodesInLine = nodesInLine;
-        this.x1 = nodesInLine[0].x;
-        this.x2 = nodesInLine[nodesInLine.length - 1].x;
+        if(GTE.STORAGE.settingsOrientation == 0){
+            this.x1 = nodesInLine[0].x;
+            this.x2 = nodesInLine[nodesInLine.length - 1].x;
+        }
+        else if(GTE.STORAGE.settingsOrientation == 1){
+            this.x1 = nodesInLine[nodesInLine.length - 1].y;
+            this.x2 = nodesInLine[0].y;
+        }
         this.containsLeaves = false;
         for (var i = 0; i < this.nodesInLine.length; i++) {
             if (this.nodesInLine[i].isLeaf()) {
@@ -23,16 +29,28 @@ GTE.TREE = (function(parentModule) {
     }
 
     MultiAction.prototype.draw = function() {
-        var width = (this.x2 + GTE.CONSTANTS.CIRCLE_SIZE) - this.x1;
 
-        this.shape = GTE.canvas.rect(width, GTE.CONSTANTS.CIRCLE_SIZE)
-            .radius(GTE.CONSTANTS.CIRCLE_SIZE / 2)
-            .fill({
-                color: '#9d9d9d'
-            })
-            .addClass('multiaction-rect');
-        this.shape.translate(this.x1,
-            this.y - GTE.CONSTANTS.CIRCLE_SIZE / 2);
+        var width = (this.x2 + GTE.CONSTANTS.CIRCLE_SIZE) - this.x1;
+        if(GTE.STORAGE.settingsOrientation == 0){
+            this.shape = GTE.canvas.rect(width, GTE.CONSTANTS.CIRCLE_SIZE)
+                .radius(GTE.CONSTANTS.CIRCLE_SIZE / 2)
+                .fill({
+                    color: '#9d9d9d'
+                })
+                .addClass('multiaction-rect');
+            this.shape.translate(this.x1,
+                this.y - GTE.CONSTANTS.CIRCLE_SIZE / 2);
+        }
+        else if(GTE.STORAGE.settingsOrientation == 1){
+            this.shape = GTE.canvas.rect(GTE.CONSTANTS.CIRCLE_SIZE,width)
+                .radius(GTE.CONSTANTS.CIRCLE_SIZE / 2)
+                .fill({
+                    color: '#9d9d9d'
+                })
+                .addClass('multiaction-rect');
+            this.shape.translate(this.y - GTE.CONSTANTS.CIRCLE_SIZE / 2,this.x1);
+        }
+
         var thisMultiAction = this;
         this.shape.mouseover(function() {
             thisMultiAction.interaction();

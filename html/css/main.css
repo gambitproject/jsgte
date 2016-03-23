@@ -67,8 +67,8 @@ html, body {
 
 
 #canvas {
-    height: 90%;
-    padding-top: 10px;
+    height: calc(100% - 75px);
+    margin: 10px;
 }
 
 .full-height {
