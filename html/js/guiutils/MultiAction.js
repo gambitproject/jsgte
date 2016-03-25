@@ -146,6 +146,10 @@ GTE.TREE = (function(parentModule) {
         this.shape.hide();
     };
 
+    MultiAction.prototype.show = function() {
+        this.shape.show();
+    };
+
     // Add class to parent module
     parentModule.MultiAction = MultiAction;
 
