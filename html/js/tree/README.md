@@ -18,7 +18,7 @@ Derived data:
 - sequences
 - perfect recall
 
-# Graphical data - so far computed automatically and not manipulable
+## Graphical data - so far computed automatically and not manipulable
 
 positions of:
 - nodes
