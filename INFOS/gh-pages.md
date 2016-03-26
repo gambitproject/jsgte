@@ -15,7 +15,7 @@ http://gambitproject.github.io/jsgte/
 
 To update this when changes happen to master do the following
 
-# pip install ghp-import
+## pip install ghp-import
 ghp-import -p html
 
 This moves html, which contains index.html to the root of a
