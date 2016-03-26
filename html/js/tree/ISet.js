@@ -173,12 +173,12 @@ GTE.TREE = (function (parentModule) {
             var width = (this.lastNode.x + parseInt(GTE.STORAGE.settingsCircleSize)*2) -
                         (this.firstNode.x - parseInt(GTE.STORAGE.settingsCircleSize));
 
-            this.shape = GTE.canvas.rect(width, GTE.CONSTANTS.ISET_HEIGHT)
+            this.shape = GTE.canvas.rect(width, GTE.STORAGE.settingsCircleSize * 1.2)
                                     .stroke({ color: this.getPlayer().colour, width: 2 })
-                                    .radius(GTE.CONSTANTS.ISET_HEIGHT/2)
+                                    .radius(GTE.STORAGE.settingsCircleSize/2)
                                     .addClass('iset');
             this.shape.translate(this.firstNode.x - parseInt(GTE.STORAGE.settingsCircleSize),
-                                this.firstNode.y - parseInt(GTE.STORAGE.settingsCircleSize) + 4);
+                                this.firstNode.y - GTE.STORAGE.settingsCircleSize * .1);
             var thisISet = this;
             this.shape.click(function() {
                 thisISet.onClick();
