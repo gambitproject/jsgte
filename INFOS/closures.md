@@ -132,6 +132,16 @@ According to what we stated earlier, when we invoke the
     owning object-a fundamental concept in object-oriented
     programming.**
 
+Note that even though the same function is used throughout all these examples, the function context for each invocation of the function changes depending upon how the function is invoked, rather than on how it was declared.
+
+For example, the exact same function instance is shared by both ninja1 and ninja2, yet when it’s executed, the function has access to, and can perform operations upon, the object through which the method was invoked. This means that we don’t need to create separate copies of a function to perform the exact same processing on different objects—this is a tenet of object-oriented programming.
+
+
+
+
+
+
+
 
 
 
