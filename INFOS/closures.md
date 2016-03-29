@@ -11,6 +11,11 @@ This is a workaround for an error in the ECMAScript Language
 Specification which causes `this` to be set incorrectly for
 inner functions.
 
+**Comment:**
+Crockford calls this an error. John Resig (see "JS Ninja"
+book below) explains why this is consistent with the global 
+`window` object just being a special case.
+
 "closure"
 http://www.adequatelygood.com/JavaScript-Module-Pattern-In-Depth.html
 ... very concise!
@@ -86,7 +91,7 @@ Testing framework
     code, including server-side JavaScript code.[31]
 
 ----------------------------------------------
-From John Resig and Bear Bibeault: "Secrets of the JavaScript Ninja"
+# From John Resig and Bear Bibeault: "Secrets of the JavaScript Ninja"
 
 chapter 2 describes a short self-made testing framework used
 in the book to verify claims
@@ -94,7 +99,7 @@ in the book to verify claims
 chapter 3 is on FUNCTIONS which are central (I suspect with their
 constructors that can only be called for functions)
 
-3.3.3 Invocation as a method
+### 3.3.3 Invocation as a method
 
 very illustrative. e.g. "window" is just one of the possible
 invocation contexts and so there is no basic difference
@@ -140,9 +145,10 @@ http://stackoverflow.com/questions/1729501/javascript-overriding-alert
 http://api.jquery.com/Types/#Proxy_Pattern
 
 ----------------------------------------------
-From "JS the good parts"
+# From Douglas Crockford, "JS the good parts"
 
-Function Objects
+### Function Objects
+
 Functions in JavaScript are objects. Objects are collections
 of name/value pairs having a hidden link to a prototype
 object. Objects produced from object literals are linked to
@@ -168,6 +174,7 @@ The thing that is special about functions is that they can
 be invoked.
 
 
+----------------------------------------------
 
 
 
