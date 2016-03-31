@@ -166,6 +166,25 @@ objects. This is a tenet of object-oriented programming.**
 
 good summary of chapter 3 in final section 3.4 
 
+Figure 5.3. Like a protective bubble, the closure for
+`innerFunction()` keeps the variables in the function's scope
+from being garbage-collected as long as the function exists.
+
+BVS NOTES: the function's scope is also where the function can be
+seen (because forward references to functions are allowed).  
+
+This shows three more interesting concepts regarding
+closures:
+
+  - Function parameters are included in the closure of that
+    function. (Seems obvious, but now we’ve said it for
+    sure.)
+
+  - All variables in an outer scope, even those declared
+    after the function declaration, are included.
+
+  - Within the same scope, variables not yet defined
+    cannot be forward-referenced.
 
 
 ----------------------------------------------
