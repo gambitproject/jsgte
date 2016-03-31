@@ -1,26 +1,23 @@
 Closures, functions
 -------------------
 
-http://www.crockford.com/javascript/javascript.html
+A simple introductory example: from
+http://stackoverflow.com/questions/36636/what-is-a-closure 
 
-http://www.crockford.com/javascript/private.html
-Private
-By convention, we make a private `that` variable. This is
-used to make the object available to the private methods.
-This is a workaround for an error in the ECMAScript Language
-Specification which causes `this` to be set incorrectly for
-inner functions.
+A closure is a persistent local variable scope
 
-**Comment:**
-Crockford calls this an error. John Resig (see "JS Ninja"
-book below) explains why this is consistent with the global 
-`window` object just being a special case.
+    outer = function() {
+      var a = 1;
+      var inner = function() {
+        alert(a);
+      }
+      return inner; // this returns a function
+    }
 
-"closure"
-http://www.adequatelygood.com/JavaScript-Module-Pattern-In-Depth.html
-... very concise!
-also:
-http://benalman.com/news/2010/11/immediately-invoked-function-expression/
+    var fnc = outer(); // execute outer to get inner 
+    fnc();
+
+note: variable `a` persists even after `outer` has been executed.
 
 http://skilldrick.co.uk/2011/04/closures-explained-with-javascript/
 
@@ -39,7 +36,7 @@ which comes very quickly coming to the point:
     //g5 is a function that always returns 5
     alert(g5());
 
-Here’s a version of the above with g converted to an
+Here's a version of the above with g converted to an
 anonymous function:
 
     function f(x) {
@@ -61,6 +58,28 @@ anonymous function:
     alert(g1());
 
 
+
+----------------------------
+http://www.crockford.com/javascript/javascript.html
+
+http://www.crockford.com/javascript/private.html
+Private
+By convention, we make a private `that` variable. This is
+used to make the object available to the private methods.
+This is a workaround for an error in the ECMAScript Language
+Specification which causes `this` to be set incorrectly for
+inner functions.
+
+**Comment:**
+Crockford calls this an error. John Resig (see "JS Ninja"
+book below) explains why this is consistent with the global 
+`window` object just being a special case.
+
+"closure"
+http://www.adequatelygood.com/JavaScript-Module-Pattern-In-Depth.html
+... very concise!
+also:
+http://benalman.com/news/2010/11/immediately-invoked-function-expression/
 IIFE = Immediately Invoked Function Expression
 If you have not come across the acronym "IIFE" before, you
 may be interested in Ben Alman's article on the subject, in
