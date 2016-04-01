@@ -186,6 +186,7 @@ closures:
   - Within the same scope, variables not yet defined
     cannot be forward-referenced.
 
+Figure 5.7. By creating multiple closures, we can do many things at once. 
 
 ----------------------------------------------
 
