@@ -75,12 +75,52 @@ Crockford calls this an error. John Resig (see "JS Ninja"
 book below) explains why this is consistent with the global 
 `window` object just being a special case.
 
-"closure"
+### Module pattern:
+
 http://www.adequatelygood.com/JavaScript-Module-Pattern-In-Depth.html
 ... very concise!
+
+http://yuiblog.com/blog/2007/06/12/module-pattern/
+
+----------------------------------------------
+but John Resig prefers assigning prototypes:
+
+http://ejohn.org/blog/simple-class-instantiation/
+
+Finally, a tangible advantage. Instantiating a function with
+a bunch of prototype properties is very, very, fast. It
+completely blows the Module pattern, and similar, out of the
+water. Thus, if you have a frequently-accessed function
+(returning an object) that you want people to interact with,
+then it’s to your advantage to have the object properties be
+in the prototype chain and instantiate it. Here it is, in
+code:
+
+    [js]// Very fast
+    function User(){}
+    User.prototype = { /* Lots of properties … */ };
+
+    // Very slow
+    function User(){
+    return { /* Lots of properties */ };
+    }[/js]
+
+Now, with that in mind, let’s also examine constructing a
+simple function API. For example, the $ function from
+jQuery. There’s no way that the users are going to want to
+do new $("div") every time they interact with that method;
+however, we want to be able to take advantage of the speedy
+benefits of the object prototype. Therefore, we need a
+solution to solve this.
+
+----------------------------------------------
+
+
 also:
 http://benalman.com/news/2010/11/immediately-invoked-function-expression/
+
 IIFE = Immediately Invoked Function Expression
+
 If you have not come across the acronym "IIFE" before, you
 may be interested in Ben Alman's article on the subject, in
 which he coins the term to stand for "Immediately Invoked
@@ -199,6 +239,49 @@ and goes as follows:
   1.  Properties are bound to the object instance from the prototype.
   2.  Properties are added to the object instance within the constructor function.
 
+Before Listing 6.8:
+**Note** 
+Another technique that may have occurred to you, and that we
+advise strongly against, is to use the Person prototype
+object directly as the Ninja prototype, like this:
+
+    Ninja.prototype = Person.prototype;
+
+By doing this, any changes to the Ninja prototype will also
+change the Person prototype because they’re the same object,
+and that’s bound to have undesirable side effects. 
+
+Listing 6.8f:
+All native JavaScript object constructors (such as Object,
+Array, String, Number, RegExp, and Function) have prototype
+properties that can be manipulated and extended, which makes
+sense, as each of those object constructors is itself a
+function. This proves to be an incredibly powerful feature
+of the language. Using it, we can extend the functionality
+of the language itself, introducing new or missing pieces of
+the language. 
+
+js code examples, very detailed
+http://perfectionkills.com/
+http://perfectionkills.com/extending-native-builtins/
+
+### 6.2.1. Extending Object
+
+Perhaps the most egregious mistake that we can make with
+prototypes is to extend the native Object.prototype. The
+difficulty is that when we extend this prototype, all
+objects receive those additional properties.
+
+Listing 6.14. Subclassing the Array object
+
+  function MyArray() {}
+  MyArray.prototype = new Array();
+  var mine = new MyArray();
+  mine.push(1, 2, 3);
+
+... not everything works here!
+
+Listing 6.15. Simulating Array functionality but without the true subclassing 
 
 ----------------------------------------------
 
@@ -230,19 +313,5 @@ functions are objects, functions can have methods.
 The thing that is special about functions is that they can
 be invoked.
 
-
 ----------------------------------------------
 
-
-
-http://addyosmani.com/writing-modular-js/
-http://addyosmani.com/blog/
-http://addyosmani.com/first/
-
-~199 slides on Front-end Tooling Workflows
-with the following hints:
-
-tools for formatting / lint:
-   jsfmt
-   fixmyjs
-   jsinspect

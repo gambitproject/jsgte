@@ -51,6 +51,21 @@ trivial to switch between reading an email or document to
 writing one without sending a new page request to the
 server.
 
+---------------------------------------------- 
+
+http://addyosmani.com/writing-modular-js/
+http://addyosmani.com/blog/
+http://addyosmani.com/first/
+
+~199 slides on Front-end Tooling Workflows
+with the following hints:
+
+tools for formatting / lint:
+   jsfmt
+   fixmyjs
+   jsinspect
+
+
 ----------------------------------------------
 
 overriding existing functions such as window.alert()
