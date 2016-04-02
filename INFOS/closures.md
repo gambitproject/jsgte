@@ -190,14 +190,6 @@ Figure 5.7. By creating multiple closures, we can do many things at once.
 
 ----------------------------------------------
 
-https://en.wikipedia.org/wiki/Backbone.js
-backbone - based on model view presenter
-
-overriding existing functions such as window.alert()
-http://stackoverflow.com/questions/1729501/javascript-overriding-alert
-http://api.jquery.com/Types/#Proxy_Pattern
-
-----------------------------------------------
 # From Douglas Crockford, "JS the good parts"
 
 ### Function Objects
