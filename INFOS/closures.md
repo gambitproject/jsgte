@@ -187,6 +187,18 @@ closures:
     cannot be forward-referenced.
 
 Figure 5.7. By creating multiple closures, we can do many things at once. 
+= 100fig01_alt.jpg
+But this is code that does not work, need Figure 5.8
+= 101fig01_alt.jpg
+file:///home/stengel/JSGTE/jsgte/INFOS/ninja-code/chapter-5/listing-5.8.html
+
+Listing 6.2 - function prototype
+
+The precedence of the initialization operations is important
+and goes as follows:
+  1.  Properties are bound to the object instance from the prototype.
+  2.  Properties are added to the object instance within the constructor function.
+
 
 ----------------------------------------------
 
