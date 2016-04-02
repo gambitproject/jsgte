@@ -30,7 +30,26 @@ The project is hosted on GitHub, and the annotated source
  example application, a list of tutorials and a long list of
  real-world projects that use Backbone. 
 
+http://backbonejs.org/#examples-todos
+
+useful: storage of data on the CLIENT
+
 https://addyosmani.com/backbone-fundamentals/
+
+If you’re writing an application where much of the heavy
+lifting for view rendering and data manipulation will be
+occurring in the browser, you may find a JavaScript MV*
+framework useful. Examples of applications that fall into
+this category are GMail, NewsBlur and the LinkedIn mobile
+app.
+
+These types of applications typically download a single
+payload containing all the scripts, stylesheets, and markup
+users need for common tasks and then perform a lot of
+additional behavior in the background. For instance, it’s
+trivial to switch between reading an email or document to
+writing one without sending a new page request to the
+server.
 
 ----------------------------------------------
 
