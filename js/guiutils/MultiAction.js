@@ -18,21 +18,21 @@ GTE.TREE = (function(parentModule) {
             }
         }
         this.level = level;
-        this.y = this.level * GTE.CONSTANTS.DIST_BETWEEN_LEVELS +
-            GTE.CONSTANTS.CIRCLE_SIZE / 2;
+        this.y = this.level * GTE.STORAGE.settingsDistLevels +
+            GTE.STORAGE.settingsCircleSize / 2;
     }
 
     MultiAction.prototype.draw = function() {
-        var width = (this.x2 + GTE.CONSTANTS.CIRCLE_SIZE) - this.x1;
+        var width = (this.x2 + parseInt(GTE.STORAGE.settingsCircleSize)) - this.x1;
 
-        this.shape = GTE.canvas.rect(width, GTE.CONSTANTS.CIRCLE_SIZE)
-            .radius(GTE.CONSTANTS.CIRCLE_SIZE / 2)
+        this.shape = GTE.canvas.rect(width, GTE.STORAGE.settingsCircleSize)
+            .radius(GTE.STORAGE.settingsCircleSize / 2)
             .fill({
                 color: '#9d9d9d'
             })
             .addClass('multiaction-rect');
         this.shape.translate(this.x1,
-            this.y - GTE.CONSTANTS.CIRCLE_SIZE / 2);
+            this.y - GTE.STORAGE.settingsCircleSize / 2);
         var thisMultiAction = this;
         this.shape.mouseover(function() {
             thisMultiAction.interaction();
@@ -144,6 +144,10 @@ GTE.TREE = (function(parentModule) {
 
     MultiAction.prototype.hide = function() {
         this.shape.hide();
+    };
+
+    MultiAction.prototype.show = function() {
+        this.shape.show();
     };
 
     // Add class to parent module
