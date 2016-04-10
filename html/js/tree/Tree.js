@@ -762,14 +762,14 @@ GTE.TREE = (function (parentModule) {
             window.alert("Couldn't merge the information sets." +
             "Please select two information sets that do not share a path from root.");
         }else {
-            // Add Node A to Node B ISet
-            var nodesInA = a.getNodes();
-            for (var i = 0; i < nodesInA.length; i++) {
-                nodesInA[i].changeISet(b);
+            // Add Node B to Node A ISet
+            var nodesInB = b.getNodes();
+            for (var i = 0; i < nodesInB.length; i++) {
+                nodesInB[i].changeISet(a);
             }
         }
         this.positionsUpdated = false;
-        return b;
+        return a;
     };
 
     Tree.prototype.iSetsSharePathFromRoot = function (a, b) {
