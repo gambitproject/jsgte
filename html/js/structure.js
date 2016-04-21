@@ -7,7 +7,7 @@ var GTE = (function () {
     GTE.UI = {};
     GTE.TREE = {};
     GTE.TREE.UTILS = {};
-
+    GTE.TREE.CHANGES = [];
     GTE.ORIENTATIONS = {
       VERTICAL: 0,
       HORIZONTAL: 1

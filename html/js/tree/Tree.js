@@ -630,11 +630,13 @@ GTE.TREE = (function (parentModule) {
      * @param {Node} node Node to be deleted
      */
     Tree.prototype.deleteChildrenOf = function (node) {
+        var nodesToDelete = [];
         // Delete everything below every child
-        while(node.children.length !== 0){
-            this.recursiveDeleteChildren(node.children[0]);
+        while(node.children.length !== 0) {
+            nodesToDelete = nodesToDelete.concat(this.recursiveDeleteChildren(node.children[0]));
         }
         this.positionsUpdated = false;
+        return nodesToDelete;
     };
 
     /**
@@ -644,12 +646,14 @@ GTE.TREE = (function (parentModule) {
     * @param {Node} node Starting node
     */
     Tree.prototype.recursiveDeleteChildren = function (node) {
+        var deletedNodes = [];
         if (!node.isLeaf()) {
             for (var i=0; i < node.children.length; i++) {
-                this.recursiveDeleteChildren(node.children[i]);
+                deletedNodes = deletedNodes.concat(this.recursiveDeleteChildren(node.children[i]));
             }
         }
-        node.delete();
+        deletedNodes.push(node.delete());
+        return deletedNodes;
     };
 
     /**
@@ -1322,6 +1326,7 @@ GTE.TREE = (function (parentModule) {
             GTE.tools.changePlayerColour(playerId, colour);
         }
     };
+
 
     // Add class to parent module
     parentModule.Tree = Tree;

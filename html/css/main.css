@@ -304,6 +304,7 @@ a {
     height:100%;
     text-align:center;
     z-index: 1000;
+    overflow: scroll;
 }
 
 #settings > div {

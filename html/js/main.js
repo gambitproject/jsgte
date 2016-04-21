@@ -129,6 +129,11 @@
         return false;
     });
 
+    document.getElementById("button-undo").addEventListener("click", function(){
+        GTE.tools.undo();
+        return false;
+    });
+
     document.getElementById("form-settings").addEventListener("submit", function(e){
         e.preventDefault();
         // Save settings
