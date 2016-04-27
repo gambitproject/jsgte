@@ -187,19 +187,48 @@ the strategic form (typically in more than one place as the
 strategic form is rather redundant in that respect, much
 more cells than game tree leaves).
 
-#### Feature (later but not too hard)
+#### Perfect recall
+
+To be assumed for strategy generation.
+Needs discussion.
+
+#### Payoff display style
+
+There are two possible ways to display the payoffs in a
+cell (always with matching colours):
+
+- in diagonal corners (lower left row player, upper right
+  column player)
+- comma-separated on a single line 
+- for 3 and more players, while comma-separated seems
+  easiest, this will make the cell much wider than high
+  so staggering the payoffs from lower left to upper right
+  in order row (player 1) / column (player 2) / panel
+  (player 3) will save horizontal space and use the square
+  cell better.  
+
+#### Feature (later but not too hard?)
 
 Permute (swap) players with a single click.
 
-### Finding equilibria
+Trickier for 3 or more players, where it would be nice to
+drag and drop a player into a new position.
 
-Small games allow to find all equilibria quickly.
+Another question is the EFFECT of the player swap.
+The clearest effect would be to keep the colours and player
+names: that is, from the standard description of red for the
+row player 1 and blue for the column player 2, the swap
+would result in blue (and player name 2) for the row player
+and red (and player name 1) for the column player, and of
+course exchanged strategy names and payoffs.
+There could be then a second button that says "reset to
+standard colors and player names". The names then become 1
+and 2 even if they have been Alice and Bob before.
 
-For larger games, algorithms to find ONE equilibrium should
-be run fast because they are quicker.
-
-The decision on which algorithm to trigger could be made by
-the CLIENT.
+In the extensive game, this player swap would have NO
+perceptible effect except at the leaves where the payoffs
+are transposed. Here it may be more natural to change the
+player names. To be discussed. Preferably configurable.
 
 ### Displaying equilibria
 
@@ -214,9 +243,63 @@ and payoff next to strategy - probably at other side of
 table, i.e. on the right for row player, and at the bottom
 for column player, to verify equilibrium property.
 
-### Server programming (Harkirat)
+### Finding equilibria
+
+Small games allow to find all equilibria quickly.
+
+For larger games, algorithms to find ONE equilibrium should
+be run first because they are quicker.
+
+The decision on which algorithm to trigger could be made by
+the CLIENT.
+
+## Server programming (Harkirat)
 
 Currently JETTY but unstable.
 Should be APACHE.
 
-How to react to choice of algorithm?
+- How to react to choice of algorithm?
+- needs formatting as needed for "Displaying Equilibria"
+  above
+
+### Undo and Redo
+
+I suggest the following:
+The game tree, or in fact any game, is a data structure that
+encodes the tree and its graphics information along with a 
+central `mode status` object that encodes:
+
+- the current MODE (add/delete node etc.)
+- graphics parameters (such as line thickness)
+
+Each event (typically mouseclick on the canvas) induces
+either a change of the mode or the tree.
+For simplicity, I suggest to keep everything together, and
+perform the following after an event:
+
+- deep-copy the entire tree, including the `mode status`
+  object, and put it on an undo stack.
+- Then perform on the CURRENT tree the change, either in the
+  `mode status` or (more complex) the tree
+- the new tree is then redrawn.
+- actions such as exporting to a picture or saving a file
+  are not put on the undo stack, but before creating an
+  entirely new game or loading a game the current game is
+  put on the undo stack.
+
+When clicking UNDO, the tree is simply taken to be the
+previous one on the stack, while KEEPING the forward part of
+the stack (as a list) for possible REDO. 
+The forward part is either overwritten (i.e. lost
+completely) by new events, or (probably better) some
+INSERTIONS take place before abandoning the old REDO
+possiblities.
+
+Although this wastes space, it looks simplest.
+Perhaps a log file that records each event could be written
+alongside.
+
+## Displaying equilibrium diagrams (Amelie)
+
+
+
