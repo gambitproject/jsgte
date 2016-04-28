@@ -1,6 +1,6 @@
 # JSGTE development plan GSOC 2016
 
-Date: 26 April 2016
+Date: 28 April 2016
 
 GSoC students (and their mentors)
 
@@ -187,6 +187,12 @@ the strategic form (typically in more than one place as the
 strategic form is rather redundant in that respect, much
 more cells than game tree leaves).
 
+Design requirement:
+
+make top left corner of strategic form diagram (= endpoint
+of diagonal separator) reference coordinate (0,0) like in
+bimatrixgame.sty
+
 #### Perfect recall
 
 To be assumed for strategy generation.
@@ -298,6 +304,41 @@ possiblities.
 Although this wastes space, it looks simplest.
 Perhaps a log file that records each event could be written
 alongside.
+
+## Refactoring code (early!)
+
+### coordinates of graphics elements
+
+- current graphics coordinates add funny parameters related
+  ato node size to all graphics elements, preventing
+  orthogonality - see also issue #74
+  https://github.com/gambitproject/jsgte/issues/74
+
+Remedy: 
+
+- all nodes are located at their CENTER, not lower
+  left corner 
+
+- reference is root at 0,0
+
+- new general drawing method based on these
+
+### make settings panel independent
+
+At the moment, the settings panel (cogwheel icon) is drawn
+in the middle of the canvas.
+It should be a separate canvas, which can also go into a
+popup window and be moved.
+
+Also, it should have three buttons similar to the XFIG
+drawing program:
+
+- `Cancel` (abandons changes)
+- `Apply`  (tries changes)
+- `Done`   (applies changes and quits)
+
+All these will be put into the settings / mode object and
+stored (except when `Cancel`)
 
 ## Displaying equilibrium diagrams (Amelie)
 
