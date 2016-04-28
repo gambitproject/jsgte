@@ -307,11 +307,16 @@ alongside.
 
 ## Refactoring code (early!)
 
+In general, Harkirat and Jaume should familiarize themselves
+with the code, and refactoring will be a good way to do so.
+Here are some suggestions with possible improvement
+possibilities to learn about the code.
+
 ### coordinates of graphics elements
 
 - current graphics coordinates add funny parameters related
   ato node size to all graphics elements, preventing
-  orthogonality - see also issue #74
+  orthogonality - see also issue #74 (bug)
   https://github.com/gambitproject/jsgte/issues/74
 
 Remedy: 
@@ -339,6 +344,14 @@ drawing program:
 
 All these will be put into the settings / mode object and
 stored (except when `Cancel`)
+
+### separate tree layout module
+
+At the moment, tree.js has 72 methods and 1330 lines of
+code.
+I suspect the tree layout is computed in an interspersed
+manner throughout the tree.js code.
+It should be separate.  
 
 ## Displaying equilibrium diagrams (Amelie)
 
