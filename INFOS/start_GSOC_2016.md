@@ -32,7 +32,7 @@ GTE is meant to be a portal for creating and automatically
 analyzing games, and for learning about game-theoretic
 concepts such as Nash equilibrium.
 
-The blueprint is the current Flash implemenation (see
+The blueprint is the current Flash implementation (see
 www.gametheoryexplorer.org), which will be streamlined in
 JSGTE.
 
@@ -354,6 +354,8 @@ manner throughout the tree.js code.
 It should be separate.  
 
 ## Displaying equilibrium diagrams (Amelie)
+
+see separate file `eqdiagrams.md`.
 
 
 
