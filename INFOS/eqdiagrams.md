@@ -75,7 +75,7 @@ Because this is a 2x2 game, the following pair of diagrams
 is possible, which is the most elaborate and detailed of all.
 (For larger strategy numbers, only more restrictive diagrams 
 result, as will be explained.) 
-f
+
 ![](./EQDIAG/upperenv.png)
 
 See also the vector graphics (arbitrarily zoomable) file 
