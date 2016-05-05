@@ -113,7 +113,7 @@ as a blue line again below this, which is subdivided into
 two intervals, labeled T and B, that indicate the pure best
 responses of player I. At the common point of these two
 intervals, for prob(r)=1/4 (which depends on the payoffs to
-player II), _both_ T and R are best responses. This means
+player I), _both_ T and R are best responses. This means
 player I can _mix_ between T and R at this point.
 
 The right diagram is analogous, except that the horizontal
@@ -162,6 +162,15 @@ vertically, by a clockwise quarter turn, as shown with the
 quarter-circles that end in straight arrows that lead to the
 square.
 
+The *intersections of the best-response correspondence
+curves* define the Nash equilibria (pairs of mutual best
+responses), here three of them.
+There will always be at least one such intersection.
+In degenerate games, the mixed equilibrium may just be the
+endpoint of a *whole interval* of equilibrium strategies.
+
+#### Side note
+
 This requires, in fact, that the upper envelope is of
 payoffs to player II is drawn on the right (and not on the
 left), i.e. as a second diagram, if the probability plotted
@@ -175,9 +184,19 @@ to the side of the square, but would need a (confusing)
 twist, or else draw the goal posts with B on the left and T
 on the right.
 
+Otherwise, the "mirror image" of the above diagram would
+look like this. Clearly, it would be better to draw the
+probability of T rather than of B from 0 to 1. 
+The result would be less symmetric: normally we write 
+1-p and p for two probabilities of given events, rather than
+p and 1-p.  
+
+![](./EQDIAG/leftupperenv.png)
+
+Why is this worth a discussion?
 It seems natural to draw the payoffs to player I first and
 the payoffs to player II second, but in fact this is not the
-natural choice. What is drawn here is, in fact, the **set of
+natural choice. What is drawn in the earlier first picture is, in fact, the **set of
 mixed strategies of player II** in the left diagram,
 subdivided (via the upper envelope) into best responses of
 player I, and here it seems better to draw this set of mixed
@@ -186,13 +205,6 @@ However, when seeing this for the first time, "goalpost on
 the left" should correspond to a "left" strategy, and
 "goalpost on the right" to a "right" strategy, so one should
 start this way.
-
-The *intersections of the best-response correspondence
-curves* define the Nash equilibria (pairs of mutual best
-responses), here three of them.
-There will always be at least one such intersection.
-In degenerate games, the mixed equilibrium may just be the
-endpoint of a *whole interval* of equilibrium strategies.
 
 ## Interactive display
 
