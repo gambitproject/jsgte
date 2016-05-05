@@ -113,8 +113,8 @@ as a blue line again below this, which is subdivided into
 two intervals, labeled T and B, that indicate the pure best
 responses of player I. At the common point of these two
 intervals, for prob(r)=1/4 (which depends on the payoffs to
-player I), _both_ T and R are best responses. This means
-player I can _mix_ between T and R at this point.
+player I), _both_ T and B are best responses. This means
+player I can _mix_ between T and B at this point.
 
 The right diagram is analogous, except that the horizontal
 line now represent the mixed strategies of player I, drawn
