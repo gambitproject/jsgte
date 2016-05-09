@@ -148,7 +148,7 @@ At the moment, there is no strategic form at all.
 
 A basic solver for strategic-form games (which for two
 players are called *bimatrix games*) is at 
-http://www.banach.lse.ac.uk
+http://banach.lse.ac.uk
 
 The strategic form is also the basis for the display of
 equilibrium diagrams (for Amelie).
