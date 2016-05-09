@@ -95,33 +95,36 @@ This changes the css of the 3 paragraphs.
 
 ###Different kinds of selectors###
 ####Simple###
-* "p" all paragraphs
+* `p` all paragraphs
 
-*"img" all images
+*`img` all images
 
-* "*" all HTML elements
-####Attribut selectors####
-* "p[name]" all paragraphes having a name attribute.
+* `*` all HTML elements
 
-* "p[name= "toto" ]" all paragraphes having a name attribute exactly equals to "toto".
+####Attribute selectors####
 
-* "p[name^= "toto" ]" all paragraphes having a name attribute beginning by "toto".
+* `p[name]` all paragraphs having a name attribute.
 
-* "p[name$= "toto" ]" all paragraphes having a name attribute ending by "toto".
+* `p[name= "toto" ]` all paragraphs having a name attribute exactly equals to "toto".
 
-* "p[name*= "toto" ]" all paragraphes having a name attribute containing by "toto".
+* `p[name^= "toto" ]` all paragraphs having a name attribute beginning by "toto".
+
+* `p[name$= "toto" ]` all paragraphs having a name attribute ending by "toto".
+
+* `p[name*= "toto" ]` all paragraphs having a name attribute containing by "toto".
 
 ####Class selectors####
-* "p.rotation" all paragraphes with a rotation class.
 
-* "*.rotation" all elements with a rotation class.
+* `p.rotation` all paragraphs with a rotation class.
+
+* `*.rotation` all elements with a rotation class.
 
 ####Id selectors####
-* "p[id="idpara1"]" all paragraphes with id exactly equals to "idpara1".
+* `p[id="idpara1"]` all paragraphs with id exactly equals to "idpara1".
 
-* "p#idpara1" exactly equavalent to "p[id="idpara1"]" .
+* `p#idpara1` exactly equavalent to `p[id="idpara1"]` .
 
-* "*#idpara1" all elements having an attribut id equals to "idpara1".
+* "*#idpara1" all elements having an attribute id equals to "idpara1".
 
 * "#idpara1" only the first one.
 
