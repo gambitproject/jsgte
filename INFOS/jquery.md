@@ -31,7 +31,7 @@ It can be used at two level:
 
 * `$.each()` go through all the object properties. `$.each(obj, callback)` applies the function `callback(property, value)` on all the properties of the object obj.
 
-* `$.extend()` add propertie sto an object. For example `$.extend(obj1, obj2)$ add the obj2 properties to obj1.
+* `$.extend()` add properties to an object. For example `$.extend(obj1, obj2)` add the `obj2` properties to `obj1`.
 
 * and many others.
 
@@ -91,25 +91,25 @@ A selector is a string that represents HTML objects on which methods will apply.
 $("p").css({"background-color" : "black", color : "white"});
 </script>
 ```
-This changes the css of the 3 paragraphes.
+This changes the css of the 3 paragraphs.
 
 ###Different kinds of selectors###
 ####Simple###
-* "p" all paragraphes
+* "p" all paragraphs
 
 *"img" all images
 
 * "*" all HTML elements
 ####Attribut selectors####
-* "p[name]" all paragraphes having a name attribut.
+* "p[name]" all paragraphes having a name attribute.
 
-* "p[name= "toto" ]" all paragraphes having a name attribut exactly equals to "toto".
+* "p[name= "toto" ]" all paragraphes having a name attribute exactly equals to "toto".
 
-* "p[name^= "toto" ]" all paragraphes having a name attribut beginning by "toto".
+* "p[name^= "toto" ]" all paragraphes having a name attribute beginning by "toto".
 
-* "p[name$= "toto" ]" all paragraphes having a name attribut ending by "toto".
+* "p[name$= "toto" ]" all paragraphes having a name attribute ending by "toto".
 
-* "p[name*= "toto" ]" all paragraphes having a name attribut containing by "toto".
+* "p[name*= "toto" ]" all paragraphes having a name attribute containing by "toto".
 
 ####Class selectors####
 * "p.rotation" all paragraphes with a rotation class.
