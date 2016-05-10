@@ -156,13 +156,13 @@ String added to the end of the selector to specify it more.
 ##DOM access##
 
 ###Document Object Model : JavaScript###
-Elements can have 0 or multiple child, but only one father.
+Elements can have 0 or multiple children, but only one father.
 ```html
 <div>
    <p> This is a paragraph </p>
 </div>
 ```
-The div element has three child : one element <p> and two text element containing an endline.
+The div element has three children : one element <p> and two text element containing an endline.
 
 ####Dynimac creation of HTML element and text####
 `var e = document.createElement("tag")``
@@ -195,16 +195,16 @@ function add ()
 }
 </script>
 ```
-This example dynamically create and supress paragraphs.
+This example dynamically creates and supresses paragraphs.
 
 ### Different ways of using jQuery function###
 * The principal way is `$(selector, context)` where selector is a string and context is a DOM element. The output is a jQuery class element containing all HTML elements above context and verifying the selector.
 
-* An other way id `$(element)`which directly apply to an HTML element.
+* An other way is `$(element)` which directly applies to an HTML element.
 
-* `$(jQueryObject)`this allow to duplicate an object of the jQuery class.
+* `$(jQueryObject)` this allows duplicating an object of the jQuery class.
 
-* `$(html)` the created object referes to the HTML object corresponding to the string html.
+* `$(html)` the created object refers to the HTML object corresponding to the string html.
 
 ### Methods for DOM access ###
 
@@ -225,17 +225,17 @@ To add elements to a list :
 * add(html)
 ...
 
-To change some element by other (losing original elements) :
+To change some elements by others (losing original elements) :
 * `find(selector)` return elements that verify the selector among child of the list.
 
 * `prev(selector)` gets the previous brother of all the list elements.
 
 ##Using DOM##
-###Attributs and properties###
-####Attributs####
-`attr(name)` returns the value of attribut name of the first element of the list ( use each for all elements)
+###Attributes and properties###
+####Attributes####
+`attr(name)` returns the value of attribute name of the first element of the list ( use each for all elements)
 
-`attr(name, value)` gives the value value to the attribut name.
+`attr(name, value)` gives the value value to the attribute name.
 
 ...
 
