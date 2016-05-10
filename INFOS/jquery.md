@@ -36,7 +36,7 @@ It can be used at two level:
 * and many others.
 
 ###Array manipulation###
-####Javascript###
+####Javascript####
 ```javascript
 <script>
 var t=new Array(); // t=[] 
@@ -95,65 +95,156 @@ This changes the css of the 3 paragraphs.
 
 ###Different kinds of selectors###
 ####Simple###
-* `p` all paragraphs
+* `"p"` all paragraphs
 
-*`img` all images
+*`"img"` all images
 
-* `*` all HTML elements
+* `"*"` all HTML elements
 
 ####Attribute selectors####
 
-* `p[name]` all paragraphs having a name attribute.
+* `"p[name]"` all paragraphs having a name attribute.
 
-* `p[name= "toto" ]` all paragraphs having a name attribute exactly equals to "toto".
+* `"p[name= "toto" ]"` all paragraphs having a name attribute exactly equals to "toto".
 
-* `p[name^= "toto" ]` all paragraphs having a name attribute beginning by "toto".
+* `"p[name^= "toto" ]"` all paragraphs having a name attribute beginning by "toto".
 
-* `p[name$= "toto" ]` all paragraphs having a name attribute ending by "toto".
+* `"p[name$= "toto" ]"` all paragraphs having a name attribute ending by "toto".
 
-* `p[name*= "toto" ]` all paragraphs having a name attribute containing by "toto".
+* `"p[name*= "toto" ]"` all paragraphs having a name attribute containing by "toto".
 
 ####Class selectors####
 
-* `p.rotation` all paragraphs with a rotation class.
+* `"p.rotation"` all paragraphs with a rotation class.
 
-* `*.rotation` all elements with a rotation class.
+* `"*.rotation"` all elements with a rotation class.
 
 ####Id selectors####
-* `p[id="idpara1"]` all paragraphs with id exactly equals to "idpara1".
+* `"p[id="idpara1"]"` all paragraphs with id exactly equals to "idpara1".
 
-* `p#idpara1` exactly equavalent to `p[id="idpara1"]` .
+* `"p#idpara1"` exactly equavalent to `"p[id="idpara1"]"` .
 
-* "*#idpara1" all elements having an attribute id equals to "idpara1".
+* `"*#idpara1"` all elements having an attribute id equals to `"idpara1"`.
 
-* "#idpara1" only the first one.
+* `"#idpara1"` only the first one.
 
 ###Pseudo-classes###
-String added to the end of the selector to specify it more
+String added to the end of the selector to specify it more.
 
-* ":first-child"
+* `":first-child"`
 
-* ":odd"
+* `":odd"`
 
-* ":not" for negation
+* `":not"` for negation
 
-* ":empty" for elements having no children
+* `":empty"` for elements having no children
 
-* ":gt(n)" among selected element return the element of index n. (gt for greater than n and lt for lower than n).
+* `":gt(n)"` among selected element return the element of index n. (gt for greater than n and lt for lower than n).
 
 ###Combinations###
 
-* "div h1" elements h1 having one div as a father, granfather ...
+* `"div h1"` elements h1 having one div as a father, granfather ...
 
-* "div>h1" elements h1 having a div as a father.
+* `"div>h1"` elements h1 having a div as a father.
 
-* "h1 + h2" h1 and h2 have the same father, h2 is selected.
+* `"h1 + h2"` h1 and h2 have the same father, h2 is selected.
 
 ###Multiple selectors###
 
-* "p,img" a paragraph or an image.
+* `"p,img"` a paragraph or an image.
 
-##DOM access#
+##DOM access##
+
+###Document Object Model : JavaScript###
+Elements can have 0 or multiple child, but only one father.
+```html
+<div>
+   <p> This is a paragraph </p>
+</div>
+```
+The div element has three child : one element <p> and two text element containing an endline.
+
+####Dynimac creation of HTML element and text####
+`var e = document.createElement("tag")``
+The element e is created but for now it's nowhere.
+`parent.appendChild(e)`
+Now e is the last child of parent.
+`parent.insertBefore(beforeEnfant)`
+To insert e just before the element beforeEnfant.
+
+####Direct access to page elements####
+`var e = document.getElementById("id")`
+Problem if two elements have the same id only the first one is returned.
+
+Example
+```javascript
+<p onclick = "add()">
+  Click to add a paragraph
+</p>
+<script>
+var num_para=1;
+function add ()
+{ var p=document.createElement("p");
+  var texte = document.createTextNode( "Paragraph "+ num_para + " added. Click to remove !");
+  document.body.appendChild(p);
+  p.appendChild(texte);
+  num_para++;
+  p.onclick = function()
+  { p.parentNode.removeChild(p);
+  }
+}
+</script>
+```
+This example dynamically create and supress paragraphs.
+
+### Different ways of using jQuery function###
+* The principal way is `$(selector, context)` where selector is a string and context is a DOM element. The output is a jQuery class element containing all HTML elements above context and verifying the selector.
+
+* An other way id `$(element)`which directly apply to an HTML element.
+
+* `$(jQueryObject)`this allow to duplicate an object of the jQuery class.
+
+* `$(html)` the created object referes to the HTML object corresponding to the string html.
+
+### Methods for DOM access ###
+
+All methods that follow return a jQuery class object that refers to DOM elements
+
+To remove elements from a list :
+* `filter(selector)`
+
+* `filter(callback)`
+
+* `not(selector)`
+...
+To add elements to a list :
+* `add(selector, context)`
+
+* add(element)
+
+* add(html)
+...
+
+To change some element by other (losing original elements) :
+* `find(selector)` return elements that verify the selector among child of the list.
+
+* `prev(selector)` gets the previous brother of all the list elements.
+
+##Using DOM##
+###Attributs and properties###
+####Attributs####
+`attr(name)` returns the value of attribut name of the first element of the list ( use each for all elements)
+
+`attr(name, value)` gives the value value to the attribut name.
+
+...
+
+####Properties####
+
+
+
+
+
 
 
 
