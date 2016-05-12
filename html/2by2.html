@@ -6,6 +6,9 @@
         <title>2 by 2 games</title>
         <link rel="stylesheet" href="css/2by2.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+        <script src="js/three/three.js"></script>
+        <script src="js/three/renderers/Projector.js"></script>
+		<script src="js/three/renderers/CanvasRenderer.js"></script>
     </head>
 
 <script>
@@ -95,7 +98,59 @@ $(document).ready(function(){
     <td><input class="player1" type="text" name=P22_1 value=0>\<input class="player2" type="text" name=P22_2  value=0></td>
   </tr>
 </table>
-        <canvas id="Payoff2" width="200" height="500">
+        <canvas id="Payoff2" width="200" height="300">
         </canvas>
+        
+<script>
+$(document).ready(function(){
+    container = document.createElement( 'div' );
+    document.body.appendChild( container );
+    scene = new THREE.Scene();
+    camera = new THREE.PerspectiveCamera( 10, 1, 1, 10000 );
+    camera.position.z = 100;
+    renderer = new THREE.WebGLRenderer();
+    //renderer.setPixelRatio( window.devicePixelRatio );
+    renderer.setSize( window.innerWidth, window.innerWidth );
+    renderer.setClearColor( 0xffffff, 1);
+    container.appendChild( renderer.domElement );
+    var material = new THREE.LineBasicMaterial({color: 0x0000ff});
+    var geometry = new THREE.Geometry();
+    geometry.vertices.push(new THREE.Vector3( -window.innerWidth/2, -window.innerWidth/2, 0 ),
+                           new THREE.Vector3( 0, 0, 0 ),
+                           new THREE.Vector3( (window.innerWidth-1)/2, 0, 0 ),
+                           new THREE.Vector3( 5, 5, 0 )
+                           );
+                  
+                  
+    var P11_1=parseInt($("[name='P11_1']").val(),10);
+    var P12_1=parseInt($("[name='P12_1']").val(),10);
+    var maxP1_1;
+    var maxP1_2;
+    var minP1_1;
+    var minP1_2;
+    var P21_1=parseInt($("[name='P21_1']").val(),10);
+    var P22_1=parseInt($("[name='P22_1']").val(),10);
+    if( P11_1>P21_1){
+    maxP1_1=P11_1;
+    minP1_1=P21_1;
+    }else{
+    maxP1_1=P21_1;
+    minP1_1=P11_1;
+    }
+    if( P12_1>P22_1){
+    maxP1_2=P12_1;
+    minP1_2=P22_1;
+    }else{
+    maxP1_2=P22_1;
+    minP1_2=P12_1;
+    }
+                                                                      
+   var line = new THREE.Line( geometry, material );
+                  scene.add( line );
+   renderer.render( scene, camera);
+});
+   
+</script>
+                                                                    
 </body>
 </html>
