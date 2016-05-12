@@ -12,6 +12,66 @@
     </head>
 
 <script>
+    function bottom() {
+        container = document.createElement( 'div' );
+        document.body.appendChild( container );
+        scene = new THREE.Scene();
+        camera = new THREE.PerspectiveCamera( 60, 1, 1, 10000 );
+        camera.position.z = window.innerWidth;
+        renderer = new THREE.WebGLRenderer();
+        //renderer.setPixelRatio( window.devicePixelRatio );
+        renderer.setSize( window.innerWidth/2, window.innerWidth/2 );
+        renderer.setClearColor( 0xffffff, 1);
+        container.appendChild( renderer.domElement );
+        var material = new THREE.LineBasicMaterial({color: 0x000000});
+        var geometry = new THREE.Geometry();
+        geometry.vertices.push(new THREE.Vector3( -window.innerWidth/4, window.innerWidth/4, 0 ),
+                               new THREE.Vector3(-window.innerWidth/4, -window.innerWidth/4, 0 ),
+                               new THREE.Vector3( window.innerWidth/4, -window.innerWidth/4, 0 ),
+                               new THREE.Vector3( window.innerWidth/4, window.innerWidth/4, 0 )
+                               );
+        var line = new THREE.Line( geometry, material );
+        scene.add( line );
+                               
+                               var P11_1=parseInt($("[name='P11_1']").val(),10);
+                               var P12_1=parseInt($("[name='P12_1']").val(),10);
+                               var maxP1_1;
+                               var maxP1_2;
+                               var minP1_1;
+                               var minP1_2;
+                               var P21_1=parseInt($("[name='P21_1']").val(),10);
+                               var P22_1=parseInt($("[name='P22_1']").val(),10);
+                               if( P11_1>P21_1){
+                                   maxP1_1=P11_1;
+                                   minP1_1=P21_1;
+                               }else{
+                                   maxP1_1=P21_1;
+                                   minP1_1=P11_1;
+                               }
+                               if( P12_1>P22_1){
+                                   maxP1_2=P12_1;
+                                   minP1_2=P22_1;
+                               }else{
+                                   maxP1_2=P22_1;
+                                   minP1_2=P12_1;
+                               }
+                               var geometryP1_1 = new THREE.Geometry();
+                               var materialP1_1 = new THREE.LineBasicMaterial({color: 0xff0000});
+                               geometryP1_1.vertices.push(new THREE.Vector3( -window.innerWidth/4, P11_1, 0 ),
+                                                          new THREE.Vector3(window.innerWidth/4, P12_1, 0 )
+                                                          );
+                                                          var lineP1_1 = new THREE.Line( geometryP1_1, materialP1_1 );
+                                                          scene.add( lineP1_1 );
+                                                          var geometryP1_2 = new THREE.Geometry();
+                                                          var materialP1_2 = new THREE.LineBasicMaterial({color: 0xff0000});
+                                                          geometryP1_2.vertices.push(new THREE.Vector3( -window.innerWidth/4, P21_1, 0 ),
+                                                                                     new THREE.Vector3(window.innerWidth/4, P22_1, 0 ));
+                                                                                     var lineP1_2 = new THREE.Line( geometryP1_2, materialP1_2 );
+                                                                                     scene.add( lineP1_2 );
+                                                                                     renderer.render( scene, camera);
+    };
+    
+    
 $(document).ready(function(){
     $("input").change(function(){
    // alert("test");
@@ -72,6 +132,7 @@ $(document).ready(function(){
     ctx.fillStyle="#ff6666";
     ctx.fill();
     ctx.closePath();
+                      bottom();
     });
 });
 </script>
@@ -101,56 +162,6 @@ $(document).ready(function(){
         <canvas id="Payoff2" width="200" height="300">
         </canvas>
         
-<script>
-$(document).ready(function(){
-    container = document.createElement( 'div' );
-    document.body.appendChild( container );
-    scene = new THREE.Scene();
-    camera = new THREE.PerspectiveCamera( 10, 1, 1, 10000 );
-    camera.position.z = 100;
-    renderer = new THREE.WebGLRenderer();
-    //renderer.setPixelRatio( window.devicePixelRatio );
-    renderer.setSize( window.innerWidth, window.innerWidth );
-    renderer.setClearColor( 0xffffff, 1);
-    container.appendChild( renderer.domElement );
-    var material = new THREE.LineBasicMaterial({color: 0x0000ff});
-    var geometry = new THREE.Geometry();
-    geometry.vertices.push(new THREE.Vector3( -window.innerWidth/2, -window.innerWidth/2, 0 ),
-                           new THREE.Vector3( 0, 0, 0 ),
-                           new THREE.Vector3( (window.innerWidth-1)/2, 0, 0 ),
-                           new THREE.Vector3( 5, 5, 0 )
-                           );
-                  
-                  
-    var P11_1=parseInt($("[name='P11_1']").val(),10);
-    var P12_1=parseInt($("[name='P12_1']").val(),10);
-    var maxP1_1;
-    var maxP1_2;
-    var minP1_1;
-    var minP1_2;
-    var P21_1=parseInt($("[name='P21_1']").val(),10);
-    var P22_1=parseInt($("[name='P22_1']").val(),10);
-    if( P11_1>P21_1){
-    maxP1_1=P11_1;
-    minP1_1=P21_1;
-    }else{
-    maxP1_1=P21_1;
-    minP1_1=P11_1;
-    }
-    if( P12_1>P22_1){
-    maxP1_2=P12_1;
-    minP1_2=P22_1;
-    }else{
-    maxP1_2=P22_1;
-    minP1_2=P12_1;
-    }
-                                                                      
-   var line = new THREE.Line( geometry, material );
-                  scene.add( line );
-   renderer.render( scene, camera);
-});
-   
-</script>
                                                                     
 </body>
 </html>
