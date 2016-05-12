@@ -23,7 +23,7 @@
         renderer.setSize( window.innerWidth/2, window.innerWidth/2 );
         renderer.setClearColor( 0xffffff, 1);
         container.appendChild( renderer.domElement );
-        var material = new THREE.LineBasicMaterial({color: 0x000000});
+        var material = new THREE.LineBasicMaterial({color: 0x000000, linewidth:2});
         var geometry = new THREE.Geometry();
         geometry.vertices.push(new THREE.Vector3( -window.innerWidth/4, window.innerWidth/4, 0 ),
                                new THREE.Vector3(-window.innerWidth/4, -window.innerWidth/4, 0 ),
@@ -32,43 +32,49 @@
                                );
         var line = new THREE.Line( geometry, material );
         scene.add( line );
-                               
-                               var P11_1=parseInt($("[name='P11_1']").val(),10);
-                               var P12_1=parseInt($("[name='P12_1']").val(),10);
-                               var maxP1_1;
-                               var maxP1_2;
-                               var minP1_1;
-                               var minP1_2;
-                               var P21_1=parseInt($("[name='P21_1']").val(),10);
-                               var P22_1=parseInt($("[name='P22_1']").val(),10);
-                               if( P11_1>P21_1){
-                                   maxP1_1=P11_1;
-                                   minP1_1=P21_1;
-                               }else{
-                                   maxP1_1=P21_1;
-                                   minP1_1=P11_1;
-                               }
-                               if( P12_1>P22_1){
-                                   maxP1_2=P12_1;
-                                   minP1_2=P22_1;
-                               }else{
-                                   maxP1_2=P22_1;
-                                   minP1_2=P12_1;
-                               }
-                               var geometryP1_1 = new THREE.Geometry();
-                               var materialP1_1 = new THREE.LineBasicMaterial({color: 0xff0000});
-                               geometryP1_1.vertices.push(new THREE.Vector3( -window.innerWidth/4, P11_1, 0 ),
-                                                          new THREE.Vector3(window.innerWidth/4, P12_1, 0 )
-                                                          );
-                                                          var lineP1_1 = new THREE.Line( geometryP1_1, materialP1_1 );
-                                                          scene.add( lineP1_1 );
-                                                          var geometryP1_2 = new THREE.Geometry();
-                                                          var materialP1_2 = new THREE.LineBasicMaterial({color: 0xff0000});
-                                                          geometryP1_2.vertices.push(new THREE.Vector3( -window.innerWidth/4, P21_1, 0 ),
-                                                                                     new THREE.Vector3(window.innerWidth/4, P22_1, 0 ));
-                                                                                     var lineP1_2 = new THREE.Line( geometryP1_2, materialP1_2 );
-                                                                                     scene.add( lineP1_2 );
-                                                                                     renderer.render( scene, camera);
+        var ratio=window.innerWidth/10;
+        var P11_1=$("[name='P11_1']").val()*ratio-window.innerWidth/4;
+        var P12_1=$("[name='P12_1']").val()*ratio-window.innerWidth/4;
+        var maxP1_1;
+        var maxP1_2;
+        var minP1_1;
+        var minP1_2;
+        var P21_1=$("[name='P21_1']").val()*ratio-window.innerWidth/4;
+        var P22_1=$("[name='P22_1']").val()*ratio-window.innerWidth/4;
+        if( P11_1>P21_1){
+           maxP1_1=P11_1;
+           minP1_1=P21_1;
+        }else{
+            maxP1_1=P21_1;
+            minP1_1=P11_1;
+        }
+        if( P12_1>P22_1){
+            maxP1_2=P12_1;
+            minP1_2=P22_1;
+        }else{
+            maxP1_2=P22_1;
+            minP1_2=P12_1;
+        }
+        var geometryP1_1 = new THREE.Geometry();
+        var materialP1_1 = new THREE.LineBasicMaterial({color: 0xff0000, linewidth:3});
+        geometryP1_1.vertices.push(new THREE.Vector3( -window.innerWidth/4, P11_1, 0 ),
+                                   new THREE.Vector3(window.innerWidth/4, P12_1, 0 ));
+        var lineP1_1 = new THREE.Line( geometryP1_1, materialP1_1 );
+        scene.add( lineP1_1 );
+        var geometryP1_2 = new THREE.Geometry();
+        var materialP1_2 = new THREE.LineBasicMaterial({color: 0xff0000, linewidth:3});
+        geometryP1_2.vertices.push(new THREE.Vector3( -window.innerWidth/4, P21_1, 0 ),
+        new THREE.Vector3(window.innerWidth/4, P22_1, 0 ));
+        var lineP1_2 = new THREE.Line( geometryP1_2, materialP1_2 );
+        scene.add( lineP1_2 );
+        
+        var geometryP1_sur = new THREE.Geometry();
+        var material_sur = new THREE.LineBasicMaterial({color: 0xff0000, linewidth:3});
+        geometryP1_2.vertices.push(new THREE.Vector3( -window.innerWidth/4, P21_1, 0 ),
+                                   new THREE.Vector3(window.innerWidth/4, P22_1, 0 ));
+        var lineP1_2 = new THREE.Line( geometryP1_2, materialP1_2 );
+        scene.add( lineP1_2 );
+        renderer.render( scene, camera);
     };
     
     
