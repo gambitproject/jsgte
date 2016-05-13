@@ -299,12 +299,13 @@ a {
     margin: 100px auto;
     background-color: #fff;
     border:1px solid #000;
-    padding:15px;
+    padding:0px;
     text-align:center;
     z-index: 1000;
     position : absolute;
     left:0px;
     top:0px;
+    box-shadow:10px 10px 5px #888888;
 }
 
 #settings ul {
@@ -354,11 +355,12 @@ a {
     width:100%;
     background-color:#c2c2c2;
     position:relative;
-    top:0;
-    border-radius:6px 6px 0 0;
+    top:0px;
+    border-radius:0px 0px 0 0;
     text-align:center;
-    height:24px;
-    cursor:move
+    font-size:large;
+    height:30px;
+    cursor:move;
 }
 #player-colours label {
     width: 150px !important;
