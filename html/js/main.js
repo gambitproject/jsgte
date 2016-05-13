@@ -117,13 +117,16 @@
 
     document.getElementById("button-settings").addEventListener("click", function(){
         var el = document.getElementById("settings");
-        el.style.visibility = (el.style.visibility == "visible") ? "hidden" : "visible";
+        el.style.display = (el.style.display == "block") ? "none" : "block";
+        el.style.position = "absolute";
+        el.style.top = 0;
+        el.style.left = 0;
         return false;
     });
 
     document.getElementById("button-settings-close").addEventListener("click", function(){
         var el = document.getElementById("settings");
-        el.style.visibility = (el.style.visibility == "visible") ? "hidden" : "visible";
+        el.style.display = (el.style.display == "block") ? "none" : "block";
         // Reset form to saved settings
         setSettingsForm();
         return false;
@@ -157,7 +160,7 @@
         GTE.tree.draw(true);
         // Hide the modal
         var el = document.getElementById("settings");
-        el.style.visibility = (el.style.visibility == "visible") ? "hidden" : "visible";
+        el.style.display = (popup.style.display == "block") ? "none" : "block";
         return false;
     });
 
@@ -171,5 +174,30 @@
         GTE.tree.draw(true);
         return false;
     });
+    
+    var settings = document.getElementById("settings");
+    var settings_bar = document.getElementById("settings_bar");
+    var offset = { x: 0, y: 0 };
+
+    settings_bar.addEventListener('mousedown', mouseDown, false);
+    window.addEventListener('mouseup', mouseUp, false);
+
+    function mouseUp() {
+        window.removeEventListener('mousemove', settingsMove, true);
+    }
+
+    function mouseDown(e) {
+        offset.x = e.clientX - settings.offsetLeft;
+        offset.y = e.clientY - settings.offsetTop + 100 ;
+        window.addEventListener('mousemove', settingsMove, true);
+    }
+
+    function settingsMove(e) {
+        settings.style.position = 'absolute';
+        var top = e.clientY - offset.y ;
+        var left = e.clientX - offset.x;
+        settings.style.top = top + 'px';
+        settings.style.left = left + 'px';
+    }
 
 }());
