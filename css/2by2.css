@@ -1,0 +1,12 @@
+.player1{
+    color:red
+}
+
+.player2{
+    color:blue
+}
+
+input{
+    width: 50px;
+   text-align: center;
+}
