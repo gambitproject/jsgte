@@ -10,12 +10,15 @@ To test them as html pages you can navigate to
 
 http://gambitproject.github.io/jsgte/
 
-To update this when changes happen to master do the following
+To update this when changes happen to master type
 
-# pip install ghp-import
-ghp-import -p html
+  ghp-import -p html
 
 This moves html, which contains index.html to the root of a
 new branch gh-pages. For more details see
 
 https://help.github.com/categories/github-pages-basics/
+
+On Linux you can install ghp-import via 
+
+  pip install ghp-import
