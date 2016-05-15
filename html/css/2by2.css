@@ -10,3 +10,8 @@ input{
     width: 50px;
    text-align: center;
 }
+
+canvas{
+    #padding: 30px;
+    margin: 50px;
+}
