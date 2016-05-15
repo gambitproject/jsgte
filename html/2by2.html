@@ -16,8 +16,6 @@
 <script>
     var canvas1,canvas2;
     var ctx1,ctx2;
-    var payoff1_11, payoff1_12, payoff1_21, payoff1_22, payoff2_11, payoff2_12, payoff2_21, payoff2_22; //payoff vertices
-    var point1_1, point1_2, point1_3,point2_1, point2_2, point2_3; // point delimiting the best response.
     
     function initDraws() {
         canvas1 = document.getElementById("Payoff1");
@@ -26,21 +24,111 @@
         ctx2 = canvas2.getContext("2d");
         compute_firstP();
         compute_secondP();
+        points=[payoff1_11, payoff1_12, payoff1_21, payoff1_22, payoff2_11, payoff2_12, payoff2_21, payoff2_22];
         draw();
+        
+        //alert(points[0].y);
         // mouse event
-        //canvas1.addEventListener("mousedown",doMouseDown);
-        //canvas1.addEventListener("mouseup",doMouseUp);
-        //canvas2.addEventListener("mousedown",doMouseDown);
-        //canvas2.addEventListener("mouseup",doMouseUp);
+        canvas1.addEventListener("mousedown",doMouseDown);
+        canvas1.addEventListener("mouseup",doMouseUp);
+        canvas2.addEventListener("mousedown",doMouseDown);
+        canvas2.addEventListener("mouseup",doMouseUp);
         input_user=document.getElementsByTagName("input");
         for (var i=0; i<input_user.length;i++){
-           input_user[i].addEventListener("onchange",redraw);
+           //input_user[i].addEventListener("onchange",redraw());
         }
     }
 
+function getMousePosition(e) {
+    return {
+        x: e.clientX ,
+        y: e.clientY
+  };
+}
+
+
+function doMouseDown(event) {
+    mousePosition = getMousePosition( event)
+    
+    var isMouseOver = isMouseOverPoint(mousePosition);
+    /*if (isMouseOver) {
+        canvas1.addEventListener("mousemove", doMouseMove);
+    }*/
+    //console.log("Pressing1: X = " + mousePosition.x + ", Y = " + mousePosition.y);
+    //mousePosition = getMousePosition(canvas2, event)
+    
+    //isMouseOver = isMouseOverPoint(mousePosition);
+    /*if (isMouseOver) {
+        canvas2.addEventListener("mousemove", doMouseMove);
+    }*/
+    console.log("Pressing2: X = " + mousePosition.x + ", Y = " + mousePosition.y);
+}
+
+function doMouseUp(event) {
+    mousePosition = getMousePosition(event)
+    
+    canvas1.removeEventListener("mousemove", doMouseMove);
+    canvas2.removeEventListener("mousemove", doMouseMove);
+
+    redraw()
+    console.log("Releasing: X = " + mousePosition.x + ", Y = " + mousePosition.y);
+}
+
+function isMouseOverPoint(mousePosition) {
+    var canvasPosition = canvas1.getBoundingClientRect();
+    for (var i=0 ; i< points.length/2;i++){
+        distX = mousePosition.x - (points[i].x)-canvasPosition.left;
+        distY = mousePosition.y -points[i].y-canvasPosition.top;
+        var squareDist = distX*distX + distY*distY;
+        if (squareDist < 100) {
+            canvas1.addEventListener("mousemove", doMouseMove);
+            point_moving=i;
+            return i;
+        }
+    }
+    canvasPosition = canvas2.getBoundingClientRect();
+    for (var i=points.length/2 ; i< points.length;i++){
+        distX = mousePosition.x - points[i].x-canvasPosition.left;
+        distY = mousePosition.y - points[i].y-canvasPosition.top;
+        var squareDist = distX*distX + distY*distY;
+        if (squareDist < 100) {
+            (canvas2).addEventListener("mousemove", doMouseMove);
+            point_moving=i;
+            return i;
+        }
+    }
+    
+    return -1;
+}
+
+function doMouseMove(event) {
+    //alert("moving "+point_moving);
+    if (point_moving<points.length/2){
+        mousePosition = getMousePosition(event)
+        var canvasPosition = canvas1.getBoundingClientRect();
+         points[point_moving].y = mousePosition.y-canvasPosition.top;
+         if(point_moving==0) document.getElementById("P1_11").value=~~((-points[point_moving].y+canvas1.height-50)/3)/10;
+         if(point_moving==1) document.getElementById("P1_12").value=~~((-points[point_moving].y+canvas1.height-50)/3)/10;
+         if(point_moving==2) document.getElementById("P1_21").value=~~((-points[point_moving].y+canvas1.height-50)/3)/10;
+         if(point_moving==3) document.getElementById("P1_22").value=~~((-points[point_moving].y+canvas1.height-50)/3)/10;
+    }
+    if (point_moving>=points.length/2){
+        mousePosition = getMousePosition(event)
+        var canvasPosition = canvas2.getBoundingClientRect();
+        points[point_moving].y = mousePosition.y-canvasPosition.top;
+        if(point_moving==4) document.getElementById("P2_11").value=~~((-points[point_moving].y+canvas2.height-50)/3)/10;
+        if(point_moving==5) document.getElementById("P2_12").value=~~((-points[point_moving].y+canvas2.height-50)/3)/10;
+        if(point_moving==6) document.getElementById("P2_21").value=~~((-points[point_moving].y+canvas2.height-50)/3)/10;
+        if(point_moving==7) document.getElementById("P2_22").value=~~((-points[point_moving].y+canvas2.height-50)/3)/10;
+    }
+    redraw()
+    
+    console.log("Moving: X = " + mousePosition.x + ", Y = " + mousePosition.y);
+}
+
     function redraw(){
-        canvas1.clearRect(0,0,canvas1.width,canvas1.height);
-        canvas2.clearRect(0,0,canvas2.width,canvas2.height);
+        ctx1.clearRect(0,0,canvas1.width,canvas1.height);
+        ctx2.clearRect(0,0,canvas2.width,canvas2.height);
         compute_firstP();
         compute_secondP();
         draw();
@@ -51,10 +139,10 @@
         var P1_12=document.getElementById("P1_12").value;
         var P1_21=document.getElementById("P1_21").value;
         var P1_22=document.getElementById("P1_22").value;
-        payoff1_11={x:0, y:canvas1.height-P1_11*100, radius:5, color:"yellow"};
-        payoff1_12={x:canvas1.width, y:canvas1.height-P1_12*100, radius:5, color:"yellow"};
-        payoff1_21={x:0, y:canvas1.height-P1_21*100, radius:5, color:"yellow"};
-        payoff1_22={x:canvas1.width, y:canvas1.height-P1_22*100, radius:5, color:"yellow"};
+        payoff1_11={x:50, y:canvas1.height-50-P1_11*30, radius:5, color:"yellow"};
+        payoff1_12={x:canvas1.width-50, y:canvas1.height-50-P1_12*30, radius:5, color:"yellow"};
+        payoff1_21={x:50, y:canvas1.height-50-P1_21*30, radius:5, color:"yellow"};
+        payoff1_22={x:canvas1.width-50, y:canvas1.height-50-P1_22*30, radius:5, color:"yellow"};
         var maxP1_1, minP1_1, maxP1_2, minP1_2; // max and min off player1 payoff for strategy 1 or 2 of player2
         if( P1_11>P1_21){
             maxP1_1=P1_11;
@@ -71,16 +159,15 @@
             minP1_2=P1_12;
         }
         if((maxP1_1==P1_11 && maxP1_2==P1_12)||(maxP1_1==P1_21 && maxP1_2==P1_22)){
-            alert("test");
-            point1_1={x:0,y:canvas1.height-maxP1_2*100};
-            point1_2={x:canvas1.width,y:canvas1.height-maxP1_1*100};
-            point1_3={x:canvas1.width,y:canvas1.height-maxP1_1*100};}
+            point1_1={x:50,y:canvas1.height-50-maxP1_1*30};
+            point1_2={x:canvas1.width-50,y:canvas1.height-50-maxP1_2*30};
+            point1_3={x:canvas1.width-50,y:canvas1.height-50-maxP1_2*30};}
         else{
             var middle_x=(P1_21-P1_11)/(Number(P1_21)- Number(P1_22) + Number(P1_12) - Number(P1_11));
             var middle_y=Number((P1_12-P1_11)*middle_x)+Number(P1_11);
-            point1_1={x:0, y:canvas1.height-maxP1_1*100};
-            point1_2={x:middle_x * canvas1.width,y:canvas1.height-middle_y*100};
-            point1_3={x:canvas1.width,y:canvas1.height-maxP1_2*100};
+            point1_1={x:50, y:canvas1.height-50-maxP1_1*30};
+            point1_2={x:middle_x * (canvas1.width-100)+50,y:canvas1.height-50-middle_y*30};
+            point1_3={x:canvas1.width-50,y:canvas1.height-50-maxP1_2*30};
         }
     }
             
@@ -89,10 +176,10 @@
         var P2_12=document.getElementById("P2_12").value;
         var P2_21=document.getElementById("P2_21").value;
         var P2_22=document.getElementById("P2_22").value;
-        payoff2_11={x:0, y:canvas2.height-P2_11*100, radius:5, color:"yellow"};
-        payoff2_12={x:0, y:canvas2.height-P2_12*100, radius:5, color:"yellow"};
-        payoff2_21={x:canvas2.width, y:canvas2.height-P2_21*100, radius:5, color:"yellow"};
-        payoff2_22={x:canvas2.width, y:canvas2.height-P2_22*100, radius:5, color:"yellow"};
+        payoff2_11={x:50, y:canvas2.height-50-P2_11*30, radius:5, color:"yellow"};
+        payoff2_12={x:50, y:canvas2.height-50-P2_12*30, radius:5, color:"yellow"};
+        payoff2_21={x:canvas2.width-50, y:canvas2.height-50-P2_21*30, radius:5, color:"yellow"};
+        payoff2_22={x:canvas2.width-50, y:canvas2.height-50-P2_22*30, radius:5, color:"yellow"};
         var maxP2_1, minP2_1, maxP2_2, minP2_2; // max and min off player1 payoff for strategy 1 or 2 of player2
         if( P2_11>P2_12){
             maxP2_1=P2_11;
@@ -109,48 +196,48 @@
             minP2_2=P2_21;
         }
         if((maxP2_1==P2_11 && maxP2_2==P2_21)||(maxP2_1==P2_12 && maxP2_2==P2_22)){
-            point2_1={x:0,y:canvas2.height-maxP2_2*100};
-            point2_2={x:canvas2.width,y:canvas2.height-maxP2_1*100};
-            point2_3={x:canvas2.width,y:canvas2.height-maxP2_1*100};}
+            point2_1={x:50,y:canvas2.height-50-maxP2_1*30};
+            point2_2={x:canvas2.width-50,y:canvas2.height-50-maxP2_2*30};
+            point2_3={x:canvas2.width-50,y:canvas2.height-50-maxP2_2*30};}
         else{
             var middle_x=(P2_12-P2_11)/(Number(P2_12)- Number(P2_22) + Number(P2_21) - Number(P2_11));
             var middle_y=Number((P2_21-P2_11)*middle_x)+Number(P2_11);
-            point2_1={x:0,y:canvas2.height-maxP2_1*100};
-            point2_2={x:middle_x * canvas2.width,y:canvas2.height-middle_y*100};
-            point2_3={x:canvas2.width,y:canvas2.height-maxP2_2*100};
+            point2_1={x:50,y:canvas2.height-50-maxP2_1*30};
+            point2_2={x:middle_x * (canvas2.width-100)+50,y:canvas2.height-50-middle_y*30};
+            point2_3={x:canvas2.width-50,y:canvas2.height-50-maxP2_2*30};
         }
     }
     
     function draw(){
-        ctx1.beginPath();
-        ctx1.moveTo(0,0);
-        ctx1.lineTo(0,canvas1.height);
-        ctx1.lineTo(canvas1.width,canvas1.height);
-        ctx1.lineTo(canvas1.width,0);
-        ctx1.lineWidth = 4;
+        ctx1.beginPath(); //limits of the drawing
+        ctx1.moveTo(50,50);
+        ctx1.lineTo(50,canvas1.height-50);
+        ctx1.lineTo(canvas1.width-50,canvas1.height-50);
+        ctx1.lineTo(canvas1.width-50,50);
+        ctx1.lineWidth = 2;
         ctx1.strokeStyle = '#000000';
         ctx1.stroke();
         ctx1.closePath();
-        ctx1.beginPath();
+        ctx1.beginPath(); // Two lines
         ctx1.moveTo(payoff1_11.x,payoff1_11.y);
         ctx1.lineTo(payoff1_12.x,payoff1_12.y);
         ctx1.moveTo(payoff1_21.x,payoff1_21.y);
         ctx1.lineTo(payoff1_22.x,payoff1_22.y);
-        ctx1.lineWidth = 4;
+        ctx1.lineWidth = 2;
         ctx1.strokeStyle = '#ff0000';
         ctx1.stroke();
         ctx1.closePath();
-        ctx1.beginPath();
-        ctx1.moveTo(0,0);
+        ctx1.beginPath();//best response surface
+        ctx1.moveTo(50,50);
         ctx1.lineTo(point1_1.x,point1_1.y);
         ctx1.lineTo(point1_2.x,point1_2.y);
         ctx1.lineTo(point1_3.x,point1_3.y);
-        ctx1.lineTo(canvas1.width,0);
-        ctx1.lineTo(0,0);
+        ctx1.lineTo(canvas1.width-50,50);
+        ctx1.lineTo(50,50);
         ctx1.fillStyle="#ff6666";
         ctx1.fill();
         ctx1.closePath();
-        ctx1.beginPath();
+        ctx1.beginPath();// Points
         ctx1.arc(payoff1_11.x, payoff1_11.y, payoff1_11.radius, 0, 2*Math.PI);
         ctx1.fillStyle = payoff1_11.color;
         ctx1.fill();
@@ -174,36 +261,44 @@
         ctx1.fill();
         ctx1.stroke();
         ctx1.closePath();
+        ctx1.fillStyle = '#000000';
+        ctx1.font='30px Arial';
+        ctx1.fillText("Player1 payoff",50,40);
+        ctx1.font='20px Arial';
+        ctx1.fillStyle = '#0000ff';
+        ctx1.fillText("0",40,370);
+        ctx1.fillText("1",260,370);
+        ctx1.fillText("Player2 "+document.getElementById("P2S2").value+" prob ",80,380);
         
-        ctx2.beginPath();
-        ctx2.moveTo(0,0);
-        ctx2.lineTo(0,canvas2.height);
-        ctx2.lineTo(canvas2.width,canvas2.height);
-        ctx2.lineTo(canvas2.width,0);
-        ctx2.lineWidth = 4;
+        ctx2.beginPath(); //limits of the drawing
+        ctx2.moveTo(50,50);
+        ctx2.lineTo(50,canvas2.height-50);
+        ctx2.lineTo(canvas2.width-50,canvas2.height-50);
+        ctx2.lineTo(canvas2.width-50,50);
+        ctx2.lineWidth = 2;
         ctx2.strokeStyle = '#000000';
         ctx2.stroke();
         ctx2.closePath();
-        ctx2.beginPath();
+        ctx2.beginPath();// Two lines
         ctx2.moveTo(payoff2_11.x,payoff2_11.y);
         ctx2.lineTo(payoff2_21.x,payoff2_21.y);
         ctx2.moveTo(payoff2_12.x,payoff2_12.y);
         ctx2.lineTo(payoff2_22.x,payoff2_22.y);
-        ctx2.lineWidth = 4;
+        ctx2.lineWidth = 2;
         ctx2.strokeStyle = '#0000ff';
         ctx2.stroke();
         ctx2.closePath();
-        ctx2.beginPath();
-        ctx2.moveTo(0,0);
+        ctx2.beginPath();//best response surface
+        ctx2.moveTo(50,50);
         ctx2.lineTo(point2_1.x,point2_1.y);
         ctx2.lineTo(point2_2.x,point2_2.y);
         ctx2.lineTo(point2_3.x,point2_3.y);
-        ctx2.lineTo(canvas1.width,0);
-        ctx2.lineTo(0,0);
+        ctx2.lineTo(canvas1.width-50,50);
+        ctx2.lineTo(50,50);
         ctx2.fillStyle="#6666ff";
         ctx2.fill();
         ctx2.closePath();
-        ctx2.beginPath();
+        ctx2.beginPath();// Points
         ctx2.arc(payoff2_11.x, payoff2_11.y, payoff2_11.radius, 0, 2*Math.PI);
         ctx2.fillStyle = payoff2_11.color;
         ctx2.fill();
@@ -227,6 +322,14 @@
         ctx2.fill();
         ctx2.stroke();
         ctx2.closePath();
+        ctx2.fillStyle = '#000000';
+        ctx2.font='30px Arial';
+        ctx2.fillText("Player2 payoff",50,40);
+        ctx2.font='20px Arial';
+        ctx2.fillStyle = '#ff0000';
+        ctx2.fillText("0",40,370);
+        ctx2.fillText("1",260,370);
+        ctx2.fillText("Player1 "+document.getElementById("P1S2").value+" prob ",80,380);
     }
 
 </script>
@@ -238,20 +341,20 @@
     <th><label><input class="player2" type="text" id="P2S2" value="S2"/> </label></th>
   </tr>
   <tr>
-      <th><label><input class="player1" type="text" name=1s1 value="S1"/> </label></th>
-    <td><input class="player1" type="text" id="P1_11" value=0>\<input class="player2" type="text" id="P2_11"  value=0></td>
-    <td><input class="player1" type="text" id="P1_12"  value=0>\<input class="player2" type="text" id="P2_12" value=0></td>
+      <th><label><input class="player1" type="text" id="P1S1" value="S1"/> </label></th>
+    <td><input class="player1" type="text" id="P1_11" onchange="redraw()" value=0>\<input class="player2" type="text" id="P2_11"  onchange="redraw()" value=0></td>
+    <td><input class="player1" type="text" id="P1_12" onchange="redraw()" value=0>\<input class="player2" type="text" id="P2_12" onchange="redraw()" value=0></td>
   </tr>
   <tr>
-  <th><label><input class="player1" type="text" name=1s2 value="S2"/> </label></th>
-    <td><input class="player1" type="text" id="P1_21"  value=0>\<input class="player2" type="text" id="P2_21"  value=0></td>
-    <td><input class="player1" type="text" id="P1_22" value=0>\<input class="player2" type="text" id="P2_22"  value=0></td>
+  <th><label><input class="player1" type="text" id="P1S2" value="S2"/> </label></th>
+    <td><input class="player1" type="text" id="P1_21" onchange="redraw()" value=0>\<input class="player2" type="text" id="P2_21"  onchange="redraw()" value=0></td>
+    <td><input class="player1" type="text" id="P1_22" onchange="redraw()" value=0>\<input class="player2" type="text" id="P2_22"  onchange="redraw()" value=0></td>
   </tr>
 </table>
-        <canvas id="Payoff1" width="300" height="500" style = "float:left; width: 40%;">
+        <canvas id="Payoff1" width="300px" height="400px">
         </canvas>
         
-        <canvas id="Payoff2" width="300" height="500" style = "float:right; width: 40%;">
+        <canvas id="Payoff2" width="300px" height="400px">
         </canvas>
         
                                                                     
