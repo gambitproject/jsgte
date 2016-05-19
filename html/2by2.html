@@ -16,6 +16,15 @@
 <script>
     var canvas1,canvas2;
     var ctx1,ctx2;
+    var points=[];
+    
+    function redraw(){
+        ctx1.clearRect(0,0,canvas1.width,canvas1.height);
+        ctx2.clearRect(0,0,canvas2.width,canvas2.height);
+        compute_firstP();
+        compute_secondP();
+        draw();
+    }
     
     function initDraws() {
         canvas1 = document.getElementById("Payoff1");
@@ -24,7 +33,7 @@
         ctx2 = canvas2.getContext("2d");
         compute_firstP();
         compute_secondP();
-        points=[payoff1_11, payoff1_12, payoff1_21, payoff1_22, payoff2_11, payoff2_12, payoff2_21, payoff2_22];
+        alert(points[0].y);
         draw();
         
         //alert(points[0].y);
@@ -51,16 +60,7 @@ function doMouseDown(event) {
     mousePosition = getMousePosition( event)
     
     var isMouseOver = isMouseOverPoint(mousePosition);
-    /*if (isMouseOver) {
-        canvas1.addEventListener("mousemove", doMouseMove);
-    }*/
-    //console.log("Pressing1: X = " + mousePosition.x + ", Y = " + mousePosition.y);
-    //mousePosition = getMousePosition(canvas2, event)
-    
-    //isMouseOver = isMouseOverPoint(mousePosition);
-    /*if (isMouseOver) {
-        canvas2.addEventListener("mousemove", doMouseMove);
-    }*/
+
     console.log("Pressing2: X = " + mousePosition.x + ", Y = " + mousePosition.y);
 }
 
@@ -107,34 +107,34 @@ function doMouseMove(event) {
         mousePosition = getMousePosition(event)
         var canvasPosition = canvas1.getBoundingClientRect();
          points[point_moving].y = mousePosition.y-canvasPosition.top;
-         if(point_moving==0) document.getElementById("P1_11").value=~~((-points[point_moving].y+canvas1.height-50)/3)/10;
-         if(point_moving==1) document.getElementById("P1_12").value=~~((-points[point_moving].y+canvas1.height-50)/3)/10;
-         if(point_moving==2) document.getElementById("P1_21").value=~~((-points[point_moving].y+canvas1.height-50)/3)/10;
-         if(point_moving==3) document.getElementById("P1_22").value=~~((-points[point_moving].y+canvas1.height-50)/3)/10;
+         var newPos=~~((-points[point_moving].y+canvas1.height-50)/3)/10;
+         if (Number(newPos)<0) newPos=0;
+         if (Number(newPos)>10) newPos=10;
+         if(point_moving==0) document.getElementById("P1_11").value=newPos;
+         if(point_moving==1) document.getElementById("P1_12").value=newPos;
+         if(point_moving==2) document.getElementById("P1_21").value=newPos;
+         if(point_moving==3) document.getElementById("P1_22").value=newPos;
     }
     if (point_moving>=points.length/2){
         mousePosition = getMousePosition(event)
         var canvasPosition = canvas2.getBoundingClientRect();
         points[point_moving].y = mousePosition.y-canvasPosition.top;
-        if(point_moving==4) document.getElementById("P2_11").value=~~((-points[point_moving].y+canvas2.height-50)/3)/10;
-        if(point_moving==5) document.getElementById("P2_12").value=~~((-points[point_moving].y+canvas2.height-50)/3)/10;
-        if(point_moving==6) document.getElementById("P2_21").value=~~((-points[point_moving].y+canvas2.height-50)/3)/10;
-        if(point_moving==7) document.getElementById("P2_22").value=~~((-points[point_moving].y+canvas2.height-50)/3)/10;
+        var newPos=~~((-points[point_moving].y+canvas2.height-50)/3)/10;
+        if (Number(newPos)<0) newPos=0;
+        if (Number(newPos)>10) newPos=10;
+        if(point_moving==4) document.getElementById("P2_11").value=newPos;
+        if(point_moving==5) document.getElementById("P2_12").value=newPos;
+        if(point_moving==6) document.getElementById("P2_21").value=newPos;
+        if(point_moving==7) document.getElementById("P2_22").value=newPos;
     }
     redraw()
     
     console.log("Moving: X = " + mousePosition.x + ", Y = " + mousePosition.y);
 }
 
-    function redraw(){
-        ctx1.clearRect(0,0,canvas1.width,canvas1.height);
-        ctx2.clearRect(0,0,canvas2.width,canvas2.height);
-        compute_firstP();
-        compute_secondP();
-        draw();
-    }
 
-    function compute_firstP(){
+
+function compute_firstP(){
         var P1_11=document.getElementById("P1_11").value;
         var P1_12=document.getElementById("P1_12").value;
         var P1_21=document.getElementById("P1_21").value;
@@ -144,14 +144,14 @@ function doMouseMove(event) {
         payoff1_21={x:50, y:canvas1.height-50-P1_21*30, radius:5, color:"yellow"};
         payoff1_22={x:canvas1.width-50, y:canvas1.height-50-P1_22*30, radius:5, color:"yellow"};
         var maxP1_1, minP1_1, maxP1_2, minP1_2; // max and min off player1 payoff for strategy 1 or 2 of player2
-        if( P1_11>P1_21){
+        if( Number(P1_11)>Number(P1_21)){
             maxP1_1=P1_11;
             minP1_1=P1_21;
         }else{
             maxP1_1=P1_21;
             minP1_1=P1_11;
         }
-        if( P1_12>P1_22){
+        if( Number(P1_12)>Number(P1_22)){
             maxP1_2=P1_12;
             minP1_2=P1_22;
         }else{
@@ -180,15 +180,16 @@ function doMouseMove(event) {
         payoff2_12={x:50, y:canvas2.height-50-P2_12*30, radius:5, color:"yellow"};
         payoff2_21={x:canvas2.width-50, y:canvas2.height-50-P2_21*30, radius:5, color:"yellow"};
         payoff2_22={x:canvas2.width-50, y:canvas2.height-50-P2_22*30, radius:5, color:"yellow"};
+        points=[payoff1_11, payoff1_12, payoff1_21, payoff1_22, payoff2_11, payoff2_12, payoff2_21, payoff2_22];
         var maxP2_1, minP2_1, maxP2_2, minP2_2; // max and min off player1 payoff for strategy 1 or 2 of player2
-        if( P2_11>P2_12){
+        if( Number(P2_11)>Number(P2_12)){
             maxP2_1=P2_11;
             minP2_1=P2_12;
         }else{
             maxP2_1=P2_12;
             minP2_1=P2_11;
         }
-        if( P2_21>P2_22){
+        if( Number(P2_21)>Number(P2_22)){
             maxP2_2=P2_21;
             minP2_2=P2_22;
         }else{
@@ -198,7 +199,8 @@ function doMouseMove(event) {
         if((maxP2_1==P2_11 && maxP2_2==P2_21)||(maxP2_1==P2_12 && maxP2_2==P2_22)){
             point2_1={x:50,y:canvas2.height-50-maxP2_1*30};
             point2_2={x:canvas2.width-50,y:canvas2.height-50-maxP2_2*30};
-            point2_3={x:canvas2.width-50,y:canvas2.height-50-maxP2_2*30};}
+            point2_3={x:canvas2.width-50,y:canvas2.height-50-maxP2_2*30};
+            }
         else{
             var middle_x=(P2_12-P2_11)/(Number(P2_12)- Number(P2_22) + Number(P2_21) - Number(P2_11));
             var middle_y=Number((P2_21-P2_11)*middle_x)+Number(P2_11);
@@ -337,16 +339,16 @@ function doMouseMove(event) {
         <table border="1">
   <tr>
     <th><label class="player1">Player I</label> \ <label class="player2">Player II</label></th>
-    <th><label><input class="player2" type="text" id="P2S1" value="S1"/> </label></th>
-    <th><label><input class="player2" type="text" id="P2S2" value="S2"/> </label></th>
+    <th><label><input class="player2" type="text" id="P2S1" onchange="redraw()" value="S1"/> </label></th>
+    <th><label><input class="player2" type="text" id="P2S2" onchange="redraw()" value="S2"/> </label></th>
   </tr>
   <tr>
-      <th><label><input class="player1" type="text" id="P1S1" value="S1"/> </label></th>
+      <th><label><input class="player1" type="text" id="P1S1" onchange="redraw()" value="S1"/> </label></th>
     <td><input class="player1" type="text" id="P1_11" onchange="redraw()" value=0>\<input class="player2" type="text" id="P2_11"  onchange="redraw()" value=0></td>
     <td><input class="player1" type="text" id="P1_12" onchange="redraw()" value=0>\<input class="player2" type="text" id="P2_12" onchange="redraw()" value=0></td>
   </tr>
   <tr>
-  <th><label><input class="player1" type="text" id="P1S2" value="S2"/> </label></th>
+  <th><label><input class="player1" type="text" id="P1S2" onchange="redraw()" value="S2"/> </label></th>
     <td><input class="player1" type="text" id="P1_21" onchange="redraw()" value=0>\<input class="player2" type="text" id="P2_21"  onchange="redraw()" value=0></td>
     <td><input class="player1" type="text" id="P1_22" onchange="redraw()" value=0>\<input class="player2" type="text" id="P2_22"  onchange="redraw()" value=0></td>
   </tr>
