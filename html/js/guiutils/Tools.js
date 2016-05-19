@@ -39,6 +39,7 @@ GTE.UI = (function (parentModule) {
     Tools.prototype.loadTree = function(xml) {
         var jsTree = X2J.parseXml(xml);
         var tree = jsTree[0].gte[0];
+        var display = tree.display[0];
         this.resetPlayers(1);
         this.activePlayer = -1;
         var root = new GTE.TREE.Node(null);
@@ -46,7 +47,8 @@ GTE.UI = (function (parentModule) {
         var child2 = new GTE.TREE.Node(root);
         GTE.tree = new GTE.TREE.Tree(root);
         this.addChancePlayer();
-        this.setPlayers(tree.display[0].color, tree.players[0].player);
+        this.setPlayers(display.color, tree.players[0].player);
+        this.setDisplayProperties(display);
         GTE.tree.draw();
         this.switchMode(GTE.MODES.ADD);
     };
@@ -275,6 +277,15 @@ GTE.UI = (function (parentModule) {
         {
             this.addPlayer(colour[i-1].jValue, i, name[i-1].jValue);
         }
+    };
+
+    /**
+    * Sets display properties of the tree
+    */
+    Tools.prototype.setDisplayProperties = function (display) {
+        GTE.STORAGE.settingsLineThickness = display.strokeWidth[0].jValue;
+        GTE.STORAGE.settingsCircleSize = display.nodeDiameter[0].jValue;
+        GTE.STORAGE.settingsDistLevels = display.levelDistance[0].jValue;
     };
 
     // Add class to parent module
