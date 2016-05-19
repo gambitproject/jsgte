@@ -14,7 +14,7 @@ GTE.UI = (function (parentModule) {
     * It creates a new Tree and draws it
     */
     Tools.prototype.newTree = function() {
-        this.resetPlayers();
+        this.resetPlayers(1);
         this.activePlayer = -1;
         var root = new GTE.TREE.Node(null);
         var child1 = new GTE.TREE.Node(root);
@@ -33,8 +33,18 @@ GTE.UI = (function (parentModule) {
     };
 
     Tools.prototype.loadTree = function(xml) {
-        //TODO :: Parse xml to javascript
-        console.log(xml);
+        var jsTree = X2J.parseXml(xml);
+        var tree = jsTree[0].gte[0];
+        this.resetPlayers(1);
+        this.activePlayer = -1;
+        var root = new GTE.TREE.Node(null);
+        var child1 = new GTE.TREE.Node(root);
+        var child2 = new GTE.TREE.Node(root);
+        GTE.tree = new GTE.TREE.Tree(root);
+        this.addChancePlayer();
+        this.setPlayers(tree.display[0].color, tree.players[0].player);
+        GTE.tree.draw();
+        this.switchMode(GTE.MODES.ADD);
     };
 
     /**
@@ -124,10 +134,10 @@ GTE.UI = (function (parentModule) {
     /**
     * Function that adds a player button to the toolbar
     */
-    Tools.prototype.addPlayer = function () {
+    Tools.prototype.addPlayer = function (colour, id, name) {
         if (GTE.tree.numberOfPlayers() < GTE.CONSTANTS.MAX_PLAYERS) {
             // Create a new player
-            var player = GTE.tree.newPlayer();
+            var player = GTE.tree.newPlayer(colour, id, name);
             if (player !== null) {
                 if (player.id == GTE.CONSTANTS.MIN_PLAYERS + 1) {
                     document.getElementById("button-player-less").className =
@@ -246,9 +256,9 @@ GTE.UI = (function (parentModule) {
     /**
     * Removes all players from the toolbar
     */
-    Tools.prototype.resetPlayers = function () {
+    Tools.prototype.resetPlayers = function (length) {
         var buttons = document.getElementsByClassName("button-player");
-        while(buttons.length > 2) {
+        while(buttons.length > length + 1) {
             this.removePlayerButton(buttons[buttons.length-1]);
         }
     };
@@ -256,6 +266,18 @@ GTE.UI = (function (parentModule) {
     Tools.prototype.changePlayerColour = function (playerId, colour) {
         var playerButton = document.getElementById("button-player-" + playerId);
         playerButton.style.color = colour;
+        GTE.STORAGE.settingsPlayersColours[playerId] = colour;
+    };
+
+    Tools.prototype.setPlayers = function (colour,name) {
+        for(var i=1; i<=name.length; i++)
+        {
+            this.addPlayer(colour[i-1].jValue, i, name[i-1].jValue);
+   //         var pl = new GTE.TREE.Player(i,colour[i-1].jValue);
+     //       pl.name = name[i-1].jValue;
+       //     GTE.tree.players[i] = pl;
+         //   this.changePlayerColour(i,colour[i-1].jValue);
+        }
     };
 
     // Add class to parent module

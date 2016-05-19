@@ -849,18 +849,19 @@ GTE.TREE = (function (parentModule) {
     *                           get this player's colour from the list of colours
     * @return {Player} player   Created player
     */
-    Tree.prototype.newPlayer = function (colour) {
+    Tree.prototype.newPlayer = function (colour, id, name) {
         // Player ID is incremental
         var id;
-        if (this.players.length >= 1) {
-            id = this.players[this.players.length-1].id+1;
-        } else {
-            id = GTE.TREE.Player.CHANCE;
+        if(id == null) {
+            if (this.players.length >= 1) {
+                    id = this.players[this.players.length-1].id+1;
+                } else {
+                    id = GTE.TREE.Player.CHANCE;
+            }
         }
-
         colour = colour || GTE.tools.getColour(this.players.length);
         // Create the new player
-        var player = new GTE.TREE.Player(id, colour);
+        var player = new GTE.TREE.Player(id, colour, name);
         // Add the player to the list of players and return it
         return this.addPlayer(player);
     };
