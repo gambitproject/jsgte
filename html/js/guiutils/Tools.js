@@ -32,6 +32,10 @@ GTE.UI = (function (parentModule) {
         this.switchMode(GTE.MODES.ADD);
     };
 
+    /**
+    * Function used to create new tree according
+    * to the xml data received.
+    */
     Tools.prototype.loadTree = function(xml) {
         var jsTree = X2J.parseXml(xml);
         var tree = jsTree[0].gte[0];
@@ -254,7 +258,7 @@ GTE.UI = (function (parentModule) {
     };
 
     /**
-    * Removes all players from the toolbar
+    * Resets the length of the players to @length in the toolbar.
     */
     Tools.prototype.resetPlayers = function (length) {
         var buttons = document.getElementsByClassName("button-player");
@@ -263,20 +267,13 @@ GTE.UI = (function (parentModule) {
         }
     };
 
-    Tools.prototype.changePlayerColour = function (playerId, colour) {
-        var playerButton = document.getElementById("button-player-" + playerId);
-        playerButton.style.color = colour;
-        GTE.STORAGE.settingsPlayersColours[playerId] = colour;
-    };
-
+    /**
+    * Adds new players to the according to color and name arrays
+    */
     Tools.prototype.setPlayers = function (colour,name) {
         for(var i=1; i<=name.length; i++)
         {
             this.addPlayer(colour[i-1].jValue, i, name[i-1].jValue);
-   //         var pl = new GTE.TREE.Player(i,colour[i-1].jValue);
-     //       pl.name = name[i-1].jValue;
-       //     GTE.tree.players[i] = pl;
-         //   this.changePlayerColour(i,colour[i-1].jValue);
         }
     };
 
