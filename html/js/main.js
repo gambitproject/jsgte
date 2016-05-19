@@ -78,6 +78,22 @@
         GTE.tools.newTree();
         return false;
     });
+    document.getElementById("button-load").addEventListener("click", function(){
+        var xmlFiles = document.getElementById("xmlFile");
+        if (xmlFiles) {
+            xmlFiles.click();
+        }
+        var file = xmlFiles.files[0];
+        var reader = new FileReader();
+        reader.onloadend = function(evt) {
+            if (evt.target.readyState == FileReader.DONE) {
+                    GTE.tools.loadTree(evt.target.result);
+            };
+        };
+        var blob = file.slice(0, file.size - 1);
+        reader.readAsBinaryString(blob);
+        return false;
+    });
 
     document.getElementById("button-add").addEventListener("click", function(){
         GTE.tools.switchMode(GTE.MODES.ADD);

@@ -32,6 +32,11 @@ GTE.UI = (function (parentModule) {
         this.switchMode(GTE.MODES.ADD);
     };
 
+    Tools.prototype.loadTree = function(xml) {
+        //TODO :: Parse xml to javascript
+        console.log(xml);
+    };
+
     /**
     * Function that switches mode to the one specified by the button pressed
     * @param {Button} button Button pressed that will activate mode
