@@ -43,14 +43,39 @@ GTE.UI = (function (parentModule) {
         this.resetPlayers(1);
         this.activePlayer = -1;
         var root = new GTE.TREE.Node(null);
-        var child1 = new GTE.TREE.Node(root);
-        var child2 = new GTE.TREE.Node(root);
         GTE.tree = new GTE.TREE.Tree(root);
         this.addChancePlayer();
         this.setPlayers(display.color, tree.players[0].player);
         this.setDisplayProperties(display);
+        this.createTree(tree.extensiveForm[0].node[0], root);
+        root.assignPlayer(GTE.tree.players[tree.extensiveForm[0].node[0].jAttr.player]);
         GTE.tree.draw();
         this.switchMode(GTE.MODES.ADD);
+    };
+
+    Tools.prototype.createRecursiveTree = function(node, father) {
+        var currentNode = GTE.tree.addChildNodeTo( father, GTE.tree.players[node.jAttr.player] );
+        for( var i = 0 ; i < node.jIndex.length ; i++) {
+            if(node.jIndex[i][0] == "node") {
+                this.createRecursiveTree(node.node[node.jIndex[i][1]], currentNode);
+            }
+            if(node.jIndex[i][0] == "outcome") {
+                GTE.tree.addChildNodeTo(currentNode, GTE.tree.players[node.outcome[node.jIndex[i][1]].jAttr.player]);
+            }
+        }
+    };
+
+    Tools.prototype.createTree = function(node, root) {
+        //  var root = new GTE.TREE.Node(null, node.jAttr.player);
+        for( var i = 0 ; i < node.jIndex.length ; i++) {
+            if(node.jIndex[i][0] == "node") {
+                this.createRecursiveTree(node.node[node.jIndex[i][1]], root);
+            }
+            if(node.jIndex[i][0] == "outcome") {
+                GTE.tree.addChildNodeTo(root, GTE.tree.players[node.node[node.jIndex[i][1]].jAttr.player]);
+            }
+        }
+        return root;
     };
 
     /**

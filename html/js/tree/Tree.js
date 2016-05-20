@@ -569,8 +569,8 @@ GTE.TREE = (function (parentModule) {
     * @param  {Node} parentNode Node that will get a new child
     * @return {Node} newNode    Node that has been added
     */
-    Tree.prototype.addChildNodeTo = function (parentNode) {
-        var newNode = new GTE.TREE.Node(parentNode);
+    Tree.prototype.addChildNodeTo = function (parentNode, player, reachedBy, iset) {
+        var newNode = new GTE.TREE.Node(parentNode, player, reachedBy, iset);
         this.positionsUpdated = false;
         return newNode;
     };
