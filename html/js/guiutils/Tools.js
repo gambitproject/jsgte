@@ -56,6 +56,9 @@ GTE.UI = (function (parentModule) {
         this.switchMode(GTE.MODES.ADD);
     };
 
+    /**
+    * Builds the sub-tree for the variable @node
+    */
     Tools.prototype.createRecursiveTree = function(node, father) {
         var currentNode = GTE.tree.addChildNodeTo( father, GTE.tree.players[node.jAttr.player] );
         for( var i = 0 ; i < node.jIndex.length ; i++) {
@@ -68,6 +71,9 @@ GTE.UI = (function (parentModule) {
         }
     };
 
+    /**
+    * Function to create nodes of the laoded tree
+    */
     Tools.prototype.createTree = function(node, root) {
         //  var root = new GTE.TREE.Node(null, node.jAttr.player);
         for( var i = 0 ; i < node.jIndex.length ; i++) {
