@@ -7,6 +7,7 @@ GTE.UI = (function (parentModule) {
     */
     function Tools() {
         this.activePlayer = -1;
+        this.isetToolsRan = false;
     }
 
     /**
@@ -16,6 +17,7 @@ GTE.UI = (function (parentModule) {
     Tools.prototype.newTree = function() {
         this.resetPlayers(1);
         this.activePlayer = -1;
+        this.isetToolsRan = false;
         var root = new GTE.TREE.Node(null);
         var child1 = new GTE.TREE.Node(root);
         var child2 = new GTE.TREE.Node(root);
@@ -42,6 +44,7 @@ GTE.UI = (function (parentModule) {
         var display = tree.display[0];
         this.resetPlayers(1);
         this.activePlayer = -1;
+        this.isetToolsRan = false;
         var root = new GTE.TREE.Node(null);
         GTE.tree = new GTE.TREE.Tree(root);
         this.addChancePlayer();
