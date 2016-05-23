@@ -19,9 +19,10 @@ form* instead, and we should do so too.
 Hence, the shorthand SF suggests itself.
 
 One of the problems is that SF is also a possible
-abbreviation for the *sequence form* that is derived from
-the *extensive form* (a game tree) and is a strategic
-description of the same size as the game tree.
+abbreviation for the *sequence form* which is another,
+different strategic description, which is derived from
+the *extensive form* (a game tree). Unlike the strategic
+form, the sequence form has the same size as the game tree.
 The sequence form is very useful for solving game trees of
 large (and even medium) size and we will use it.
 
@@ -29,19 +30,26 @@ So it seems that we have convenient abbreviations EF, NF, SF
 for extensive form, normal form, and sequence form.
 However, we should not re-introduce "normal form" for this
 purpose only. In addition, the sequence form is not well
-known.
+known, nor is the abbreviation "SF" for "sequence form".
 
 I suggest the following alternatives (for discussion):
 
 * EF for extensive form
-* SF or STF for strategic form (also known as normal form)
-* QF or SQF for the seQuence form
+* SF (or possibly STF) for strategic form (also known as normal form)
+* QF (or possibly SQF) for the seQuence form
+
+Further common abbreviations:
+
+* NE for Nash equilibrium
+* SPNE for subgame perfect Nash equilibrium.
 
 ## Definition
 
 The SF (strategic form) is specified by a set of
-N *players*, each of which has a set of *strategies*, and
-*payoffs* defined for each player as follows.
+N *players*, each of which has a nonempty set of
+*strategies*, and *payoffs* defined for each player as
+follows.
+N is a positive integer.
 A *strategy profile* is an N-tuple of strategies, one for
 each player.
 The SF specifies a payoff to each player for each strategy
@@ -51,10 +59,33 @@ In our computational setting, the sets of players and their
 strategies are all finite, payoffs are rational numbers
 (in the theory, real numbers).
 
+The strategic form can be considered either as
+
+* a primitive, that is, a given game structure on its own, or
+* *derived* from an EF (extensive form) game.
+
+EF games are often converted to SF in order to study
+concepts like NE (Nash equilibrium), or to compute a NE.
+
+### Names of strategies and players
+
 In order to display a SF game, players and strategies should
 have *names*.
 
+In JS, these names could be used to index the N-dimensional
+array that defines the SF.
+However, the order of these names should not prescribe the
+order in which they appear.
+We will therefore *number* the strategies as nonnegative
+integers (starting from 0), and keep their names separately.
 
+Players should also have names.
+We number players with 1, 2, 3 and so on.
+Player 0 is the special *chance player* in an EF game.
+
+The following is an example of a two-player game.
+
+![](./IMAGES/battle.png) 
 
 The strategic form is a table that lists STRATEGIES for each
 player (rows for player 1, columns for player 2) and the
