@@ -12,26 +12,7 @@ GTE.TREE = (function(parentModule) {
     }
 
     Block.prototype.draw = function() {
-        var width = (this.x2 + parseInt(GTE.STORAGE.settingsCircleSize)) - this.x1;
 
-        this.shape = GTE.canvas.rect(width, GTE.STORAGE.settingsCircleSize)
-            .radius(GTE.STORAGE.settingsCircleSize / 2)
-            .fill({
-                color: '#9d9d9d'
-            })
-            .addClass('Block-rect');
-        this.shape.translate(this.x1,
-            this.y - GTE.STORAGE.settingsCircleSize / 2);
-        var thisBlock = this;
-        this.shape.mouseover(function() {
-            thisBlock.interaction();
-        });
-        this.shape.mouseout(function() {
-            thisBlock.interaction();
-        });
-        this.shape.click(function() {
-            thisBlock.onClick();
-        });
     };
 
     Block.prototype.hide = function() {
