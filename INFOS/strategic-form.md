@@ -1,4 +1,5 @@
 ## Strategic Form
+
 The role of the Strategic form would be to convert the complete game tree (in which all nodes are assigned with players and all leaf nodes have payoffs assigned to them) into strategic form.
 The strategic form for an n-player game would be an n-dimensional matrix.
 As suggested by Bernhard, the matrix should be integer addressable rather than string addressable. To implement this functionality, the following classes have been added to jsgte.
