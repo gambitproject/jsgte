@@ -19,7 +19,7 @@ GTE.TREE = (function (parentModule) {
         this.oldLeaves = [];
         this.players = [];
         this.multiActionLines = [];
-        
+        this.matrix = new GTE.TREE.Matrix();
         this.showChanceName = true;
     }
 

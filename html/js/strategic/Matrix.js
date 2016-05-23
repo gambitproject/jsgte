@@ -6,8 +6,19 @@ GTE.TREE = (function(parentModule) {
      * @class
      */
     function Matrix() {
+        this.players = [];
         
     }
+
+    Matrix.prototype.assignPlayers = function(players) {
+        this.players = players;
+    };
+
+    Matrix.prototype.addPlayer = function(player) {
+        if(this.players.indexOf(player) == -1)
+            this.players.push(player);
+    };
+
 
     // Add class to parent module
     parentModule.Matrix = Matrix;
