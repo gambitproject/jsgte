@@ -509,6 +509,7 @@ GTE.TREE = (function (parentModule) {
             for (var j = 0; j < this.leaves.length; j++) {
                 this.players[i].payoffs.push(
                         new GTE.TREE.Payoff(this.leaves[j], this.players[i]));
+                this.leaves[j].iset.payoffs.push(this.players[i].payoffs[j]);
             }
         }
     };

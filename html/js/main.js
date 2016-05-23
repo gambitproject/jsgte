@@ -6,6 +6,7 @@
     GTE.tools = new GTE.UI.Tools();
     // Initialize settings
     var setSettingsToDefaults = function() {
+        GTE.STORAGE.settingsBlockSize = GTE.CONSTANTS.BLOCK_SIZE;
         GTE.STORAGE.settingsCircleSize = GTE.CONSTANTS.CIRCLE_SIZE;
         GTE.STORAGE.settingsLineThickness = GTE.CONSTANTS.LINE_THICKNESS;
         GTE.STORAGE.settingsDistLevels = GTE.CONSTANTS.DIST_BETWEEN_LEVELS;

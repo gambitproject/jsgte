@@ -9,6 +9,7 @@ GTE.TREE = (function(parentModule) {
         this.players = [];
         this.nodes = []; // multidimensional array containing corresponding nodes of players
         this.strategies = [];
+        this.matrix = [];
     }
 
     Matrix.prototype.assignPlayers = function(players) {
@@ -93,6 +94,14 @@ GTE.TREE = (function(parentModule) {
         for(var i=0; i<this.players.length; i++) {
             var currentStrategy = this.createMoves(this.getNodes(this.players[i]));
             this.strategies.push(currentStrategy);
+        }
+        for(var i=0;i<this.strategies[1].length;i++) {
+            this.matrix[i] = [];
+            for(var j=0;j<this.strategies[2].length;j++) {
+                this.matrix[i][j] = new GTE.TREE.StrategyBlock(i, j, [this.players[1], this.players[2]], [this.strategies[1][i], this.strategies[2][j]]);
+                this.matrix[i][j].assignPayoffs();
+                this.matrix[i][j].draw();
+            }
         }
     };
 
