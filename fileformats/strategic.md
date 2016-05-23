@@ -3,7 +3,56 @@
 Date: 23 May 2016
 
 Part of this extends and re-uses material from
-[INFOS/start_GSOC_2016.md](../INFOS/start_GSOC_2016.md)
+[INFOS/start_GSOC_2016.md](../INFOS/start_GSOC_2016.md).
+
+## Terminology
+
+The strategic form is one of the basic models of game
+theory.
+
+Another standard term is *normal form*.
+Because "normal" is not a very descriptive word, leading
+game theorists (such as Sergiu Hart, in the Handbook of Game
+Theory that of which he co-edited the first three volumes
+with Bob Aumann) strive to establish the term *strategic
+form* instead, and we should do so too.
+Hence, the shorthand SF suggests itself.
+
+One of the problems is that SF is also a possible
+abbreviation for the *sequence form* that is derived from
+the *extensive form* (a game tree) and is a strategic
+description of the same size as the game tree.
+The sequence form is very useful for solving game trees of
+large (and even medium) size and we will use it.
+
+So it seems that we have convenient abbreviations EF, NF, SF
+for extensive form, normal form, and sequence form.
+However, we should not re-introduce "normal form" for this
+purpose only. In addition, the sequence form is not well
+known.
+
+I suggest the following alternatives (for discussion):
+
+* EF for extensive form
+* SF or STF for strategic form (also known as normal form)
+* QF or SQF for the seQuence form
+
+## Definition
+
+The SF (strategic form) is specified by a set of
+N *players*, each of which has a set of *strategies*, and
+*payoffs* defined for each player as follows.
+A *strategy profile* is an N-tuple of strategies, one for
+each player.
+The SF specifies a payoff to each player for each strategy
+profile.
+
+In our computational setting, the sets of players and their
+strategies are all finite, payoffs are rational numbers
+(in the theory, real numbers).
+
+In order to display a SF game, players and strategies should
+have *names*.
 
 
 
