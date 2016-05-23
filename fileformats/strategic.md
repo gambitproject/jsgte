@@ -192,8 +192,25 @@ line width, and the separating parallel inner lines
 independently (which may possibly have a different line
 width, default same as outer rectangle).  
 
+### Fonts
+
+There should be a standard font *size* that makes single-digit
+payoffs look nice and balanced (see above pictures).
+A simple remedy to adjust overcrowded cells is to only
+change the *cell size* but leave the font size alone.
+
+As *typefaces* I have chosen above, and think it looks good:
+
+* Helvetica (sans serif) for payoffs
+* Roman (serif) for player names
+* Roman bold italic (alternative: italic) for strategy
+  names.
+
+Making these at some time choosable is a future feature.
+
 ## More than two players
 
+(not complete)
 
 The strategic form is a table that lists STRATEGIES for each
 player (rows for player 1, columns for player 2) and the
