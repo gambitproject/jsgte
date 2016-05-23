@@ -101,6 +101,7 @@ GTE.UI = (function (parentModule) {
     */
     Tools.prototype.toStrategicForm = function (player) {
         GTE.tree.clear();
+        GTE.tree.matrix.initialise();
         alert("tostrategicform");
     };
 
