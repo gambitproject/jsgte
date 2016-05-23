@@ -8,6 +8,7 @@ GTE.TREE = (function(parentModule) {
     function Matrix() {
         this.players = [];
         this.nodes = []; // multidimensional array containing corresponding nodes of players
+        this.strategies = [];
     }
 
     Matrix.prototype.assignPlayers = function(players) {
@@ -37,18 +38,75 @@ GTE.TREE = (function(parentModule) {
     };
 
     Matrix.prototype.getNodes = function(player) {
-        if(this.players.indexOf(player) == -1)
-            return []
-        else
-            return this.nodes[this.players.indexOf(player)];
+        if(this.players.indexOf(player) == -1 || this.nodes[this.players.indexOf(player)] == undefined)
+            return [];
+        else {
+            var playerNodes = [];
+            for(var i=0;i<this.nodes[this.players.indexOf(player)].length;i++)
+                playerNodes.push(this.nodes[this.players.indexOf(player)][i]);
+            return playerNodes;
+        }
     };
+
+    Matrix.prototype.createMovePermutations = function(moves, currentPermutations) {
+        if(moves==undefined || moves.length ==0) {
+            return currentPermutations;
+        }
+        else {
+            var permutations = [];
+            if(currentPermutations.length == 0) {
+                for(var i=0;i<moves.length;i++) {
+                    var perm = [];
+                    perm.push(moves[i]);
+                    permutations.push(perm);
+                }
+            }
+            else {
+                for(var i=0;i<moves.length;i++) {
+                    for(var j = 0; j<currentPermutations.length ; j++) {
+                        var perm = currentPermutations[j].slice(0);
+                        perm.push(moves[i]);
+                        permutations.push(perm);
+                    }
+                }
+            }
+            return permutations;
+        }
+    };
+
+    Matrix.prototype.createMoves = function(nodes) {
+        if(nodes == undefined || nodes.length==0)
+            return [];
+        else {
+            var permutations = [];
+            for(var i=0;i<nodes.length;i++) {
+                permutations = this.createMovePermutations(nodes[i].iset.moves, permutations)
+            }
+            return permutations;
+        }
+    };
+
 
     Matrix.prototype.initialise = function() {
         this.assignPlayers(GTE.tree.players);
         this.assignNodes(GTE.tree.root);
-
+        for(var i=0; i<this.players.length; i++) {
+            var currentStrategy = this.createMoves(this.getNodes(this.players[i]));
+            this.strategies.push(currentStrategy);
+        }
     };
 
+    Matrix.prototype.strategiesToString = function() {
+        for(var i = 0;i<this.strategies.length;i++) {
+            for(var j=0;j<this.strategies[i].length;j++) {
+                var str = "";
+                for (var k = 0;k<this.strategies[i][j].length;k++) {
+                    str = str + this.strategies[i][j][k].name;
+                }
+                console.log(str);
+            }
+        }
+    };
 
     // Add class to parent module
     parentModule.Matrix = Matrix;
