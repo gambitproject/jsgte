@@ -10,7 +10,7 @@ The role of matrix.js is to create an instance of the matrix that will be render
 It will contain a multidimensional array of the type strategyBlock which will be indexed by integers itself. There will be prototype functions that will return (n-1) dimensional arrays of a given strategy passed as a parameter.
 
 ## StrategyBlock.js
-The role of StrategyBlock.js is to create an instance of strategy class. The strategy class represents one unit of the matrix represented by Matrix.js. It will have parameters :
+The role of StrategyBlock.js is to create an instance of strategyBlock class. The strategy class represents one unit of the matrix represented by Matrix.js. It will have parameters :
 coordinate -> array of coordinates used to reference this particular strategy ( the number will be equal to the number of players)
 strategies -> an array of strategies that are used in this StrategyBlock instance. 
 node -> the leaf node to which these set of strategies point to
