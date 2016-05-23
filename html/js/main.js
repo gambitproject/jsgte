@@ -79,6 +79,14 @@
         return false;
     });
 
+    document.getElementById("button-strategic").addEventListener("click", function(){
+        if(GTE.tools.isetToolsRan)
+            GTE.tools.toStrategicForm();
+        else
+            alert("first assign payoffs to each player");
+        return false;
+    });
+
     document.getElementById("button-add").addEventListener("click", function(){
         GTE.tools.switchMode(GTE.MODES.ADD);
         return false;

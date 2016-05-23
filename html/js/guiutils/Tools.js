@@ -95,6 +95,14 @@ GTE.UI = (function (parentModule) {
             this.activePlayer = -1;
         }
     };
+    /**
+    * Function that creates the strategic form and
+    * renders the strategic form to the canvas
+    */
+    Tools.prototype.toStrategicForm = function (player) {
+        GTE.tree.clear();
+        alert("tostrategicform");
+    };
 
     /**
     * Function that selects a player
