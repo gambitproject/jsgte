@@ -209,6 +209,38 @@ Making these at some time choosable is a future feature.
 
 ## More than two players
 
+2 players:
+
+* player 1 - rows
+* player 2 - columns
+
+3 players:
+as many PANELS has player 3 has strategies
+
+* player 1 - rows
+* player 2 - columns
+* player 3 - panels
+
+The panels should normally be displayed horizontally.
+
+Strategy names, per default:
+
+* player 1 - upper case
+* player 2 - lower case
+* player 3 - upper case
+
+standard strategy names:
+
+* player 1 - two strategies: T,B; three strategies: T,M,B;
+  four more strategies: A,B,C,D etc.
+* player 2 - two strategies: l,r; three strategies: l,c,r
+  four more strategies: a,b,c,d etc.
+* player 3 - if panels displayed horizontally:
+  two strategies: L,R; three strategies: L,C,R
+  if panels displayed vertically, or perhaps already
+  generally, for any number of strategies:
+  P,Q,R,S,T... (which conflicts least with the above).
+
 (not complete)
 
 The strategic form is a table that lists STRATEGIES for each
