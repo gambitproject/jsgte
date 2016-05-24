@@ -100,8 +100,7 @@ The name of player 1, his strategies, and payoffs, are shown
 in red (for "row player").
 The name of player 2, her strategies, and payoffs, are shown
 in blue.
-(For two players we use the two genders, for example "he"
-and "she".)
+(For two players we often use the two genders "he" and "she".)
 
 This is the standard display of a two-player game.
 
