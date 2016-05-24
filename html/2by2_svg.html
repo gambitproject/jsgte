@@ -233,6 +233,19 @@ function compute_firstP(){
         stick.setAttributeNS(null, "x1",point2_2.x);
         stick.setAttributeNS(null, "x2",point2_2.x);
         
+        //change legend according to strategies name.
+        var temp= svg1.getElementById("y11");
+        temp.textContent=P2S1;
+        temp= svg1.getElementById("y12");
+        temp.textContent=P2S2;
+        temp= svg2.getElementById("y21");
+        temp.textContent=P1S1;
+        temp= svg2.getElementById("y22");
+        temp.textContent=P1S2;
+        temp= svg1.getElementById("prob2");
+        temp.textContent="Player2 "+P2S2+" prob";
+        temp= svg2.getElementById("prob1");
+        temp.textContent="Player1 "+P1S2+" prob";
     }
 
 </script>
@@ -260,9 +273,9 @@ function compute_firstP(){
             <polyline points="50,50 50,350 250,350, 250,50" style="fill:none;stroke:black;stroke-width:2" />
             <!-- Legend, strategy names will be updated after-->
             <text x="50" y="40" fill="green" font-family="Arial" font-size="30">Player1 payoff</text>
-            <text x="80" y="385" fill="blue" font-family="Arial" font-size="20">Player2 S2 prob</text>
-            <text x="5" y="180" fill="blue" font-family="Arial" font-size="30" transform="rotate(270 30,180)">S1</text>
-            <text x="260" y="180" fill="blue" font-family="Arial" font-size="30" transform="rotate(90 270,180)">S2</text>
+            <text id="prob2" x="80" y="385" fill="blue" font-family="Arial" font-size="20">Player2 S2 prob</text>
+            <text id="y11" x="5" y="180" fill="blue" font-family="Arial" font-size="30" transform="rotate(270 30,180)">S1</text>
+            <text id="y12" x="260" y="180" fill="blue" font-family="Arial" font-size="30" transform="rotate(90 270,180)">S2</text>
             <text x="40" y="368" fill="blue" font-family="Arial" font-size="20">0</text>
             <text x="250" y="368" fill="blue" font-family="Arial" font-size="20">1</text>
             <!-- Upper envelop, coordinates will be updated-->
@@ -312,7 +325,7 @@ function compute_firstP(){
             <text x="258" y="325" fill="black" font-family="Arial" font-size="15">1</text>
             <!-- Intersection point-->
             <circle id="inter1" cx="250" cy="350" r="8" fill="orange" stroke="black" stroke-width="1" draggable="false" ondragstart="doMouseDown()"/>
-            <line id="interstick1" x1="250" y1="350" x2="250" y2="355" style="stroke:black;stroke-width:1" />
+            <line id="interstick1" x1="250" y1="350" x2="250" y2="355" style="stroke:black;stroke-width:2" />
             <text id="interlabel1" x="250" y="368" fill="blue" font-family="Arial" font-size="20">1</text>
             <!-- Payoff points-->
             <circle id="Payoff1_11" asso="P1_11" cx="50" cy="350" r="10" fill="red" stroke="black" draggable="false" ondragstart="doMouseDown()"/>
@@ -328,11 +341,11 @@ function compute_firstP(){
             <polyline points="50,50 50,350 250,350, 250,50" style="fill:none;stroke:black;stroke-width:2" />
             <!-- Legend, strategy names will be updated after-->
             <text x="50" y="40" fill="blue" font-family="Arial" font-size="30">Player2 payoff</text>
-            <text x="80" y="385" fill="green" font-family="Arial" font-size="20">Player1 S2 prob</text>
+            <text id="prob1" x="80" y="385" fill="green" font-family="Arial" font-size="20">Player1 S2 prob</text>
             <text x="40" y="368" fill="green" font-family="Arial" font-size="20">0</text>
             <text x="250" y="368" fill="green" font-family="Arial" font-size="20">1</text>
-            <text x="5" y="180" fill="green" font-family="Arial" font-size="30" transform="rotate(270 30,180)">S1</text>
-            <text x="260" y="180" fill="green" font-family="Arial" font-size="30" transform="rotate(90 270,180)">S2</text>
+            <text id="y21" x="5" y="180" fill="green" font-family="Arial" font-size="30" transform="rotate(270 30,180)">S1</text>
+            <text id="y22" x="260" y="180" fill="green" font-family="Arial" font-size="30" transform="rotate(90 270,180)">S2</text>
             <!-- Upper envelop, coordinates will be updated-->
             <polygon id="envelop2" points="50,50 50,350 250,350 250,50" style="fill:orange;stroke:orange;stroke-width:0" />
             <!-- First strategy payoff-->
@@ -379,7 +392,7 @@ function compute_firstP(){
             <text x="258" y="325" fill="black" font-family="Arial" font-size="15">1</text>
             <!-- Intersection point-->
             <circle id="inter2" cx="250" cy="350" r="8" fill="orange" stroke="black" stroke-width="1" draggable="false" ondragstart="doMouseDown()"/>
-            <line id="interstick2" x1="250" y1="350" x2="250" y2="355" style="stroke:black;stroke-width:1" />
+            <line id="interstick2" x1="250" y1="350" x2="250" y2="355" style="stroke:black;stroke-width:2" />
             <text id="interlabel2" x="250" y="368" fill="green" font-family="Arial" font-size="20">1</text>
             <!-- Payoff points-->
             <circle id="Payoff2_11" asso="P2_11" cx="50" cy="350" r="10" fill="red" stroke="black" draggable="false" ondragstart="doMouseDown()"/>
