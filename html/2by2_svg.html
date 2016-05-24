@@ -18,7 +18,9 @@
     var ctx1,ctx2;
     var points=[];
     var svgH=400;
-    var svgW=300
+    var svgW=300;
+    var moving_point;
+    
 
     
     function initDraws() {
@@ -38,14 +40,14 @@
         
         //alert(points[0].y);
         // mouse event
-        pay1_11.addEventListener("click", doMouseDown);
-        pay1_12.addEventListener("click", doMouseDown);
-        pay1_21.addEventListener("click", doMouseDown);
-        pay1_22.addEventListener("click", doMouseDown);
-        pay2_11.addEventListener("click", doMouseDown);
-        pay2_12.addEventListener("click", doMouseDown);
-        pay2_21.addEventListener("click", doMouseDown);
-        pay2_22.addEventListener("click", doMouseDown);
+        pay1_11.addEventListener("mousedown", doMouseDown);
+        pay1_12.addEventListener("mousedown", doMouseDown);
+        pay1_21.addEventListener("mousedown", doMouseDown);
+        pay1_22.addEventListener("mousedown", doMouseDown);
+        pay2_11.addEventListener("mousedown", doMouseDown);
+        pay2_12.addEventListener("mousedown", doMouseDown);
+        pay2_21.addEventListener("mousedown", doMouseDown);
+        pay2_22.addEventListener("mousedown", doMouseDown);
         input_user=document.getElementsByTagName("input");
         for (var i=0; i<input_user.length;i++){
            //input_user[i].addEventListener("onchange",redraw());
@@ -71,30 +73,31 @@ function doMouseDown(event) {
     event.preventDefault();
     //var temp=this.parentNode.childNodes[13];
     this.parentNode.insertBefore(this,null);
-    
-    this.addEventListener("mousemove", doMouseMove);
-    this.addEventListener("click", doMouseUp);
-    this.removeEventListener("click", doMouseDown);
+    moving_point=this;
+    document.addEventListener("mousemove", doMouseMove);
+    this.addEventListener("mouseup", doMouseUp);
+    this.removeEventListener("mousedown", doMouseDown);
     console.log("Down: "+this.getAttribute("id"));
 }
 
 
 function doMouseUp(event) {
     mousePosition = getMousePosition(event)
-    this.removeEventListener("mousemove", doMouseMove);
-    this.addEventListener("click", doMouseDown);
+    document.removeEventListener("mousemove", doMouseMove);
+    moving_point=NULL;
+    this.addEventListener("mousedown", doMouseDown);
     console.log("Releasing: X = " + mousePosition.x + ", Y = " + mousePosition.y);
 }
 
 
 function doMouseMove(event) {
     var mousePosition = getMousePosition(event)
-    svgPosition = this.parentNode.getBoundingClientRect();
+    svgPosition = moving_point.parentNode.getBoundingClientRect();
     var newPos=~~((-mousePosition.y+svgPosition.top+svgH-50)/3)/10;
     if (Number(newPos)<0) newPos=0;
     if (Number(newPos)>10) newPos=10;
-    if( (Number(newPos)-this.getAttribute("cy"))*(Number(newPos)-this.getAttribute("cy"))>0.005){
-       document.getElementById(this.getAttribute("asso")).value=newPos;
+    if( (Number(newPos)-moving_point.getAttribute("cy"))*(Number(newPos)-moving_point.getAttribute("cy"))>0.005){
+       document.getElementById(moving_point.getAttribute("asso")).value=newPos;
        redraw();
     }
     
@@ -324,14 +327,14 @@ function compute_firstP(){
             <line x1="250" y1="320" x2="255" y2="320" style="stroke:black;stroke-width:1" />
             <text x="258" y="325" fill="black" font-family="Arial" font-size="15">1</text>
             <!-- Intersection point-->
-            <circle id="inter1" cx="250" cy="350" r="8" fill="orange" stroke="black" stroke-width="1" draggable="false" ondragstart="doMouseDown()"/>
+            <circle id="inter1" cx="250" cy="350" r="5" fill="orange" stroke="black" stroke-width="1" draggable="false" ondragstart="doMouseDown()"/>
             <line id="interstick1" x1="250" y1="350" x2="250" y2="355" style="stroke:black;stroke-width:2" />
             <text id="interlabel1" x="250" y="368" fill="blue" font-family="Arial" font-size="20">1</text>
             <!-- Payoff points-->
-            <circle id="Payoff1_11" asso="P1_11" cx="50" cy="350" r="10" fill="red" stroke="black" draggable="false" ondragstart="doMouseDown()"/>
-            <circle id="Payoff1_12" asso="P1_12" cx="250" cy="350" r="10" fill="red" stroke="black" draggable="false" ondragstart="doMouseDown()"/>
-            <circle id="Payoff1_21" asso="P1_21" cx="50" cy="350" r="10" fill="yellow" stroke="black" draggable="false" ondragstart="doMouseDown()"/>
-            <circle id="Payoff1_22" asso="P1_22" cx="250" cy="350" r="10" fill="yellow" stroke="black" draggable="false" ondragstart="doMouseDown()"/>
+            <circle id="Payoff1_11" asso="P1_11" cx="50" cy="350" r="5" fill="red" stroke="black" draggable="false" ondragstart="doMouseDown()"/>
+            <circle id="Payoff1_12" asso="P1_12" cx="250" cy="350" r="5" fill="red" stroke="black" draggable="false" ondragstart="doMouseDown()"/>
+            <circle id="Payoff1_21" asso="P1_21" cx="50" cy="350" r="5" fill="yellow" stroke="black" draggable="false" ondragstart="doMouseDown()"/>
+            <circle id="Payoff1_22" asso="P1_22" cx="250" cy="350" r="5" fill="yellow" stroke="black" draggable="false" ondragstart="doMouseDown()"/>
             
         </svg>
         
@@ -373,6 +376,7 @@ function compute_firstP(){
             <text x="35" y="295" fill="black" font-family="Arial" font-size="15">2</text>
             <line x1="50" y1="320" x2="45" y2="320" style="stroke:black;stroke-width:1" />
             <text x="35" y="325" fill="black" font-family="Arial" font-size="15">1</text>
+            <line x1="250" y1="80" x2="255" y2="80" style="stroke:black;stroke-width:1" />
             <text x="258" y="85" fill="black" font-family="Arial" font-size="15">9</text>
             <line x1="250" y1="110" x2="255" y2="110" style="stroke:black;stroke-width:1" />
             <text x="258" y="115" fill="black" font-family="Arial" font-size="15">8</text>
@@ -391,14 +395,14 @@ function compute_firstP(){
             <line x1="250" y1="320" x2="255" y2="320" style="stroke:black;stroke-width:1" />
             <text x="258" y="325" fill="black" font-family="Arial" font-size="15">1</text>
             <!-- Intersection point-->
-            <circle id="inter2" cx="250" cy="350" r="8" fill="orange" stroke="black" stroke-width="1" draggable="false" ondragstart="doMouseDown()"/>
+            <circle id="inter2" cx="250" cy="350" r="5" fill="orange" stroke="black" stroke-width="1" draggable="false" ondragstart="doMouseDown()"/>
             <line id="interstick2" x1="250" y1="350" x2="250" y2="355" style="stroke:black;stroke-width:2" />
             <text id="interlabel2" x="250" y="368" fill="green" font-family="Arial" font-size="20">1</text>
             <!-- Payoff points-->
-            <circle id="Payoff2_11" asso="P2_11" cx="50" cy="350" r="10" fill="red" stroke="black" draggable="false" ondragstart="doMouseDown()"/>
-            <circle id="Payoff2_12" asso="P2_12" cx="50" cy="350" r="10" fill="yellow" stroke="black" draggable="false" ondragstart="doMouseDown()"/>
-            <circle id="Payoff2_21" asso="P2_21" cx="250" cy="350" r="10" fill="red" stroke="black" draggable="false" ondragstart="doMouseDown()"/>
-            <circle id="Payoff2_22" asso="P2_22" cx="250" cy="350" r="10" fill="yellow" stroke="black" draggable="false" ondragstart="doMouseDown()"/>
+            <circle id="Payoff2_11" asso="P2_11" cx="50" cy="350" r="5" fill="red" stroke="black" draggable="false" ondragstart="doMouseDown()"/>
+            <circle id="Payoff2_12" asso="P2_12" cx="50" cy="350" r="5" fill="yellow" stroke="black" draggable="false" ondragstart="doMouseDown()"/>
+            <circle id="Payoff2_21" asso="P2_21" cx="250" cy="350" r="5" fill="red" stroke="black" draggable="false" ondragstart="doMouseDown()"/>
+            <circle id="Payoff2_22" asso="P2_22" cx="250" cy="350" r="5" fill="yellow" stroke="black" draggable="false" ondragstart="doMouseDown()"/>
             
         </svg>
         
