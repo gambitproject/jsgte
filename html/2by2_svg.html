@@ -406,6 +406,137 @@ function compute_firstP(){
             
         </svg>
         
+        <svg id="SVG" version="1.1" width="700px" height="400px">
+            <!-- Drawing the contour-->
+            <polyline points="50,50 50,350 250,350, 250,50" style="fill:none;stroke:black;stroke-width:2" />
+            <!-- Legend, strategy names will be updated after-->
+            <text x="50" y="40" fill="green" font-family="Arial" font-size="30">Player1 payoff</text>
+            <text id="prob2" x="80" y="385" fill="blue" font-family="Arial" font-size="20">Player2 S2 prob</text>
+            <text id="y11" x="5" y="180" fill="blue" font-family="Arial" font-size="30" transform="rotate(270 30,180)">S1</text>
+            <text id="y12" x="260" y="180" fill="blue" font-family="Arial" font-size="30" transform="rotate(90 270,180)">S2</text>
+            <text x="40" y="368" fill="blue" font-family="Arial" font-size="20">0</text>
+            <text x="250" y="368" fill="blue" font-family="Arial" font-size="20">1</text>
+            <!-- Upper envelop, coordinates will be updated-->
+            <polygon id="envelop1" points="50,50 50,350 250,350 250,50" style="fill:orange;stroke:orange;stroke-width:0" />
+            <!-- First strategy payoff-->
+            <line id="11" x1="50" y1="350" x2="250" y2="350" style="stroke:red;stroke-width:2" />
+            <text id="text11" x="80" y="350" fill="red" font-family="Arial" font-size="20">S1</text>
+            <!-- Second strategy payoff-->
+            <line id="12" x1="50" y1="350" x2="250" y2="350" style="stroke:yellow;stroke-width:2" />
+            <text id="text12" x="200" y="350" fill="yellow" font-family="Arial" font-size="20">S2</text>
+            <!-- Sticks-->
+            <line x1="50" y1="80" x2="45" y2="80" style="stroke:black;stroke-width:1" />
+            <text x="35" y="85" fill="black" font-family="Arial" font-size="15">9</text>
+            <line x1="50" y1="110" x2="45" y2="110" style="stroke:black;stroke-width:1" />
+            <text x="35" y="115" fill="black" font-family="Arial" font-size="15">8</text>
+            <line x1="50" y1="140" x2="45" y2="140" style="stroke:black;stroke-width:1" />
+            <text x="35" y="145" fill="black" font-family="Arial" font-size="15">7</text>
+            <line x1="50" y1="170" x2="45" y2="170" style="stroke:black;stroke-width:1" />
+            <text x="35" y="175" fill="black" font-family="Arial" font-size="15">6</text>
+            <line x1="50" y1="200" x2="45" y2="200" style="stroke:black;stroke-width:1" />
+            <text x="35" y="205" fill="black" font-family="Arial" font-size="15">5</text>
+            <line x1="50" y1="230" x2="45" y2="230" style="stroke:black;stroke-width:1" />
+            <text x="35" y="235" fill="black" font-family="Arial" font-size="15">4</text>
+            <line x1="50" y1="260" x2="45" y2="260" style="stroke:black;stroke-width:1" />
+            <text x="35" y="265" fill="black" font-family="Arial" font-size="15">3</text>
+            <line x1="50" y1="290" x2="45" y2="290" style="stroke:black;stroke-width:1" />
+            <text x="35" y="295" fill="black" font-family="Arial" font-size="15">2</text>
+            <line x1="50" y1="320" x2="45" y2="320" style="stroke:black;stroke-width:1" />
+            <text x="35" y="325" fill="black" font-family="Arial" font-size="15">1</text>
+            <line x1="250" y1="80" x2="255" y2="80" style="stroke:black;stroke-width:1" />
+            <text x="258" y="85" fill="black" font-family="Arial" font-size="15">9</text>
+            <line x1="250" y1="110" x2="255" y2="110" style="stroke:black;stroke-width:1" />
+            <text x="258" y="115" fill="black" font-family="Arial" font-size="15">8</text>
+            <line x1="250" y1="140" x2="255" y2="140" style="stroke:black;stroke-width:1" />
+            <text x="258" y="145" fill="black" font-family="Arial" font-size="15">7</text>
+            <line x1="250" y1="170" x2="255" y2="170" style="stroke:black;stroke-width:1" />
+            <text x="258" y="175" fill="black" font-family="Arial" font-size="15">6</text>
+            <line x1="250" y1="200" x2="255" y2="200" style="stroke:black;stroke-width:1" />
+            <text x="258" y="205" fill="black" font-family="Arial" font-size="15">5</text>
+            <line x1="250" y1="230" x2="255" y2="230" style="stroke:black;stroke-width:1" />
+            <text x="258" y="235" fill="black" font-family="Arial" font-size="15">4</text>
+            <line x1="250" y1="260" x2="255" y2="260" style="stroke:black;stroke-width:1" />
+            <text x="258" y="265" fill="black" font-family="Arial" font-size="15">3</text>
+            <line x1="250" y1="290" x2="255" y2="290" style="stroke:black;stroke-width:1" />
+            <text x="258" y="295" fill="black" font-family="Arial" font-size="15">2</text>
+            <line x1="250" y1="320" x2="255" y2="320" style="stroke:black;stroke-width:1" />
+            <text x="258" y="325" fill="black" font-family="Arial" font-size="15">1</text>
+            <!-- Intersection point-->
+            <circle id="inter1" cx="250" cy="350" r="5" fill="orange" stroke="black" stroke-width="1" draggable="false" ondragstart="doMouseDown()"/>
+            <line id="interstick1" x1="250" y1="350" x2="250" y2="355" style="stroke:black;stroke-width:2" />
+            <text id="interlabel1" x="250" y="368" fill="blue" font-family="Arial" font-size="20">1</text>
+            <!-- Payoff points-->
+            <circle id="Payoff1_11" asso="P1_11" cx="50" cy="350" r="5" fill="red" stroke="black" draggable="false" ondragstart="doMouseDown()"/>
+            <circle id="Payoff1_12" asso="P1_12" cx="250" cy="350" r="5" fill="red" stroke="black" draggable="false" ondragstart="doMouseDown()"/>
+            <circle id="Payoff1_21" asso="P1_21" cx="50" cy="350" r="5" fill="yellow" stroke="black" draggable="false" ondragstart="doMouseDown()"/>
+            <circle id="Payoff1_22" asso="P1_22" cx="250" cy="350" r="5" fill="yellow" stroke="black" draggable="false" ondragstart="doMouseDown()"/>
+
+            <!-- Drawing the contour-->
+            <polyline points="450,50 450,350 650,350, 650,50" style="fill:none;stroke:black;stroke-width:2" />
+            <!-- Legend, strategy names will be updated after-->
+            <text x="450" y="40" fill="blue" font-family="Arial" font-size="30">Player2 payoff</text>
+            <text id="prob1" x="480" y="385" fill="green" font-family="Arial" font-size="20">Player1 S2 prob</text>
+            <text x="440" y="368" fill="green" font-family="Arial" font-size="20">0</text>
+            <text x="650" y="368" fill="green" font-family="Arial" font-size="20">1</text>
+            <text id="y21" x="405" y="180" fill="green" font-family="Arial" font-size="30" transform="rotate(270 430,180)">S1</text>
+            <text id="y22" x="660" y="180" fill="green" font-family="Arial" font-size="30" transform="rotate(90 670,180)">S2</text>
+            <!-- Upper envelop, coordinates will be updated-->
+            <polygon id="envelop2" points="450,50 450,350 450,350 450,50" style="fill:orange;stroke:orange;stroke-width:0" />
+            <!-- First strategy payoff-->
+            <line id="21" x1="450" y1="350" x2="650" y2="350" style="stroke:red;stroke-width:2" />
+            <text id="text21" x="480" y="350" fill="red" font-family="Arial" font-size="20">S1</text>
+            <!-- Second strategy payoff-->
+            <line id="22" x1="450" y1="350" x2="650" y2="350" style="stroke:yellow;stroke-width:2" />
+            <text id="text22" x="4200" y="350" fill="yellow" font-family="Arial" font-size="20">S2</text>
+            <!-- Sticks-->
+            <line x1="450" y1="80" x2="445" y2="80" style="stroke:black;stroke-width:1" />
+            <text x="435" y="85" fill="black" font-family="Arial" font-size="15">9</text>
+            <line x1="450" y1="110" x2="445" y2="110" style="stroke:black;stroke-width:1" />
+            <text x="435" y="115" fill="black" font-family="Arial" font-size="15">8</text>
+            <line x1="450" y1="140" x2="445" y2="140" style="stroke:black;stroke-width:1" />
+            <text x="435" y="145" fill="black" font-family="Arial" font-size="15">7</text>
+            <line x1="450" y1="170" x2="445" y2="170" style="stroke:black;stroke-width:1" />
+            <text x="435" y="175" fill="black" font-family="Arial" font-size="15">6</text>
+            <line x1="450" y1="200" x2="445" y2="200" style="stroke:black;stroke-width:1" />
+            <text x="435" y="205" fill="black" font-family="Arial" font-size="15">5</text>
+            <line x1="450" y1="230" x2="445" y2="230" style="stroke:black;stroke-width:1" />
+            <text x="435" y="235" fill="black" font-family="Arial" font-size="15">4</text>
+            <line x1="450" y1="260" x2="445" y2="260" style="stroke:black;stroke-width:1" />
+            <text x="435" y="265" fill="black" font-family="Arial" font-size="15">3</text>
+            <line x1="450" y1="290" x2="445" y2="290" style="stroke:black;stroke-width:1" />
+            <text x="435" y="295" fill="black" font-family="Arial" font-size="15">2</text>
+            <line x1="450" y1="320" x2="445" y2="320" style="stroke:black;stroke-width:1" />
+            <text x="435" y="325" fill="black" font-family="Arial" font-size="15">1</text>
+            <line x1="650" y1="80" x2="655" y2="80" style="stroke:black;stroke-width:1" />
+            <text x="658" y="85" fill="black" font-family="Arial" font-size="15">9</text>
+            <line x1="650" y1="110" x2="655" y2="110" style="stroke:black;stroke-width:1" />
+            <text x="658" y="115" fill="black" font-family="Arial" font-size="15">8</text>
+            <line x1="650" y1="140" x2="655" y2="140" style="stroke:black;stroke-width:1" />
+            <text x="658" y="145" fill="black" font-family="Arial" font-size="15">7</text>
+            <line x1="650" y1="170" x2="655" y2="170" style="stroke:black;stroke-width:1" />
+            <text x="658" y="175" fill="black" font-family="Arial" font-size="15">6</text>
+            <line x1="650" y1="200" x2="655" y2="200" style="stroke:black;stroke-width:1" />
+            <text x="658" y="205" fill="black" font-family="Arial" font-size="15">5</text>
+            <line x1="650" y1="230" x2="655" y2="230" style="stroke:black;stroke-width:1" />
+            <text x="658" y="235" fill="black" font-family="Arial" font-size="15">4</text>
+            <line x1="650" y1="260" x2="655" y2="260" style="stroke:black;stroke-width:1" />
+            <text x="658" y="265" fill="black" font-family="Arial" font-size="15">3</text>
+            <line x1="650" y1="290" x2="655" y2="290" style="stroke:black;stroke-width:1" />
+            <text x="658" y="295" fill="black" font-family="Arial" font-size="15">2</text>
+            <line x1="650" y1="320" x2="655" y2="320" style="stroke:black;stroke-width:1" />
+            <text x="658" y="325" fill="black" font-family="Arial" font-size="15">1</text>
+            <!-- Intersection point-->
+            <circle id="inter2" cx="650" cy="350" r="5" fill="orange" stroke="black" stroke-width="1" draggable="false" ondragstart="doMouseDown()"/>
+            <line id="interstick2" x1="650" y1="350" x2="650" y2="355" style="stroke:black;stroke-width:2" />
+            <text id="interlabel2" x="650" y="368" fill="green" font-family="Arial" font-size="20">1</text>
+            <!-- Payoff points-->
+            <circle id="Payoff2_11" asso="P2_11" cx="450" cy="350" r="5" fill="red" stroke="black" draggable="false" ondragstart="doMouseDown()"/>
+            <circle id="Payoff2_12" asso="P2_12" cx="450" cy="350" r="5" fill="yellow" stroke="black" draggable="false" ondragstart="doMouseDown()"/>
+            <circle id="Payoff2_21" asso="P2_21" cx="650" cy="350" r="5" fill="red" stroke="black" draggable="false" ondragstart="doMouseDown()"/>
+            <circle id="Payoff2_22" asso="P2_22" cx="650" cy="350" r="5" fill="yellow" stroke="black" draggable="false" ondragstart="doMouseDown()"/>
+            
+        </svg>
+        
                                                                     
 </body>
 </html>

@@ -15,3 +15,8 @@ canvas{
     #padding: 30px;
     margin: 50px;
 }
+
+circle {
+    fill:deepPink;
+    radius: 7px;
+}
