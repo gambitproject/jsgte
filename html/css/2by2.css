@@ -1,9 +1,21 @@
-.player1{
-    color:green
+text{
+    font-family:Arial
 }
 
-.player2{
+table .player1{
+    color:red
+}
+
+table .player2{
     color:blue
+}
+
+svg .player1{
+    fill:red
+}
+
+svg .player2{
+    fill:blue
 }
 
 input{
@@ -16,7 +28,3 @@ canvas{
     margin: 50px;
 }
 
-circle {
-    fill:deepPink;
-    radius: 7px;
-}
