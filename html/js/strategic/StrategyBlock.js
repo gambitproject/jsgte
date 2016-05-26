@@ -26,7 +26,7 @@ GTE.TREE = (function(parentModule) {
         for(var i = 0; i<this.strategy.strategicUnits.length;i++) {
             for(var j = 0;j<this.strategy.strategicUnits[i].moves.length;j++) {
                 this.editable = new GTE.UI.Widgets.ContentEditable(
-                    x+i*20, 40*this.height,
+                    x+j*20+ i*100, 40*this.height,
                     GTE.CONSTANTS.CONTENT_EDITABLE_GROW_TO_RIGHT,
                     this.strategy.strategicUnits[i].moves[j].name, "strategy")
                 .colour(this.strategy.strategicUnits[i].player.colour);
@@ -34,7 +34,7 @@ GTE.TREE = (function(parentModule) {
         }
 
         for(var i = 0; i<this.strategy.payoffs.length;i++) {
-            this.strategy.payoffs[i].draw(100 + x + i*40, 40 * this.height);
+            this.strategy.payoffs[i].draw(500 + x + i*40, 40 * this.height);
         }
     };
 
