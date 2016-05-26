@@ -27,7 +27,6 @@
     function initDraws() {
         svg = document.getElementById("SVG");
         payoff=document.getElementsByClassName("pay");
-        alert(payoff.length);
         for(i=0;i<8;i++){
           payoff[i].addEventListener("mousedown", doMouseDown);
         }
@@ -237,149 +236,149 @@ function compute_firstP(){
         <table border="1">
   <tr>
     <th><label class="player1">Player I</label> \ <label class="player2">Player II</label></th>
-    <th><label><input class="player2" type="text" id="P2S1" onchange="redraw()" value="S1"/> </label></th>
-    <th><label><input class="player2" type="text" id="P2S2" onchange="redraw()" value="S2"/> </label></th>
+    <th><label><input class="player2 strat1" type="text" id="P2S1" onchange="redraw()" value="S1"/> </label></th>
+    <th><label><input class="player2 strat2" type="text" id="P2S2" onchange="redraw()" value="S2"/> </label></th>
   </tr>
   <tr>
-      <th><label><input class="player1" type="text" id="P1S1" onchange="redraw()" value="S1"/> </label></th>
-    <td><input class="player1" type="text" id="P1_11" onchange="redraw()" value=0>\<input class="player2" type="text" id="P2_11"  onchange="redraw()" value=0></td>
-    <td><input class="player1" type="text" id="P1_12" onchange="redraw()" value=0>\<input class="player2" type="text" id="P2_12" onchange="redraw()" value=0></td>
+      <th><label><input class="player1 strat1" type="text" id="P1S1" onchange="redraw()" value="S1"/> </label></th>
+    <td><input class="player1 payoff" type="text" id="P1_11" onchange="redraw()" value=0>\<input class="player2 payoff" type="text" id="P2_11"  onchange="redraw()" value=0></td>
+    <td><input class="player1 payoff" type="text" id="P1_12" onchange="redraw()" value=0>\<input class="player2 payoff" type="text" id="P2_12" onchange="redraw()" value=0></td>
   </tr>
   <tr>
-  <th><label><input class="player1" type="text" id="P1S2" onchange="redraw()" value="S2"/> </label></th>
-    <td><input class="player1" type="text" id="P1_21" onchange="redraw()" value=0>\<input class="player2" type="text" id="P2_21"  onchange="redraw()" value=0></td>
-    <td><input class="player1" type="text" id="P1_22" onchange="redraw()" value=0>\<input class="player2" type="text" id="P2_22"  onchange="redraw()" value=0></td>
+  <th><label><input class="player1 strat2" type="text" id="P1S2" onchange="redraw()" value="S2"/> </label></th>
+    <td><input class="player1 payoff" type="text" id="P1_21" onchange="redraw()" value=0>\<input class="player2 payoff" type="text" id="P2_21"  onchange="redraw()" value=0></td>
+    <td><input class="player1 payoff" type="text" id="P1_22" onchange="redraw()" value=0>\<input class="player2 payoff" type="text" id="P2_22"  onchange="redraw()" value=0></td>
   </tr>
 </table>
         
         <svg id="SVG" version="1.1" width="700px" height="400px">
             <!-- Drawing the contour-->
-            <polyline points="50,50 50,350 250,350, 250,50" style="fill:none;stroke:black;stroke-width:2" />
+            <polyline points="50,50 50,350 250,350, 250,50"/>
             <!-- Legend, strategy names will be updated after-->
-            <text class="player1" x="50" y="40" font-size="30">Player1 payoff</text>
-            <text class="player2" id="prob2" x="80" y="385"  font-size="20">Player2 S2 prob</text>
-            <text class="player2" id="y11" x="5" y="180"   font-size="30" transform="rotate(270 30,180)">S1</text>
-            <text class="player2" id="y12" x="260" y="180"  font-size="30" transform="rotate(90 270,180)">S2</text>
-            <text class="player2" x="40" y="368"  font-size="20">0</text>
-            <text class="player2" x="250" y="368"  font-size="20">1</text>
+            <text class="player1 title" x="50" y="40">Player1 payoff</text>
+            <text class="player2 legendh" id="prob2" x="80" y="385">Player2 S2 prob</text>
+            <text class="player2 legendv" id="y11" x="5" y="180" transform="rotate(270 30,180)">S1</text>
+            <text class="player2 legendv" id="y12" x="260" y="180" transform="rotate(90 270,180)">S2</text>
+            <text class="player2 legendh" x="40" y="368">0</text>
+            <text class="player2 legendh" x="250" y="368">1</text>
             <!-- Upper envelop, coordinates will be updated-->
-            <polygon id="envelop1" points="50,50 50,350 250,350 250,50" style="fill:#ff6666;stroke:pink;stroke-width:0" />
+            <polygon id="envelop1" points="50,50 50,350 250,350 250,50"/>
             <!-- First strategy payoff-->
-            <line id="11" x1="50" y1="350" x2="250" y2="350" style="stroke:red;stroke-width:2" />
-            <text id="text11" x="80" y="350" fill="red"  font-size="20">S1</text>
+            <line class="line1" id="11" x1="50" y1="350" x2="250" y2="350" />
+            <text id="text11" class="player1 legendh" x="80" y="350">S1</text>
             <!-- Second strategy payoff-->
-            <line id="12" x1="50" y1="350" x2="250" y2="350" style="stroke:red;stroke-width:2" />
-            <text id="text12" x="200" y="350" fill="red"  font-size="20">S2</text>
+            <line class="line1" id="12" x1="50" y1="350" x2="250" y2="350"/>
+            <text id="text12" class="player1 legendh" x="200" y="350">S2</text>
             <!-- Sticks-->
-            <line x1="50" y1="80" x2="45" y2="80" style="stroke:black;stroke-width:1" />
-            <text x="35" y="85" fill="black" font-size="15">9</text>
-            <line x1="50" y1="110" x2="45" y2="110" style="stroke:black;stroke-width:1" />
-            <text x="35" y="115" fill="black" font-size="15">8</text>
-            <line x1="50" y1="140" x2="45" y2="140" style="stroke:black;stroke-width:1" />
-            <text x="35" y="145" fill="black"  font-size="15">7</text>
-            <line x1="50" y1="170" x2="45" y2="170" style="stroke:black;stroke-width:1" />
-            <text x="35" y="175" fill="black"  font-size="15">6</text>
-            <line x1="50" y1="200" x2="45" y2="200" style="stroke:black;stroke-width:1" />
-            <text x="35" y="205" fill="black" font-size="15">5</text>
-            <line x1="50" y1="230" x2="45" y2="230" style="stroke:black;stroke-width:1" />
-            <text x="35" y="235" fill="black" font-size="15">4</text>
-            <line x1="50" y1="260" x2="45" y2="260" style="stroke:black;stroke-width:1" />
-            <text x="35" y="265" fill="black" font-size="15">3</text>
-            <line x1="50" y1="290" x2="45" y2="290" style="stroke:black;stroke-width:1" />
-            <text x="35" y="295" fill="black" font-size="15">2</text>
-            <line x1="50" y1="320" x2="45" y2="320" style="stroke:black;stroke-width:1" />
-            <text x="35" y="325" fill="black"  font-size="15">1</text>
-            <line x1="250" y1="80" x2="255" y2="80" style="stroke:black;stroke-width:1" />
-            <text x="258" y="85" fill="black"  font-size="15">9</text>
-            <line x1="250" y1="110" x2="255" y2="110" style="stroke:black;stroke-width:1" />
-            <text x="258" y="115" fill="black" font-size="15">8</text>
-            <line x1="250" y1="140" x2="255" y2="140" style="stroke:black;stroke-width:1" />
-            <text x="258" y="145" fill="black"  font-size="15">7</text>
-            <line x1="250" y1="170" x2="255" y2="170" style="stroke:black;stroke-width:1" />
-            <text x="258" y="175" fill="black" font-size="15">6</text>
-            <line x1="250" y1="200" x2="255" y2="200" style="stroke:black;stroke-width:1" />
-            <text x="258" y="205" fill="black" font-size="15">5</text>
-            <line x1="250" y1="230" x2="255" y2="230" style="stroke:black;stroke-width:1" />
-            <text x="258" y="235" fill="black"  font-size="15">4</text>
-            <line x1="250" y1="260" x2="255" y2="260" style="stroke:black;stroke-width:1" />
-            <text x="258" y="265" fill="black"  font-size="15">3</text>
-            <line x1="250" y1="290" x2="255" y2="290" style="stroke:black;stroke-width:1" />
-            <text x="258" y="295" fill="black"  font-size="15">2</text>
-            <line x1="250" y1="320" x2="255" y2="320" style="stroke:black;stroke-width:1" />
-            <text x="258" y="325" fill="black"  font-size="15">1</text>
+            <line class="stick" x1="50" y1="80" x2="45" y2="80"/>
+            <text class="sticklabel" x="35" y="85">9</text>
+            <line class="stick" x1="50" y1="110" x2="45" y2="110"/>
+            <text class="sticklabel" x="35" y="115">8</text>
+            <line class="stick" x1="50" y1="140" x2="45" y2="140"/>
+            <text class="sticklabel" x="35" y="145">7</text>
+            <line class="stick" x1="50" y1="170" x2="45" y2="170"/>
+            <text class="sticklabel" x="35" y="175">6</text>
+            <line class="stick" x1="50" y1="200" x2="45" y2="200"/>
+            <text class="sticklabel" x="35" y="205">5</text>
+            <line class="stick" x1="50" y1="230" x2="45" y2="230"/>
+            <text class="sticklabel" x="35" y="235">4</text>
+            <line class="stick" x1="50" y1="260" x2="45" y2="260"/>
+            <text class="sticklabel" x="35" y="265">3</text>
+            <line class="stick" x1="50" y1="290" x2="45" y2="290"/>
+            <text class="sticklabel" x="35" y="295">2</text>
+            <line class="stick" x1="50" y1="320" x2="45" y2="320"/>
+            <text class="sticklabel" x="35" y="325">1</text>
+            <line class="stick" x1="250" y1="80" x2="255" y2="80"/>
+            <text class="sticklabel" x="258" y="85">9</text>
+            <line class="stick" x1="250" y1="110" x2="255" y2="110"/>
+            <text class="sticklabel" x="258" y="115">8</text>
+            <line class="stick" x1="250" y1="140" x2="255" y2="140"/>
+            <text class="sticklabel" x="258" y="145">7</text>
+            <line class="stick" x1="250" y1="170" x2="255" y2="170"/>
+            <text class="sticklabel" x="258" y="175">6</text>
+            <line class="stick" x1="250" y1="200" x2="255" y2="200"/>
+            <text class="sticklabel" x="258" y="205">5</text>
+            <line class="stick" x1="250" y1="230" x2="255" y2="230"/>
+            <text class="sticklabel" x="258" y="235">4</text>
+            <line class="stick" x1="250" y1="260" x2="255" y2="260"/>
+            <text class="sticklabel" x="258" y="265">3</text>
+            <line class="stick" x1="250" y1="290" x2="255" y2="290"/>
+            <text class="sticklabel" x="258" y="295">2</text>
+            <line class="stick" x1="250" y1="320" x2="255" y2="320"/>
+            <text class="sticklabel" x="258" y="325">1</text>
             <!-- Intersection point-->
-            <circle id="inter1" cx="250" cy="350" r="5" fill="orange" stroke="black" stroke-width="1" draggable="false" ondragstart="doMouseDown()"/>
-            <line id="interstick1" x1="250" y1="350" x2="250" y2="355" style="stroke:black;stroke-width:2" />
-            <text id="interlabel1" x="250" y="368" fill="blue"  font-size="20">1</text>
+            <circle class="inter" id="inter1" cx="250" cy="350" r="5" draggable="false" ondragstart="doMouseDown()"/>
+            <line class="line2" id="interstick1" x1="250" y1="350" x2="250" y2="355"/>
+            <text class="player2 legendh" id="interlabel1" x="250" y="368">1</text>
             <!-- Payoff points-->
-            <circle class="pay" id="Payoff1_11" asso="P1_11" cx="50" cy="350" r="5" fill="yellow" stroke="red" draggable="false" ondragstart="doMouseDown()"/>
-            <circle class="pay" id="Payoff1_12" asso="P1_12" cx="250" cy="350" r="5" fill="yellow" stroke="red" draggable="false" ondragstart="doMouseDown()"/>
-            <circle class="pay" id="Payoff1_21" asso="P1_21" cx="50" cy="350" r="5" fill="yellow" stroke="red" draggable="false" ondragstart="doMouseDown()"/>
-            <circle class="pay" id="Payoff1_22" asso="P1_22" cx="250" cy="350" r="5" fill="yellow" stroke="red" draggable="false" ondragstart="doMouseDown()"/>
+            <circle class="pay line1" id="Payoff1_11" asso="P1_11" cx="50" cy="350" r="5" draggable="false" ondragstart="doMouseDown()"/>
+            <circle class="pay line1" id="Payoff1_12" asso="P1_12" cx="250" cy="350" r="5"  draggable="false" ondragstart="doMouseDown()"/>
+            <circle class="pay line1" id="Payoff1_21" asso="P1_21" cx="50" cy="350" r="5"  draggable="false" ondragstart="doMouseDown()"/>
+            <circle class="pay line1" id="Payoff1_22" asso="P1_22" cx="250" cy="350" r="5" draggable="false" ondragstart="doMouseDown()"/>
 
             <!-- Drawing the contour-->
-            <polyline points="450,50 450,350 650,350, 650,50" style="fill:none;stroke:black;stroke-width:2" />
+            <polyline points="450,50 450,350 650,350, 650,50"/>
             <!-- Legend, strategy names will be updated after-->
-            <text class="player2" x="450" y="40" fill="blue"  font-size="30">Player2 payoff</text>
-            <text class="player1" id="prob1" x="480" y="385" fill="green"  font-size="20">Player1 S2 prob</text>
-            <text class="player1" x="440" y="368" fill="green"  font-size="20">0</text>
-            <text class="player1" x="650" y="368" fill="green"  font-size="20">1</text>
-            <text class="player1" id="y21" x="405" y="180" fill="green"  font-size="30" transform="rotate(270 430,180)">S1</text>
-            <text class="player1" id="y22" x="660" y="180" fill="green"  font-size="30" transform="rotate(90 670,180)">S2</text>
+            <text class="player2 title" x="450" y="40">Player2 payoff</text>
+            <text class="player1 legendh" id="prob1" x="480" y="385">Player1 S2 prob</text>
+            <text class="player1 legendh" x="440" y="368">0</text>
+            <text class="player1 legendh" x="650" y="368">1</text>
+            <text class="player1 legendv" id="y21" x="405" y="180"transform="rotate(270 430,180)">S1</text>
+            <text class="player1 legendv" id="y22" x="660" y="180"transform="rotate(90 670,180)">S2</text>
             <!-- Upper envelop, coordinates will be updated-->
-            <polygon id="envelop2" points="450,50 450,350 450,350 450,50" style="fill:#6666ff;stroke:#0000ff;stroke-width:0" />
+            <polygon id="envelop2" points="450,50 450,350 450,350 450,50"/>
             <!-- First strategy payoff-->
-            <line id="21" x1="450" y1="350" x2="650" y2="350" style="stroke:blue;stroke-width:2" />
-            <text id="text21" x="480" y="350" fill="red"  font-size="20">S1</text>
+            <line class="line2" id="21" x1="450" y1="350" x2="650" y2="350"/>
+            <text id="text21" class="player2 legendh" x="480" y="350">S1</text>
             <!-- Second strategy payoff-->
-            <line id="22" x1="450" y1="350" x2="650" y2="350" style="stroke:blue;stroke-width:2" />
-            <text id="text22" x="600" y="350" fill="yellow"  font-size="20">S2</text>
+            <line class="line2" id="22" x1="450" y1="350" x2="650" y2="350"/>
+            <text id="text22" class="player2 legendh" x="600" y="350">S2</text>
             <!-- Sticks-->
-            <line x1="450" y1="80" x2="445" y2="80" style="stroke:black;stroke-width:1" />
-            <text x="435" y="85" fill="black"  font-size="15">9</text>
-            <line x1="450" y1="110" x2="445" y2="110" style="stroke:black;stroke-width:1" />
-            <text x="435" y="115" fill="black"  font-size="15">8</text>
-            <line x1="450" y1="140" x2="445" y2="140" style="stroke:black;stroke-width:1" />
-            <text x="435" y="145" fill="black"  font-size="15">7</text>
-            <line x1="450" y1="170" x2="445" y2="170" style="stroke:black;stroke-width:1" />
-            <text x="435" y="175" fill="black"  font-size="15">6</text>
-            <line x1="450" y1="200" x2="445" y2="200" style="stroke:black;stroke-width:1" />
-            <text x="435" y="205" fill="black"  font-size="15">5</text>
-            <line x1="450" y1="230" x2="445" y2="230" style="stroke:black;stroke-width:1" />
-            <text x="435" y="235" fill="black"  font-size="15">4</text>
-            <line x1="450" y1="260" x2="445" y2="260" style="stroke:black;stroke-width:1" />
-            <text x="435" y="265" fill="black"  font-size="15">3</text>
-            <line x1="450" y1="290" x2="445" y2="290" style="stroke:black;stroke-width:1" />
-            <text x="435" y="295" fill="black"  font-size="15">2</text>
-            <line x1="450" y1="320" x2="445" y2="320" style="stroke:black;stroke-width:1" />
-            <text x="435" y="325" fill="black"  font-size="15">1</text>
-            <line x1="650" y1="80" x2="655" y2="80" style="stroke:black;stroke-width:1" />
-            <text x="658" y="85" fill="black"  font-size="15">9</text>
-            <line x1="650" y1="110" x2="655" y2="110" style="stroke:black;stroke-width:1" />
-            <text x="658" y="115" fill="black"  font-size="15">8</text>
-            <line x1="650" y1="140" x2="655" y2="140" style="stroke:black;stroke-width:1" />
-            <text x="658" y="145" fill="black"  font-size="15">7</text>
-            <line x1="650" y1="170" x2="655" y2="170" style="stroke:black;stroke-width:1" />
-            <text x="658" y="175" fill="black"  font-size="15">6</text>
-            <line x1="650" y1="200" x2="655" y2="200" style="stroke:black;stroke-width:1" />
-            <text x="658" y="205" fill="black"  font-size="15">5</text>
-            <line x1="650" y1="230" x2="655" y2="230" style="stroke:black;stroke-width:1" />
-            <text x="658" y="235" fill="black"  font-size="15">4</text>
-            <line x1="650" y1="260" x2="655" y2="260" style="stroke:black;stroke-width:1" />
-            <text x="658" y="265" fill="black"  font-size="15">3</text>
-            <line x1="650" y1="290" x2="655" y2="290" style="stroke:black;stroke-width:1" />
-            <text x="658" y="295" fill="black"  font-size="15">2</text>
-            <line x1="650" y1="320" x2="655" y2="320" style="stroke:black;stroke-width:1" />
-            <text x="658" y="325" fill="black"  font-size="15">1</text>
+            <line class="stick" x1="450" y1="80" x2="445" y2="80"/>
+            <text class="sticklabel" x="435" y="85">9</text>
+            <line class="stick" x1="450" y1="110" x2="445" y2="110"/>
+            <text class="sticklabel" x="435" y="115">8</text>
+            <line class="stick" x1="450" y1="140" x2="445" y2="140"/>
+            <text class="sticklabel" x="435" y="145">7</text>
+            <line class="stick" x1="450" y1="170" x2="445" y2="170"/>
+            <text class="sticklabel" x="435" y="175">6</text>
+            <line class="stick" x1="450" y1="200" x2="445" y2="200"/>
+            <text class="sticklabel" x="435" y="205">5</text>
+            <line class="stick" x1="450" y1="230" x2="445" y2="230"/>
+            <text class="sticklabel" x="435" y="235">4</text>
+            <line class="stick" x1="450" y1="260" x2="445" y2="260"/>
+            <text class="sticklabel" x="435" y="265">3</text>
+            <line class="stick" x1="450" y1="290" x2="445" y2="290"/>
+            <text class="sticklabel" x="435" y="295">2</text>
+            <line class="stick" x1="450" y1="320" x2="445" y2="320"/>
+            <text class="sticklabel" x="435" y="325">1</text>
+            <line class="stick" x1="650" y1="80" x2="655" y2="80"/>
+            <text class="sticklabel" x="658" y="85">9</text>
+            <line class="stick" x1="650" y1="110" x2="655" y2="110"/>
+            <text class="sticklabel" x="658" y="115">8</text>
+            <line class="stick" x1="650" y1="140" x2="655" y2="140"/>
+            <text class="sticklabel" x="658" y="145">7</text>
+            <line class="stick" x1="650" y1="170" x2="655" y2="170"/>
+            <text class="sticklabel" x="658" y="175">6</text>
+            <line class="stick" x1="650" y1="200" x2="655" y2="200"/>
+            <text class="sticklabel" x="658" y="205">5</text>
+            <line class="stick" x1="650" y1="230" x2="655" y2="230"/>
+            <text class="sticklabel" x="658" y="235">4</text>
+            <line class="stick" x1="650" y1="260" x2="655" y2="260"/>
+            <text class="sticklabel" x="658" y="265">3</text>
+            <line class="stick" x1="650" y1="290" x2="655" y2="290"/>
+            <text class="sticklabel" x="658" y="295">2</text>
+            <line class="stick" x1="650" y1="320" x2="655" y2="320"/>
+            <text class="sticklabel" x="658" y="325">1</text>
             <!-- Intersection point-->
-            <circle id="inter2" cx="650" cy="350" r="5" fill="orange" stroke="black" stroke-width="1" draggable="false" ondragstart="doMouseDown()"/>
-            <line id="interstick2" x1="650" y1="350" x2="650" y2="355" style="stroke:black;stroke-width:2" />
-            <text class="player1" id="interlabel2" x="650" y="368" font-size="20">1</text>
+            <circle class="inter" id="inter2" cx="650" cy="350" r="5" draggable="false" ondragstart="doMouseDown()"/>
+            <line class="line1" id="interstick2" x1="650" y1="350" x2="650" y2="355"/>
+            <text class="player1 legendh" id="interlabel2" x="650" y="368">1</text>
             <!-- Payoff points-->
-            <circle class="pay" id="Payoff2_11" asso="P2_11" cx="450" cy="350" r="5" fill="yellow" stroke="blue" draggable="false" ondragstart="doMouseDown()"/>
-            <circle class="pay" id="Payoff2_12" asso="P2_12" cx="450" cy="350" r="5" fill="yellow" stroke="blue" draggable="false" ondragstart="doMouseDown()"/>
-            <circle class="pay" id="Payoff2_21" asso="P2_21" cx="650" cy="350" r="5" fill="yellow" stroke="blue" draggable="false" ondragstart="doMouseDown()"/>
-            <circle class="pay" id="Payoff2_22" asso="P2_22" cx="650" cy="350" r="5" fill="yellow" stroke="blue" draggable="false" ondragstart="doMouseDown()"/>
+            <circle class="pay line2" id="Payoff2_11" asso="P2_11" cx="450" cy="350" r="5"  draggable="false" ondragstart="doMouseDown()"/>
+            <circle class="pay line2" id="Payoff2_12" asso="P2_12" cx="450" cy="350" r="5"  draggable="false" ondragstart="doMouseDown()"/>
+            <circle class="pay line2" id="Payoff2_21" asso="P2_21" cx="650" cy="350" r="5" draggable="false" ondragstart="doMouseDown()"/>
+            <circle class="pay line2" id="Payoff2_22" asso="P2_22" cx="650" cy="350" r="5" draggable="false" ondragstart="doMouseDown()"/>
             
         </svg>
         

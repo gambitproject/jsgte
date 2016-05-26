@@ -1,28 +1,123 @@
 text{
-    font-family:Arial
-}
-
-table .player1{
-    color:red
-}
-
-table .player2{
-    color:blue
-}
-
-svg .player1{
-    fill:red
-}
-
-svg .player2{
-    fill:blue
-}
-
-input{
-    width: 50px;
+   font-family:Arial;
    text-align: center;
 }
 
+table th label{
+   font-family:Arial;
+   text-align: center;
+} 
+
+table td label{
+   font-family:Arial;
+   text-align: center;
+}
+
+/*-------------Table style-------------*/
+input{
+   width: 50px;
+   text-align: center;
+}
+
+/* player color */
+
+table .player1{
+    color:red;
+}
+
+table .player2{
+    color:blue;
+}
+
+/*-------------SVG style-------------*/
+svg text{
+    text-anchor:middle;
+}
+
+/* player color */
+
+svg .player1{
+    fill:red;
+}
+
+svg .line1{
+    stroke:red;
+}
+
+svg .player2{
+    fill:blue;
+}
+
+svg .line2{
+    stroke:blue;
+}
+
+svg #envelop1{
+    fill:#ff6666;
+}
+
+svg #envelop2{
+    fill:#6666ff;
+}
+
+/* lines*/
+svg line{
+    stroke-width:2px;
+}
+
+/* legend */
+
+svg .legendh{
+    font-size:20px;
+}
+
+svg .legendv{
+    font-size:30px;
+}
+
+svg .title{
+    font-size:30px;
+}
+
+/* sticks' properties*/
+svg .sticklabel{
+    fill:black;
+    font-size:15px;
+}
+
+svg .stick{
+    stroke:black;
+    stroke-width:1px;
+}
+
+/*contour */
+svg polyline{
+    fill:none;
+    stroke:black;
+    stroke-width:2px;
+}
+
+/*upper envelopp */
+svg polygon{
+    stroke-width:0px;
+}
+
+/* end points */
+svg .pay{
+     fill:yellow;
+}
+
+/* Mixed strategy point */
+svg .inter{
+     fill:orange;
+     stroke:black;
+     stroke-width:1;
+}
+
+
+
+
+/* for canvas version */
 canvas{
     #padding: 30px;
     margin: 50px;
