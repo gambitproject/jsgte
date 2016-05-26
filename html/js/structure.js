@@ -46,11 +46,12 @@ var GTE = (function () {
       DISSOLVE: 4
     };
 
-    GTE.STRATEGICFORM = 0;
-    GTE.STRATEGICFORM = {
+    GTE.STRATEGICFORMMODE = 0;
+    GTE.STRATEGICFORMMODE = {
       GENERAL: 0,
       ZEROSUM: 1,
-      SYMMETRIC: 2
+      SYMMETRIC: 2,
+      TREE: 3
     };
 
     if (Object.freeze) {
