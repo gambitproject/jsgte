@@ -21,10 +21,12 @@
     var svgW=300;
     var moving_point;
     var payoff=[];
+    var precision;
     
 
     
     function initDraws() {
+        precision=document.getElementById("precision").value;
         svg = document.getElementById("SVG");
         svgPosition = svg.getBoundingClientRect();
         payoff=document.getElementsByClassName("pay");
@@ -38,6 +40,7 @@
 
 
 function redraw(){
+    precision=document.getElementById("precision").value;
     compute_firstP();
     compute_secondP();
     draw();
@@ -57,7 +60,7 @@ function doMouseDown(event) {
     //this.parentNode.insertBefore(this,null);
     moving_point=this;
     document.addEventListener("mousemove", doMouseMove);
-    this.addEventListener("mouseup", doMouseUp);
+    document.addEventListener("mouseup", doMouseUp);
     this.removeEventListener("mousedown", doMouseDown);
     console.log("Down: "+this.getAttribute("id"));
 }
@@ -66,16 +69,17 @@ function doMouseDown(event) {
 function doMouseUp(event) {
     mousePosition = getMousePosition(event)
     document.removeEventListener("mousemove", doMouseMove);
+    moving_point.addEventListener("mousedown", doMouseDown);
     moving_point=null;
-    this.addEventListener("mousedown", doMouseDown);
     console.log("Releasing: X = " + mousePosition.x + ", Y = " + mousePosition.y);
 }
 
 
 function doMouseMove(event) {
     var mousePosition = getMousePosition(event)
-    svgPosition = moving_point.parentNode.getBoundingClientRect();
-    var newPos=~~((-mousePosition.y+svgPosition.top+svgH-50)/3)/10;
+    svgPosition = svg.getBoundingClientRect();
+    //var newPos=~~((-mousePosition.y+svgPosition.top+svgH-50)/3)/10;
+    var newPos=~~((svgH/(svgPosition.bottom-svgPosition.top)*(-mousePosition.y+svgPosition.top)+svgH-50)/30*precision)/precision;
     if (Number(newPos)<0) newPos=0;
     if (Number(newPos)>10) newPos=10;
     if( (Number(newPos)-moving_point.getAttribute("cy"))*(Number(newPos)-moving_point.getAttribute("cy"))>0.005){
@@ -89,10 +93,14 @@ function doMouseMove(event) {
 
 
 function compute_firstP(){
-        var P1_11=document.getElementById("P1_11").value;
-        var P1_12=document.getElementById("P1_12").value;
-        var P1_21=document.getElementById("P1_21").value;
-        var P1_22=document.getElementById("P1_22").value;
+        var P1_11=~~(document.getElementById("P1_11").value*precision)/precision;
+        document.getElementById("P1_11").value=P1_11;
+        var P1_12=~~(document.getElementById("P1_12").value*precision)/precision;
+        document.getElementById("P1_12").value=P1_12;
+        var P1_21=~~(document.getElementById("P1_21").value*precision)/precision;
+        document.getElementById("P1_21").value=P1_21;
+        var P1_22=~~(document.getElementById("P1_22").value*precision)/precision;
+        document.getElementById("P1_22").value=P1_22;
         payoff[0].setAttributeNS(null, "cy", svgH-50-P1_11*30);
         payoff[1].setAttributeNS(null, "cy", svgH-50-P1_12*30);
         payoff[2].setAttributeNS(null, "cy", svgH-50-P1_21*30);
@@ -126,10 +134,14 @@ function compute_firstP(){
     }
             
     function compute_secondP(){
-        var P2_11=document.getElementById("P2_11").value;
-        var P2_12=document.getElementById("P2_12").value;
-        var P2_21=document.getElementById("P2_21").value;
-        var P2_22=document.getElementById("P2_22").value;
+        var P2_11=~~(document.getElementById("P2_11").value*precision)/precision;
+        document.getElementById("P2_11").value=P2_11;
+        var P2_12=~~(document.getElementById("P2_12").value*precision)/precision;
+        document.getElementById("P2_12").value=P2_12;
+        var P2_21=~~(document.getElementById("P2_21").value*precision)/precision;
+        document.getElementById("P2_21").value=P2_21;
+        var P2_22=~~(document.getElementById("P2_22").value*precision)/precision;
+        document.getElementById("P2_22").value=P2_22;
         
         payoff[4].setAttributeNS(null, "cy", svgH-50-P2_11*30);
         payoff[5].setAttributeNS(null, "cy", svgH-50-P2_12*30);
@@ -174,23 +186,23 @@ function compute_firstP(){
         lines[0].setAttributeNS(null, "y1", payoff[0].getAttribute("cy"));
         lines[0].setAttributeNS(null, "y2", payoff[1].getAttribute("cy"));
         var labelline=svg.getElementById("text11");
-        labelline.setAttributeNS(null, "y", payoff[0].getAttribute("cy"));
+        labelline.setAttributeNS(null, "y", Number(payoff[0].getAttribute("cy"))+Number((payoff[1].getAttribute("cy")-(payoff[0].getAttribute("cy")))/200*30)+Number(20));
         labelline.textContent=P1S1;
         lines[1].setAttributeNS(null, "y1", payoff[2].getAttribute("cy"));
         lines[1].setAttributeNS(null, "y2", payoff[3].getAttribute("cy"));
         labelline=svg.getElementById("text12");
-        labelline.setAttributeNS(null, "y", payoff[3].getAttribute("cy"));
+        labelline.setAttributeNS(null, "y", Number(payoff[3].getAttribute("cy"))+Number((payoff[2].getAttribute("cy")-(payoff[3].getAttribute("cy")))/200*30)+Number(20));
         labelline.textContent=P1S2;
         // Lines update svg2
         lines[lines.length/2+0].setAttributeNS(null, "y1", payoff[4].getAttribute("cy"));
         lines[lines.length/2+0].setAttributeNS(null, "y2", payoff[6].getAttribute("cy"));
         labelline=svg.getElementById("text21");
-        labelline.setAttributeNS(null, "y", payoff[4].getAttribute("cy"));
+        labelline.setAttributeNS(null, "y", Number(payoff[4].getAttribute("cy"))+Number((payoff[6].getAttribute("cy")-(payoff[4].getAttribute("cy")))/200*30)+Number(20));
         labelline.textContent=P2S1;
         lines[lines.length/2+1].setAttributeNS(null, "y1", payoff[5].getAttribute("cy"));
         lines[lines.length/2+1].setAttributeNS(null, "y2", payoff[7].getAttribute("cy"));
         labelline=svg.getElementById("text22");
-        labelline.setAttributeNS(null, "y", payoff[7].getAttribute("cy"));
+        labelline.setAttributeNS(null, "y", Number(payoff[7].getAttribute("cy"))+Number((payoff[5].getAttribute("cy")-(payoff[7].getAttribute("cy")))/200*30)+Number(20));
         labelline.textContent=P2S2;
         //envelop svg1
         var envelop1=document.getElementById("envelop1");
@@ -234,6 +246,9 @@ function compute_firstP(){
 
 </script>
  <!-- Table for user to update payoff and strategies' names.-->
+ <div>
+     <label>Precision : </label><input class="precision" type="text" id="precision" onchange="redraw()" value="1"/>
+     </div>
         <table border="1">
   <tr>
     <th><label class="player1">Player I</label> \ <label class="player2">Player II</label></th>
@@ -260,7 +275,7 @@ function compute_firstP(){
             <text class="player2 legendh" id="prob2" x="150" y="390">Player2 S2 prob</text>
             <text class="player2 legendv" id="y11" x="20" y="200" transform="rotate(270 20,200)">S1</text>
             <text class="player2 legendv" id="y12" x="280" y="200" transform="rotate(90 280,200)">S2</text>
-            <text class="player2 legendh" x="40" y="370">0</text>
+            <text class="player2 legendh" x="50" y="370">0</text>
             <text class="player2 legendh" x="250" y="370">1</text>
             <!-- Upper envelop, coordinates will be updated-->
             <polygon id="envelop1" points="50,50 50,350 250,350 250,50"/>
@@ -269,44 +284,44 @@ function compute_firstP(){
             <text id="text11" class="player1 legendh" x="80" y="350">S1</text>
             <!-- Second strategy payoff-->
             <line class="line1" id="12" x1="50" y1="350" x2="250" y2="350"/>
-            <text id="text12" class="player1 legendh" x="200" y="350">S2</text>
+            <text id="text12" class="player1 legendh" x="220" y="350">S2</text>
             <!-- Sticks-->
             <line class="stick" x1="50" y1="80" x2="45" y2="80"/>
-            <text class="sticklabel" x="35" y="85">9</text>
+            <text class="sticklabel" x="40" y="85">9</text>
             <line class="stick" x1="50" y1="110" x2="45" y2="110"/>
-            <text class="sticklabel" x="35" y="115">8</text>
+            <text class="sticklabel" x="40" y="115">8</text>
             <line class="stick" x1="50" y1="140" x2="45" y2="140"/>
-            <text class="sticklabel" x="35" y="145">7</text>
+            <text class="sticklabel" x="40" y="145">7</text>
             <line class="stick" x1="50" y1="170" x2="45" y2="170"/>
-            <text class="sticklabel" x="35" y="175">6</text>
+            <text class="sticklabel" x="40" y="175">6</text>
             <line class="stick" x1="50" y1="200" x2="45" y2="200"/>
-            <text class="sticklabel" x="35" y="205">5</text>
+            <text class="sticklabel" x="40" y="205">5</text>
             <line class="stick" x1="50" y1="230" x2="45" y2="230"/>
-            <text class="sticklabel" x="35" y="235">4</text>
+            <text class="sticklabel" x="40" y="235">4</text>
             <line class="stick" x1="50" y1="260" x2="45" y2="260"/>
-            <text class="sticklabel" x="35" y="265">3</text>
+            <text class="sticklabel" x="40" y="265">3</text>
             <line class="stick" x1="50" y1="290" x2="45" y2="290"/>
-            <text class="sticklabel" x="35" y="295">2</text>
+            <text class="sticklabel" x="40" y="295">2</text>
             <line class="stick" x1="50" y1="320" x2="45" y2="320"/>
-            <text class="sticklabel" x="35" y="325">1</text>
+            <text class="sticklabel" x="40" y="325">1</text>
             <line class="stick" x1="250" y1="80" x2="255" y2="80"/>
-            <text class="sticklabel" x="258" y="85">9</text>
+            <text class="sticklabel" x="260" y="85">9</text>
             <line class="stick" x1="250" y1="110" x2="255" y2="110"/>
-            <text class="sticklabel" x="258" y="115">8</text>
+            <text class="sticklabel" x="260" y="115">8</text>
             <line class="stick" x1="250" y1="140" x2="255" y2="140"/>
-            <text class="sticklabel" x="258" y="145">7</text>
+            <text class="sticklabel" x="260" y="145">7</text>
             <line class="stick" x1="250" y1="170" x2="255" y2="170"/>
-            <text class="sticklabel" x="258" y="175">6</text>
+            <text class="sticklabel" x="260" y="175">6</text>
             <line class="stick" x1="250" y1="200" x2="255" y2="200"/>
-            <text class="sticklabel" x="258" y="205">5</text>
+            <text class="sticklabel" x="260" y="205">5</text>
             <line class="stick" x1="250" y1="230" x2="255" y2="230"/>
-            <text class="sticklabel" x="258" y="235">4</text>
+            <text class="sticklabel" x="260" y="235">4</text>
             <line class="stick" x1="250" y1="260" x2="255" y2="260"/>
-            <text class="sticklabel" x="258" y="265">3</text>
+            <text class="sticklabel" x="260" y="265">3</text>
             <line class="stick" x1="250" y1="290" x2="255" y2="290"/>
-            <text class="sticklabel" x="258" y="295">2</text>
+            <text class="sticklabel" x="260" y="295">2</text>
             <line class="stick" x1="250" y1="320" x2="255" y2="320"/>
-            <text class="sticklabel" x="258" y="325">1</text>
+            <text class="sticklabel" x="260" y="325">1</text>
             <!-- Intersection point-->
             <circle class="inter" id="inter1" cx="250" cy="350" r="5" draggable="false" ondragstart="doMouseDown()"/>
             <line class="line2" id="interstick1" x1="250" y1="350" x2="250" y2="355"/>
@@ -322,8 +337,8 @@ function compute_firstP(){
             <!-- Legend, strategy names will be updated after-->
             <text class="player2 title" x="550" y="40">Player2 payoff</text>
             <text class="player1 legendh" id="prob1" x="550" y="390">Player1 S2 prob</text>
-            <text class="player1 legendh" x="440" y="370">0</text>
-            <text class="player1 legendh" x="650" y="379">1</text>
+            <text class="player1 legendh" x="450" y="370">0</text>
+            <text class="player1 legendh" x="650" y="370">1</text>
             <text class="player1 legendv" id="y21" x="420" y="200"transform="rotate(270 420,200)">S1</text>
             <text class="player1 legendv" id="y22" x="680" y="200"transform="rotate(90 680,200)">S2</text>
             <!-- Upper envelop, coordinates will be updated-->
@@ -333,44 +348,44 @@ function compute_firstP(){
             <text id="text21" class="player2 legendh" x="480" y="350">S1</text>
             <!-- Second strategy payoff-->
             <line class="line2" id="22" x1="450" y1="350" x2="650" y2="350"/>
-            <text id="text22" class="player2 legendh" x="600" y="350">S2</text>
+            <text id="text22" class="player2 legendh" x="620" y="350">S2</text>
             <!-- Sticks-->
             <line class="stick" x1="450" y1="80" x2="445" y2="80"/>
-            <text class="sticklabel" x="435" y="85">9</text>
+            <text class="sticklabel" x="440" y="85">9</text>
             <line class="stick" x1="450" y1="110" x2="445" y2="110"/>
-            <text class="sticklabel" x="435" y="115">8</text>
+            <text class="sticklabel" x="440" y="115">8</text>
             <line class="stick" x1="450" y1="140" x2="445" y2="140"/>
-            <text class="sticklabel" x="435" y="145">7</text>
+            <text class="sticklabel" x="440" y="145">7</text>
             <line class="stick" x1="450" y1="170" x2="445" y2="170"/>
-            <text class="sticklabel" x="435" y="175">6</text>
+            <text class="sticklabel" x="440" y="175">6</text>
             <line class="stick" x1="450" y1="200" x2="445" y2="200"/>
-            <text class="sticklabel" x="435" y="205">5</text>
+            <text class="sticklabel" x="440" y="205">5</text>
             <line class="stick" x1="450" y1="230" x2="445" y2="230"/>
-            <text class="sticklabel" x="435" y="235">4</text>
+            <text class="sticklabel" x="440" y="235">4</text>
             <line class="stick" x1="450" y1="260" x2="445" y2="260"/>
-            <text class="sticklabel" x="435" y="265">3</text>
+            <text class="sticklabel" x="440" y="265">3</text>
             <line class="stick" x1="450" y1="290" x2="445" y2="290"/>
-            <text class="sticklabel" x="435" y="295">2</text>
+            <text class="sticklabel" x="440" y="295">2</text>
             <line class="stick" x1="450" y1="320" x2="445" y2="320"/>
-            <text class="sticklabel" x="435" y="325">1</text>
+            <text class="sticklabel" x="440" y="325">1</text>
             <line class="stick" x1="650" y1="80" x2="655" y2="80"/>
-            <text class="sticklabel" x="658" y="85">9</text>
+            <text class="sticklabel" x="660" y="85">9</text>
             <line class="stick" x1="650" y1="110" x2="655" y2="110"/>
-            <text class="sticklabel" x="658" y="115">8</text>
+            <text class="sticklabel" x="660" y="115">8</text>
             <line class="stick" x1="650" y1="140" x2="655" y2="140"/>
-            <text class="sticklabel" x="658" y="145">7</text>
+            <text class="sticklabel" x="660" y="145">7</text>
             <line class="stick" x1="650" y1="170" x2="655" y2="170"/>
-            <text class="sticklabel" x="658" y="175">6</text>
+            <text class="sticklabel" x="660" y="175">6</text>
             <line class="stick" x1="650" y1="200" x2="655" y2="200"/>
-            <text class="sticklabel" x="658" y="205">5</text>
+            <text class="sticklabel" x="660" y="205">5</text>
             <line class="stick" x1="650" y1="230" x2="655" y2="230"/>
-            <text class="sticklabel" x="658" y="235">4</text>
+            <text class="sticklabel" x="660" y="235">4</text>
             <line class="stick" x1="650" y1="260" x2="655" y2="260"/>
-            <text class="sticklabel" x="658" y="265">3</text>
+            <text class="sticklabel" x="660" y="265">3</text>
             <line class="stick" x1="650" y1="290" x2="655" y2="290"/>
-            <text class="sticklabel" x="658" y="295">2</text>
+            <text class="sticklabel" x="660" y="295">2</text>
             <line class="stick" x1="650" y1="320" x2="655" y2="320"/>
-            <text class="sticklabel" x="658" y="325">1</text>
+            <text class="sticklabel" x="660" y="325">1</text>
             <!-- Intersection point-->
             <circle class="inter" id="inter2" cx="650" cy="350" r="5" draggable="false" ondragstart="doMouseDown()"/>
             <line class="line1" id="interstick2" x1="650" y1="350" x2="650" y2="355"/>

@@ -3,21 +3,24 @@ text{
    text-align: center;
 }
 
-table th label{
+
+label{
    font-family:Arial;
    text-align: center;
 } 
 
-table td label{
-   font-family:Arial;
-   text-align: center;
-}
-
 /*-------------Table style-------------*/
+table{
+    width:70vw;
+    margin-left : 5vw;
+}
+table td{
+    margin:0 auto;
+}
 input{
    width: 10vw;
    text-align: center;
-   font-size:1em;
+   font-size:0.8em;
 }
 
 /* player color */
