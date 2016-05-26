@@ -26,6 +26,7 @@
     
     function initDraws() {
         svg = document.getElementById("SVG");
+        svgPosition = svg.getBoundingClientRect();
         payoff=document.getElementsByClassName("pay");
         for(i=0;i<8;i++){
           payoff[i].addEventListener("mousedown", doMouseDown);
@@ -251,16 +252,16 @@ function compute_firstP(){
   </tr>
 </table>
         
-        <svg id="SVG" version="1.1" width="700px" height="400px">
+        <svg id="SVG" version="1.1" viewBox="0 0 700 400">
             <!-- Drawing the contour-->
             <polyline points="50,50 50,350 250,350, 250,50"/>
             <!-- Legend, strategy names will be updated after-->
-            <text class="player1 title" x="50" y="40">Player1 payoff</text>
-            <text class="player2 legendh" id="prob2" x="80" y="385">Player2 S2 prob</text>
-            <text class="player2 legendv" id="y11" x="5" y="180" transform="rotate(270 30,180)">S1</text>
-            <text class="player2 legendv" id="y12" x="260" y="180" transform="rotate(90 270,180)">S2</text>
-            <text class="player2 legendh" x="40" y="368">0</text>
-            <text class="player2 legendh" x="250" y="368">1</text>
+            <text class="player1 title" x="150" y="40">Player1 payoff</text>
+            <text class="player2 legendh" id="prob2" x="150" y="390">Player2 S2 prob</text>
+            <text class="player2 legendv" id="y11" x="20" y="200" transform="rotate(270 20,200)">S1</text>
+            <text class="player2 legendv" id="y12" x="280" y="200" transform="rotate(90 280,200)">S2</text>
+            <text class="player2 legendh" x="40" y="370">0</text>
+            <text class="player2 legendh" x="250" y="370">1</text>
             <!-- Upper envelop, coordinates will be updated-->
             <polygon id="envelop1" points="50,50 50,350 250,350 250,50"/>
             <!-- First strategy payoff-->
@@ -309,7 +310,7 @@ function compute_firstP(){
             <!-- Intersection point-->
             <circle class="inter" id="inter1" cx="250" cy="350" r="5" draggable="false" ondragstart="doMouseDown()"/>
             <line class="line2" id="interstick1" x1="250" y1="350" x2="250" y2="355"/>
-            <text class="player2 legendh" id="interlabel1" x="250" y="368">1</text>
+            <text class="player2 legendh" id="interlabel1" x="250" y="370">1</text>
             <!-- Payoff points-->
             <circle class="pay line1" id="Payoff1_11" asso="P1_11" cx="50" cy="350" r="5" draggable="false" ondragstart="doMouseDown()"/>
             <circle class="pay line1" id="Payoff1_12" asso="P1_12" cx="250" cy="350" r="5"  draggable="false" ondragstart="doMouseDown()"/>
@@ -319,12 +320,12 @@ function compute_firstP(){
             <!-- Drawing the contour-->
             <polyline points="450,50 450,350 650,350, 650,50"/>
             <!-- Legend, strategy names will be updated after-->
-            <text class="player2 title" x="450" y="40">Player2 payoff</text>
-            <text class="player1 legendh" id="prob1" x="480" y="385">Player1 S2 prob</text>
-            <text class="player1 legendh" x="440" y="368">0</text>
-            <text class="player1 legendh" x="650" y="368">1</text>
-            <text class="player1 legendv" id="y21" x="405" y="180"transform="rotate(270 430,180)">S1</text>
-            <text class="player1 legendv" id="y22" x="660" y="180"transform="rotate(90 670,180)">S2</text>
+            <text class="player2 title" x="550" y="40">Player2 payoff</text>
+            <text class="player1 legendh" id="prob1" x="550" y="390">Player1 S2 prob</text>
+            <text class="player1 legendh" x="440" y="370">0</text>
+            <text class="player1 legendh" x="650" y="379">1</text>
+            <text class="player1 legendv" id="y21" x="420" y="200"transform="rotate(270 420,200)">S1</text>
+            <text class="player1 legendv" id="y22" x="680" y="200"transform="rotate(90 680,200)">S2</text>
             <!-- Upper envelop, coordinates will be updated-->
             <polygon id="envelop2" points="450,50 450,350 450,350 450,50"/>
             <!-- First strategy payoff-->
@@ -373,7 +374,7 @@ function compute_firstP(){
             <!-- Intersection point-->
             <circle class="inter" id="inter2" cx="650" cy="350" r="5" draggable="false" ondragstart="doMouseDown()"/>
             <line class="line1" id="interstick2" x1="650" y1="350" x2="650" y2="355"/>
-            <text class="player1 legendh" id="interlabel2" x="650" y="368">1</text>
+            <text class="player1 legendh" id="interlabel2" x="650" y="370">1</text>
             <!-- Payoff points-->
             <circle class="pay line2" id="Payoff2_11" asso="P2_11" cx="450" cy="350" r="5"  draggable="false" ondragstart="doMouseDown()"/>
             <circle class="pay line2" id="Payoff2_12" asso="P2_12" cx="450" cy="350" r="5"  draggable="false" ondragstart="doMouseDown()"/>

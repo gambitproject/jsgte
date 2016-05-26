@@ -15,8 +15,9 @@ table td label{
 
 /*-------------Table style-------------*/
 input{
-   width: 50px;
+   width: 10vw;
    text-align: center;
+   font-size:1em;
 }
 
 /* player color */
@@ -30,6 +31,10 @@ table .player2{
 }
 
 /*-------------SVG style-------------*/
+svg{
+  width:80vw;
+  height:70vh;
+}
 svg text{
     text-anchor:middle;
 }
@@ -68,21 +73,21 @@ svg line{
 /* legend */
 
 svg .legendh{
-    font-size:20px;
+    font-size:1em;
 }
 
 svg .legendv{
-    font-size:30px;
+    font-size:1em;
 }
 
 svg .title{
-    font-size:30px;
+    font-size:2em;
 }
 
 /* sticks' properties*/
 svg .sticklabel{
     fill:black;
-    font-size:15px;
+    font-size:1em;
 }
 
 svg .stick{
