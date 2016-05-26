@@ -47,7 +47,7 @@ var GTE = (function () {
     };
 
     GTE.STRATEGICFORMMODE = 0;
-    GTE.STRATEGICFORMMODE = {
+    GTE.STRATEGICFORMMODES = {
       GENERAL: 0,
       ZEROSUM: 1,
       SYMMETRIC: 2,
