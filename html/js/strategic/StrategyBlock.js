@@ -5,10 +5,9 @@ GTE.TREE = (function(parentModule) {
      * Creates a new Strategy.
      * @class
      */
-    function StrategyBlock(x, y, players, moves) {
-        this.strategy = new GTE.TREE.Strategy(players, moves);
-        this.x = x;
-        this.y = y;
+    function StrategyBlock(strategyUnits, height) {
+        this.strategy = new GTE.TREE.Strategy(strategyUnits);
+        this.height = height;
         this.shape = null;
     }
 
@@ -17,15 +16,26 @@ GTE.TREE = (function(parentModule) {
     };
 
     StrategyBlock.prototype.draw = function() {
-        var x = (100) * (this.x + 1);
-        var y = (100) * (this.y + 1);
-        this.shape = GTE.canvas.rect(100, 100)
-            .fill({
-                color: '#9d9d9d'
-            });
-        this.shape.translate(x, y);
-        this.strategy.payoffs[0].draw(x, y+40);
-        this.strategy.payoffs[1].draw(x+40, y);
+        var x = (100);
+//        this.shape = GTE.canvas.rect(100, 100)
+  //          .fill({
+    //            color: '#9d9d9d'
+      //      });
+        //this.shape.translate(x, y);
+
+        for(var i = 0; i<this.strategy.strategicUnits.length;i++) {
+            for(var j = 0;j<this.strategy.strategicUnits[i].moves.length;j++) {
+                this.editable = new GTE.UI.Widgets.ContentEditable(
+                    x+i*20, 40*this.height,
+                    GTE.CONSTANTS.CONTENT_EDITABLE_GROW_TO_RIGHT,
+                    this.strategy.strategicUnits[i].moves[j].name, "strategy")
+                .colour(this.strategy.strategicUnits[i].player.colour);
+            }
+        }
+
+        for(var i = 0; i<this.strategy.payoffs.length;i++) {
+            this.strategy.payoffs[i].draw(100 + x + i*40, 40 * this.height);
+        }
     };
 
     // Add class to parent module
