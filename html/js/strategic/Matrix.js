@@ -7,7 +7,7 @@ GTE.TREE = (function(parentModule) {
      */
     function Matrix() {
         this.players = [];
-        this.nodes = []; // multidimensional array containing corresponding nodes of players
+        this.isets = []; // multidimensional array containing corresponding isets of players
         this.strategies = []; // a multidimensional array containing strategicUnit objects
         this.matrix = [];
     }
@@ -23,29 +23,31 @@ GTE.TREE = (function(parentModule) {
             this.players.push(player);
     };
 
-    Matrix.prototype.assignNodes = function(node) {
+    Matrix.prototype.assignIsets = function(node) {
         var playerIndex = this.players.indexOf(node.player);
         if(playerIndex == -1)
             alert("player not present in player array.")
         else {
-            if(this.nodes[playerIndex] == undefined)
-                this.nodes[playerIndex] = [];
-            this.nodes[playerIndex].push(node);
+            if(this.isets[playerIndex] == undefined)
+                this.isets[playerIndex] = [];
+            if(this.isets[playerIndex].indexOf(node.iset) == -1) {
+                this.isets[playerIndex].push(node.iset);
+            }
             for(var i=0;i<node.children.length;i++) {
                 if(!node.children[i].isLeaf())
-                    this.assignNodes(node.children[i]);
+                    this.assignIsets(node.children[i]);
             }
         }
     };
 
-    Matrix.prototype.getNodes = function(player) {
-        if(this.players.indexOf(player) == -1 || this.nodes[this.players.indexOf(player)] == undefined)
+    Matrix.prototype.getIsets = function(player) {
+        if(this.players.indexOf(player) == -1 || this.isets[this.players.indexOf(player)] == undefined)
             return [];
         else {
-            var playerNodes = [];
-            for(var i=0;i<this.nodes[this.players.indexOf(player)].length;i++)
-                playerNodes.push(this.nodes[this.players.indexOf(player)][i]);
-            return playerNodes;
+            var playerIsets = [];
+            for(var i=0;i<this.isets[this.players.indexOf(player)].length;i++)
+                playerIsets.push(this.isets[this.players.indexOf(player)][i]);
+            return playerIsets;
         }
     };
 
@@ -76,22 +78,21 @@ GTE.TREE = (function(parentModule) {
     };
 
     Matrix.prototype.createMoves = function(player) {
-        var nodes = this.getNodes(player)
-        if(nodes == undefined || nodes.length==0)
+        var isets = this.getIsets(player)
+        if(isets == undefined || isets.length==0)
             return [];
         else {
             var permutations = [];
-            for(var i=0;i<nodes.length;i++) {
-                permutations = this.createMovePermutations(nodes[i].iset.moves, permutations, player)
+            for(var i=0;i<isets.length;i++) {
+                permutations = this.createMovePermutations(isets[i].moves, permutations, player)
             }
             return permutations;
         }
     };
 
-
     Matrix.prototype.initialise = function() {
         this.assignPlayers(GTE.tree.players);
-        this.assignNodes(GTE.tree.root);
+        this.assignIsets(GTE.tree.root);
         for(var i=0; i<this.players.length; i++) {
             var currentStrategy = this.createMoves(this.players[i]);  
             this.strategies.push(currentStrategy);
