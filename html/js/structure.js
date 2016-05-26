@@ -45,6 +45,14 @@ var GTE = (function () {
       MERGE: 3,
       DISSOLVE: 4
     };
+
+    GTE.STRATEGICFORM = 0;
+    GTE.STRATEGICFORM = {
+      GENERAL: 0,
+      ZEROSUM: 1,
+      SYMMETRIC: 2
+    };
+
     if (Object.freeze) {
       Object.freeze(GTE.MODES);
     }
