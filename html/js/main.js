@@ -88,6 +88,13 @@
         return false;
     });
 
+    document.getElementById("button-independent-strategic").addEventListener("click", function(){
+        var x = prompt("Enter the number of moves for the first player", "2");
+        var y = prompt("Enter the number of moves for the second player", "2");
+        GTE.tools.createIndependentStrategicForm(x, y);
+        return false;
+    });
+
     document.getElementById("button-add").addEventListener("click", function(){
         GTE.tools.switchMode(GTE.MODES.ADD);
         return false;

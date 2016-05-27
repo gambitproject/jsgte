@@ -16,6 +16,7 @@ GTE.UI = (function (parentModule) {
     Tools.prototype.newTree = function() {
         this.resetPlayers();
         this.activePlayer = -1;
+        this.isetToolsRan = false;
         var root = new GTE.TREE.Node(null);
         var child1 = new GTE.TREE.Node(root);
         var child2 = new GTE.TREE.Node(root);
@@ -23,7 +24,6 @@ GTE.UI = (function (parentModule) {
 
         this.addChancePlayer();
         this.addPlayer();
-        // Add a second Player
         this.addPlayer();
 
         // GTE.tree.updatePositions();
@@ -99,11 +99,45 @@ GTE.UI = (function (parentModule) {
     * Function that creates the strategic form and
     * renders the strategic form to the canvas
     */
-    Tools.prototype.toStrategicForm = function (player) {
+    Tools.prototype.toStrategicForm = function () {
         GTE.tree.clear();
         GTE.tree.matrix.initialise();
         alert("tostrategicform");
     };
+
+    /**
+    * Function that creates a strategic form independent 
+    * of the game tree.
+    */
+    Tools.prototype.createIndependentStrategicForm = function (x, y) {
+        GTE.tree.clear();
+        this.isetToolsRan = false;
+        this.resetPlayers();
+        this.activePlayer = -1;
+        var root = new GTE.TREE.Node(null);
+        GTE.tree = new GTE.TREE.Tree(root);
+        this.addChancePlayer();
+        this.addPlayer();
+        this.addPlayer();
+        root.assignPlayer(GTE.tree.players[1]);
+        for(var i = 0; i<x; i++) {
+            GTE.tree.addChildNodeTo(root);
+            root.children[i].assignPlayer(GTE.tree.players[2]);
+        }
+        for(var i = 0; i<root.children.length; i++) {
+            for(var j = 0; j<y; j++) {
+                GTE.tree.addChildNodeTo(root.children[i]);
+            }
+        }
+        GTE.tree.draw();
+        this.switchMode(GTE.MODES.MERGE);
+        GTE.tree.multiActionLines[0].onClick();
+        GTE.tree.draw();
+        this.switchMode(GTE.MODES.ADD);
+        this.toStrategicForm();
+        alert("independentStrategy");
+    };
+
 
     /**
     * Function that selects a player
