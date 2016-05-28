@@ -88,9 +88,26 @@
         return false;
     });
 
-    document.getElementById("button-independent-strategic").addEventListener("click", function(){
+    document.getElementById("button-independent-strategic-general").addEventListener("click", function(){
         var x = prompt("Enter the number of moves for the first player", "2");
         var y = prompt("Enter the number of moves for the second player", "2");
+        GTE.STRATEGICFORMMODE = GTE.STRATEGICFORMMODES.GENERAL;
+        GTE.tools.createIndependentStrategicForm(x, y);
+        return false;
+    });
+
+    document.getElementById("button-independent-strategic-zerosum").addEventListener("click", function(){
+        var x = prompt("Enter the number of moves for the first player", "2");
+        var y = prompt("Enter the number of moves for the second player", "2");
+        GTE.STRATEGICFORMMODE = GTE.STRATEGICFORMMODES.ZEROSUM;
+        GTE.tools.createIndependentStrategicForm(x, y);
+        return false;
+    });
+
+    document.getElementById("button-independent-strategic-symmetric").addEventListener("click", function(){
+        var x = prompt("Enter the number of moves for the first player", "2");
+        var y = prompt("Enter the number of moves for the second player", "2");
+        GTE.STRATEGICFORMMODE = GTE.STRATEGICFORMMODES.SYMMETRIC;
         GTE.tools.createIndependentStrategicForm(x, y);
         return false;
     });
