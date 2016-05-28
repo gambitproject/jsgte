@@ -48,10 +48,10 @@ var GTE = (function () {
 
     GTE.STRATEGICFORMMODE = 0;
     GTE.STRATEGICFORMMODES = {
-      GENERAL: 0,
-      ZEROSUM: 1,
-      SYMMETRIC: 2,
-      TREE: 3
+      TREE: 0,
+      GENERAL : 1,
+      ZEROSUM: 2,
+      SYMMETRIC: 3
     };
 
     if (Object.freeze) {
