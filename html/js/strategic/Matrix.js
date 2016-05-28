@@ -100,11 +100,19 @@ GTE.TREE = (function(parentModule) {
         var currentPlayers = this.getAllPlayers();
         var strMatrix = this.createStrategies();
         for(var i = 0; i< strMatrix.length; i++) {
-            var currentStrategyBlock = new GTE.TREE.StrategyBlock(strMatrix[i] , i+1);
-            currentStrategyBlock.assignPayoffs();
-            currentStrategyBlock.draw();
-            this.matrix.push(currentStrategyBlock);
+            if(this.players.length == 3) {
+                var currentStrategyBlock = new GTE.TREE.StrategyBlock(strMatrix[i] , parseInt(i/(this.strategies[2].length)), parseInt(i%(this.strategies[2].length)));
+                currentStrategyBlock.assignPayoffs();
+                currentStrategyBlock.draw();
+                this.matrix.push(currentStrategyBlock);
+            } else {
+                var currentStrategyBlock = new GTE.TREE.StrategyBlock(strMatrix[i] , i+1);
+                currentStrategyBlock.assignPayoffs();
+                currentStrategyBlock.draw();
+                this.matrix.push(currentStrategyBlock);
+            }
         }
+
     //    this.createStrategies(this.getAllStrategies());
     /*    for(var i=0;i<this.strategies[1].length;i++) {
             this.matrix[i] = [];
