@@ -103,12 +103,11 @@ GTE.TREE = (function(parentModule) {
             if(this.players.length == 3) {
                 var currentStrategyBlock = new GTE.TREE.StrategyBlock(strMatrix[i] , parseInt(i/(this.strategies[2].length)), parseInt(i%(this.strategies[2].length)));
                 currentStrategyBlock.assignPayoffs();
-                currentStrategyBlock.draw();
                 this.matrix.push(currentStrategyBlock);
             } else {
                 var currentStrategyBlock = new GTE.TREE.StrategyBlock(strMatrix[i] , i+1);
                 currentStrategyBlock.assignPayoffs();
-                currentStrategyBlock.draw();
+                currentStrategy.draw();
                 this.matrix.push(currentStrategyBlock);
             }
         }
@@ -116,9 +115,61 @@ GTE.TREE = (function(parentModule) {
             for(var i = 0; i<this.matrix.length; i++) {
                 this.matrix[i].assignPartners();
             }
+            this.drawMatrix();
         }
     };
 
+    Matrix.prototype.drawMatrix = function() {
+        this.drawUtilities();
+        for(var i = 0;i<this.matrix.length; i++) {
+            this.matrix[i].draw();
+        }
+    };
+
+    Matrix.prototype.drawUtilities = function() {
+        GTE.canvas.line(GTE.CONSTANTS.MATRIX_X -50,
+                GTE.CONSTANTS.MATRIX_Y -50,
+                GTE.CONSTANTS.MATRIX_X,
+                GTE.CONSTANTS.MATRIX_Y)
+            .stroke({ width: parseInt(GTE.STORAGE.settingsLineThickness) });
+
+        this.player1 = new GTE.UI.Widgets.ContentEditable(
+                GTE.CONSTANTS.MATRIX_X - 50, GTE.CONSTANTS.MATRIX_Y,
+                GTE.CONSTANTS.CONTENT_EDITABLE_GROW_TO_RIGHT,
+                "I", "player 1")
+            .colour(this.players[1].colour)
+
+        this.player2 = new GTE.UI.Widgets.ContentEditable(
+                GTE.CONSTANTS.MATRIX_X , GTE.CONSTANTS.MATRIX_Y - 50,
+                GTE.CONSTANTS.CONTENT_EDITABLE_GROW_TO_RIGHT,
+                "II", "player 2")
+            .colour(this.players[2].colour)
+
+        for(var i=0; i<this.strategies[1].length; i++) {
+            var string = "";
+            for(var j = 0; j<this.strategies[1][i].moves.length;j++) {
+                string+=this.strategies[1][i].moves[j].name
+            }
+            var str = new GTE.UI.Widgets.ContentEditable(
+                GTE.CONSTANTS.MATRIX_X - 40, GTE.CONSTANTS.MATRIX_Y + 40 + i*100,
+                GTE.CONSTANTS.CONTENT_EDITABLE_GROW_TO_RIGHT,
+                string, "player 2")
+            .colour(this.players[1].colour);
+        }
+
+        for(var i=0; i<this.strategies[2].length; i++) {
+            var string = "";
+            for(var j = 0; j<this.strategies[2][i].moves.length;j++) {
+                string+=this.strategies[2][i].moves[j].name
+            }
+            var str = new GTE.UI.Widgets.ContentEditable(
+                GTE.CONSTANTS.MATRIX_X + 35 + i*100, GTE.CONSTANTS.MATRIX_Y - 40 ,
+                GTE.CONSTANTS.CONTENT_EDITABLE_GROW_TO_RIGHT,
+                string, "player 2")
+            .colour(this.players[2].colour);
+        }
+
+    };
 
     Matrix.prototype.createStrategiesPermutations = function(strategy, currentPermutations) {
         if(strategy==undefined || strategy.length ==0) {

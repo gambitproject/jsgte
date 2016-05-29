@@ -29,7 +29,7 @@ GTE.TREE = (function(parentModule) {
             //render a 2 player game
             this.shape = GTE.canvas.rect(size, size).attr({fill: '#fff', 'fill-opacity': 1, stroke: '#000', 'stroke-width': 2});
             this.shape.translate(x + this.width*size, y + size * this.height);
-            this.strategy.payoffs[0].draw(x + this.width*size + 0, y + size * this.height + size * .7);
+            this.strategy.payoffs[0].draw(x + this.width*size, y + size * this.height + size * .7);
             this.strategy.payoffs[1].draw(x + this.width*size + size*.7, y + size * this.height );
             return;
         }
