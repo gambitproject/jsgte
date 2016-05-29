@@ -196,7 +196,6 @@ GTE.TREE = (function (parentModule) {
                     if (this.iset !== null) {
                         this.iset.onClick();
                     } else {
-
                         GTE.tree.assignSelectedPlayerToNode(this);
                         GTE.tree.draw();
                     }

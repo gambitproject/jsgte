@@ -38,12 +38,50 @@ GTE.TREE = (function(parentModule) {
             .colour(this.player.colour)
             .onSave(
                 function() {
-                    var text = this.getCleanedText();
-                    if (text === "") {
-                        window.alert("Payoff should not be empty.");
-                    } else {
-                        thisPayoff.changeText(text);
-                    }
+                    switch (GTE.STRATEGICFORMMODE) {
+                        case GTE.STRATEGICFORMMODES.TREE:
+                            var text = this.getCleanedText();
+                            if (text === "") {
+                                window.alert("Payoff should not be empty.");
+                            } else {
+                                thisPayoff.changeText(text);
+                            }
+                            break;
+                        case GTE.STRATEGICFORMMODES.GENERAL:
+                            var text = this.getCleanedText();
+                            if (text === "") {
+                                window.alert("Payoff should not be empty.");
+                            } else {
+                                thisPayoff.changeText(text);
+                            }
+                            break;
+                        case GTE.STRATEGICFORMMODES.ZEROSUM:
+                            var text = this.getCleanedText();
+                            if (text === "") {
+                                window.alert("Payoff should not be empty.");
+                            } else {
+                                thisPayoff.changeText(text);
+                                if(text[0]!='-') {
+                                    //it is a negative number
+                                    thisPayoff.partner.changeText("-"+text);
+                                } else {
+                                    //it is a positive number
+                                    thisPayoff.partner.changeText(text.substr(1));
+                                }
+                            }
+                            break;
+                        case GTE.STRATEGICFORMMODES.SYMMETRIC:
+                            var text = this.getCleanedText();
+                            if (text === "") {
+                                window.alert("Payoff should not be empty.");
+                            } else {
+                                thisPayoff.changeText(text);
+                                thisPayoff.partner.changeText(text);
+                            }
+                            break;
+                        default:
+                            break;
+                }
                 });
     };
 

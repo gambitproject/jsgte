@@ -112,6 +112,11 @@ GTE.TREE = (function(parentModule) {
                 this.matrix.push(currentStrategyBlock);
             }
         }
+        if(this.players.length == 3) {
+            for(var i = 0; i<this.matrix.length; i++) {
+                this.matrix[i].assignPartners();
+            }
+        }
 
     //    this.createStrategies(this.getAllStrategies());
     /*    for(var i=0;i<this.strategies[1].length;i++) {
