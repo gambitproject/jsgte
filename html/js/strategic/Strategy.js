@@ -34,6 +34,26 @@ GTE.TREE = (function(parentModule) {
         }
     };
 
+    Strategy.prototype.assignPartner = function(x, y) {
+        switch (GTE.STRATEGICFORMMODE) {
+            case GTE.STRATEGICFORMMODES.TREE:
+                break;
+            case GTE.STRATEGICFORMMODES.GENERAL:
+                break;
+            case GTE.STRATEGICFORMMODES.ZEROSUM:
+                this.payoffs[0].partner = this.payoffs[1];
+                this.payoffs[1].partner = this.payoffs[0];
+                break;
+            case GTE.STRATEGICFORMMODES.SYMMETRIC:
+                this.payoffs[0].partner = GTE.tree.matrix.matrix[x*(GTE.tree.matrix.strategies[2].length)+y].strategy.payoffs[0];
+                this.payoffs[1].partner = GTE.tree.matrix.matrix[x*(GTE.tree.matrix.strategies[2].length)+y].strategy.payoffs[1];
+                break;
+            default:
+                break;
+        }
+
+    };
+
 
     // Add class to parent module
     parentModule.Strategy = Strategy;

@@ -1,3 +1,4 @@
+
 GTE.TREE = (function(parentModule) {
     "use strict";
 
@@ -14,6 +15,10 @@ GTE.TREE = (function(parentModule) {
 
     StrategyBlock.prototype.assignPayoffs = function() {
         this.strategy.findPayoff(GTE.tree.root);
+    };
+
+    StrategyBlock.prototype.assignPartners = function() {
+        this.strategy.assignPartner(this.width, this.height);
     };
 
     StrategyBlock.prototype.draw = function() {

@@ -105,10 +105,9 @@
     });
 
     document.getElementById("button-independent-strategic-symmetric").addEventListener("click", function(){
-        var x = prompt("Enter the number of moves for the first player", "2");
-        var y = prompt("Enter the number of moves for the second player", "2");
+        var x = prompt("Enter the number of moves for the game", "2");
         GTE.STRATEGICFORMMODE = GTE.STRATEGICFORMMODES.SYMMETRIC;
-        GTE.tools.createIndependentStrategicForm(x, y);
+        GTE.tools.createIndependentStrategicForm(x, x);
         return false;
     });
 
