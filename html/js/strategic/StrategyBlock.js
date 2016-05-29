@@ -22,14 +22,15 @@ GTE.TREE = (function(parentModule) {
     };
 
     StrategyBlock.prototype.draw = function() {
-        var x = (100);
-        var y = 100;
+        var x = GTE.CONSTANTS.MATRIX_X;
+        var y = GTE.CONSTANTS.MATRIX_Y;
+        var size = GTE.CONSTANTS.MATRIX_SIZE;
         if(this.strategy.strategicUnits.length == 2) {
             //render a 2 player game
-            this.shape = GTE.canvas.rect(100, 100).attr({fill: '#fff', 'fill-opacity': 1, stroke: '#000', 'stroke-width': 2});
-            this.shape.translate(x + this.width*100, y + 100 * this.height);
-            this.strategy.payoffs[0].draw(x + this.width*100 + 0, y + 100 * this.height + 70);
-            this.strategy.payoffs[1].draw(x + this.width*100 + 70, y + 100 * this.height );
+            this.shape = GTE.canvas.rect(size, size).attr({fill: '#fff', 'fill-opacity': 1, stroke: '#000', 'stroke-width': 2});
+            this.shape.translate(x + this.width*size, y + size * this.height);
+            this.strategy.payoffs[0].draw(x + this.width*size + 0, y + size * this.height + size * .7);
+            this.strategy.payoffs[1].draw(x + this.width*size + size*.7, y + size * this.height );
             return;
         }
         // render a n player game
