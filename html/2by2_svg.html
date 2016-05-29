@@ -26,12 +26,16 @@
 
     
     function initDraws() {
-        precision=document.getElementById("precision").value;
+        precision=1/document.getElementById("precision").value;
         svg = document.getElementById("SVG");
         svgPosition = svg.getBoundingClientRect();
         payoff=document.getElementsByClassName("pay");
+        lines=document.getElementsByClassName("line_trans");
         for(i=0;i<8;i++){
           payoff[i].addEventListener("mousedown", doMouseDown);
+        }
+        for(i=0;i<4;i++){
+            lines[i].addEventListener("mousedown", doMouseDown);
         }
         compute_firstP();
         compute_secondP();
@@ -40,7 +44,7 @@
 
 
 function redraw(){
-    precision=document.getElementById("precision").value;
+    precision=1/document.getElementById("precision").value;
     compute_firstP();
     compute_secondP();
     draw();
@@ -56,22 +60,29 @@ function getMousePosition(e) {
 
 function doMouseDown(event) {
     event.preventDefault();
-    //var temp=this.parentNode.childNodes[13];
-    //this.parentNode.insertBefore(this,null);
+    console.log("Down: "+this.getAttribute("class"));
     moving_point=this;
-    document.addEventListener("mousemove", doMouseMove);
+    if (this.getAttribute("class")=="line_trans"){
+        Pos_prev=getMousePosition(event);
+        document.addEventListener("mousemove", doMouseMoveLine);
+    }
+    else
+        document.addEventListener("mousemove", doMouseMove);
     document.addEventListener("mouseup", doMouseUp);
     this.removeEventListener("mousedown", doMouseDown);
-    console.log("Down: "+this.getAttribute("id"));
 }
 
 
 function doMouseUp(event) {
     mousePosition = getMousePosition(event)
-    document.removeEventListener("mousemove", doMouseMove);
+    if (moving_point.getAttribute("class")=="line_trans")
+        document.removeEventListener("mousemove", doMouseMoveLine);
+    else
+        document.removeEventListener("mousemove", doMouseMove);
+    document.removeEventListener("mouseup", doMouseUp);
     moving_point.addEventListener("mousedown", doMouseDown);
     moving_point=null;
-    console.log("Releasing: X = " + mousePosition.x + ", Y = " + mousePosition.y);
+    //console.log("Releasing: X = " + mousePosition.x + ", Y = " + mousePosition.y);
 }
 
 
@@ -86,6 +97,27 @@ function doMouseMove(event) {
        document.getElementById(moving_point.getAttribute("asso")).value=newPos;
        redraw();
     }
+    
+    //console.log("Moving: X = " + mousePosition.x + ", Y = " + mousePosition.y);
+}
+
+function doMouseMoveLine(event) {
+    var mousePosition = getMousePosition(event)
+    diff=mousePosition.y-Pos_prev.y;
+        var point1=document.getElementById(moving_point.getAttribute("asso1"));
+        var diffPos=~~((svgH/(svgPosition.bottom-svgPosition.top)*(diff))/30*precision)/precision;
+        var point2=document.getElementById(moving_point.getAttribute("asso2"));
+        var pos1=Number(point1.value)-Number(diffPos);
+        var pos2=Number(point2.value)-Number(diffPos);
+        if (pos2>=0 && pos2<=10 && pos1>=0 && pos1<=10 && diffPos!=0  ){
+            //console.log("DiffPos : "+ diffPos+" "+pos1);
+            point1.value=pos1;
+            point2.value=pos2;
+            
+            Pos_prev=mousePosition;
+            redraw();
+    }
+
     
     //console.log("Moving: X = " + mousePosition.x + ", Y = " + mousePosition.y);
 }
@@ -185,22 +217,30 @@ function compute_firstP(){
         var lines=svg.getElementsByTagName("line");
         lines[0].setAttributeNS(null, "y1", payoff[0].getAttribute("cy"));
         lines[0].setAttributeNS(null, "y2", payoff[1].getAttribute("cy"));
+        lines[1].setAttributeNS(null, "y1", payoff[0].getAttribute("cy"));
+        lines[1].setAttributeNS(null, "y2", payoff[1].getAttribute("cy"));
         var labelline=svg.getElementById("text11");
         labelline.setAttributeNS(null, "y", Number(payoff[0].getAttribute("cy"))+Number((payoff[1].getAttribute("cy")-(payoff[0].getAttribute("cy")))/200*30)+Number(20));
         labelline.textContent=P1S1;
-        lines[1].setAttributeNS(null, "y1", payoff[2].getAttribute("cy"));
-        lines[1].setAttributeNS(null, "y2", payoff[3].getAttribute("cy"));
+        lines[2].setAttributeNS(null, "y1", payoff[2].getAttribute("cy"));
+        lines[2].setAttributeNS(null, "y2", payoff[3].getAttribute("cy"));
+        lines[3].setAttributeNS(null, "y1", payoff[2].getAttribute("cy"));
+        lines[3].setAttributeNS(null, "y2", payoff[3].getAttribute("cy"));
         labelline=svg.getElementById("text12");
         labelline.setAttributeNS(null, "y", Number(payoff[3].getAttribute("cy"))+Number((payoff[2].getAttribute("cy")-(payoff[3].getAttribute("cy")))/200*30)+Number(20));
         labelline.textContent=P1S2;
         // Lines update svg2
         lines[lines.length/2+0].setAttributeNS(null, "y1", payoff[4].getAttribute("cy"));
         lines[lines.length/2+0].setAttributeNS(null, "y2", payoff[6].getAttribute("cy"));
+        lines[lines.length/2+1].setAttributeNS(null, "y1", payoff[4].getAttribute("cy"));
+        lines[lines.length/2+1].setAttributeNS(null, "y2", payoff[6].getAttribute("cy"));
         labelline=svg.getElementById("text21");
         labelline.setAttributeNS(null, "y", Number(payoff[4].getAttribute("cy"))+Number((payoff[6].getAttribute("cy")-(payoff[4].getAttribute("cy")))/200*30)+Number(20));
         labelline.textContent=P2S1;
-        lines[lines.length/2+1].setAttributeNS(null, "y1", payoff[5].getAttribute("cy"));
-        lines[lines.length/2+1].setAttributeNS(null, "y2", payoff[7].getAttribute("cy"));
+        lines[lines.length/2+2].setAttributeNS(null, "y1", payoff[5].getAttribute("cy"));
+        lines[lines.length/2+2].setAttributeNS(null, "y2", payoff[7].getAttribute("cy"));
+        lines[lines.length/2+3].setAttributeNS(null, "y1", payoff[5].getAttribute("cy"));
+        lines[lines.length/2+3].setAttributeNS(null, "y2", payoff[7].getAttribute("cy"));
         labelline=svg.getElementById("text22");
         labelline.setAttributeNS(null, "y", Number(payoff[7].getAttribute("cy"))+Number((payoff[5].getAttribute("cy")-(payoff[7].getAttribute("cy")))/200*30)+Number(20));
         labelline.textContent=P2S2;
@@ -280,10 +320,12 @@ function compute_firstP(){
             <!-- Upper envelop, coordinates will be updated-->
             <polygon id="envelop1" points="50,50 50,350 250,350 250,50"/>
             <!-- First strategy payoff-->
-            <line class="line1" id="11" x1="50" y1="350" x2="250" y2="350" />
+            <line class="line1"  id="11" x1="50" y1="350" x2="250" y2="350"/>
+            <line class="line_trans" asso1="P1_11"  asso2="P1_12" x1="50" y1="350" x2="250" y2="350"/>
             <text id="text11" class="player1 legendh" x="80" y="350">S1</text>
             <!-- Second strategy payoff-->
             <line class="line1" id="12" x1="50" y1="350" x2="250" y2="350"/>
+            <line class="line_trans" asso1="P1_21"  asso2="P1_22" x1="50" y1="350" x2="250" y2="350"/>
             <text id="text12" class="player1 legendh" x="220" y="350">S2</text>
             <!-- Sticks-->
             <line class="stick" x1="50" y1="80" x2="45" y2="80"/>
@@ -345,9 +387,11 @@ function compute_firstP(){
             <polygon id="envelop2" points="450,50 450,350 450,350 450,50"/>
             <!-- First strategy payoff-->
             <line class="line2" id="21" x1="450" y1="350" x2="650" y2="350"/>
+            <line class="line_trans" asso1="P2_11"  asso2="P2_21"  x1="350" y1="350" x2="650" y2="350"/>
             <text id="text21" class="player2 legendh" x="480" y="350">S1</text>
             <!-- Second strategy payoff-->
-            <line class="line2" id="22" x1="450" y1="350" x2="650" y2="350"/>
+            <line class="line2"  id="22" x1="450" y1="350" x2="650" y2="350"/>
+            <line class="line_trans" asso1="P2_12"  asso2="P2_22" x1="350" y1="350" x2="650" y2="350"/>
             <text id="text22" class="player2 legendh" x="620" y="350">S2</text>
             <!-- Sticks-->
             <line class="stick" x1="450" y1="80" x2="445" y2="80"/>

@@ -73,6 +73,12 @@ svg line{
     stroke-width:2px;
 }
 
+
+svg .line_trans{
+    stroke:rgba(255, 0, 0, 0.0);
+    stroke-width:10px;
+}
+
 /* legend */
 
 svg .legendh{
