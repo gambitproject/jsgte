@@ -34,6 +34,9 @@ var GTE = (function () {
       TEXT_NODE_MARGIN: 30,
       MAX_PLAYERS: 10,
       MIN_PLAYERS: 1,
+      MATRIX_X: 100,
+      MATRIX_Y: 100,
+      MATRIX_SIZE: 40,
       DEFAULT_ORIENTATION: GTE.ORIENTATIONS.VERTICAL
     };
 
