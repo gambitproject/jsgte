@@ -117,18 +117,6 @@ GTE.TREE = (function(parentModule) {
                 this.matrix[i].assignPartners();
             }
         }
-
-    //    this.createStrategies(this.getAllStrategies());
-    /*    for(var i=0;i<this.strategies[1].length;i++) {
-            this.matrix[i] = [];
-            for(var j=0;j<this.strategies[2].length;j++) {
-                var currentStrategies = this.getAllStrategies();
-                this.matrix[i][j] = new GTE.TREE.StrategyBlock(i, j,[this.strategies[1][i], this.strategies[2][j]]);
-                this.matrix[i][j].assignPayoffs();
-                this.matrix[i][j].draw();
-            }
-        }
-    */
     };
 
 
