@@ -27,13 +27,14 @@ GTE.TREE = (function(parentModule) {
     /**
      * Draws the editable label
      */
-    Payoff.prototype.draw = function(x1, y1) {
+    Payoff.prototype.draw = function(x1, y1, orientation) {
         var x = x1 || this.leaf.x;
         var y = y1 || this.leaf.y + (this.player.id * 20);
+        orientation = orientation || GTE.CONSTANTS.CONTENT_EDITABLE_GROW_TO_RIGHT;
         var thisPayoff = this;
         this.editable = new GTE.UI.Widgets.ContentEditable(
                 x, y,
-                GTE.CONSTANTS.CONTENT_EDITABLE_GROW_TO_RIGHT,
+                orientation,
                 this.text, "payoff")
             .colour(this.player.colour)
             .onSave(

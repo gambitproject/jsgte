@@ -2,7 +2,7 @@ GTE.TREE = (function(parentModule) {
     "use strict";
 
     /**
-     * Creates a new Strategy.
+     * Creates a new Matrix Class.
      * @class
      */
     function Matrix() {
@@ -151,7 +151,8 @@ GTE.TREE = (function(parentModule) {
                 string+=this.strategies[1][i].moves[j].name
             }
             var str = new GTE.UI.Widgets.ContentEditable(
-                GTE.CONSTANTS.MATRIX_X - 40, GTE.CONSTANTS.MATRIX_Y + 40 + i*100,
+                GTE.CONSTANTS.MATRIX_X - 40,
+                GTE.CONSTANTS.MATRIX_Y + 40 + i * GTE.CONSTANTS.MATRIX_SIZE,
                 GTE.CONSTANTS.CONTENT_EDITABLE_GROW_TO_RIGHT,
                 string, "player 2")
             .colour(this.players[1].colour);
@@ -163,12 +164,16 @@ GTE.TREE = (function(parentModule) {
                 string+=this.strategies[2][i].moves[j].name
             }
             var str = new GTE.UI.Widgets.ContentEditable(
-                GTE.CONSTANTS.MATRIX_X + 35 + i*100, GTE.CONSTANTS.MATRIX_Y - 40 ,
+                GTE.CONSTANTS.MATRIX_X + 35 + i * GTE.CONSTANTS.MATRIX_SIZE,
+                GTE.CONSTANTS.MATRIX_Y - 40 ,
                 GTE.CONSTANTS.CONTENT_EDITABLE_GROW_TO_RIGHT,
                 string, "player 2")
             .colour(this.players[2].colour);
         }
-
+        while( GTE.canvas.viewbox().width - GTE.CONSTANTS.MATRIX_X < GTE.tree.matrix.strategies[2].length * GTE.CONSTANTS.MATRIX_SIZE
+        ||  GTE.canvas.viewbox().height - GTE.CONSTANTS.MATRIX_Y < GTE.tree.matrix.strategies[1].length * GTE.CONSTANTS.MATRIX_SIZE) {
+            GTE.tools.zoomOut();
+        }
     };
 
     Matrix.prototype.createStrategiesPermutations = function(strategy, currentPermutations) {
