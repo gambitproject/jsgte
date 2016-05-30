@@ -1,13 +1,11 @@
 text{
-   font-family:Roman;
+   font-family:Arial;
    text-align: center;
-   font-style: italic;
 }
 
 label{
-   font-family:Roman;
+   font-family:Arial;
    text-align: center;
-   font-style: italic;
 } 
 
 /*-------------Table style-------------*/
@@ -25,11 +23,13 @@ input{
    font-size:0.8em;
 }
 
-table input{
-   width: 10vw;
-   text-align: center;
-   font-size:0.8em;
+table .strat{
    font-style: italic;
+   font-weight: bold;
+   font-family:Roman;
+}
+
+table .payoff{
 }
 
 /* player color */
@@ -42,10 +42,6 @@ table .player2{
     color:blue;
 }
 
-table th .player2{
-    color:blue;
-    font-weight: bold;
-}
 
 /*-------------SVG style-------------*/
 svg{

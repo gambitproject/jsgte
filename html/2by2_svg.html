@@ -90,7 +90,7 @@ function doMouseMove(event) {
     var mousePosition = getMousePosition(event)
     svgPosition = svg.getBoundingClientRect();
     //var newPos=~~((-mousePosition.y+svgPosition.top+svgH-50)/3)/10;
-    var newPos=~~((svgH/(svgPosition.bottom-svgPosition.top)*(-mousePosition.y+svgPosition.top)+svgH-50)/30*precision)/precision;
+    var newPos=Math.round((svgH/(svgPosition.bottom-svgPosition.top)*(-mousePosition.y+svgPosition.top)+svgH-50)/30*precision)/precision;
     if (Number(newPos)<0) newPos=0;
     if (Number(newPos)>10) newPos=10;
     if( (Number(newPos)-moving_point.getAttribute("cy"))*(Number(newPos)-moving_point.getAttribute("cy"))>0.005){
@@ -123,13 +123,13 @@ function doMouseMoveLine(event) {
 
 
 function compute_firstP(){
-        var P1_11=~~(document.getElementById("P1_11").value*precision)/precision;
+        var P1_11=Math.round(document.getElementById("P1_11").value*precision)/precision;
         document.getElementById("P1_11").value=P1_11;
-        var P1_12=~~(document.getElementById("P1_12").value*precision)/precision;
+        var P1_12=Math.round(document.getElementById("P1_12").value*precision)/precision;
         document.getElementById("P1_12").value=P1_12;
-        var P1_21=~~(document.getElementById("P1_21").value*precision)/precision;
+        var P1_21=Math.round(document.getElementById("P1_21").value*precision)/precision;
         document.getElementById("P1_21").value=P1_21;
-        var P1_22=~~(document.getElementById("P1_22").value*precision)/precision;
+        var P1_22=Math.round(document.getElementById("P1_22").value*precision)/precision;
         document.getElementById("P1_22").value=P1_22;
         payoff[0].setAttributeNS(null, "cy", svgH-50-P1_11*30);
         payoff[1].setAttributeNS(null, "cy", svgH-50-P1_12*30);
@@ -170,13 +170,13 @@ function compute_firstP(){
     }
             
     function compute_secondP(){
-        var P2_11=~~(document.getElementById("P2_11").value*precision)/precision;
+        var P2_11=Math.round(document.getElementById("P2_11").value*precision)/precision;
         document.getElementById("P2_11").value=P2_11;
-        var P2_12=~~(document.getElementById("P2_12").value*precision)/precision;
+        var P2_12=Math.round(document.getElementById("P2_12").value*precision)/precision;
         document.getElementById("P2_12").value=P2_12;
-        var P2_21=~~(document.getElementById("P2_21").value*precision)/precision;
+        var P2_21=Math.round(document.getElementById("P2_21").value*precision)/precision;
         document.getElementById("P2_21").value=P2_21;
-        var P2_22=~~(document.getElementById("P2_22").value*precision)/precision;
+        var P2_22=Math.round(document.getElementById("P2_22").value*precision)/precision;
         document.getElementById("P2_22").value=P2_22;
         
         payoff[4].setAttributeNS(null, "cy", svgH-50-P2_11*30);
@@ -303,15 +303,15 @@ function compute_firstP(){
         stick.setAttributeNS(null, "x2",point2_2.x);
         
         //change legend according to strategies name.
-        var temp= svg.getElementById("y11");
+        /*var temp= svg.getElementById("y11");
         temp.textContent=P2S1;
         temp= svg.getElementById("y12");
         temp.textContent=P2S2;
         temp= svg.getElementById("y21");
         temp.textContent=P1S1;
         temp= svg.getElementById("y22");
-        temp.textContent=P1S2;
-        temp= svg.getElementById("prob2");
+        temp.textContent=P1S2;*/
+        var temp= svg.getElementById("prob2");
         temp.textContent="Player2 "+P2S2+" prob";
         temp= svg.getElementById("prob1");
         temp.textContent="Player1 "+P1S2+" prob";
@@ -324,17 +324,17 @@ function compute_firstP(){
      </div>
         <table border="1">
   <tr>
-    <th><label class="player1">Player I</label> \ <label class="player2">Player II</label></th>
-    <th><label><input class="player2 strat1" type="text" id="P2S1" onchange="redraw()" value="l"/> </label></th>
-    <th><label><input class="player2 strat2" type="text" id="P2S2" onchange="redraw()" value="r"/> </label></th>
+    <th><label class="player1 name">Player I</label> \ <label class="player2">Player II</label></th>
+    <th><label><input class="player2 strat" type="text" id="P2S1" onchange="redraw()" value="l"/> </label></th>
+    <th><label><input class="player2 strat" type="text" id="P2S2" onchange="redraw()" value="r"/> </label></th>
   </tr>
   <tr>
-      <th><label><input class="player1 strat1" type="text" id="P1S1" onchange="redraw()" value="T"/> </label></th>
+      <th><label><input class="player1 strat" type="text" id="P1S1" onchange="redraw()" value="T"/> </label></th>
     <td><input class="player1 payoff" type="text" id="P1_11" onchange="redraw()" value=0>\<input class="player2 payoff" type="text" id="P2_11"  onchange="redraw()" value=0></td>
     <td><input class="player1 payoff" type="text" id="P1_12" onchange="redraw()" value=0>\<input class="player2 payoff" type="text" id="P2_12" onchange="redraw()" value=0></td>
   </tr>
   <tr>
-  <th><label><input class="player1 strat2" type="text" id="P1S2" onchange="redraw()" value="B"/> </label></th>
+  <th><label><input class="player1 strat" type="text" id="P1S2" onchange="redraw()" value="B"/> </label></th>
     <td><input class="player1 payoff" type="text" id="P1_21" onchange="redraw()" value=0>\<input class="player2 payoff" type="text" id="P2_21"  onchange="redraw()" value=0></td>
     <td><input class="player1 payoff" type="text" id="P1_22" onchange="redraw()" value=0>\<input class="player2 payoff" type="text" id="P2_22"  onchange="redraw()" value=0></td>
   </tr>
@@ -346,8 +346,10 @@ function compute_firstP(){
             <!-- Legend, strategy names will be updated after-->
             <text class="player1 title" x="150" y="40">Player1 payoff</text>
             <text class="player2 legendh" id="prob2" x="150" y="390">Player2 S2 prob</text>
+            <!--
             <text class="player2 legendv" id="y11" x="20" y="200" transform="rotate(270 20,200)">S1</text>
             <text class="player2 legendv" id="y12" x="280" y="200" transform="rotate(90 280,200)">S2</text>
+             -->
             <text class="player2 legendh" x="50" y="370">0</text>
             <text class="player2 legendh" x="250" y="370">1</text>
             <!-- Upper envelop, coordinates will be updated-->
@@ -414,8 +416,10 @@ function compute_firstP(){
             <text class="player1 legendh" id="prob1" x="550" y="390">Player1 S2 prob</text>
             <text class="player1 legendh" x="450" y="370">0</text>
             <text class="player1 legendh" x="650" y="370">1</text>
+            <!--
             <text class="player1 legendv" id="y21" x="420" y="200"transform="rotate(270 420,200)">S1</text>
             <text class="player1 legendv" id="y22" x="680" y="200"transform="rotate(90 680,200)">S2</text>
+             -->
             <!-- Upper envelop, coordinates will be updated-->
             <polygon id="envelop2" points="450,50 450,350 450,350 450,50"/>
             <!-- First strategy payoff-->
