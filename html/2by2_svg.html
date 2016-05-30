@@ -32,7 +32,7 @@
         payoff=document.getElementsByClassName("pay");
         lines=document.getElementsByClassName("line_trans");
         for(i=0;i<8;i++){
-          payoff[i].addEventListener("mousedown", doMouseDown);
+            payoff[i].addEventListener("mousedown", doMouseDown);
         }
         for(i=0;i<4;i++){
             lines[i].addEventListener("mousedown", doMouseDown);
@@ -107,13 +107,11 @@ function doMouseMoveLine(event) {
         var point1=document.getElementById(moving_point.getAttribute("asso1"));
         var diffPos=~~((svgH/(svgPosition.bottom-svgPosition.top)*(diff))/30*precision)/precision;
         var point2=document.getElementById(moving_point.getAttribute("asso2"));
-        var pos1=Number(point1.value)-Number(diffPos);
-        var pos2=Number(point2.value)-Number(diffPos);
+        var pos1=Math.round((point1.value-diffPos)*precision)/precision;
+        var pos2=Math.round((point2.value-diffPos)*precision)/precision;
         if (pos2>=0 && pos2<=10 && pos1>=0 && pos1<=10 && diffPos!=0  ){
-            //console.log("DiffPos : "+ diffPos+" "+pos1);
             point1.value=pos1;
             point2.value=pos2;
-            
             Pos_prev=mousePosition;
             redraw();
     }
@@ -252,7 +250,7 @@ function compute_firstP(){
         inter.setAttributeNS(null,"cy", point1_2.y);
         var interlabel=svg.getElementById("interlabel1");
         interlabel.setAttributeNS(null, "x",point1_2.x);
-        interlabel.textContent=~~((Number(point1_2.x)-50)/2)/100;
+        interlabel.textContent=Math.round((Number(point1_2.x)-50)/2)/100;
         var stick=svg.getElementById("interstick1");
         stick.setAttributeNS(null, "x1",point1_2.x);
         stick.setAttributeNS(null, "x2",point1_2.x);
@@ -264,7 +262,7 @@ function compute_firstP(){
         inter.setAttributeNS(null,"cy", point2_2.y);
         interlabel=svg.getElementById("interlabel2");
         interlabel.setAttributeNS(null, "x",point2_2.x);
-        interlabel.textContent=~~((Number(point2_2.x)-450)/2)/100;
+        interlabel.textContent=Math.round((Number(point2_2.x)-450)/2)/100;
         stick=svg.getElementById("interstick2");
         stick.setAttributeNS(null, "x1",point2_2.x);
         stick.setAttributeNS(null, "x2",point2_2.x);
@@ -292,16 +290,16 @@ function compute_firstP(){
         <table border="1">
   <tr>
     <th><label class="player1">Player I</label> \ <label class="player2">Player II</label></th>
-    <th><label><input class="player2 strat1" type="text" id="P2S1" onchange="redraw()" value="S1"/> </label></th>
-    <th><label><input class="player2 strat2" type="text" id="P2S2" onchange="redraw()" value="S2"/> </label></th>
+    <th><label><input class="player2 strat1" type="text" id="P2S1" onchange="redraw()" value="l"/> </label></th>
+    <th><label><input class="player2 strat2" type="text" id="P2S2" onchange="redraw()" value="r"/> </label></th>
   </tr>
   <tr>
-      <th><label><input class="player1 strat1" type="text" id="P1S1" onchange="redraw()" value="S1"/> </label></th>
+      <th><label><input class="player1 strat1" type="text" id="P1S1" onchange="redraw()" value="T"/> </label></th>
     <td><input class="player1 payoff" type="text" id="P1_11" onchange="redraw()" value=0>\<input class="player2 payoff" type="text" id="P2_11"  onchange="redraw()" value=0></td>
     <td><input class="player1 payoff" type="text" id="P1_12" onchange="redraw()" value=0>\<input class="player2 payoff" type="text" id="P2_12" onchange="redraw()" value=0></td>
   </tr>
   <tr>
-  <th><label><input class="player1 strat2" type="text" id="P1S2" onchange="redraw()" value="S2"/> </label></th>
+  <th><label><input class="player1 strat2" type="text" id="P1S2" onchange="redraw()" value="B"/> </label></th>
     <td><input class="player1 payoff" type="text" id="P1_21" onchange="redraw()" value=0>\<input class="player2 payoff" type="text" id="P2_21"  onchange="redraw()" value=0></td>
     <td><input class="player1 payoff" type="text" id="P1_22" onchange="redraw()" value=0>\<input class="player2 payoff" type="text" id="P2_22"  onchange="redraw()" value=0></td>
   </tr>
@@ -375,7 +373,7 @@ function compute_firstP(){
             <circle class="pay line1" id="Payoff1_22" asso="P1_22" cx="250" cy="350" r="5" draggable="false" ondragstart="doMouseDown()"/>
 
             <!-- Drawing the contour-->
-            <polyline points="450,50 450,350 650,350, 650,50"/>
+            <polyline points="450,50 450,350 650,350, 650,50" draggable="false"/>
             <!-- Legend, strategy names will be updated after-->
             <text class="player2 title" x="550" y="40">Player2 payoff</text>
             <text class="player1 legendh" id="prob1" x="550" y="390">Player1 S2 prob</text>
@@ -387,11 +385,11 @@ function compute_firstP(){
             <polygon id="envelop2" points="450,50 450,350 450,350 450,50"/>
             <!-- First strategy payoff-->
             <line class="line2" id="21" x1="450" y1="350" x2="650" y2="350"/>
-            <line class="line_trans" asso1="P2_11"  asso2="P2_21"  x1="350" y1="350" x2="650" y2="350"/>
+            <line class="line_trans" asso1="P2_11"  asso2="P2_21"  x1="450" y1="350" x2="650" y2="350"/>
             <text id="text21" class="player2 legendh" x="480" y="350">S1</text>
             <!-- Second strategy payoff-->
             <line class="line2"  id="22" x1="450" y1="350" x2="650" y2="350"/>
-            <line class="line_trans" asso1="P2_12"  asso2="P2_22" x1="350" y1="350" x2="650" y2="350"/>
+            <line class="line_trans" asso1="P2_12"  asso2="P2_22" x1="450" y1="350" x2="650" y2="350"/>
             <text id="text22" class="player2 legendh" x="620" y="350">S2</text>
             <!-- Sticks-->
             <line class="stick" x1="450" y1="80" x2="445" y2="80"/>

@@ -1,12 +1,13 @@
 text{
-   font-family:Arial;
+   font-family:Roman;
    text-align: center;
+   font-style: italic;
 }
 
-
 label{
-   font-family:Arial;
+   font-family:Roman;
    text-align: center;
+   font-style: italic;
 } 
 
 /*-------------Table style-------------*/
@@ -17,10 +18,18 @@ table{
 table td{
     margin:0 auto;
 }
+
 input{
    width: 10vw;
    text-align: center;
    font-size:0.8em;
+}
+
+table input{
+   width: 10vw;
+   text-align: center;
+   font-size:0.8em;
+   font-style: italic;
 }
 
 /* player color */
@@ -33,11 +42,17 @@ table .player2{
     color:blue;
 }
 
+table th .player2{
+    color:blue;
+    font-weight: bold;
+}
+
 /*-------------SVG style-------------*/
 svg{
   width:80vw;
   height:70vh;
 }
+
 svg text{
     text-anchor:middle;
 }
@@ -54,6 +69,7 @@ svg .line1{
 
 svg .player2{
     fill:blue;
+    font-weight: bold;
 }
 
 svg .line2{
@@ -72,7 +88,6 @@ svg #envelop2{
 svg line{
     stroke-width:2px;
 }
-
 
 svg .line_trans{
     stroke:rgba(255, 0, 0, 0.0);
