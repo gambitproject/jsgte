@@ -296,6 +296,10 @@ GTE.UI = (function (parentModule) {
         playerButton.style.color = colour;
     };
 
+    Tools.prototype.zoomOut = function () {
+        GTE.canvas.viewbox(0, 0, GTE.canvas.viewbox().width*1.2, GTE.canvas.viewbox().height*1.2);
+    };
+
     // Add class to parent module
     parentModule.Tools = Tools;
 

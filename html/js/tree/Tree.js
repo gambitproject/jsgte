@@ -313,7 +313,8 @@ GTE.TREE = (function (parentModule) {
             this.recursiveCalculateYs(node.children[i]);
         }
         node.y = node.depth * parseInt(GTE.STORAGE.settingsDistLevels);
-        if ((node.y + parseInt(GTE.STORAGE.settingsCircleSize)) > GTE.canvas.viewbox().height) {
+        if ((node.y + parseInt(GTE.STORAGE.settingsCircleSize)) > GTE.canvas.viewbox().height
+            && GTE.STRATEGICFORMMODE == GTE.STRATEGICFORMMODES.TREE) {
             this.zoomOut();
             this.updatePositions();
         }
@@ -440,7 +441,8 @@ GTE.TREE = (function (parentModule) {
             // Calculate the offset so the nodes are centered on the screen
             offset = (GTE.canvas.viewbox().width-widthPerNode*numberLeaves)/2;
         }
-        if (widthPerNode < parseInt(GTE.STORAGE.settingsCircleSize)) {
+        if (widthPerNode < parseInt(GTE.STORAGE.settingsCircleSize)
+                && GTE.STRATEGICFORMMODE == GTE.STRATEGICFORMMODES.TREE) {
             this.zoomOut();
             this.updateLeavesPositions();
         } else {

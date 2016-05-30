@@ -30,7 +30,7 @@ GTE.TREE = (function(parentModule) {
             this.shape = GTE.canvas.rect(size, size).attr({fill: '#fff', 'fill-opacity': 1, stroke: '#000', 'stroke-width': 2});
             this.shape.translate(x + this.width*size, y + size * this.height);
             this.strategy.payoffs[0].draw(x + this.width*size, y + size * this.height + size * .7);
-            this.strategy.payoffs[1].draw(x + this.width*size + size*.7, y + size * this.height );
+            this.strategy.payoffs[1].draw(x + this.width*size + size*1.06, y + size * this.height ,GTE.CONSTANTS.CONTENT_EDITABLE_GROW_TO_LEFT);
             return;
         }
         // render a n player game
@@ -39,7 +39,7 @@ GTE.TREE = (function(parentModule) {
                 this.editable = new GTE.UI.Widgets.ContentEditable(
                     x+j*20+ i*100, 100*this.height,
                     GTE.CONSTANTS.CONTENT_EDITABLE_GROW_TO_RIGHT,
-                    this.strategy.strategicUnits[i].moves[j].name   , "strategy")
+                    this.strategy.strategicUnits[i].moves[j].name , "strategy")
                 .colour(this.strategy.strategicUnits[i].player.colour);
             }
         }
