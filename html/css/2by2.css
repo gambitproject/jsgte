@@ -69,7 +69,6 @@ svg .line1{
 
 svg .player2{
     fill:blue;
-    font-weight: bold;
 }
 
 svg .line2{
@@ -99,6 +98,10 @@ svg .line_trans{
 svg .legendh{
     font-size:1em;
 }
+
+svg .legendv.player2{
+
+    font-weight: bold;}
 
 svg .legendv{
     font-size:1em;

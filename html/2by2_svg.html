@@ -150,16 +150,22 @@ function compute_firstP(){
             maxP1_2=P1_22;
             minP1_2=P1_12;
         }
-        if((maxP1_1==P1_11 && maxP1_2==P1_12)||(maxP1_1==P1_21 && maxP1_2==P1_22)){
+        if(maxP1_1==P1_11 && maxP1_2==P1_12){ //If 1 is the best strategy, the middle point is on the left
+            point1_1={x:50,y:svgH-50-maxP1_1*30};
+            point1_2={x:50,y:svgH-50-maxP1_1*30};
+            point1_3={x:svgW-50,y:svgH-50-maxP1_2*30};}
+        else if(maxP1_1==P1_21 && maxP1_2==P1_22){//If 2 is the best strategy, the middle point is on the right
             point1_1={x:50,y:svgH-50-maxP1_1*30};
             point1_2={x:svgW-50,y:svgH-50-maxP1_2*30};
-            point1_3={x:svgW-50,y:svgH-50-maxP1_2*30};}
+            point1_3={x:svgW-50,y:svgH-50-maxP1_2*30};
+            }
         else{
             var middle_x=(P1_21-P1_11)/(Number(P1_21)- Number(P1_22) + Number(P1_12) - Number(P1_11));
             var middle_y=Number((P1_12-P1_11)*middle_x)+Number(P1_11);
             point1_1={x:50, y:svgH-50-maxP1_1*30};
             point1_2={x:middle_x * (svgW-100)+50,y:svgH-50-middle_y*30};
             point1_3={x:svgW-50,y:svgH-50-maxP1_2*30};
+               
         }
     }
             
@@ -192,11 +198,16 @@ function compute_firstP(){
             maxP2_2=P2_22;
             minP2_2=P2_21;
         }
-        if((maxP2_1==P2_11 && maxP2_2==P2_21)||(maxP2_1==P2_12 && maxP2_2==P2_22)){
+        if(maxP2_1==P2_11 && maxP2_2==P2_21){//If 1 is the best strategy, the middle point is on the left
+            point2_1={x:450,y:svgH-50-maxP2_1*30};
+            point2_2={x:450,y:svgH-50-maxP2_1*30};
+            point2_3={x:svgW-50+400,y:svgH-50-maxP2_2*30};
+            }
+        else if (maxP2_1==P2_12 && maxP2_2==P2_22){//If 2 is the best strategy, the middle point is on the right
             point2_1={x:450,y:svgH-50-maxP2_1*30};
             point2_2={x:svgW-50+400,y:svgH-50-maxP2_2*30};
             point2_3={x:svgW-50+400,y:svgH-50-maxP2_2*30};
-            }
+        }
         else{
             var middle_x=(P2_12-P2_11)/(Number(P2_12)- Number(P2_22) + Number(P2_21) - Number(P2_11));
             var middle_y=Number((P2_21-P2_11)*middle_x)+Number(P2_11);
@@ -217,31 +228,55 @@ function compute_firstP(){
         lines[0].setAttributeNS(null, "y2", payoff[1].getAttribute("cy"));
         lines[1].setAttributeNS(null, "y1", payoff[0].getAttribute("cy"));
         lines[1].setAttributeNS(null, "y2", payoff[1].getAttribute("cy"));
-        var labelline=svg.getElementById("text11");
-        labelline.setAttributeNS(null, "y", Number(payoff[0].getAttribute("cy"))+Number((payoff[1].getAttribute("cy")-(payoff[0].getAttribute("cy")))/200*30)+Number(20));
-        labelline.textContent=P1S1;
+        if (point1_2.x<250){//Label strategy iff they are part of a best reponse
+            var labelline=svg.getElementById("text11");
+            labelline.setAttributeNS(null, "y", Number(payoff[0].getAttribute("cy"))+Number((payoff[1].getAttribute("cy")-(payoff[0].getAttribute("cy")))/200*30)+Number(20));
+            labelline.textContent=P1S1;
+        }
+        else {
+            labelline=svg.getElementById("text11");
+            labelline.textContent="";
+        }
         lines[2].setAttributeNS(null, "y1", payoff[2].getAttribute("cy"));
         lines[2].setAttributeNS(null, "y2", payoff[3].getAttribute("cy"));
         lines[3].setAttributeNS(null, "y1", payoff[2].getAttribute("cy"));
         lines[3].setAttributeNS(null, "y2", payoff[3].getAttribute("cy"));
-        labelline=svg.getElementById("text12");
-        labelline.setAttributeNS(null, "y", Number(payoff[3].getAttribute("cy"))+Number((payoff[2].getAttribute("cy")-(payoff[3].getAttribute("cy")))/200*30)+Number(20));
-        labelline.textContent=P1S2;
+        if(point1_2.x>50){//Label strategy iff they are part of a best reponse
+            labelline=svg.getElementById("text12");
+            labelline.setAttributeNS(null, "y", Number(payoff[3].getAttribute("cy"))+Number((payoff[2].getAttribute("cy")-(payoff[3].getAttribute("cy")))/200*30)+Number(20));
+            labelline.textContent=P1S2;
+        }
+        else {
+            labelline=svg.getElementById("text12");
+            labelline.textContent="";
+        }
         // Lines update svg2
         lines[lines.length/2+0].setAttributeNS(null, "y1", payoff[4].getAttribute("cy"));
         lines[lines.length/2+0].setAttributeNS(null, "y2", payoff[6].getAttribute("cy"));
         lines[lines.length/2+1].setAttributeNS(null, "y1", payoff[4].getAttribute("cy"));
         lines[lines.length/2+1].setAttributeNS(null, "y2", payoff[6].getAttribute("cy"));
-        labelline=svg.getElementById("text21");
-        labelline.setAttributeNS(null, "y", Number(payoff[4].getAttribute("cy"))+Number((payoff[6].getAttribute("cy")-(payoff[4].getAttribute("cy")))/200*30)+Number(20));
-        labelline.textContent=P2S1;
+        if(point2_2.x<650){//Label strategy iff they are part of a best reponse
+            labelline=svg.getElementById("text21");
+            labelline.setAttributeNS(null, "y", Number(payoff[4].getAttribute("cy"))+Number((payoff[6].getAttribute("cy")-(payoff[4].getAttribute("cy")))/200*30)+Number(20));
+            labelline.textContent=P2S1;
+        }
+        else {
+            labelline=svg.getElementById("text21");
+            labelline.textContent="";
+        }
         lines[lines.length/2+2].setAttributeNS(null, "y1", payoff[5].getAttribute("cy"));
         lines[lines.length/2+2].setAttributeNS(null, "y2", payoff[7].getAttribute("cy"));
         lines[lines.length/2+3].setAttributeNS(null, "y1", payoff[5].getAttribute("cy"));
         lines[lines.length/2+3].setAttributeNS(null, "y2", payoff[7].getAttribute("cy"));
-        labelline=svg.getElementById("text22");
-        labelline.setAttributeNS(null, "y", Number(payoff[7].getAttribute("cy"))+Number((payoff[5].getAttribute("cy")-(payoff[7].getAttribute("cy")))/200*30)+Number(20));
-        labelline.textContent=P2S2;
+        if (point2_2.x>450){//Label strategy iff they are part of a best reponse
+            labelline=svg.getElementById("text22");
+            labelline.setAttributeNS(null, "y", Number(payoff[7].getAttribute("cy"))+Number((payoff[5].getAttribute("cy")-(payoff[7].getAttribute("cy")))/200*30)+Number(20));
+            labelline.textContent=P2S2;
+        }
+        else {
+            labelline=svg.getElementById("text22");
+            labelline.textContent="";
+        }
         //envelop svg1
         var envelop1=document.getElementById("envelop1");
         envelop1.setAttributeNS(null,"points", "50,50 "+point1_1.x+","+point1_1.y+" "+point1_2.x+","+point1_2.y+" "+point1_3.x+","+point1_3.y+" 250,50");
@@ -320,11 +355,11 @@ function compute_firstP(){
             <!-- First strategy payoff-->
             <line class="line1"  id="11" x1="50" y1="350" x2="250" y2="350"/>
             <line class="line_trans" asso1="P1_11"  asso2="P1_12" x1="50" y1="350" x2="250" y2="350"/>
-            <text id="text11" class="player1 legendh" x="80" y="350">S1</text>
+            <text id="text11" class="player1 legendv" x="80" y="350">S1</text>
             <!-- Second strategy payoff-->
             <line class="line1" id="12" x1="50" y1="350" x2="250" y2="350"/>
             <line class="line_trans" asso1="P1_21"  asso2="P1_22" x1="50" y1="350" x2="250" y2="350"/>
-            <text id="text12" class="player1 legendh" x="220" y="350">S2</text>
+            <text id="text12" class="player1 legendv" x="220" y="350">S2</text>
             <!-- Sticks-->
             <line class="stick" x1="50" y1="80" x2="45" y2="80"/>
             <text class="sticklabel" x="40" y="85">9</text>
@@ -386,11 +421,11 @@ function compute_firstP(){
             <!-- First strategy payoff-->
             <line class="line2" id="21" x1="450" y1="350" x2="650" y2="350"/>
             <line class="line_trans" asso1="P2_11"  asso2="P2_21"  x1="450" y1="350" x2="650" y2="350"/>
-            <text id="text21" class="player2 legendh" x="480" y="350">S1</text>
+            <text id="text21" class="player2 legendv" x="480" y="350">S1</text>
             <!-- Second strategy payoff-->
             <line class="line2"  id="22" x1="450" y1="350" x2="650" y2="350"/>
             <line class="line_trans" asso1="P2_12"  asso2="P2_22" x1="450" y1="350" x2="650" y2="350"/>
-            <text id="text22" class="player2 legendh" x="620" y="350">S2</text>
+            <text id="text22" class="player2 legendv" x="620" y="350">S2</text>
             <!-- Sticks-->
             <line class="stick" x1="450" y1="80" x2="445" y2="80"/>
             <text class="sticklabel" x="440" y="85">9</text>
