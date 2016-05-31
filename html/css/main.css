@@ -291,6 +291,10 @@ a {
     cursor: default;
 }
 
+.text-button {
+    color:black;
+}
+
 /*Settings modal*/
 
 #settings {
