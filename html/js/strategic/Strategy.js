@@ -45,8 +45,8 @@ GTE.TREE = (function(parentModule) {
                 this.payoffs[1].partner = this.payoffs[0];
                 break;
             case GTE.STRATEGICFORMMODES.SYMMETRIC:
-                this.payoffs[0].partner = GTE.tree.matrix.matrix[x*(GTE.tree.matrix.strategies[2].length)+y].strategy.payoffs[0];
-                this.payoffs[1].partner = GTE.tree.matrix.matrix[x*(GTE.tree.matrix.strategies[2].length)+y].strategy.payoffs[1];
+                this.payoffs[0].partner = GTE.tree.matrix.matrix[x*(GTE.tree.matrix.strategies[2].length)+y].strategy.payoffs[1];
+                this.payoffs[1].partner = GTE.tree.matrix.matrix[x*(GTE.tree.matrix.strategies[2].length)+y].strategy.payoffs[0];
                 break;
             default:
                 break;
