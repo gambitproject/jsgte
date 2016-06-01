@@ -107,6 +107,13 @@ GTE.UI.Widgets = (function (parentModule) {
             }
         });
 
+        this.textdiv.addEventListener('focus', function(e) {
+            if (thisContentEditable.functionOnSave !== null){
+                //Select the div completely
+                document.execCommand('selectAll',false,null);
+            }
+        });
+
         // keypress is used to detect the RETURN key and to apply a max number
         // of characters allowed
         this.textdiv.addEventListener('keypress', function(e) {
