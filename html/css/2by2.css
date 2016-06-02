@@ -23,12 +23,6 @@ input{
    font-size:0.8em;
 }
 
-table .strat{
-   font-style: italic;
-   font-weight: bold;
-   font-family:Roman;
-}
-
 table .payoff{
 }
 
@@ -67,6 +61,13 @@ svg .player2{
     fill:blue;
 }
 
+svg .stratin{
+    text-anchor:start;
+    font-style: italic;
+   font-weight: bold;
+   font-family:Roman;
+}
+
 svg .line2{
     stroke:blue;
 }
@@ -96,8 +97,14 @@ svg .legendh{
 }
 
 svg .legendv.player2{
+font-style: italic;
+   font-weight: bold;
+   font-family:Roman;}
 
-    font-weight: bold;}
+svg .legendv.player1{
+font-style: italic;
+   font-weight: bold;
+   font-family:Roman;}
 
 svg .legendv{
     font-size:1em;
@@ -143,6 +150,11 @@ svg .inter{
 }
 
 
+.strat{
+   font-style: italic;
+   font-weight: bold;
+   font-family:Roman;
+}
 
 
 /* for canvas version */

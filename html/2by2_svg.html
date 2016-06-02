@@ -312,9 +312,9 @@ function compute_firstP(){
         temp= svg.getElementById("y22");
         temp.textContent=P1S2;*/
         var temp= svg.getElementById("prob2");
-        temp.textContent="Player2 "+P2S2+" prob";
+        temp.textContent=P2S2;
         temp= svg.getElementById("prob1");
-        temp.textContent="Player1 "+P1S2+" prob";
+        temp.textContent=P1S2;
     }
 
 </script>
@@ -345,7 +345,7 @@ function compute_firstP(){
             <polyline points="50,50 50,350 250,350, 250,50"/>
             <!-- Legend, strategy names will be updated after-->
             <text class="player1 title" x="150" y="40">Player1 payoff</text>
-            <text class="player2 legendh" id="prob2" x="150" y="390">Player2 S2 prob</text>
+            <text class="player2 legendh" x="140" y="390">Player2 proba of</text><text class="player2 stratin" id="prob2" x="205" y="390">S2 </text>
             <!--
             <text class="player2 legendv" id="y11" x="20" y="200" transform="rotate(270 20,200)">S1</text>
             <text class="player2 legendv" id="y12" x="280" y="200" transform="rotate(90 280,200)">S2</text>
@@ -357,11 +357,11 @@ function compute_firstP(){
             <!-- First strategy payoff-->
             <line class="line1"  id="11" x1="50" y1="350" x2="250" y2="350"/>
             <line class="line_trans" asso1="P1_11"  asso2="P1_12" x1="50" y1="350" x2="250" y2="350"/>
-            <text id="text11" class="player1 legendv" x="80" y="350">S1</text>
+            <text id="text11" class="player1 strat" x="80" y="350">S1</text>
             <!-- Second strategy payoff-->
             <line class="line1" id="12" x1="50" y1="350" x2="250" y2="350"/>
             <line class="line_trans" asso1="P1_21"  asso2="P1_22" x1="50" y1="350" x2="250" y2="350"/>
-            <text id="text12" class="player1 legendv" x="220" y="350">S2</text>
+            <text id="text12" class="player1 strat" x="220" y="350">S2</text>
             <!-- Sticks-->
             <line class="stick" x1="50" y1="80" x2="45" y2="80"/>
             <text class="sticklabel" x="40" y="85">9</text>
@@ -413,7 +413,7 @@ function compute_firstP(){
             <polyline points="450,50 450,350 650,350, 650,50" draggable="false"/>
             <!-- Legend, strategy names will be updated after-->
             <text class="player2 title" x="550" y="40">Player2 payoff</text>
-            <text class="player1 legendh" id="prob1" x="550" y="390">Player1 S2 prob</text>
+            <text class="player1 legendh" x="540" y="390">Player1 proba of </text><text class="player1 stratin" id="prob1" x="605" y="390">S2 </text>
             <text class="player1 legendh" x="450" y="370">0</text>
             <text class="player1 legendh" x="650" y="370">1</text>
             <!--
