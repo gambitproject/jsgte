@@ -47,6 +47,19 @@ svg text{
     text-anchor:middle;
 }
 
+
+/*contour */
+svg polyline{
+    fill:none;
+    stroke:black;
+    stroke-width:2px;
+}
+
+/*upper envelopp */
+svg polygon{
+    stroke-width:0px;
+}
+
 /* player color */
 
 svg .player1{
@@ -125,21 +138,14 @@ svg .stick{
     stroke-width:1px;
 }
 
-/*contour */
-svg polyline{
-    fill:none;
-    stroke:black;
-    stroke-width:2px;
-}
-
-/*upper envelopp */
-svg polygon{
-    stroke-width:0px;
-}
 
 /* end points */
 svg .pay{
      fill:yellow;
+}
+
+svg .br{
+    fill:green;
 }
 
 /* Mixed strategy point */

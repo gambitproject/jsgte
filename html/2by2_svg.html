@@ -90,7 +90,7 @@ function doMouseMove(event) {
     var mousePosition = getMousePosition(event)
     svgPosition = svg.getBoundingClientRect();
     //var newPos=~~((-mousePosition.y+svgPosition.top+svgH-50)/3)/10;
-    var newPos=Math.round((svgH/(svgPosition.bottom-svgPosition.top)*(-mousePosition.y+svgPosition.top)+svgH-50)/30*precision)/precision;
+    var newPos=Math.round((2*svgH/(svgPosition.bottom-svgPosition.top)*(-mousePosition.y+svgPosition.top)+svgH-50)/30*precision)/precision;
     if (Number(newPos)<0) newPos=0;
     if (Number(newPos)>10) newPos=10;
     if( (Number(newPos)-moving_point.getAttribute("cy"))*(Number(newPos)-moving_point.getAttribute("cy"))>0.005){
@@ -139,16 +139,20 @@ function compute_firstP(){
         if( Number(P1_11)>Number(P1_21)){
             maxP1_1=P1_11;
             minP1_1=P1_21;
+            M1_1=1;
         }else{
             maxP1_1=P1_21;
             minP1_1=P1_11;
+            M1_1=2;
         }
         if( Number(P1_12)>Number(P1_22)){
             maxP1_2=P1_12;
             minP1_2=P1_22;
+            M1_2=1;
         }else{
             maxP1_2=P1_22;
             minP1_2=P1_12;
+            M1_2=2;
         }
         if(maxP1_1==P1_11 && maxP1_2==P1_12){ //If 1 is the best strategy, the middle point is on the left
             point1_1={x:50,y:svgH-50-maxP1_1*30};
@@ -187,16 +191,20 @@ function compute_firstP(){
         if( Number(P2_11)>Number(P2_12)){
             maxP2_1=P2_11;
             minP2_1=P2_12;
+            M2_1=1;
         }else{
             maxP2_1=P2_12;
             minP2_1=P2_11;
+            M2_1=2;
         }
         if( Number(P2_21)>Number(P2_22)){
             maxP2_2=P2_21;
             minP2_2=P2_22;
+            M2_2=1;
         }else{
             maxP2_2=P2_22;
             minP2_2=P2_21;
+            M2_2=2;
         }
         if(maxP2_1==P2_11 && maxP2_2==P2_21){//If 1 is the best strategy, the middle point is on the left
             point2_1={x:450,y:svgH-50-maxP2_1*30};
@@ -315,6 +323,65 @@ function compute_firstP(){
         temp.textContent=P2S2;
         temp= svg.getElementById("prob1");
         temp.textContent=P1S2;
+        
+        
+        //Last drawing
+        temp= svg.getElementsByClassName("br");
+        temp2= svg.getElementsByClassName("last");
+        var path1="";
+        var path2="";
+        console.log(temp2.length);
+        if (M2_1==1){
+            temp[0].setAttributeNS(null, "cx", 50);
+            path1="50,";
+            path2="50,";
+        }
+        else{
+            temp[0].setAttributeNS(null, "cx", 250);
+            path1="250,";
+            path2="250,";
+        }
+        if (M1_1==1){
+            temp[0].setAttributeNS(null, "cy", 500);
+            path1=path1+500+", ";
+            path2=path2+500+", ";
+        }
+        else{
+            temp[0].setAttributeNS(null, "cy", 700);
+            path1=path1+700+", ";
+            path2=path2+700+", ";
+        }
+
+        if (M2_2==1){
+            temp[1].setAttributeNS(null, "cx", 50);
+        }
+        else{
+            temp[1].setAttributeNS(null, "cx", 250);
+        }
+        if (M1_2==1){
+            temp[1].setAttributeNS(null, "cy", 500);
+        }
+        else{
+            temp[1].setAttributeNS(null, "cy", 700);
+        }
+        if (point1_2.x>50 && point1_2.x<250 && point2_2.x>450 && point2_2.x<650){
+            var posx=50+point1_2.x-50;
+            temp[2].setAttributeNS(null, "x", posx-10);
+            path1=path1+posx+","+temp[0].getAttribute("cy")+", "+posx+","+temp[1].getAttribute("cy")+" ,"+temp[1].getAttribute("cx")+","+temp[1].getAttribute("cy");
+            var posy=500+point2_2.x-450;
+            temp[2].setAttributeNS(null, "y", posy-10);
+            temp[2].setAttributeNS(null, "height", 20);
+            temp[2].setAttributeNS(null, "width", 20);
+            path2=path2+temp[0].getAttribute("cx")+","+posy+", "+temp[1].getAttribute("cx")+","+posy+", "+temp[1].getAttribute("cx")+","+temp[1].getAttribute("cy");
+        }
+        else{
+            temp[2].setAttributeNS(null, "height", 0);
+            temp[2].setAttributeNS(null, "width", 0);
+        }
+        temp2[0].setAttributeNS(null, "points", path1);
+        temp2[1].setAttributeNS(null, "points", path2);
+        
+        
     }
 
 </script>
@@ -340,7 +407,7 @@ function compute_firstP(){
   </tr>
 </table>
         
-        <svg id="SVG" version="1.1" viewBox="0 0 700 400">
+        <svg id="SVG" version="1.1" viewBox="0 0 700 800">
             <!-- Drawing the contour-->
             <polyline points="50,50 50,350 250,350, 250,50"/>
             <!-- Legend, strategy names will be updated after-->
@@ -476,6 +543,17 @@ function compute_firstP(){
             <circle class="pay line2" id="Payoff2_12" asso="P2_12" cx="450" cy="350" r="5"  draggable="false" ondragstart="doMouseDown()"/>
             <circle class="pay line2" id="Payoff2_21" asso="P2_21" cx="650" cy="350" r="5" draggable="false" ondragstart="doMouseDown()"/>
             <circle class="pay line2" id="Payoff2_22" asso="P2_22" cx="650" cy="350" r="5" draggable="false" ondragstart="doMouseDown()"/>
+            
+            
+            <!-- Drawing the contour-->
+            <polyline points="50,500 50,700 250,700, 250,500, 50,500"/>
+            <!-- Best player1 --->
+            <polyline  class="last line1" points="50,500 50,700 250,700, 250,500"/>
+            <!-- Best player2 --->
+            <polyline class="last line2" points="50,500 50,700 250,700, 250,500"/>
+            <circle class="br" cx="250" cy="700" r="10"  draggable="false" />
+            <circle class="br" cx="250" cy="700" r="10" draggable="false"/>
+            <rect class="br" x="40" y="490" width="20" height="20" fill="green"/>
             
         </svg>
         
