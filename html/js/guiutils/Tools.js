@@ -101,8 +101,8 @@ GTE.UI = (function (parentModule) {
     */
     Tools.prototype.toStrategicForm = function () {
         GTE.tree.clear();
+        GTE.tree.matrix = new GTE.TREE.Matrix();
         GTE.tree.matrix.initialise();
-        alert("tostrategicform");
     };
 
     /**
@@ -135,7 +135,6 @@ GTE.UI = (function (parentModule) {
         GTE.tree.draw();
         this.switchMode(GTE.MODES.ADD);
         this.toStrategicForm();
-        alert("independentStrategy");
     };
 
 

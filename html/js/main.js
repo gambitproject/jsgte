@@ -88,6 +88,11 @@
         return false;
     });
 
+    document.getElementById("button-tree").addEventListener("click", function(){
+        GTE.tree.draw();
+        return false;
+    });
+
     document.getElementById("button-independent-strategic-general").addEventListener("click", function(){
         var x = prompt("Enter the number of moves for the first player", "2");
         var y = prompt("Enter the number of moves for the second player", "2");
