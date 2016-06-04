@@ -256,6 +256,19 @@ GTE.TREE = (function(parentModule) {
         return str;
     };
 
+    Matrix.prototype.setMatrixFromStringFormat = function(playerIn, matrixToSet) {
+        matrixToSet = matrixToSet.trim();
+        matrixToSet = matrixToSet.split("\n");
+        for(var i=0; i<this.strategies[1].length; i++) {
+            matrixToSet[i] = matrixToSet[i].trim();
+            matrixToSet[i] = matrixToSet[i].split(" ");
+            for(var j=0; j<this.strategies[2].length; j++) {
+                this.matrix[i*this.strategies[2].length+j].strategy.payoffs[playerIn].value = parseInt(matrixToSet[i][j]);
+                this.matrix[i*this.strategies[2].length+j].strategy.payoffs[playerIn].text = (matrixToSet[i][j]);
+            }
+        }
+    };
+
     // Add class to parent module
     parentModule.Matrix = Matrix;
 
