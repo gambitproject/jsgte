@@ -8,17 +8,19 @@ label{
    text-align: center;
 } 
 
-/*-------------Table style-------------*/
-table{
-    width:70vw;
-    margin-left : 5vw;
+div{
+    float:left;
+    margin :0;
+    width:19vw;
 }
+
+/*-------------Table style-------------*/
 table td{
     margin:0 auto;
 }
 
 input{
-   width: 10vw;
+   width: 6vw;
    text-align: center;
    font-size:0.8em;
 }
@@ -39,8 +41,11 @@ table .player2{
 
 /*-------------SVG style-------------*/
 svg{
-  width:80vw;
-  height:70vh;
+  width:79vw;
+  height:100vh;
+  float:right;
+
+    margin :0;
 }
 
 svg text{
