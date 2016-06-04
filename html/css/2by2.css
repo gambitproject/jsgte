@@ -49,7 +49,7 @@ svg text{
 
 
 /*contour */
-svg polyline{
+svg .contour{
     fill:none;
     stroke:black;
     stroke-width:2px;
@@ -74,8 +74,14 @@ svg .player2{
     fill:blue;
 }
 
-svg .stratin{
+svg .strat_left{
     text-anchor:start;
+    font-style: italic;
+   font-weight: bold;
+   font-family:Roman;
+}
+svg .strat_right{
+    text-anchor:end;
     font-style: italic;
    font-weight: bold;
    font-family:Roman;
@@ -95,7 +101,12 @@ svg #envelop2{
 
 /* lines*/
 svg line{
-    stroke-width:2px;
+    stroke-width:0.2em;
+}
+svg polyline{
+    fill:none;
+    stroke:black;
+    stroke-width:0.2em;
 }
 
 svg .line_trans{

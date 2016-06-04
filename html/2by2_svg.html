@@ -231,7 +231,7 @@ function compute_firstP(){
         var P2S1=document.getElementById("P2S1").value;
         var P2S2=document.getElementById("P2S2").value;
         // Lines update svg1
-        var lines=svg.getElementsByTagName("line");
+        var lines=svg.getElementsByClassName("lined1");
         lines[0].setAttributeNS(null, "y1", payoff[0].getAttribute("cy"));
         lines[0].setAttributeNS(null, "y2", payoff[1].getAttribute("cy"));
         lines[1].setAttributeNS(null, "y1", payoff[0].getAttribute("cy"));
@@ -259,10 +259,11 @@ function compute_firstP(){
             labelline.textContent="";
         }
         // Lines update svg2
-        lines[lines.length/2+0].setAttributeNS(null, "y1", payoff[4].getAttribute("cy"));
-        lines[lines.length/2+0].setAttributeNS(null, "y2", payoff[6].getAttribute("cy"));
-        lines[lines.length/2+1].setAttributeNS(null, "y1", payoff[4].getAttribute("cy"));
-        lines[lines.length/2+1].setAttributeNS(null, "y2", payoff[6].getAttribute("cy"));
+        lines=svg.getElementsByClassName("lined2");
+        lines[0].setAttributeNS(null, "y1", payoff[4].getAttribute("cy"));
+        lines[0].setAttributeNS(null, "y2", payoff[6].getAttribute("cy"));
+        lines[1].setAttributeNS(null, "y1", payoff[4].getAttribute("cy"));
+        lines[1].setAttributeNS(null, "y2", payoff[6].getAttribute("cy"));
         if(point2_2.x<650){//Label strategy iff they are part of a best reponse
             labelline=svg.getElementById("text21");
             labelline.setAttributeNS(null, "y", Number(payoff[4].getAttribute("cy"))+Number((payoff[6].getAttribute("cy")-(payoff[4].getAttribute("cy")))/200*30)+Number(20));
@@ -272,10 +273,10 @@ function compute_firstP(){
             labelline=svg.getElementById("text21");
             labelline.textContent="";
         }
-        lines[lines.length/2+2].setAttributeNS(null, "y1", payoff[5].getAttribute("cy"));
-        lines[lines.length/2+2].setAttributeNS(null, "y2", payoff[7].getAttribute("cy"));
-        lines[lines.length/2+3].setAttributeNS(null, "y1", payoff[5].getAttribute("cy"));
-        lines[lines.length/2+3].setAttributeNS(null, "y2", payoff[7].getAttribute("cy"));
+        lines[2].setAttributeNS(null, "y1", payoff[5].getAttribute("cy"));
+        lines[2].setAttributeNS(null, "y2", payoff[7].getAttribute("cy"));
+        lines[3].setAttributeNS(null, "y1", payoff[5].getAttribute("cy"));
+        lines[3].setAttributeNS(null, "y2", payoff[7].getAttribute("cy"));
         if (point2_2.x>450){//Label strategy iff they are part of a best reponse
             labelline=svg.getElementById("text22");
             labelline.setAttributeNS(null, "y", Number(payoff[7].getAttribute("cy"))+Number((payoff[5].getAttribute("cy")-(payoff[7].getAttribute("cy")))/200*30)+Number(20));
@@ -294,9 +295,10 @@ function compute_firstP(){
         var interlabel=svg.getElementById("interlabel1");
         interlabel.setAttributeNS(null, "x",point1_2.x);
         interlabel.textContent=Math.round((Number(point1_2.x)-50)/2)/100;
-        var stick=svg.getElementById("interstick1");
-        stick.setAttributeNS(null, "x1",point1_2.x);
-        stick.setAttributeNS(null, "x2",point1_2.x);
+        var stick=svg.getElementsByClassName("interstick1");
+        for (i=0;i<stick.length;i++){
+            stick[i].setAttributeNS(null, "x1",point1_2.x);
+            stick[i].setAttributeNS(null, "x2",point1_2.x);}
         //envelop svg2
         var envelop2=document.getElementById("envelop2");
         envelop2.setAttributeNS(null,"points", "450,50 "+point2_1.x+","+point2_1.y+" "+point2_2.x+","+point2_2.y+" "+point2_3.x+","+point2_3.y+" 650,50");
@@ -306,9 +308,11 @@ function compute_firstP(){
         interlabel=svg.getElementById("interlabel2");
         interlabel.setAttributeNS(null, "x",point2_2.x);
         interlabel.textContent=Math.round((Number(point2_2.x)-450)/2)/100;
-        stick=svg.getElementById("interstick2");
-        stick.setAttributeNS(null, "x1",point2_2.x);
-        stick.setAttributeNS(null, "x2",point2_2.x);
+        var stick=svg.getElementsByClassName("interstick2");
+        for (i=0;i<stick.length;i++){
+            stick[i].setAttributeNS(null, "x1",point2_2.x);
+            stick[i].setAttributeNS(null, "x2",point2_2.x);
+        }
         
         //change legend according to strategies name.
         /*var temp= svg.getElementById("y11");
@@ -319,15 +323,27 @@ function compute_firstP(){
         temp.textContent=P1S1;
         temp= svg.getElementById("y22");
         temp.textContent=P1S2;*/
-        var temp= svg.getElementById("prob2");
-        temp.textContent=P2S2;
-        temp= svg.getElementById("prob1");
-        temp.textContent=P1S2;
+        var temp= svg.getElementsByClassName("strat22");
+        for (i=0;i<temp.length;i++){
+            temp[i].textContent=P2S2;
+        }
+        temp= svg.getElementsByClassName("strat21");
+        for (i=0;i<temp.length;i++){
+            temp[i].textContent=P2S1;
+        }
+        temp= svg.getElementsByClassName("strat12");
+        for (i=0;i<temp.length;i++){
+            temp[i].textContent=P1S2;
+        }
+        temp= svg.getElementsByClassName("strat11");
+        for (i=0;i<temp.length;i++){
+            temp[i].textContent=P1S1;
+        }
         
         
-        //Last drawing
+        //Best reponse path
         temp= svg.getElementsByClassName("br");
-        temp2= svg.getElementsByClassName("last");
+        temp2= svg.getElementsByClassName("brline");
         var path1="";
         var path2="";
         console.log(temp2.length);
@@ -377,11 +393,39 @@ function compute_firstP(){
         else{
             temp[2].setAttributeNS(null, "height", 0);
             temp[2].setAttributeNS(null, "width", 0);
+            if (temp[0].getAttribute("cy")==temp[1].getAttribute("cy")){
+                path2=path2+temp[0].getAttribute("cx")+","+temp[1].getAttribute("cy")+", "+temp[1].getAttribute("cx")+","+temp[1].getAttribute("cy");
+                path1="";
+            }
+            else{
+                path2="";
+                path1=path1+temp[1].getAttribute("cx")+","+temp[0].getAttribute("cy")+", "+temp[1].getAttribute("cx")+","+temp[1].getAttribute("cy");
+            }
         }
         temp2[0].setAttributeNS(null, "points", path1);
         temp2[1].setAttributeNS(null, "points", path2);
         
+        var stick=svg.getElementsByClassName("middle11");
+        for (i=0;i<stick.length;i++){
+            pos=(point2_2.x+Number(450))/2;
+            stick[i].setAttributeNS(null, "x",pos);
+        }
+        var stick=svg.getElementsByClassName("middle12");
+        for (i=0;i<stick.length;i++){
+            pos=(point2_2.x+Number(650))/2;
+            stick[i].setAttributeNS(null, "x",pos);
+        }
         
+        var stick=svg.getElementsByClassName("middle21");
+        for (i=0;i<stick.length;i++){
+            pos=(point1_2.x+Number(50))/2;
+            stick[i].setAttributeNS(null, "x",pos);
+        }
+        var stick=svg.getElementsByClassName("middle22");
+        for (i=0;i<stick.length;i++){
+            pos=(point1_2.x+Number(250))/2;
+            stick[i].setAttributeNS(null, "x",pos);
+        }
     }
 
 </script>
@@ -409,10 +453,10 @@ function compute_firstP(){
         
         <svg id="SVG" version="1.1" viewBox="0 0 700 800">
             <!-- Drawing the contour-->
-            <polyline points="50,50 50,350 250,350, 250,50"/>
+            <polyline class="contour" points="50,50 50,350 250,350, 250,50"/>
             <!-- Legend, strategy names will be updated after-->
             <text class="player1 title" x="150" y="40">Player1 payoff</text>
-            <text class="player2 legendh" x="140" y="390">Player2 proba of</text><text class="player2 stratin" id="prob2" x="205" y="390">S2 </text>
+            <text class="player2 legendh" x="140" y="390">Player2 proba of</text><text class="player2 strat_left strat22" x="205" y="390">S2 </text>
             <!--
             <text class="player2 legendv" id="y11" x="20" y="200" transform="rotate(270 20,200)">S1</text>
             <text class="player2 legendv" id="y12" x="280" y="200" transform="rotate(90 280,200)">S2</text>
@@ -422,12 +466,12 @@ function compute_firstP(){
             <!-- Upper envelop, coordinates will be updated-->
             <polygon id="envelop1" points="50,50 50,350 250,350 250,50"/>
             <!-- First strategy payoff-->
-            <line class="line1"  id="11" x1="50" y1="350" x2="250" y2="350"/>
-            <line class="line_trans" asso1="P1_11"  asso2="P1_12" x1="50" y1="350" x2="250" y2="350"/>
+            <line class="line1 lined1"  id="11" x1="50" y1="350" x2="250" y2="350"/>
+            <line class="line_trans lined1" asso1="P1_11"  asso2="P1_12" x1="50" y1="350" x2="250" y2="350"/>
             <text id="text11" class="player1 strat" x="80" y="350">S1</text>
             <!-- Second strategy payoff-->
-            <line class="line1" id="12" x1="50" y1="350" x2="250" y2="350"/>
-            <line class="line_trans" asso1="P1_21"  asso2="P1_22" x1="50" y1="350" x2="250" y2="350"/>
+            <line class="line1 lined1" id="12" x1="50" y1="350" x2="250" y2="350"/>
+            <line class="line_trans lined1" asso1="P1_21"  asso2="P1_22" x1="50" y1="350" x2="250" y2="350"/>
             <text id="text12" class="player1 strat" x="220" y="350">S2</text>
             <!-- Sticks-->
             <line class="stick" x1="50" y1="80" x2="45" y2="80"/>
@@ -468,7 +512,7 @@ function compute_firstP(){
             <text class="sticklabel" x="260" y="325">1</text>
             <!-- Intersection point-->
             <circle class="inter" id="inter1" cx="250" cy="350" r="5" draggable="false" ondragstart="doMouseDown()"/>
-            <line class="line2" id="interstick1" x1="250" y1="350" x2="250" y2="355"/>
+            <line class="line2 interstick1" x1="250" y1="350" x2="250" y2="355"/>
             <text class="player2 legendh" id="interlabel1" x="250" y="370">1</text>
             <!-- Payoff points-->
             <circle class="pay line1" id="Payoff1_11" asso="P1_11" cx="50" cy="350" r="5" draggable="false" ondragstart="doMouseDown()"/>
@@ -477,10 +521,10 @@ function compute_firstP(){
             <circle class="pay line1" id="Payoff1_22" asso="P1_22" cx="250" cy="350" r="5" draggable="false" ondragstart="doMouseDown()"/>
 
             <!-- Drawing the contour-->
-            <polyline points="450,50 450,350 650,350, 650,50" draggable="false"/>
+            <polyline class="contour" points="450,50 450,350 650,350, 650,50" draggable="false"/>
             <!-- Legend, strategy names will be updated after-->
             <text class="player2 title" x="550" y="40">Player2 payoff</text>
-            <text class="player1 legendh" x="540" y="390">Player1 proba of </text><text class="player1 stratin" id="prob1" x="605" y="390">S2 </text>
+            <text class="player1 legendh" x="540" y="390">Player1 proba of </text><text class="player1 strat_left strat12" x="605" y="390">S2 </text>
             <text class="player1 legendh" x="450" y="370">0</text>
             <text class="player1 legendh" x="650" y="370">1</text>
             <!--
@@ -490,12 +534,12 @@ function compute_firstP(){
             <!-- Upper envelop, coordinates will be updated-->
             <polygon id="envelop2" points="450,50 450,350 450,350 450,50"/>
             <!-- First strategy payoff-->
-            <line class="line2" id="21" x1="450" y1="350" x2="650" y2="350"/>
-            <line class="line_trans" asso1="P2_11"  asso2="P2_21"  x1="450" y1="350" x2="650" y2="350"/>
+            <line class="line2 lined2" id="21" x1="450" y1="350" x2="650" y2="350"/>
+            <line class="line_trans lined2" asso1="P2_11"  asso2="P2_21"  x1="450" y1="350" x2="650" y2="350"/>
             <text id="text21" class="player2 legendv" x="480" y="350">S1</text>
             <!-- Second strategy payoff-->
-            <line class="line2"  id="22" x1="450" y1="350" x2="650" y2="350"/>
-            <line class="line_trans" asso1="P2_12"  asso2="P2_22" x1="450" y1="350" x2="650" y2="350"/>
+            <line class="line2 lined2"  id="22" x1="450" y1="350" x2="650" y2="350"/>
+            <line class="line_trans lined2" asso1="P2_12"  asso2="P2_22" x1="450" y1="350" x2="650" y2="350"/>
             <text id="text22" class="player2 legendv" x="620" y="350">S2</text>
             <!-- Sticks-->
             <line class="stick" x1="450" y1="80" x2="445" y2="80"/>
@@ -536,7 +580,7 @@ function compute_firstP(){
             <text class="sticklabel" x="660" y="325">1</text>
             <!-- Intersection point-->
             <circle class="inter" id="inter2" cx="650" cy="350" r="5" draggable="false" ondragstart="doMouseDown()"/>
-            <line class="line1" id="interstick2" x1="650" y1="350" x2="650" y2="355"/>
+            <line class="line1 interstick2" x1="650" y1="350" x2="650" y2="355"/>
             <text class="player1 legendh" id="interlabel2" x="650" y="370">1</text>
             <!-- Payoff points-->
             <circle class="pay line2" id="Payoff2_11" asso="P2_11" cx="450" cy="350" r="5"  draggable="false" ondragstart="doMouseDown()"/>
@@ -546,14 +590,40 @@ function compute_firstP(){
             
             
             <!-- Drawing the contour-->
-            <polyline points="50,500 50,700 250,700, 250,500, 50,500"/>
+            <polyline class="contour" points="50,500 50,700 250,700, 250,500, 50,500"/>
             <!-- Best player1 --->
-            <polyline  class="last line1" points="50,500 50,700 250,700, 250,500"/>
+            <polyline  class="brline line1" points="50,500 50,700 250,700, 250,500"/>
             <!-- Best player2 --->
-            <polyline class="last line2" points="50,500 50,700 250,700, 250,500"/>
+            <polyline class="brline line2" points="50,500 50,700 250,700, 250,500"/>
+            <!--pure equilibrium--->
             <circle class="br" cx="250" cy="700" r="10"  draggable="false" />
             <circle class="br" cx="250" cy="700" r="10" draggable="false"/>
+            <!--mixed equilibrium--->
             <rect class="br" x="40" y="490" width="20" height="20" fill="green"/>
+            
+            <!--legend -->
+            <line class="line2" x1="50" y1="450" x2="250" y2="450"/>
+            <line class="stick" x1="50" y1="445" x2="50" y2="455"/>
+            <line class="stick" x1="250" y1="445" x2="250" y2="455"/>
+            <line class="line2 interstick1" x1="50" y1="445" x2="50" y2="455"/>
+            <text class="player2 strat_right strat22" x="25" y="455">S2 </text><text class="player2" x="35" y="455">=0</text>
+            <text class="player2 strat_left strat21" x="255" y="455">S1 </text><text class="player2" x="270" y="455">=0</text>
+            <text class="player1 strat_right strat11" x="35" y="505">S2 </text>
+            <text class="player1 strat_right strat12" x="35" y="705">S1 </text>
+            <text class="player2 strat strat21" x="50" y="720">S2 </text>
+            <text class="player2 strat strat22" x="250" y="720">S1 </text>
+            
+            <text class="player1 strat strat11 middle12" x="35" y="430">S2 </text>
+            <text class="player1 strat strat12 middle11" x="35" y="430">S1 </text>
+            <text class="player2 strat strat21 middle22" x="35" y="430">S2 </text>
+            <text class="player2 strat strat22 middle21" x="35" y="430">S1 </text>
+            
+            <line class="line1" x1="450" y1="450" x2="650" y2="450"/>
+            <line class="stick" x1="450" y1="445" x2="450" y2="455"/>
+            <line class="stick" x1="650" y1="445" x2="650" y2="455"/>
+            <line class="line1 interstick2" x1="450" y1="445" x2="650" y2="455"/>
+            <text class="player1 strat_right strat12" x="425" y="455">S2 </text><text class="player1" x="435" y="455">=0</text>
+            <text class="player1 strat_left strat11" x="655" y="455">S1 </text><text class="player1" x="675" y="455">=0</text>
             
         </svg>
         
