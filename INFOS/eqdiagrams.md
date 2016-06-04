@@ -231,3 +231,27 @@ and not the other possibilities which are seen on the left.
 At a later stage, the fineness of the grid should be
 adjustable, e.g. to multiples of 0.5 or 0.1.
 
+## Degenerate games
+
+The following picture shows a _degenerate_ game.
+
+![](./EQDIAG/leftupperenv.png)
+
+In two-player games, a game is degenerate if some player has
+a mixed strategy which assigns positive probability to _k_
+pure strategies, against which the other player has _more
+than k_ best responses.
+
+Hence, a 2x2 game is degenerate if and only if there is a
+pure strategy that has 2 best responses, like strategy _l_
+in the above game. (This holds because the only case where
+the definition of degeneracy can apply is when _k_=1).
+
+A degenerate game can have an infinite number of Nash
+equilibria. However, these will always be part of sets of
+``interchangeable'' equilibria where it suffices to specify
+the extreme points. In the above example, the two
+best-response curves intersect in an interval where player II
+play r for sure, and the two best responses T and B of
+player I can now be mixed so that r stays a best response,
+i.e. whenever $prob(B)\ge 2/3$.
