@@ -116,7 +116,7 @@ svg polyline{
 
 svg .line_trans{
     stroke:rgba(255, 0, 0, 0.0);
-    stroke-width:10px;
+    stroke-width:1em;
 }
 
 /* legend */
@@ -151,7 +151,7 @@ svg .sticklabel{
 
 svg .stick{
     stroke:black;
-    stroke-width:1px;
+    stroke-width:0.1em;
 }
 
 
@@ -162,6 +162,12 @@ svg .pay{
 
 svg .br{
     fill:green;
+}
+
+svg .arc {
+    fill:none;
+    stroke-width:0.1em;
+     stroke:black;
 }
 
 /* Mixed strategy point */
@@ -177,6 +183,7 @@ svg .inter{
    font-weight: bold;
    font-family:Roman;
 }
+
 
 
 /* for canvas version */
