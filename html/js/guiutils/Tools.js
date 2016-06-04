@@ -295,8 +295,38 @@ GTE.UI = (function (parentModule) {
         playerButton.style.color = colour;
     };
 
+    /**
+    *  Zooms out the canvas
+    */
     Tools.prototype.zoomOut = function () {
         GTE.canvas.viewbox(0, 0, GTE.canvas.viewbox().width*1.2, GTE.canvas.viewbox().height*1.2);
+    };
+
+    Tools.prototype.parseMatrix = function (mat1, mat2) {
+        mat1 = mat1.trim();
+        mat2 = mat2.trim();
+        mat1 = mat1.split("\n");
+        mat2 = mat2.split("\n");
+        if(mat1.length != mat2.length) {
+            alert("The size of both matrices should be same");
+            return false;
+        }
+        for(var i = 0;i<mat1.length; i++) {
+            mat1[i] = mat1[i].trim();
+            mat2[i] = mat2[i].trim();
+            mat1[i] = mat1[i].split(" ");
+            mat2[i] = mat2[i].split(" ");
+        }
+        var length = mat1[0].length;
+        for(var i = 0;i<mat1.length; i++) {
+            if(mat1[i].length != length || mat2[i].length != length) {
+                alert("the length of matrices should be same");
+                return false;
+            }
+        }
+        var dim = [];
+        dim.push(mat1.length, mat1[0].length);
+        return dim;
     };
 
     // Add class to parent module

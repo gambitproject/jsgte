@@ -115,9 +115,31 @@
 
     document.getElementById("matrix-settings").addEventListener("submit", function(e){
         var el = document.getElementById("matrixPopup");
-        el.style.display = (popup.style.display == "block") ? "none" : "block";
+        el.style.display = (el.style.display == "block") ? "none" : "block";
         return false;
     });
+
+    document.getElementById("button-matrix-reset").addEventListener("click", function(e){
+        document.getElementById('matrix-player-1').value = GTE.tree.matrix.getMatrixInStringFormat(0);
+        document.getElementById('matrix-player-2').value = GTE.tree.matrix.getMatrixInStringFormat(1);
+        return false;
+    });
+
+    document.getElementById("button-matrix-save").addEventListener("click", function(e){
+        var dimensions = GTE.tools.parseMatrix(document.getElementById('matrix-player-1').value,document.getElementById('matrix-player-2').value )
+        if(dimensions) {
+            GTE.STRATEGICFORMMODE = GTE.STRATEGICFORMMODES.GENERAL;
+            GTE.tools.createIndependentStrategicForm(dimensions[0], dimensions[1]);
+            GTE.tree.clear();
+            GTE.tree.matrix.setMatrixFromStringFormat(0, document.getElementById('matrix-player-1').value);
+            GTE.tree.matrix.setMatrixFromStringFormat(1, document.getElementById('matrix-player-2').value);
+            GTE.tree.matrix.drawMatrix();
+            var el = document.getElementById("matrixPopup");
+            el.style.display = (el.style.display == "block") ? "none" : "block";
+        }
+        return false;
+    });
+
 
     /*
         Hide irrelevant buttons for strategic.html
