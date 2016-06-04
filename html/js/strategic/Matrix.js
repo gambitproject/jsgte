@@ -243,6 +243,19 @@ GTE.TREE = (function(parentModule) {
         }
     };
 
+    Matrix.prototype.getMatrixInStringFormat = function(playerIn) {
+        var str = "";
+        for(var i=0; i<this.strategies[1].length; i++) {
+            for(var j=0; j<this.strategies[2].length; j++) {
+                str += this.matrix[i*this.strategies[2].length+j].strategy.payoffs[playerIn].value;
+                str +=" ";
+            }
+            str+="\n";
+        }
+        console.log(str);
+        return str;
+    };
+
     // Add class to parent module
     parentModule.Matrix = Matrix;
 

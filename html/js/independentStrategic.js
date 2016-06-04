@@ -102,9 +102,8 @@
     document.getElementById("button-matrix").addEventListener("click", function(){
         var el = document.getElementById("matrixPopup");
         el.style.display = (el.style.display == "block") ? "none" : "block";
-        el.style.position = "absolute";
-        el.style.top = 0;
-        el.style.left = 0;
+        document.getElementById('matrix-player-1').value = GTE.tree.matrix.getMatrixInStringFormat(0);
+        document.getElementById('matrix-player-2').value = GTE.tree.matrix.getMatrixInStringFormat(1);
         return false;
     });
 
@@ -132,13 +131,13 @@
         document.getElementById('button-player-less').style.display = 'none' ;
         document.getElementById('button-merge').style.display = 'none' ;
         document.getElementById('button-dissolve').style.display = 'none' ;
-
-
     };
     hideButtons();
 
     var matrixPopup = document.getElementById("matrixPopup");
     var matrix_bar = document.getElementById("matrix_bar");
     var offset = { x: 0, y: 0 };
-
+    //initialise the matrix
+    GTE.STRATEGICFORMMODE = GTE.STRATEGICFORMMODES.GENERAL;
+    GTE.tools.createIndependentStrategicForm(2, 2);
 }());
