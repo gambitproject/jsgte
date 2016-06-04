@@ -1,0 +1,52 @@
+<gte version="0.1">
+  <gameDescription/>
+  <display>
+    <color player="1">#FF0000</color>
+    <color player="2">#0000FF</color>
+    <font>Times</font>
+    <strokeWidth>1</strokeWidth>
+    <nodeDiameter>7</nodeDiameter>
+    <isetDiameter>25</isetDiameter>
+    <levelDistance>75</levelDistance>
+  </display>
+  <players>
+    <player playerId="1">Alice</player>
+    <player playerId="2">Bob</player>
+  </players>
+  <extensiveForm>
+    <node>
+      <node player="Alice" prob="1/2">
+        <node iset="2" player="Bob" move="R">
+          <outcome move="M">
+            <payoff player="Alice">2</payoff>
+            <payoff player="Bob">-2</payoff>
+          </outcome>
+          <outcome move="P">
+            <payoff player="Alice">1</payoff>
+            <payoff player="Bob">-1</payoff>
+          </outcome>
+        </node>
+        <outcome move="F">
+          <payoff player="Alice">-1</payoff>
+          <payoff player="Bob">1</payoff>
+        </outcome>
+      </node>
+      <node player="Alice" prob="1/2">
+        <node iset="2" player="Bob" move="R">
+          <outcome move="M">
+            <payoff player="Alice">-2</payoff>
+            <payoff player="Bob">2</payoff>
+          </outcome>
+          <outcome move="P">
+            <payoff player="Alice">1</payoff>
+            <payoff player="Bob">-1</payoff>
+          </outcome>
+        </node>
+        <outcome move="F">
+          <payoff player="Alice">-1</payoff>
+          <payoff player="Bob">1</payoff>
+        </outcome>
+      </node>
+    </node>
+  </extensiveForm>
+</gte>
