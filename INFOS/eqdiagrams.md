@@ -235,7 +235,7 @@ adjustable, e.g. to multiples of 0.5 or 0.1.
 
 The following picture shows a _degenerate_ game.
 
-![](./EQDIAG/leftupperenv.png)
+![](./EQDIAG/degen1.png)
 
 In two-player games, a game is degenerate if some player has
 a mixed strategy which assigns positive probability to _k_
@@ -254,4 +254,36 @@ the extreme points. In the above example, the two
 best-response curves intersect in an interval where player II
 play r for sure, and the two best responses T and B of
 player I can now be mixed so that r stays a best response,
-i.e. whenever $prob(B)\ge 2/3$.
+i.e. whenever prob(B) >= 2/3.
+
+This is a whole _interval_ of NE.
+In the diagram this is indicated by a green rectangle.
+It is displayed so that the two intersecting best response
+curves are drawn with first (at lowest visual depth) the
+green equilibrium rectangle, then (second-lowest depth) the
+blue best response curve, then (highest, most visible depth)
+for the interval where the two curves intersect the red
+best-reponse curve as a DOTTED LINE.
+(This is fine-tuning, but the green rectangle should be
+shown for sure.)
+
+The intersection of the two best-response curves can result
+in a single interval, and the two curves can even intersect
+_completely_ in which case we get the union of two NE line
+segments.
+
+### "Very" degenerate game: all strategies are best responses
+
+As an even further complication, two strategies can
+_simultaneously_ be best responses, where they define the
+same line segment in the goalpost diagram. In that case
+the best response "curve" (normally the Z-like line with a
+connecting orthogonal cross segment) is in fact the WHOLE
+SQUARE (because that player can always play everything),
+and the intersection is simply the other person's best
+response curve. Which in turn may also be the whole square.
+This is the case, for example, when all payoffs are zero.
+It may be confusing to display the equilibria for this came
+and therefore be advisable not use this as the default game,
+but rather, for example, one of the standard games such as
+Battle of the Sexes.
