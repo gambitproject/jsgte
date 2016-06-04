@@ -62,7 +62,7 @@ function doMouseDown(event) {
     event.preventDefault();
     console.log("Down: "+this.getAttribute("class"));
     moving_point=this;
-    if (this.getAttribute("class")=="line_trans"){
+    if (this.getAttribute("class").includes("line_trans")){
         Pos_prev=getMousePosition(event);
         document.addEventListener("mousemove", doMouseMoveLine);
     }
@@ -88,6 +88,7 @@ function doMouseUp(event) {
 
 function doMouseMove(event) {
     var mousePosition = getMousePosition(event)
+    console.log("Down: "+moving_point.getAttribute("class"));
     svgPosition = svg.getBoundingClientRect();
     //var newPos=~~((-mousePosition.y+svgPosition.top+svgH-50)/3)/10;
     var newPos=Math.round((2*svgH/(svgPosition.bottom-svgPosition.top)*(-mousePosition.y+svgPosition.top)+svgH-50)/30*precision)/precision;
@@ -105,7 +106,7 @@ function doMouseMoveLine(event) {
     var mousePosition = getMousePosition(event)
     diff=mousePosition.y-Pos_prev.y;
         var point1=document.getElementById(moving_point.getAttribute("asso1"));
-        var diffPos=~~((svgH/(svgPosition.bottom-svgPosition.top)*(diff))/30*precision)/precision;
+        var diffPos=~~((2*svgH/(svgPosition.bottom-svgPosition.top)*(diff))/30*precision)/precision;
         var point2=document.getElementById(moving_point.getAttribute("asso2"));
         var pos1=Math.round((point1.value-diffPos)*precision)/precision;
         var pos2=Math.round((point2.value-diffPos)*precision)/precision;
@@ -117,7 +118,7 @@ function doMouseMoveLine(event) {
     }
 
     
-    //console.log("Moving: X = " + mousePosition.x + ", Y = " + mousePosition.y);
+    console.log("Moving: X = " + mousePosition.x + ", Y = " + mousePosition.y);
 }
 
 
@@ -144,6 +145,8 @@ function compute_firstP(){
             maxP1_1=P1_21;
             minP1_1=P1_11;
             M1_1=2;
+            if (Number(P1_11)==Number(P1_12))
+            M1_1=0;
         }
         if( Number(P1_12)>Number(P1_22)){
             maxP1_2=P1_12;
@@ -153,6 +156,8 @@ function compute_firstP(){
             maxP1_2=P1_22;
             minP1_2=P1_12;
             M1_2=2;
+            if (Number(P1_12)==Number(P1_22))
+            M1_2=0;
         }
         if(maxP1_1==P1_11 && maxP1_2==P1_12){ //If 1 is the best strategy, the middle point is on the left
             point1_1={x:50,y:svgH-50-maxP1_1*30};
@@ -196,6 +201,8 @@ function compute_firstP(){
             maxP2_1=P2_12;
             minP2_1=P2_11;
             M2_1=2;
+            if (Number(P2_11)==Number(P2_12))
+            M2_1=0;
         }
         if( Number(P2_21)>Number(P2_22)){
             maxP2_2=P2_21;
@@ -205,6 +212,8 @@ function compute_firstP(){
             maxP2_2=P2_22;
             minP2_2=P2_21;
             M2_2=2;
+            if (Number(P2_21)==Number(P2_22))
+            M2_2=0;
         }
         if(maxP2_1==P2_11 && maxP2_2==P2_21){//If 1 is the best strategy, the middle point is on the left
             point2_1={x:450,y:svgH-50-maxP2_1*30};
@@ -346,95 +355,172 @@ function compute_firstP(){
         temp2= svg.getElementsByClassName("brline");
         var path1="";
         var path2="";
+        var path1_2="";
+        var path2_2="";
+        var path1_3="";
+        var path2_3="";
         console.log(temp2.length);
         if (M2_1==1){
-            temp[0].setAttributeNS(null, "cx", 50);
-            path1="50,";
-            path2="50,";
+            path2="50,500, 50,";
+            if (M1_1==1){
+                temp[0].setAttributeNS(null, "r", 10);
+                temp[0].setAttributeNS(null, "cx", 50);
+                temp[0].setAttributeNS(null, "cy", 500);
+            }
+            else{
+                temp[0].setAttributeNS(null, "r", 0);
+            }
         }
         else{
-            temp[0].setAttributeNS(null, "cx", 250);
-            path1="250,";
-            path2="250,";
+            if (M1_2==1){
+                temp[0].setAttributeNS(null, "r", 10);
+                temp[0].setAttributeNS(null, "cx", 250);
+                temp[0].setAttributeNS(null, "cy", 500);
+            }
+            else{
+                temp[0].setAttributeNS(null, "r", 0);
+            }
+            
+            if (M2_1==2){
+                path2="250,500, 250," ;
+            }
+            else{
+                path2="50,500, 250,500, 250,"
+            }
+        }
+        if (M2_2==1){
+            path2_2=", 50,"
+            path2_3=", 50,700";
+            if (M1_1==2){
+                temp[1].setAttributeNS(null, "r", 10);
+                temp[1].setAttributeNS(null, "cx", 50);
+                temp[1].setAttributeNS(null, "cy", 700);
+            }
+            else{
+                temp[1].setAttributeNS(null, "r", 0);
+            }
+        }
+        else{
+            path2_2=", 250,"
+                if (M1_2==2){
+                    temp[1].setAttributeNS(null, "r", 10);
+                    temp[1].setAttributeNS(null, "cx", 250);
+                    temp[1].setAttributeNS(null, "cy", 700);
+                }
+                else{
+                    temp[1].setAttributeNS(null, "r", 0);
+                }
+                
+            if (M2_2==0){
+                path2_3=", 250,700, 50,700";
+            }
+            else{
+                path2_3=", 250,700";
+            }
         }
         if (M1_1==1){
-            temp[0].setAttributeNS(null, "cy", 500);
-            path1=path1+500+", ";
-            path2=path2+500+", ";
+            path1="50,500, ";
+            path1_2=",500, ";
         }
         else{
-            temp[0].setAttributeNS(null, "cy", 700);
-            path1=path1+700+", ";
-            path2=path2+700+", ";
-        }
-
-        if (M2_2==1){
-            temp[1].setAttributeNS(null, "cx", 50);
-        }
-        else{
-            temp[1].setAttributeNS(null, "cx", 250);
+            if(M1_1==2){
+            path1="50,700, ";
+            path1_2=",700, ";
+            }
+            else{
+                path1="50,500, 50,700, ";
+                path1_2=",700, ";
+            }
         }
         if (M1_2==1){
-            temp[1].setAttributeNS(null, "cy", 500);
+            path1_3=",500, 250,500";
         }
         else{
-            temp[1].setAttributeNS(null, "cy", 700);
+            if(M1_2==2){
+                path1_3=",700, 250,700";}
+            else
+            path1_3=",700, 250,700, 250,500";
         }
-        if (point1_2.x>50 && point1_2.x<250 && point2_2.x>450 && point2_2.x<650){
-            var posx=50+point1_2.x-50;
+        if (point1_2.x>50 && point1_2.x<250){
+            var posx=~~(50+point1_2.x-50);
             temp[2].setAttributeNS(null, "x", posx-10);
-            path1=path1+posx+","+temp[0].getAttribute("cy")+", "+posx+","+temp[1].getAttribute("cy")+" ,"+temp[1].getAttribute("cx")+","+temp[1].getAttribute("cy");
-            var posy=500+point2_2.x-450;
+            temp[2].setAttributeNS(null, "y", 590);
+            path1=path1+posx+path1_2+posx+path1_3;
+       }
+        else{
+            temp[2].setAttributeNS(null, "x", 140);
+           temp[2].setAttributeNS(null, "height", 0);
+           temp[2].setAttributeNS(null, "width", 0);
+           if(M1_1==1 || M1_2==1){
+               path1="50,500, 250,500";
+           }
+              path1="50,700, 250,700";
+       }
+
+
+        if(point2_2.x>450 && point2_2.x<650){
+            var posy=~~(500+point2_2.x-450);
             temp[2].setAttributeNS(null, "y", posy-10);
             temp[2].setAttributeNS(null, "height", 20);
             temp[2].setAttributeNS(null, "width", 20);
-            path2=path2+temp[0].getAttribute("cx")+","+posy+", "+temp[1].getAttribute("cx")+","+posy+", "+temp[1].getAttribute("cx")+","+temp[1].getAttribute("cy");
+            path2=path2+posy+path2_2+posy+path2_3;
         }
         else{
+            if (point1_2.x<=50 && point1_2.x>=250){
             temp[2].setAttributeNS(null, "height", 0);
-            temp[2].setAttributeNS(null, "width", 0);
-            if (temp[0].getAttribute("cy")==temp[1].getAttribute("cy")){
-                path2=path2+temp[0].getAttribute("cx")+","+temp[1].getAttribute("cy")+", "+temp[1].getAttribute("cx")+","+temp[1].getAttribute("cy");
-                path1="";
-            }
+                temp[2].setAttributeNS(null, "width", 0);}
+            if (M2_1==1 || M2_2==2){
+                path2="50,500, 50,700";}
             else{
-                path2="";
-                path1=path1+temp[1].getAttribute("cx")+","+temp[0].getAttribute("cy")+", "+temp[1].getAttribute("cx")+","+temp[1].getAttribute("cy");
+                path2="250,500, 250,700";
             }
         }
         temp2[0].setAttributeNS(null, "points", path1);
         temp2[1].setAttributeNS(null, "points", path2);
         
-        var stick=svg.getElementsByClassName("middle11");
-        for (i=0;i<stick.length;i++){
-            if(point2_2.x==450){
-                stick[i].textContent=""
-            }
-            pos=(point2_2.x+Number(450))/2;
-            stick[i].setAttributeNS(null, "x",pos);
-        }
-        var stick=svg.getElementsByClassName("middle12");
+        var stick=svg.getElementsByClassName("middle21");
         for (i=0;i<stick.length;i++){
             if(point2_2.x==650){
                 stick[i].textContent=""
             }
+            if(M2_2==2)
+            pos=(point2_2.x+Number(450))/2;
+            else
             pos=(point2_2.x+Number(650))/2;
-            stick[i].setAttributeNS(null, "x",pos);
-        }
-        
-        var stick=svg.getElementsByClassName("middle21");
-        for (i=0;i<stick.length;i++){
-            if(point1_2.x==50){
-                stick[i].textContent=""
-            }
-            pos=(point1_2.x+Number(50))/2;
+            
             stick[i].setAttributeNS(null, "x",pos);
         }
         var stick=svg.getElementsByClassName("middle22");
         for (i=0;i<stick.length;i++){
+            if(point2_2.x==450){
+                stick[i].textContent=""
+            }
+            if(M2_1==2)
+            pos=(point2_2.x+Number(450))/2;
+            else
+            pos=(point2_2.x+Number(650))/2;
+            stick[i].setAttributeNS(null, "x",pos);
+        }
+        
+        var stick=svg.getElementsByClassName("middle11");
+        for (i=0;i<stick.length;i++){
             if(point1_2.x==250){
                 stick[i].textContent=""
             }
+            if(M1_2==2)
+            pos=(point1_2.x+Number(50))/2;
+            else
+            pos=(point1_2.x+Number(250))/2;
+            stick[i].setAttributeNS(null, "x",pos);
+        }
+        var stick=svg.getElementsByClassName("middle12");
+        for (i=0;i<stick.length;i++){
+            if(point1_2.x==50){
+                stick[i].textContent=""
+            }
+            if(M1_1==2)
+            pos=(point1_2.x+Number(50))/2;
+            else
             pos=(point1_2.x+Number(250))/2;
             stick[i].setAttributeNS(null, "x",pos);
         }
@@ -654,10 +740,10 @@ function compute_firstP(){
             <text class="player2 strat strat21" x="50" y="720">S2 </text>
             <text class="player2 strat strat22" x="250" y="720">S1 </text>
             
-            <text class="player2 strat strat21 middle11" x="35" y="430">S2 </text>
-            <text class="player2 strat strat22 middle12" x="265" y="430">S1 </text>
-            <text class="player1 strat strat11 middle21" x="435" y="430">S2 </text>
-            <text class="player1 strat strat12 middle22" x="665" y="430">S1 </text>
+            <text class="player2 strat strat21 middle21" x="35" y="430">S2 </text>
+            <text class="player2 strat strat22 middle22" x="265" y="430">S1 </text>
+            <text class="player1 strat strat11 middle11" x="435" y="430">S2 </text>
+            <text class="player1 strat strat12 middle12" x="665" y="430">S1 </text>
             
             <line class="line1" x1="450" y1="450" x2="650" y2="450"/>
             <line class="stick" x1="450" y1="445" x2="450" y2="455"/>
