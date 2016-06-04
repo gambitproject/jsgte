@@ -1,0 +1,123 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="stylesheet" href="css/normalize.min.css">
+        <link rel="stylesheet" href="css/main.css">
+        <link rel="stylesheet" href="css/svg-styles.css">
+        <link rel="stylesheet" href="css/widgets-styles.css">
+        <link rel="stylesheet" href="css/font.css">
+    </head>
+    <body>
+        <!--[if lt IE 8]>
+            <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+
+        <div id="toolbar" class="full-width darker">
+            <div>
+                <img src="images/horiz8_small.png" class="left ml-10 vertical-centered">
+            </div>
+            <div>
+                <ul class="vertical-centered">
+                    <li><button id="button-new" class="button button--sacnite button--inverted" alt="New game" title="New game"><i class="icon-file"></i></button></li>
+                </ul>
+                <ul class="vertical-centered">
+                    <li><button id="button-tree" class="text-button" alt="Strategic Form" title="Strategic Form">Tree</button></li>
+                    <li><button id="button-strategic" class="text-button" alt="Strategic Form" title="Strategic Form">Convert to Strategic</button></li>
+                </ul>
+            </div>
+            <div>
+                <ul class="vertical-centered">
+                    <li><button id="button-independent-strategic-general" class="text-button" alt="Create Independent Stratgic Form" title="Create Independent Stratgic Form"><span>General</span></button></li>
+                    <li><button id="button-independent-strategic-zerosum" class="text-button" alt="Create Independent Stratgic Form" title="Create Independent Stratgic Form">Zero Sum</button></li>
+                    <li><button id="button-independent-strategic-symmetric" class="text-button" alt="Create Independent Stratgic Form" title="Create Independent Stratgic Form">Symmetric</button></li>
+                </ul>
+            </div>
+            <div>
+                <ul class="vertical-centered">
+                    <li><button id="button-add" class="active button button--sacnite button--inverted" alt="Add child node" title="Add child node"><i class="icon-plus-circle"></i></button></li>
+                    <li><button id="button-remove" class="button button--sacnite button--inverted" alt="Remove node" title="Remove node"><i class="icon-minus-circle"></i></button></li>
+                </ul>
+                <ul class="vertical-centered">
+                    <div id="player-buttons">
+                    </div>
+                    <li><button id="button-player-more" class="button button--sacnite button--inverted" alt="More players" title="More players"><i class="icon-user-plus"></i></button></li>
+                    <li><button id="button-player-less" class="button button--sacnite button--inverted" alt="Less players" title="Less players"><i class="icon-user-less"></i></button></li>
+                </ul>
+                <ul class="vertical-centered">
+                    <li><button id="button-merge" class="button button--sacnite button--inverted" alt="Merge isets"><i class="icon-link"></i></button></li>
+                    <li><button id="button-dissolve" class="button button--sacnite button--inverted" alt="Dissolve iset"><i class="icon-unlink"></i></button></li>
+                </ul>
+                <ul class="vertical-centered">
+                    <li><button id="button-settings" class="button button--sacnite button--inverted" alt="Settings"><i class="icon-cog"></i></button></li>
+                </ul>
+            </div>
+        </div>
+        <div id="canvas">
+
+        </div>
+        <div id="settings">
+            <div id="settings_bar"><i class="icon-cog"></i>
+            &nbsp; &nbsp; &nbsp;
+            Settings &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            </div>
+            <a id="button-settings-close" title="Close" class="close">X</a>
+            <form id="form-settings" action="" method="post">
+                <ul>
+                    <li id="orientation">
+                        <label>Orientation</label>
+                        <input type="radio" name="orientation" value="0" orientation="0">Vertical
+                        <input type="radio" name="orientation" value="1" orientation="1">Horizontal
+                    </li>
+                    <li id="chance-colour">
+                        <label>Chance player colour</label>
+                        <input type="color" name="chance-colour">
+                    </li>
+                    <li id="player-colours">
+                        <label>Player colours</label>
+                    </li>
+                    <li>
+                        <label for="stroke-width">Stroke width</label>
+                        <input type="number" name="stroke-width" value="0">
+                    </li>
+                    <li>
+                        <label for="circle-size">Circle size</label>
+                        <input type="number" name="circle-size" value="0">
+                    </li>
+                    <li>
+                        <label for="dist-levels">Distance between levels</label>
+                        <input type="number" name="dist-levels" value="0">
+                    </li>
+                    <li>
+                        <button id="button-settings-reset" type="button" name="clear">Reset</button>
+                        <button id="button-settings-save" type="submit" name="save">Save</button>
+                    </li>
+                </ul>
+            </form>
+        </div>
+        <script src="js/thirdparty/svg.min.js"></script>
+        <script src="js/structure.js"></script>
+        <script src="js/guiutils/Tools.js"></script>
+        <script src="js/guiutils/ContentEditable.js"></script>
+        <script src="js/guiutils/MultiAction.js"></script>
+        <script src="js/guiutils/Block.js"></script>
+        <script src="js/tree/Utils.js"></script>
+        <script src="js/tree/ISet.js"></script>
+        <script src="js/tree/Move.js"></script>
+        <script src="js/tree/ChanceMove.js"></script>
+        <script src="js/tree/Payoff.js"></script>
+        <script src="js/tree/Player.js"></script>
+        <script src="js/tree/Tree.js"></script>
+        <script src="js/tree/Node.js"></script>
+        <script src="js/strategic/StrategyBlock.js"></script>
+        <script src="js/strategic/Strategy.js"></script>
+        <script src="js/strategic/Matrix.js"></script>
+        <script src="js/strategic/StrategicUnit.js"></script>
+        <script src="js/independentStrategic.js"></script>
+    </body>
+</html>
