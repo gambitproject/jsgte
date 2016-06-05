@@ -441,40 +441,140 @@ function compute_firstP(){
             else
             path1_3=",700, 250,700, 250,500";
         }
-        if (point1_2.x>50 && point1_2.x<250){
+        if (point1_2.x>50 && point1_2.x<250 && point2_2.x>450 && point2_2.x<650){
             var posx=~~(50+point1_2.x-50);
             temp[2].setAttributeNS(null, "x", posx-10);
-            temp[2].setAttributeNS(null, "y", 590);
-            path1=path1+posx+path1_2+posx+path1_3;
-       }
-        else{
-            temp[2].setAttributeNS(null, "x", 140);
-           temp[2].setAttributeNS(null, "height", 0);
-           temp[2].setAttributeNS(null, "width", 0);
-           if(M1_1==1 || M1_2==1){
-               path1="50,500, 250,500";
-           }
-              path1="50,700, 250,700";
-       }
-
-
-        if(point2_2.x>450 && point2_2.x<650){
             var posy=~~(500+point2_2.x-450);
             temp[2].setAttributeNS(null, "y", posy-10);
             temp[2].setAttributeNS(null, "height", 20);
             temp[2].setAttributeNS(null, "width", 20);
+            path1=path1+posx+path1_2+posx+path1_3;
             path2=path2+posy+path2_2+posy+path2_3;
-        }
+       }
         else{
-            if (point1_2.x<=50 && point1_2.x>=250){
-            temp[2].setAttributeNS(null, "height", 0);
-                temp[2].setAttributeNS(null, "width", 0);}
-            if (M2_1==1 || M2_2==2){
-                path2="50,500, 50,700";}
-            else{
-                path2="250,500, 250,700";
+            if (point2_2.x>450 && point2_2.x<650){
+                posy=~~(500+point2_2.x-450);
+                temp[2].setAttributeNS(null, "y", posy-10);
+                temp[2].setAttributeNS(null, "height", 20);
+                temp[2].setAttributeNS(null, "width", 20);
+                path2=path2+posy+path2_2+posy+path2_3;
+                if(M1_1==0){
+                    path1="50,500, 50,700, ";
+                    rad=(posy-500);
+                    temp[2].setAttributeNS(null, "y", 500+Number(rad));
+                    temp[2].setAttributeNS(null, "x", 40);
+                    temp[2].setAttributeNS(null, "height", rad);
+                    temp[2].setAttributeNS(null, "width", 20);
+                    if(M2_1==1){
+                        rad=(700-posy);
+                        temp[2].setAttributeNS(null, "x", 40);
+                        temp[2].setAttributeNS(null, "y", 700-rad);
+                        temp[2].setAttributeNS(null, "height", rad);
+                        temp[2].setAttributeNS(null, "width", 20)
+                    }
+                    else{;
+                        rad=(posy-500);
+                        temp[2].setAttributeNS(null, "x", 40);
+                        temp[2].setAttributeNS(null, "y", 500);
+                        temp[2].setAttributeNS(null, "height", rad);
+                        temp[2].setAttributeNS(null, "width", 20);
+                    }
+                }
+                else if (M1_1==1)
+                    path1="50,500, ";
+                else
+                    path1="50,700, ";
+                if(M1_2==0){
+                    if(M2_1==1){
+                        rad=(700-posy);
+                        temp[2].setAttributeNS(null, "x", 240);
+                        temp[2].setAttributeNS(null, "y", 700-rad);
+                        temp[2].setAttributeNS(null, "height", rad);
+                        temp[2].setAttributeNS(null, "width", 20)
+                    }
+                    else{;
+                        rad=(posy-500);
+                        temp[2].setAttributeNS(null, "x", 240);
+                        temp[2].setAttributeNS(null, "y", 500);
+                        temp[2].setAttributeNS(null, "height", rad);
+                        temp[2].setAttributeNS(null, "width", 20);
+                    }
+                    if (M1_1==1)
+                        path1=path1+"250,500, 250,700";
+                    else
+                        path1=path1+"250,700, 250,500";
+                }
+                else if (M1_2==1)
+                    path1=path1+"250,500";
+                else
+                    path1=path1+"250,700";
             }
-        }
+            else{
+            if(point1_2.x>50 && point1_2.x<250){
+                var posx=~~(50+point1_2.x-50);
+                temp[2].setAttributeNS(null, "x", posx-10);
+                temp[2].setAttributeNS(null, "height", 20);
+                temp[2].setAttributeNS(null, "width", 20);
+                path1=path1+posx+path1_2+posx+path1_3;
+                if(M2_1==0){
+                    path2="50,500, 250,500, ";
+                    if(M1_1==1){
+                    rad=(posx-50);
+                    alert(posx+" "+rad+" ");
+                    temp[2].setAttributeNS(null, "x", 50);
+                    temp[2].setAttributeNS(null, "y", 490);
+                    temp[2].setAttributeNS(null, "height", 20);
+                    temp[2].setAttributeNS(null, "width", rad);
+                    }
+                    else{
+                        rad=(250-posx);
+                        alert(posx+" "+rad+" ");
+                        temp[2].setAttributeNS(null, "x", 250-Number(rad));
+                        temp[2].setAttributeNS(null, "y", 490);
+                        temp[2].setAttributeNS(null, "height", 20);
+                        temp[2].setAttributeNS(null, "width", rad);
+                    }
+                }
+                else if (M2_1==1)
+                    path2="50,500, ";
+                else
+                    path2="250,500, ";
+                if (M2_2==0){
+                    path2=path2+"50,500, 250,500, ";
+                    if(M1_1==1){
+                        rad=(posx-50);
+                        alert(posx+" "+rad+" ");
+                        temp[2].setAttributeNS(null, "x", 50);
+                        temp[2].setAttributeNS(null, "y", 240);
+                        temp[2].setAttributeNS(null, "height", 20);
+                        temp[2].setAttributeNS(null, "width", rad);
+                    }
+                    else{
+                        rad=(250-posx);
+                        alert(posx+" "+rad+" ");
+                        temp[2].setAttributeNS(null, "x", 250-Number(rad));
+                        temp[2].setAttributeNS(null, "y", 240);
+                        temp[2].setAttributeNS(null, "height", 20);
+                        temp[2].setAttributeNS(null, "width", rad);
+                    }
+                    if(M1_2==1)
+                        path2=path2+"50,700, 250,700";
+                    else
+                        path2=path2+"250,700, 50,700";
+                }
+                else{ if (M2_2==1)
+                    path2=path2+"50,700";
+                else
+                    path2=path2+"250,700";
+                }
+            }
+            else{
+                temp[2].setAttributeNS(null, "height", 0);
+                temp[2].setAttributeNS(null, "width", 0);
+            }
+            }
+       }
+
         temp2[0].setAttributeNS(null, "points", path1);
         temp2[1].setAttributeNS(null, "points", path2);
         
