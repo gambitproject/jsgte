@@ -11,7 +11,7 @@ GTE.TREE = (function(parentModule) {
 
     Communication.prototype.sendPostRequest = function(url, parameters) {
         $.ajax({
-           type: "GET",
+           type: "POST",
            url: url,
            success: function (msg) {
                    console.log(msg);
