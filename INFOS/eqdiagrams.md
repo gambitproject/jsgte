@@ -238,9 +238,9 @@ The following picture shows a _degenerate_ game.
 ![](./EQDIAG/degen1.png)
 
 In two-player games, a game is degenerate if some player has
-a mixed strategy which assigns positive probability to _k_
+a mixed strategy which assigns positive probability to exactly _k_
 pure strategies, against which the other player has _more
-than k_ best responses.
+than k_ pure best responses.
 
 Hence, a 2x2 game is degenerate if and only if there is a
 pure strategy that has 2 best responses, like strategy _l_
@@ -282,6 +282,11 @@ connecting orthogonal cross segment) is in fact the WHOLE
 SQUARE (because that player can always play everything),
 and the intersection is simply the other person's best
 response curve. Which in turn may also be the whole square.
+In other words, this case arises if the two strategies have
+identical payoffs for the player, and then the two strategies may be arbitrarily
+substituted for each other, or played in an arbitrary mixture.
+(On the other hand, the two strategies may still have different effects 
+on the other player, and therefore one cannot just ignore one of them.)
 This is the case, for example, when all payoffs are zero.
 It may be confusing to display the equilibria for this came
 and therefore be advisable not use this as the default game,
