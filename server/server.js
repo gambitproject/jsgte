@@ -39,5 +39,5 @@ app.post('/solve', function (req, res)
 {
 	//solve and return ans
 	res.send("ans");
-	console.log(req.body['Name']);
+	console.log(req.body);
 });
