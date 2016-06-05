@@ -125,6 +125,14 @@
         return false;
     });
 
+    document.getElementById("button-solve-lrs").addEventListener("click", function(){
+        var communicate = new GTE.TREE.Communication();
+        var matrix1 = GTE.tree.matrix.getMatrixInStringFormat(0);
+        var matrix2 = GTE.tree.matrix.getMatrixInStringFormat(1);
+        communicate.sendPostRequest('/solve', {player1 : matrix1, player2 : matrix2});
+        return false;
+    });
+
     document.getElementById("button-matrix-save").addEventListener("click", function(e){
         var dimensions = GTE.tools.parseMatrix(document.getElementById('matrix-player-1').value,document.getElementById('matrix-player-2').value )
         if(dimensions) {
