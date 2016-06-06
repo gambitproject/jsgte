@@ -39,7 +39,11 @@ app.get('/strategic', function (req, res)
 app.post('/solve', function (req, res) 
 {
 	//solve and return ans
-	var input = "3 2 0 6 2 5 3 3 1 0 0 2 4 3 ";
+	var matrix = req.body;
+	var input = matrix['height'] + " "+matrix['width']+"\n";
+	input = input + matrix['player1'] + "\n";
+	input = input + matrix['player2'];
+	console.log(input);
 	var index = gameIndex;
 	gameIndex++;
 	fs.writeFile("./inputs/game"+index, input, function(err) {
@@ -49,16 +53,13 @@ app.post('/solve', function (req, res)
 	    console.log("The input was saved!");
 		var process = spawn('./lrslib-061/lrsnash',  ['./inputs/game'+index]);
 		process.stdout.on('data', function(data) {
-			console.log(data);
+			res.send(data);
 			fs.writeFile("./outputs/game"+index, data, function(err) {
 			    if(err) {
 			        return console.log(err);
 			    }
 			    console.log("The output was saved!");
 			});
-
 		});
 	});
-	res.send("ans");
-	console.log(req.body);
 });
