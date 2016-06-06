@@ -238,7 +238,6 @@ GTE.TREE = (function(parentModule) {
                 for (var k = 0;k<this.strategies[i][j].length;k++) {
                     str = str + this.strategies[i][j][k].name;
                 }
-                console.log(str);
             }
         }
     };
@@ -252,7 +251,6 @@ GTE.TREE = (function(parentModule) {
             }
             str+="\n";
         }
-        console.log(str);
         return str;
     };
 

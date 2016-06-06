@@ -129,8 +129,8 @@
         var communicate = new GTE.TREE.Communication();
         var matrix1 = GTE.tree.matrix.getMatrixInStringFormat(0);
         var matrix2 = GTE.tree.matrix.getMatrixInStringFormat(1);
-        var height = GTE.tree.getNumberOfStrategies(GTE.tree.players[1]);
-        var width = GTE.tree.getNumberOfStrategies(GTE.tree.players[2]);
+        var height = GTE.tree.matrix.getNumberOfStrategies(GTE.tree.players[1]);
+        var width = GTE.tree.matrix.getNumberOfStrategies(GTE.tree.players[2]);
         communicate.sendPostRequest('/solve', {player1 : matrix1, player2 : matrix2, height: height, width: width});
         return false;
     });
