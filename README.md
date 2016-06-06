@@ -33,4 +33,6 @@ On Linux you can install ghp-import via
 7. cd lrslib-061
 8. Compile all the algorithms (make all)
 9. cd .. (server)
-10. Run "node server.js"
+10. Run "node server.js" (Make sure you are in the server directory)
+11. localhost:3000/tree for tree games
+12. localhost:3000/strategic for independent games
