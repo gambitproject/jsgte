@@ -269,6 +269,12 @@ GTE.TREE = (function(parentModule) {
         }
     };
 
+    Matrix.prototype.getNumberOfStrategies = function(player) {
+        var index = this.players.indexOf(player);
+        if(index != -1) {
+            return this.strategies[index].length;
+        }
+    };
     // Add class to parent module
     parentModule.Matrix = Matrix;
 
