@@ -39,26 +39,9 @@ GTE.UI = (function (parentModule) {
     * to the xml data received.
     */
     Tools.prototype.loadTree = function(xml) {
-        var jsTree = X2J.parseXml(xml);
-        var tree = jsTree[0].gte[0];
-        var display = tree.display[0];
-        this.resetPlayers(1);
-        this.activePlayer = -1;
-        this.isetToolsRan = true;
-        var root = new GTE.TREE.Node(null);
-        GTE.tree = new GTE.TREE.Tree(root);
-        this.addChancePlayer();
-        this.setPlayers(display.color, tree.players[0].player);
-        this.setDisplayProperties(display);
-        this.createTree(tree.extensiveForm[0].node[0], root);
-        root.assignPlayer(GTE.tree.players[tree.extensiveForm[0].node[0].jAttr.player]);
-        tree.extensiveForm[0].node[0].jAttr.iset = 0;
-   ///     this.setIsets(tree.extensiveForm[0].node[0], root);
-        GTE.tree.initializeISets();
-        GTE.tree.draw();
-        this.mergeIsets(tree.extensiveForm[0].node[0], root);
-        GTE.tree.draw();
-        this.switchMode(GTE.MODES.ADD);
+        var importer = new GTE.TREE.XmlImporter(xml);
+        importer.parseXmlToJson();
+        importer.loadTree();
     };
 
     /**
