@@ -44,7 +44,7 @@ GTE.UI = (function (parentModule) {
         var display = tree.display[0];
         this.resetPlayers(1);
         this.activePlayer = -1;
-        this.isetToolsRan = false;
+        this.isetToolsRan = true;
         var root = new GTE.TREE.Node(null);
         GTE.tree = new GTE.TREE.Tree(root);
         this.addChancePlayer();
@@ -52,6 +52,11 @@ GTE.UI = (function (parentModule) {
         this.setDisplayProperties(display);
         this.createTree(tree.extensiveForm[0].node[0], root);
         root.assignPlayer(GTE.tree.players[tree.extensiveForm[0].node[0].jAttr.player]);
+        tree.extensiveForm[0].node[0].jAttr.iset = 0;
+   ///     this.setIsets(tree.extensiveForm[0].node[0], root);
+        GTE.tree.initializeISets();
+        GTE.tree.draw();
+        this.mergeIsets(tree.extensiveForm[0].node[0], root);
         GTE.tree.draw();
         this.switchMode(GTE.MODES.ADD);
     };
@@ -81,7 +86,7 @@ GTE.UI = (function (parentModule) {
                 this.createRecursiveTree(node.node[node.jIndex[i][1]], root);
             }
             if(node.jIndex[i][0] == "outcome") {
-                GTE.tree.addChildNodeTo(root, GTE.tree.players[node.node[node.jIndex[i][1]].jAttr.player]);
+                GTE.tree.addChildNodeTo(root, GTE.tree.players[node.outcome[node.jIndex[i][1]].jAttr.player]);
             }
         }
         return root;
@@ -320,6 +325,48 @@ GTE.UI = (function (parentModule) {
         GTE.STORAGE.settingsLineThickness = display.strokeWidth[0].jValue;
         GTE.STORAGE.settingsCircleSize = display.nodeDiameter[0].jValue;
         GTE.STORAGE.settingsDistLevels = display.levelDistance[0].jValue;
+    };
+
+    /**
+    * Sets isets for the loaded tree
+    */
+    Tools.prototype.setIsets = function (nodejs, node) {
+
+    //        var nodes = GTE.tree.getAllNodes(true);
+    //        for (var i = 0; i < nodes.length; i++) {
+    //            GTE.tree.createSingletonISet(nodes[i]);
+    //       }
+        GTE.tree.createSingletonISet(node);
+
+        if(nodejs.jIndex != undefined) {
+            for( var i = 0 ; i < nodejs.jIndex.length ; i++) {
+                if(nodejs.jIndex[i][0] == "node") {
+                    this.setIsets(nodejs.node[nodejs.jIndex[i][1]], node.children[i]);
+                }
+                if(nodejs.jIndex[i][0] == "outcome") {
+                    this.setIsets(nodejs.outcome[nodejs.jIndex[i][1]], node.children[i]);
+                }
+            }
+        }
+    };
+
+    Tools.prototype.mergeIsets = function (nodejs, node) {
+        if(node.iset != GTE.tree.isets[nodejs.jAttr.iset] && nodejs.jAttr.iset != undefined){
+//            GTE.MODE = GTE.MODES.MERGE;
+            node.changeISet(GTE.tree.isets[nodejs.jAttr.iset]);
+            GTE.tree.draw();
+//            GTE.tree.merge(node.iset, GTE.tree.isets[nodejs.jAttr.iset]);
+        }
+        if(nodejs.jIndex != undefined) {
+            for( var i = 0 ; i < nodejs.jIndex.length ; i++) {
+                if(nodejs.jIndex[i][0] == "node") {
+                    this.mergeIsets(nodejs.node[nodejs.jIndex[i][1]], node.children[i]);
+                }
+                if(nodejs.jIndex[i][0] == "outcome") {
+                //    this.mergeIsets(nodejs.outcome[nodejs.jIndex[i][1]], node.children[i]);
+                }
+            }
+        }
     };
 
     // Add class to parent module
