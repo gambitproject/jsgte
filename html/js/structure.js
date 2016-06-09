@@ -44,6 +44,13 @@ var GTE = (function () {
       MERGE: 3,
       DISSOLVE: 4
     };
+    GTE.KEYMODES = {
+      DISABLED: 0,
+      NO_TRAVERSAL: 1,
+      NODE_TRAVERSAL: 2,
+      MULTI_TRAVERSAL: 3
+    };
+    
     if (Object.freeze) {
       Object.freeze(GTE.MODES);
     }

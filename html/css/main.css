@@ -269,13 +269,13 @@ a {
 .button--sacnite:not(.disabled):hover {
     color: #37474f;
 }
-.button--sacnite.button--inverted:not(.disabled):hover {
+.button--sacnite.button--inverted:not(.disabled):hover i, .button--sacnite.button--inverted:not(.disabled):focus i {
     color: #fff;
 }
 .button--sacnite.button--inverted.active {
     color: #fff;
 }
-.button--sacnite:not(.active):not(.disabled):hover::before {
+.button--sacnite:not(.active):not(.disabled):hover::before, .button--sacnite:not(.active):not(.disabled):focus::before {
     box-shadow: inset 0 0 0 2px #37474f;
     -webkit-transform: scale3d(1, 1, 1);
     transform: scale3d(1, 1, 1);

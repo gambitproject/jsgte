@@ -570,6 +570,7 @@ GTE.TREE = (function (parentModule) {
     * @return {Node} newNode    Node that has been added
     */
     Tree.prototype.addChildNodeTo = function (parentNode) {
+        
         var newNode = new GTE.TREE.Node(parentNode);
         this.positionsUpdated = false;
         return newNode;

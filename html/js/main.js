@@ -4,6 +4,8 @@
     // GTE is initialized by the library
     GTE.canvas = SVG('canvas').size("100%", "100%").attr({'style': 'background: #fff'});
     GTE.tools = new GTE.UI.Tools();
+    GTE.keyTraversal = new GTE.UI.KeyTraversal();
+    
     // Initialize settings
     var setSettingsToDefaults = function() {
         GTE.STORAGE.settingsCircleSize = GTE.CONSTANTS.CIRCLE_SIZE;
@@ -73,6 +75,8 @@
 
     // Always start with root and two children
     GTE.tools.newTree();
+    // Initiate key listening for canvas traversal
+    GTE.keyTraversal.addListeners();
 
     document.getElementById("button-new").addEventListener("click", function(){
         GTE.tools.newTree();
@@ -164,6 +168,7 @@
         return false;
     });
 
+    
     document.getElementById("button-settings-reset").addEventListener("click", function() {
         // Clear localStorage and reset settings
         localStorage.clear();
