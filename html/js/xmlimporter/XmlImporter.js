@@ -28,8 +28,11 @@ GTE.TREE = (function(parentModule) {
         GTE.tools.setDisplayProperties(display);
         this.createTree(tree.extensiveForm[0].node[0], root);
         root.assignPlayer(GTE.tree.players[tree.extensiveForm[0].node[0].jAttr.player]);
-        GTE.tools.switchMode(GTE.MODES.MERGE);
+        //GTE.tools.switchMode(GTE.MODES.MERGE);
+        this.setIsets(tree.extensiveForm[0].node[0], root);
         GTE.tree.draw();
+        var listOfIsets = this.getListOfIsets(tree.extensiveForm[0].node[0], root);
+        this.mergeIsets(tree.extensiveForm[0].node[0], root, listOfIsets);
         GTE.tools.switchMode(GTE.MODES.ADD);
     };
 
@@ -62,6 +65,60 @@ GTE.TREE = (function(parentModule) {
             }
         }
         return root;
+    };
+
+    /**
+    * Function to create nodes of the laoded tree
+    */
+    XmlImporter.prototype.setIsets = function(nodejs, node) {
+        GTE.tree.createSingletonISet(node);
+        if(nodejs.jIndex != undefined) {
+            for( var i = 0 ; i < nodejs.jIndex.length ; i++) {
+                if(nodejs.jIndex[i][0] == "node") {
+                    this.setIsets(nodejs.node[nodejs.jIndex[i][1]], node.children[i]);
+                }
+                if(nodejs.jIndex[i][0] == "outcome") {
+                    this.setIsets(nodejs.outcome[nodejs.jIndex[i][1]], node.children[i]);
+                }
+            }
+        }
+    };
+
+    /**
+    * Function that returns a list of isets
+    */
+    XmlImporter.prototype.getListOfIsets = function(nodejs, node) {
+        var list = [node.iset];
+        if(nodejs.jIndex != undefined) {
+            for( var i = 0 ; i < nodejs.jIndex.length ; i++) {
+                if(nodejs.jIndex[i][0] == "node") {
+                    list = list.concat(this.getListOfIsets(nodejs.node[nodejs.jIndex[i][1]], node.children[i]));
+                }
+                if(nodejs.jIndex[i][0] == "outcome") {
+                    list = list.concat((this.getListOfIsets(nodejs.outcome[nodejs.jIndex[i][1]], node.children[i])));
+                }
+            }
+        }
+        return list;
+    };
+
+    XmlImporter.prototype.mergeIsets = function (nodejs, node, listOfIsets) {
+        if(node.iset != listOfIsets[nodejs.jAttr.iset] && nodejs.jAttr.iset != undefined){
+            var currentIset = node.iset;
+            node.changeISet(listOfIsets[nodejs.jAttr.iset]);
+            listOfIsets.splice(listOfIsets.indexOf(currentIset), 1);
+            GTE.tree.draw();
+        }
+        if(nodejs.jIndex != undefined) {
+            for( var i = 0 ; i < nodejs.jIndex.length ; i++) {
+                if(nodejs.jIndex[i][0] == "node") {
+                    this.mergeIsets(nodejs.node[nodejs.jIndex[i][1]], node.children[i], listOfIsets);
+                }
+                if(nodejs.jIndex[i][0] == "outcome") {
+                //    this.mergeIsets(nodejs.outcome[nodejs.jIndex[i][1]], node.children[i]);
+                }
+            }
+        }
     };
 
     // Add class to parent module

@@ -333,17 +333,17 @@ GTE.UI = (function (parentModule) {
         }
     };
 
-    Tools.prototype.mergeIsets = function (nodejs, node) {
-        if(node.iset != GTE.tree.isets[nodejs.jAttr.iset] && nodejs.jAttr.iset != undefined){
+    Tools.prototype.mergeIsets = function (nodejs, node, listOfIsets) {
+        if(node.iset != listOfIsets[nodejs.jAttr.iset] && nodejs.jAttr.iset != undefined){
 //            GTE.MODE = GTE.MODES.MERGE;
-            node.changeISet(GTE.tree.isets[nodejs.jAttr.iset]);
+            node.changeISet(listOfisets[nodejs.jAttr.iset]);
             GTE.tree.draw();
 //            GTE.tree.merge(node.iset, GTE.tree.isets[nodejs.jAttr.iset]);
         }
         if(nodejs.jIndex != undefined) {
             for( var i = 0 ; i < nodejs.jIndex.length ; i++) {
                 if(nodejs.jIndex[i][0] == "node") {
-                    this.mergeIsets(nodejs.node[nodejs.jIndex[i][1]], node.children[i]);
+                    this.mergeIsets(nodejs.node[nodejs.jIndex[i][1]], node.children[i], listOfIsets);
                 }
                 if(nodejs.jIndex[i][0] == "outcome") {
                 //    this.mergeIsets(nodejs.outcome[nodejs.jIndex[i][1]], node.children[i]);
