@@ -673,6 +673,49 @@ function compute_firstP(){
 
 </script>
  <!-- Table for user to update payoff and strategies' names.-->
+ <div id="toolbar" class="full-width darker">
+     <div>
+         <img src="images/horiz8_small.png" class="left ml-10 vertical-centered">
+             </div>
+     <div>
+         <ul class="vertical-centered">
+             <li><button id="button-new" class="button button--sacnite button--inverted" alt="New game" title="New game"><i class="icon-file"></i></button></li>
+         </ul>
+         <ul class="vertical-centered">
+             <li><button id="button-tree" class="text-button" alt="Strategic Form" title="Strategic Form">Tree</button></li>
+             <li><button id="button-strategic" class="text-button" alt="Strategic Form" title="Strategic Form">Convert to Strategic</button></li>
+         </ul>
+     </div>
+     <div>
+         <ul class="vertical-centered">
+             <li><button id="button-independent-strategic-general" class="text-button" alt="Create Independent Stratgic Form" title="Create Independent Stratgic Form"><span>General</span></button></li>
+             <li><button id="button-independent-strategic-zerosum" class="text-button" alt="Create Independent Stratgic Form" title="Create Independent Stratgic Form">Zero Sum</button></li>
+             <li><button id="button-independent-strategic-symmetric" class="text-button" alt="Create Independent Stratgic Form" title="Create Independent Stratgic Form">Symmetric</button></li>
+         </ul>
+     </div>
+     <div>
+         <ul class="vertical-centered">
+             <li><button id="button-add" class="active button button--sacnite button--inverted" alt="Add child node" title="Add child node"><i class="icon-plus-circle"></i></button></li>
+             <li><button id="button-remove" class="button button--sacnite button--inverted" alt="Remove node" title="Remove node"><i class="icon-minus-circle"></i></button></li>
+         </ul>
+         <ul class="vertical-centered">
+             <div id="player-buttons">
+             </div>
+             <li><button id="button-player-more" class="button button--sacnite button--inverted" alt="More players" title="More players"><i class="icon-user-plus"></i></button></li>
+             <li><button id="button-player-less" class="button button--sacnite button--inverted" alt="Less players" title="Less players"><i class="icon-user-less"></i></button></li>
+         </ul>
+         <ul class="vertical-centered">
+             <li><button id="button-merge" class="button button--sacnite button--inverted" alt="Merge isets"><i class="icon-link"></i></button></li>
+             <li><button id="button-dissolve" class="button button--sacnite button--inverted" alt="Dissolve iset"><i class="icon-unlink"></i></button></li>
+         </ul>
+         <ul class="vertical-centered">
+             <li><button id="button-matrix" class="text-button" alt="Settings">Edit Matrix</button></li>
+         </ul>
+         <ul class="vertical-centered">
+             <li><button id="button-solve-lrs" class="text-button" alt="solve lrs">Solve Lrs</button></li>
+         </ul>
+     </div>
+ 
  <div>
      <label>Precision : </label>
      <input class="precision" type="text" id="precision" onchange="redraw()" value="1"/>
@@ -706,6 +749,22 @@ function compute_firstP(){
     </td>
   </tr>
 </table>
+ </div>s
+ <div id="canvas">
+     
+ </div>
+ <div id="matrixPopup">
+     <div id="matrix_bar">
+         Matrix
+     </div>
+     <a id="button-matrix-close" title="Close" class="close">X</a>
+     <form id="matrix-settings" action="" method="post">
+         <textarea id="matrix-player-1" rows = "15" cols = "30"></textarea>
+         <textarea id="matrix-player-2" rows = "15" cols = "30"></textarea><br>
+     </form>
+     <button id="button-matrix-save" type="submit" name="save">Save</button>
+     <button id="button-matrix-reset" name="reset">Reset</button>
+ </div>
         </div>
         
         <svg id="SVG" version="1.1" currentScale="1" viewBox="0 0 700 750">
@@ -908,6 +967,27 @@ function compute_firstP(){
             
         </svg>
         
+        <script src="js/thirdparty/svg.min.js"></script>
+        <script src="js/thirdparty/jquery.min.js"></script>
+        <script src="js/structure.js"></script>
+        <script src="js/guiutils/Tools.js"></script>
+        <script src="js/guiutils/ContentEditable.js"></script>
+        <script src="js/guiutils/MultiAction.js"></script>
+        <script src="js/guiutils/Block.js"></script>
+        <script src="js/tree/Utils.js"></script>
+        <script src="js/tree/ISet.js"></script>
+        <script src="js/tree/Move.js"></script>
+        <script src="js/tree/ChanceMove.js"></script>
+        <script src="js/tree/Payoff.js"></script>
+        <script src="js/tree/Player.js"></script>
+        <script src="js/tree/Tree.js"></script>
+        <script src="js/tree/Node.js"></script>
+        <script src="js/strategic/StrategyBlock.js"></script>
+        <script src="js/strategic/Strategy.js"></script>
+        <script src="js/strategic/Matrix.js"></script>
+        <script src="js/strategic/StrategicUnit.js"></script>
+        <script src="js/independentStrategic.js"></script>
+        <script src="js/servercomm/Communication.js"></script>
                                                                     
 </body>
 </html>
