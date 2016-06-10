@@ -14,6 +14,7 @@ GTE.TREE = (function (parentModule) {
         this.numberOfNodes = 0;
         this.maxNodesDepth = -1;
         this.dirty = true;
+        this.payoffs = [];
     }
 
     /**

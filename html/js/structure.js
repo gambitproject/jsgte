@@ -20,6 +20,7 @@ var GTE = (function () {
       CIRCLE_SIZE: 20,
       DIST_BETWEEN_LEVELS: 150,
       LINE_THICKNESS: 3,
+      BLOCK_SIZE : 5,
       MAX_HORIZONTAL_DISTANCE_BW_NODES: 250,
       VERTICAL_SHIFTING_ON_COLLISIONS: 50,
       CONTENT_EDITABLE_OFFSET_LEFT: 31,
@@ -33,6 +34,9 @@ var GTE = (function () {
       TEXT_NODE_MARGIN: 30,
       MAX_PLAYERS: 10,
       MIN_PLAYERS: 1,
+      MATRIX_X: 100,
+      MATRIX_Y: 100,
+      MATRIX_SIZE: 100,
       DEFAULT_ORIENTATION: GTE.ORIENTATIONS.VERTICAL
     };
 
@@ -44,6 +48,15 @@ var GTE = (function () {
       MERGE: 3,
       DISSOLVE: 4
     };
+
+    GTE.STRATEGICFORMMODE = 0;
+    GTE.STRATEGICFORMMODES = {
+      TREE: 0,
+      GENERAL : 1,
+      ZEROSUM: 2,
+      SYMMETRIC: 3
+    };
+
     if (Object.freeze) {
       Object.freeze(GTE.MODES);
     }

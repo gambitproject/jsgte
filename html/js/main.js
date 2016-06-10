@@ -6,6 +6,7 @@
     GTE.tools = new GTE.UI.Tools();
     // Initialize settings
     var setSettingsToDefaults = function() {
+        GTE.STORAGE.settingsBlockSize = GTE.CONSTANTS.BLOCK_SIZE;
         GTE.STORAGE.settingsCircleSize = GTE.CONSTANTS.CIRCLE_SIZE;
         GTE.STORAGE.settingsLineThickness = GTE.CONSTANTS.LINE_THICKNESS;
         GTE.STORAGE.settingsDistLevels = GTE.CONSTANTS.DIST_BETWEEN_LEVELS;
@@ -79,6 +80,42 @@
         return false;
     });
 
+    document.getElementById("button-strategic").addEventListener("click", function(){
+        if(GTE.tools.isetToolsRan)
+            GTE.tools.toStrategicForm();
+        else
+            alert("first assign payoffs to each player");
+        return false;
+    });
+
+    document.getElementById("button-tree").addEventListener("click", function(){
+        GTE.tree.draw();
+        return false;
+    });
+
+    document.getElementById("button-independent-strategic-general").addEventListener("click", function(){
+        var x = prompt("Enter the number of moves for the first player", "2");
+        var y = prompt("Enter the number of moves for the second player", "2");
+        GTE.STRATEGICFORMMODE = GTE.STRATEGICFORMMODES.GENERAL;
+        GTE.tools.createIndependentStrategicForm(x, y);
+        return false;
+    });
+
+    document.getElementById("button-independent-strategic-zerosum").addEventListener("click", function(){
+        var x = prompt("Enter the number of moves for the first player", "2");
+        var y = prompt("Enter the number of moves for the second player", "2");
+        GTE.STRATEGICFORMMODE = GTE.STRATEGICFORMMODES.ZEROSUM;
+        GTE.tools.createIndependentStrategicForm(x, y);
+        return false;
+    });
+
+    document.getElementById("button-independent-strategic-symmetric").addEventListener("click", function(){
+        var x = prompt("Enter the number of moves for the game", "2");
+        GTE.STRATEGICFORMMODE = GTE.STRATEGICFORMMODES.SYMMETRIC;
+        GTE.tools.createIndependentStrategicForm(x, x);
+        return false;
+    });
+
     document.getElementById("button-add").addEventListener("click", function(){
         GTE.tools.switchMode(GTE.MODES.ADD);
         return false;
@@ -117,13 +154,16 @@
 
     document.getElementById("button-settings").addEventListener("click", function(){
         var el = document.getElementById("settings");
-        el.style.visibility = (el.style.visibility == "visible") ? "hidden" : "visible";
+        el.style.display = (el.style.display == "block") ? "none" : "block";
+        el.style.position = "absolute";
+        el.style.top = 0;
+        el.style.left = 0;
         return false;
     });
 
     document.getElementById("button-settings-close").addEventListener("click", function(){
         var el = document.getElementById("settings");
-        el.style.visibility = (el.style.visibility == "visible") ? "hidden" : "visible";
+        el.style.display = (el.style.display == "block") ? "none" : "block";
         // Reset form to saved settings
         setSettingsForm();
         return false;
@@ -157,7 +197,7 @@
         GTE.tree.draw(true);
         // Hide the modal
         var el = document.getElementById("settings");
-        el.style.visibility = (el.style.visibility == "visible") ? "hidden" : "visible";
+        el.style.display = (popup.style.display == "block") ? "none" : "block";
         return false;
     });
 
@@ -171,5 +211,30 @@
         GTE.tree.draw(true);
         return false;
     });
+    
+    var settings = document.getElementById("settings");
+    var settings_bar = document.getElementById("settings_bar");
+    var offset = { x: 0, y: 0 };
+
+    settings_bar.addEventListener('mousedown', mouseDown, false);
+    window.addEventListener('mouseup', mouseUp, false);
+
+    function mouseUp() {
+        window.removeEventListener('mousemove', settingsMove, true);
+    }
+
+    function mouseDown(e) {
+        offset.x = e.clientX - settings.offsetLeft;
+        offset.y = e.clientY - settings.offsetTop + 100 ;
+        window.addEventListener('mousemove', settingsMove, true);
+    }
+
+    function settingsMove(e) {
+        settings.style.position = 'absolute';
+        var top = e.clientY - offset.y ;
+        var left = e.clientX - offset.x;
+        settings.style.top = top + 'px';
+        settings.style.left = left + 'px';
+    }
 
 }());
