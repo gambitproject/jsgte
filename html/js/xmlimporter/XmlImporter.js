@@ -29,10 +29,14 @@ GTE.TREE = (function(parentModule) {
         this.createTree(tree.extensiveForm[0].node[0], root);
         root.assignPlayer(GTE.tree.players[tree.extensiveForm[0].node[0].jAttr.player]);
         //GTE.tools.switchMode(GTE.MODES.MERGE);
-        this.setIsets(tree.extensiveForm[0].node[0], root);
+        if (GTE.tools.ableToSwitchToISetEditingMode()) {
+            GTE.tree.initializeISets();
+            this.isetToolsRan = true;
+            var listOfIsets = this.getListOfIsets(tree.extensiveForm[0].node[0], root);
+            this.mergeIsets(tree.extensiveForm[0].node[0], root, listOfIsets);
+            this.assignPayoffs(tree.extensiveForm[0].node[0], root);
+        }
         GTE.tree.draw();
-        var listOfIsets = this.getListOfIsets(tree.extensiveForm[0].node[0], root);
-        this.mergeIsets(tree.extensiveForm[0].node[0], root, listOfIsets);
         GTE.tools.switchMode(GTE.MODES.ADD);
     };
 
@@ -116,6 +120,29 @@ GTE.TREE = (function(parentModule) {
                 }
                 if(nodejs.jIndex[i][0] == "outcome") {
                 //    this.mergeIsets(nodejs.outcome[nodejs.jIndex[i][1]], node.children[i]);
+                }
+            }
+        }
+    };
+
+    XmlImporter.prototype.assignPayoffs = function (nodejs, node, listOfIsets) {
+        if(nodejs.jIndex != undefined) {
+            for( var i = 0 ; i < nodejs.jIndex.length ; i++) {
+                if(nodejs.jIndex[i][0] == "node") {
+                    this.assignPayoffs(nodejs.node[nodejs.jIndex[i][1]], node.children[i], listOfIsets);
+                }
+                if(nodejs.jIndex[i][0] == "outcome") {
+                    var outcome = nodejs.outcome[nodejs.jIndex[i][1]];
+                    for(var j = 0; j<outcome.payoff.length;j++) {
+                        var index = GTE.tree.players[outcome.payoff[j].jAttr.player].payoffs.map(function(el) {
+                          return el.leaf;
+                        }).indexOf(node.children[i]);
+
+                        if(index != -1) {
+                            GTE.tree.players[outcome.payoff[j].jAttr.player].payoffs[index].setValue(outcome.payoff[j].jValue);
+                            GTE.tree.players[outcome.payoff[j].jAttr.player].payoffs[index].changeText(outcome.payoff[j].jValue);
+                        }
+                    }
                 }
             }
         }
