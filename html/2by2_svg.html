@@ -4,6 +4,12 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <title>2 by 2 games</title>
+            
+        <link rel="stylesheet" href="css/normalize.min.css">
+        <link rel="stylesheet" href="css/main.css">
+        <link rel="stylesheet" href="css/svg-styles.css">
+        <link rel="stylesheet" href="css/widgets-styles.css">
+        <link rel="stylesheet" href="css/font.css">
         <link rel="stylesheet" href="css/2by2.css">
     </head>
 </script>
@@ -27,7 +33,7 @@
     
     function initDraws() {
         precision=1/document.getElementById("precision").value;
-        svg = document.getElementById("SVG");
+        svg = document.getElementById("drawing");
         svgPosition = svg.getBoundingClientRect();
         payoff=document.getElementsByClassName("pay");
         lines=document.getElementsByClassName("line_trans");
@@ -676,7 +682,7 @@ function compute_firstP(){
  <div id="toolbar" class="full-width darker">
      <div>
          <img src="images/horiz8_small.png" class="left ml-10 vertical-centered">
-             </div>
+    </div>
      <div>
          <ul class="vertical-centered">
              <li><button id="button-new" class="button button--sacnite button--inverted" alt="New game" title="New game"><i class="icon-file"></i></button></li>
@@ -715,42 +721,11 @@ function compute_firstP(){
              <li><button id="button-solve-lrs" class="text-button" alt="solve lrs">Solve Lrs</button></li>
          </ul>
      </div>
- 
- <div>
+  </div>
+ </div>
+ <div id="canvas">
      <label>Precision : </label>
      <input class="precision" type="text" id="precision" onchange="redraw()" value="1"/>
-
-        <table border="1">
-  <tr>
-    <th><p><label class="player1 name">Player I</label></p>
-        <p><label class="player2">Player II</label></p>
-    </th>
-    <th><label><input class="player2 strat" type="text" id="P2S1" onchange="redraw()" value="l"/> </label></th>
-    <th><label><input class="player2 strat" type="text" id="P2S2" onchange="redraw()" value="r"/> </label></th>
-  </tr>
-  <tr>
-      <th><label><input class="player1 strat" type="text" id="P1S1" onchange="redraw()" value="T"/> </label></th>
-    <td><p><input class="player1 payoff" type="text" id="P1_11" onchange="redraw()" value=3></p>
-        <p><input class="player2 payoff" type="text" id="P2_11"  onchange="redraw()" value=2></p>
-    </td>
-    <td><p><input class="player1 payoff" type="text" id="P1_12" onchange="redraw()" value=0></p>
-        <p><input class="player2 payoff" type="text" id="P2_12" onchange="redraw()" value=0></p>
-    </td>
-  </tr>
-  <tr>
-  <th><label><input class="player1 strat" type="text" id="P1S2" onchange="redraw()" value="B"/> </label></th>
-    <td>
-        <p><input class="player1 payoff" type="text" id="P1_21" onchange="redraw()" value=0></p>
-        <p><input class="player2 payoff" type="text" id="P2_21"  onchange="redraw()" value=0></p>
-    </td>
-    <td>
-        <p><input class="player1 payoff" type="text" id="P1_22" onchange="redraw()" value=2></p>
-        <p><input class="player2 payoff" type="text" id="P2_22"  onchange="redraw()" value=3></p>
-    </td>
-  </tr>
-</table>
- </div>s
- <div id="canvas">
      
  </div>
  <div id="matrixPopup">
@@ -765,9 +740,9 @@ function compute_firstP(){
      <button id="button-matrix-save" type="submit" name="save">Save</button>
      <button id="button-matrix-reset" name="reset">Reset</button>
  </div>
-        </div>
+
         
-        <svg id="SVG" version="1.1" currentScale="1" viewBox="0 0 700 750">
+        <svg id="drawing" version="1.1" currentScale="1" height="750" width="700"> <!-- viewBox="0 0 700 750" -->
             <marker id="triangle_left"
                 viewBox="0 0 10 10" refX="0" refY="0"
                 markerUnits="strokeWidth"
@@ -966,6 +941,40 @@ function compute_firstP(){
             <line class="stick" x1="410" y1="700" x2="280" y2="700" marker-end="url(#triangle_down)"/>
             
         </svg>
+        
+        
+        <div>
+            
+            <table border="1">
+                <tr>
+                    <th><p><label class="player1 name">Player I</label></p>
+                        <p><label class="player2">Player II</label></p>
+                    </th>
+                    <th><label><input class="player2 strat" type="text" id="P2S1" onchange="redraw()" value="l"/> </label></th>
+                    <th><label><input class="player2 strat" type="text" id="P2S2" onchange="redraw()" value="r"/> </label></th>
+                </tr>
+                <tr>
+                    <th><label><input class="player1 strat" type="text" id="P1S1" onchange="redraw()" value="T"/> </label></th>
+                    <td><p><input class="player1 payoff" type="text" id="P1_11" onchange="redraw()" value=3></p>
+                        <p><input class="player2 payoff" type="text" id="P2_11"  onchange="redraw()" value=2></p>
+                            </td>
+                    <td><p><input class="player1 payoff" type="text" id="P1_12" onchange="redraw()" value=0></p>
+                        <p><input class="player2 payoff" type="text" id="P2_12" onchange="redraw()" value=0></p>
+                            </td>
+                </tr>
+                <tr>
+                    <th><label><input class="player1 strat" type="text" id="P1S2" onchange="redraw()" value="B"/> </label></th>
+                    <td>
+                        <p><input class="player1 payoff" type="text" id="P1_21" onchange="redraw()" value=0></p>
+                            <p><input class="player2 payoff" type="text" id="P2_21"  onchange="redraw()" value=0></p>
+                                </td>
+                    <td>
+                        <p><input class="player1 payoff" type="text" id="P1_22" onchange="redraw()" value=2></p>
+                            <p><input class="player2 payoff" type="text" id="P2_22"  onchange="redraw()" value=3></p>
+                                </td>
+                </tr>
+            </table>
+        </div>
         
         <script src="js/thirdparty/svg.min.js"></script>
         <script src="js/thirdparty/jquery.min.js"></script>

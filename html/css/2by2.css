@@ -13,10 +13,18 @@ label{
    text-align: center;
 } 
 
-div{
+.prev_table{
     float:left;
     margin :0;
     width:15vw;
+box-sizing: border-box;
+}
+
+#canvas{
+    float:left;
+    margin :0;
+    padding : 0;
+    width:25vw;
 box-sizing: border-box;
 }
 
@@ -49,8 +57,8 @@ table .player2{
 }
 
 
-/*-------------SVG style-------------*/
-svg{
+/*-------------Drawing style-------------*/
+#drawing{
   width:75vw;
   /*height:100vh;*/
   float:right;
@@ -58,130 +66,130 @@ svg{
 box-sizing: border-box;
 }
 
-svg text{
+#drawing text{
     text-anchor:middle;
 }
 
 
 /*contour */
-svg .contour{
+#drawing .contour{
     fill:none;
     stroke:black;
     stroke-width:2px;
 }
 
 /*upper envelopp */
-svg polygon{
+#drawing polygon{
     stroke-width:0px;
 }
 
 /* player color */
 
-svg .player1{
+#drawing .player1{
     fill:red;
 }
 
-svg .line1{
+#drawing .line1{
     stroke:red;
 }
 
-svg .player2{
+#drawing .player2{
     fill:blue;
 }
 
-svg .strat_left{
+#drawing .strat_left{
     text-anchor:start;
     font-style: italic;
    font-weight: bold;
    font-family:Roman;
 }
-svg .strat_right{
+#drawing .strat_right{
     text-anchor:end;
     font-style: italic;
    font-weight: bold;
    font-family:Roman;
 }
 
-svg .line2{
+#drawing .line2{
     stroke:blue;
 }
 
-svg #envelop1{
+#drawing #envelop1{
     fill:#ff6666;
 }
 
-svg #envelop2{
+#drawing #envelop2{
     fill:#6666ff;
 }
 
 /* lines*/
-svg line{
+#drawing line{
     stroke-width:0.2em;
 }
-svg polyline{
+#drawing polyline{
     fill:none;
     stroke:black;
     stroke-width:0.2em;
 }
 
-svg .line_trans{
+#drawing .line_trans{
     stroke:rgba(255, 0, 0, 0.0);
     stroke-width:1em;
 }
 
 /* legend */
 
-svg .legendh{
+#drawing .legendh{
     font-size:1em;
 }
 
-svg .legendv.player2{
+#drawing .legendv.player2{
 font-style: italic;
    font-weight: bold;
    font-family:Roman;}
 
-svg .legendv.player1{
+#drawing .legendv.player1{
 font-style: italic;
    font-weight: bold;
    font-family:Roman;}
 
-svg .legendv{
+#drawing .legendv{
     font-size:1em;
 }
 
-svg .title{
+#drawing .title{
     font-size:2em;
 }
 
 /* sticks' properties*/
-svg .sticklabel{
+#drawing .sticklabel{
     fill:black;
     font-size:1em;
 }
 
-svg .stick{
+#drawing .stick{
     stroke:black;
     stroke-width:0.1em;
 }
 
 
 /* end points */
-svg .pay{
+#drawing .pay{
      fill:yellow;
 }
 
-svg .br{
+#drawing .br{
     fill:green;
 }
 
-svg .arc {
+#drawing .arc {
     fill:none;
     stroke-width:0.1em;
      stroke:black;
 }
 
 /* Mixed strategy point */
-svg .inter{
+#drawing .inter{
      fill:orange;
      stroke:black;
      stroke-width:1;
@@ -194,11 +202,4 @@ svg .inter{
    font-family:Roman;
 }
 
-
-
-/* for canvas version */
-canvas{
-    #padding: 30px;
-    margin: 50px;
-}
 
