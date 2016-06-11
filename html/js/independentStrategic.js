@@ -137,7 +137,8 @@
 
     document.getElementById("button-matrix-save").addEventListener("click", function(e){
         var dimensions = GTE.tools.parseMatrix(document.getElementById('matrix-player-1').value,document.getElementById('matrix-player-2').value )
-        if(dimensions) {
+       redraw(); 
+       if(dimensions) {
             GTE.STRATEGICFORMMODE = GTE.STRATEGICFORMMODES.GENERAL;
             GTE.tools.createIndependentStrategicForm(dimensions[0], dimensions[1]);
             GTE.tree.clear();

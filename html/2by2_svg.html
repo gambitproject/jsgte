@@ -130,14 +130,14 @@ function doMouseMoveLine(event) {
 
 
 function compute_firstP(){
-        var P1_11=Math.round(document.getElementById("P1_11").value*precision)/precision;
-        document.getElementById("P1_11").value=P1_11;
-        var P1_12=Math.round(document.getElementById("P1_12").value*precision)/precision;
-        document.getElementById("P1_12").value=P1_12;
-        var P1_21=Math.round(document.getElementById("P1_21").value*precision)/precision;
-        document.getElementById("P1_21").value=P1_21;
-        var P1_22=Math.round(document.getElementById("P1_22").value*precision)/precision;
-        document.getElementById("P1_22").value=P1_22;
+        var P1_11=Math.round(GTE.tree.matrix.matrix[0].strategy.payoffs[0].value*precision)/precision;
+        GTE.tree.matrix.matrix[0].strategy.payoffs[0].value=P1_11;
+        var P1_12=Math.round(GTE.tree.matrix.matrix[1].strategy.payoffs[0].value*precision)/precision;
+        GTE.tree.matrix.matrix[1].strategy.payoffs[0].value=P1_12;
+        var P1_21=Math.round(GTE.tree.matrix.matrix[2].strategy.payoffs[0].value*precision)/precision;
+        GTE.tree.matrix.matrix[2].strategy.payoffs[0].value=P1_21;
+        var P1_22=Math.round(GTE.tree.matrix.matrix[3].strategy.payoffs[0].value*precision)/precision;
+        GTE.tree.matrix.matrix[3].strategy.payoffs[0].value=P1_22;
         payoff[0].setAttributeNS(null, "cy", svgH-50-P1_11*30);
         payoff[1].setAttributeNS(null, "cy", svgH-50-P1_12*30);
         payoff[2].setAttributeNS(null, "cy", svgH-50-P1_21*30);
@@ -185,14 +185,14 @@ function compute_firstP(){
     }
             
     function compute_secondP(){
-        var P2_11=Math.round(document.getElementById("P2_11").value*precision)/precision;
-        document.getElementById("P2_11").value=P2_11;
-        var P2_12=Math.round(document.getElementById("P2_12").value*precision)/precision;
-        document.getElementById("P2_12").value=P2_12;
-        var P2_21=Math.round(document.getElementById("P2_21").value*precision)/precision;
-        document.getElementById("P2_21").value=P2_21;
-        var P2_22=Math.round(document.getElementById("P2_22").value*precision)/precision;
-        document.getElementById("P2_22").value=P2_22;
+        var P2_11=Math.round(GTE.tree.matrix.matrix[0].strategy.payoffs[1].value*precision)/precision;
+        GTE.tree.matrix.matrix[0].strategy.payoffs[1].value=P2_11;
+        var P2_12=Math.round(GTE.tree.matrix.matrix[1].strategy.payoffs[1].value*precision)/precision;
+        GTE.tree.matrix.matrix[1].strategy.payoffs[1].value=P2_12;
+        var P2_21=Math.round(GTE.tree.matrix.matrix[2].strategy.payoffs[1].value*precision)/precision;
+        GTE.tree.matrix.matrix[2].strategy.payoffs[1].value=P2_21;
+        var P2_22=Math.round(GTE.tree.matrix.matrix[3].strategy.payoffs[1].value*precision)/precision;
+        GTE.tree.matrix.matrix[3].strategy.payoffs[1].value=P2_22;
         
         payoff[4].setAttributeNS(null, "cy", svgH-50-P2_11*30);
         payoff[5].setAttributeNS(null, "cy", svgH-50-P2_12*30);
@@ -676,6 +676,8 @@ function compute_firstP(){
             stick[i].setAttributeNS(null, "x",pos);
         }
     }
+
+
 
 </script>
  <!-- Table for user to update payoff and strategies' names.-->
