@@ -59,6 +59,10 @@
 
 function redraw(){
     precision=1/document.getElementById("precision").value;
+    GTE.tree.clear();
+    document.getElementById('matrix-player-1').value = GTE.tree.matrix.getMatrixInStringFormat(0);
+    document.getElementById('matrix-player-2').value = GTE.tree.matrix.getMatrixInStringFormat(1);
+    GTE.tree.matrix.drawMatrix();
     compute_firstP();
     compute_secondP();
     draw();
@@ -113,6 +117,8 @@ function doMouseMove(event) {
         var strat=moving_point.getAttribute("asso_strat");
        //document.getElementById(moving_point.getAttribute("asso")).value=newPos;
        GTE.tree.matrix.matrix[strat].strategy.payoffs[player].value=newPos;
+       GTE.tree.matrix.matrix[strat].strategy.payoffs[player].text=newPos;
+       console.log(player+" "+strat+" "+GTE.tree.matrix.matrix[strat].strategy.payoffs[player].value);
        redraw();
     }
     
@@ -136,7 +142,12 @@ function doMouseMoveLine(event) {
         if (pos2>=0 && pos2<=10 && pos1>=0 && pos1<=10 && diffPos!=0  ){
             point1.value=pos1;
             point2.value=pos2;
+            point1.text=pos1;
+            point2.text=pos2;
+
             Pos_prev=mousePosition;
+            point1.draw();
+            point2.draw();
             redraw();
     }
 
@@ -149,6 +160,7 @@ function doMouseMoveLine(event) {
 function compute_firstP(){
         var P1_11=Math.round(GTE.tree.matrix.matrix[0].strategy.payoffs[0].value*precision)/precision;
         GTE.tree.matrix.matrix[0].strategy.payoffs[0].value=P1_11;
+        console.log(P1_11);
         var P1_12=Math.round(GTE.tree.matrix.matrix[1].strategy.payoffs[0].value*precision)/precision;
         GTE.tree.matrix.matrix[1].strategy.payoffs[0].value=P1_12;
         var P1_21=Math.round(GTE.tree.matrix.matrix[2].strategy.payoffs[0].value*precision)/precision;
