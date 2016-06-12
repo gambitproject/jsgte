@@ -150,12 +150,23 @@ GTE.TREE = (function(parentModule) {
             for(var j = 0; j<this.strategies[1][i].moves.length;j++) {
                 string+=this.strategies[1][i].moves[j].name
             }
+            var thisMatrix=this;
             var str = new GTE.UI.Widgets.ContentEditable(
                 GTE.CONSTANTS.MATRIX_X - 40,
                 GTE.CONSTANTS.MATRIX_Y + 40 + i * GTE.CONSTANTS.MATRIX_SIZE,
                 GTE.CONSTANTS.CONTENT_EDITABLE_GROW_TO_RIGHT,
                 string, "player 2")
-            .colour(this.players[1].colour);
+            .colour(this.players[1].colour)
+            .index(i)
+            .onSave( function() {
+                    var text = this.getCleanedText();
+                        if (text === "") {
+                        window.alert("Strategy's name should not be empty.");
+                        } else {
+                    thisMatrix.strategies[1][this.index].moves[0].name=text;
+                        }
+                    }
+                    );
         }
 
         for(var i=0; i<this.strategies[2].length; i++) {
@@ -163,12 +174,23 @@ GTE.TREE = (function(parentModule) {
             for(var j = 0; j<this.strategies[2][i].moves.length;j++) {
                 string+=this.strategies[2][i].moves[j].name
             }
+            var thisMatrix=this;
             var str = new GTE.UI.Widgets.ContentEditable(
                 GTE.CONSTANTS.MATRIX_X + 35 + i * GTE.CONSTANTS.MATRIX_SIZE,
                 GTE.CONSTANTS.MATRIX_Y - 40 ,
                 GTE.CONSTANTS.CONTENT_EDITABLE_GROW_TO_RIGHT,
                 string, "player 2")
-            .colour(this.players[2].colour);
+            .colour(this.players[2].colour)
+            .index(i)
+            .onSave( function() {
+                    var text = this.getCleanedText();
+                        if (text === "") {
+                        window.alert("Strategy's name should not be empty.");
+                        } else {
+                    thisMatrix.strategies[2][this.index].moves[0].name=text;
+                        }
+                    }
+                    );
         }
         while( GTE.canvas.viewbox().width - GTE.CONSTANTS.MATRIX_X < GTE.tree.matrix.strategies[2].length * GTE.CONSTANTS.MATRIX_SIZE
         ||  GTE.canvas.viewbox().height - GTE.CONSTANTS.MATRIX_Y < GTE.tree.matrix.strategies[1].length * GTE.CONSTANTS.MATRIX_SIZE) {
