@@ -41,23 +41,34 @@
     });
 
     document.getElementById("button-independent-strategic-general").addEventListener("click", function(){
-        var x = prompt("Enter the number of moves for the first player", "2");
-        var y = prompt("Enter the number of moves for the second player", "2");
+        var x=2;
+        var y=2;
+        if ( GTE.PAGE_NAME!="eqdiagrams.html"){
+            x = prompt("Enter the number of moves for the first player", "2");
+            y = prompt("Enter the number of moves for the second player", "2");
+        }
         GTE.STRATEGICFORMMODE = GTE.STRATEGICFORMMODES.GENERAL;
         GTE.tools.createIndependentStrategicForm(x, y);
         return false;
     });
 
     document.getElementById("button-independent-strategic-zerosum").addEventListener("click", function(){
-        var x = prompt("Enter the number of moves for the first player", "2");
-        var y = prompt("Enter the number of moves for the second player", "2");
+        var x=2;
+        var y=2;
+        if ( GTE.PAGE_NAME!="eqdiagrams.html"){
+            x = prompt("Enter the number of moves for the first player", "2");
+            y = prompt("Enter the number of moves for the second player", "2");
+        }
         GTE.STRATEGICFORMMODE = GTE.STRATEGICFORMMODES.ZEROSUM;
         GTE.tools.createIndependentStrategicForm(x, y);
         return false;
     });
 
     document.getElementById("button-independent-strategic-symmetric").addEventListener("click", function(){
-        var x = prompt("Enter the number of moves for the game", "2");
+        var x=2;
+        if ( GTE.PAGE_NAME!="eqdiagrams.html"){
+            var x = prompt("Enter the number of moves for the game", "2");
+        }
         GTE.STRATEGICFORMMODE = GTE.STRATEGICFORMMODES.SYMMETRIC;
         GTE.tools.createIndependentStrategicForm(x, x);
         return false;
@@ -137,7 +148,6 @@
 
     document.getElementById("button-matrix-save").addEventListener("click", function(e){
         var dimensions = GTE.tools.parseMatrix(document.getElementById('matrix-player-1').value,document.getElementById('matrix-player-2').value )
-       redraw(); 
        if(dimensions) {
             GTE.STRATEGICFORMMODE = GTE.STRATEGICFORMMODES.GENERAL;
             GTE.tools.createIndependentStrategicForm(dimensions[0], dimensions[1]);
@@ -148,6 +158,8 @@
             var el = document.getElementById("matrixPopup");
             el.style.display = (el.style.display == "block") ? "none" : "block";
         }
+        if (GTE.PAGE_NAME=="eqdiagrams.html")
+            redraw();
         return false;
     });
 
@@ -164,6 +176,11 @@
         document.getElementById('button-player-less').style.display = 'none' ;
         document.getElementById('button-merge').style.display = 'none' ;
         document.getElementById('button-dissolve').style.display = 'none' ;
+        if (GTE.PAGE_NAME=="eqdiagrams.html"){
+            document.getElementById('button-solve-lrs').style.display = 'none' ;
+            document.getElementById('button-new').style.display = 'none' ;
+ 
+        }
     };
     hideButtons();
 

@@ -106,5 +106,9 @@ var GTE = (function () {
         DEFAULT_CHANCE_NAME: "chance"
     };
 
+    GTE.PAGE_NAME=window.location.pathname.split('/')[window.location.pathname.split('/').length-1];
+    if (GTE.PAGE_NAME=="2by2_svg.html")
+           GTE.PAGE_NAME="eqdiagrams.html";
+
     return GTE;
 }());

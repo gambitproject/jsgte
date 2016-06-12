@@ -19,6 +19,7 @@
             <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
 
+
 <script>
     var svg;
     var ctx1,ctx2;
@@ -28,6 +29,7 @@
     var moving_point;
     var payoff=[];
     var precision;
+    var path=window.location.pathname;
     
 
     
@@ -101,7 +103,10 @@ function doMouseMove(event) {
     if (Number(newPos)<0) newPos=0;
     if (Number(newPos)>10) newPos=10;
     if( (Number(newPos)-moving_point.getAttribute("cy"))*(Number(newPos)-moving_point.getAttribute("cy"))>0.005){
-       document.getElementById(moving_point.getAttribute("asso")).value=newPos;
+        var player=moving_point.getAttribute("asso_player");
+        var strat=moving_point.getAttribute("asso_strat");
+       //document.getElementById(moving_point.getAttribute("asso")).value=newPos;
+       GTE.tree.matrix.matrix[strat].strategy.payoffs[player].value=newPos;
        redraw();
     }
     
@@ -111,9 +116,15 @@ function doMouseMove(event) {
 function doMouseMoveLine(event) {
     var mousePosition = getMousePosition(event)
     diff=mousePosition.y-Pos_prev.y;
-        var point1=document.getElementById(moving_point.getAttribute("asso1"));
+        var player1=moving_point.getAttribute("asso_player1");
+        var strat1=moving_point.getAttribute("asso_strat1");
+        var player2=moving_point.getAttribute("asso_player2");
+        var strat2=moving_point.getAttribute("asso_strat2");
+        //var point1=document.getElementById(moving_point.getAttribute("asso1"));
+        var point1=GTE.tree.matrix.matrix[strat1].strategy.payoffs[player1];
+        var point2=GTE.tree.matrix.matrix[strat2].strategy.payoffs[player2];
         var diffPos=~~((2*svgH/(svgPosition.bottom-svgPosition.top)*(diff))/30*precision)/precision;
-        var point2=document.getElementById(moving_point.getAttribute("asso2"));
+        //var point2=document.getElementById(moving_point.getAttribute("asso2"));
         var pos1=Math.round((point1.value-diffPos)*precision)/precision;
         var pos2=Math.round((point2.value-diffPos)*precision)/precision;
         if (pos2>=0 && pos2<=10 && pos1>=0 && pos1<=10 && diffPos!=0  ){
@@ -241,10 +252,11 @@ function compute_firstP(){
     }
     
     function draw(){
-        var P1S1=document.getElementById("P1S1").value;
-        var P1S2=document.getElementById("P1S2").value;
-        var P2S1=document.getElementById("P2S1").value;
-        var P2S2=document.getElementById("P2S2").value;
+        var P1S1=GTE.tree.matrix.strategies[1][0].moves[0].name;
+        var P1S2=GTE.tree.matrix.strategies[1][1].moves[0].name;
+        var P2S1=GTE.tree.matrix.strategies[2][0].moves[0].name;
+        var P2S2=GTE.tree.matrix.strategies[2][1].moves[0].name;
+        
         // Lines update svg1
         var lines=svg.getElementsByClassName("lined1");
         lines[0].setAttributeNS(null, "y1", payoff[0].getAttribute("cy"));
@@ -775,11 +787,11 @@ function compute_firstP(){
             <polygon id="envelop1" points="50,50 50,350 250,350 250,50"/>
             <!-- First strategy payoff-->
             <line class="line1 lined1"  id="11" x1="50" y1="350" x2="250" y2="350"/>
-            <line class="line_trans lined1" asso1="P1_11"  asso2="P1_12" x1="50" y1="350" x2="250" y2="350"/>
+            <line class="line_trans lined1" asso1="P1_11"  asso2="P1_12" asso_player1="0" asso_strat1="0" asso_player2="0" asso_strat2="1" x1="50" y1="350" x2="250" y2="350"/>
             <text id="text11" class="player1 strat" x="80" y="350">S1</text>
             <!-- Second strategy payoff-->
             <line class="line1 lined1" id="12" x1="50" y1="350" x2="250" y2="350"/>
-            <line class="line_trans lined1" asso1="P1_21"  asso2="P1_22" x1="50" y1="350" x2="250" y2="350"/>
+            <line class="line_trans lined1" asso1="P1_21"  asso2="P1_22" asso_player1="0" asso_strat1="2" asso_player2="0" asso_strat2="3" x1="50" y1="350" x2="250" y2="350"/>
             <text id="text12" class="player1 strat" x="220" y="350">S2</text>
             <!-- Sticks-->
             <line class="stick" x1="50" y1="80" x2="45" y2="80"/>
@@ -823,10 +835,10 @@ function compute_firstP(){
             <line class="line2 interstick1" x1="250" y1="350" x2="250" y2="355"/>
             <text class="player2 legendh" id="interlabel1" x="250" y="370">1</text>
             <!-- Payoff points-->
-            <circle class="pay line1" id="Payoff1_11" asso="P1_11" cx="50" cy="350" r="5" draggable="false" ondragstart="doMouseDown()"/>
-            <circle class="pay line1" id="Payoff1_12" asso="P1_12" cx="250" cy="350" r="5"  draggable="false" ondragstart="doMouseDown()"/>
-            <circle class="pay line1" id="Payoff1_21" asso="P1_21" cx="50" cy="350" r="5"  draggable="false" ondragstart="doMouseDown()"/>
-            <circle class="pay line1" id="Payoff1_22" asso="P1_22" cx="250" cy="350" r="5" draggable="false" ondragstart="doMouseDown()"/>
+            <circle class="pay line1" id="Payoff1_11" asso="P1_11" asso_player="0" asso_strat="0" cx="50" cy="350" r="5" draggable="false" ondragstart="doMouseDown()"/>
+            <circle class="pay line1" id="Payoff1_12" asso="P1_12" asso_player="0" asso_strat="1" cx="250" cy="350" r="5"  draggable="false" ondragstart="doMouseDown()"/>
+            <circle class="pay line1" id="Payoff1_21" asso="P1_21" asso_player="0" asso_strat="2" cx="50" cy="350" r="5"  draggable="false" ondragstart="doMouseDown()"/>
+            <circle class="pay line1" id="Payoff1_22" asso="P1_22" asso_player="0" asso_strat="3" cx="250" cy="350" r="5" draggable="false" ondragstart="doMouseDown()"/>
 
             <!-- Drawing the contour-->
             <polyline class="contour" points="450,50 450,350 650,350, 650,50" draggable="false"/>
@@ -843,11 +855,11 @@ function compute_firstP(){
             <polygon id="envelop2" points="450,50 450,350 450,350 450,50"/>
             <!-- First strategy payoff-->
             <line class="line2 lined2" id="21" x1="450" y1="350" x2="650" y2="350"/>
-            <line class="line_trans lined2" asso1="P2_11"  asso2="P2_21"  x1="450" y1="350" x2="650" y2="350"/>
+            <line class="line_trans lined2" asso1="P2_11"  asso2="P2_21" asso_player1="1" asso_strat1="0" asso_player2="1" asso_strat2="2"  x1="450" y1="350" x2="650" y2="350"/>
             <text id="text21" class="player2 legendv" x="480" y="350">S1</text>
             <!-- Second strategy payoff-->
             <line class="line2 lined2"  id="22" x1="450" y1="350" x2="650" y2="350"/>
-            <line class="line_trans lined2" asso1="P2_12"  asso2="P2_22" x1="450" y1="350" x2="650" y2="350"/>
+            <line class="line_trans lined2" asso1="P2_12"  asso2="P2_22" asso_player1="1" asso_strat1="1" asso_player2="1" asso_strat2="3" x1="450" y1="350" x2="650" y2="350"/>
             <text id="text22" class="player2 legendv" x="620" y="350">S2</text>
             <!-- Sticks-->
             <line class="stick" x1="450" y1="80" x2="445" y2="80"/>
@@ -891,10 +903,10 @@ function compute_firstP(){
             <line class="line1 interstick2" x1="650" y1="350" x2="650" y2="355"/>
             <text class="player1 legendh" id="interlabel2" x="650" y="370">1</text>
             <!-- Payoff points-->
-            <circle class="pay line2" id="Payoff2_11" asso="P2_11" cx="450" cy="350" r="5"  draggable="false" ondragstart="doMouseDown()"/>
-            <circle class="pay line2" id="Payoff2_12" asso="P2_12" cx="450" cy="350" r="5"  draggable="false" ondragstart="doMouseDown()"/>
-            <circle class="pay line2" id="Payoff2_21" asso="P2_21" cx="650" cy="350" r="5" draggable="false" ondragstart="doMouseDown()"/>
-            <circle class="pay line2" id="Payoff2_22" asso="P2_22" cx="650" cy="350" r="5" draggable="false" ondragstart="doMouseDown()"/>
+            <circle class="pay line2" id="Payoff2_11" asso="P2_11" asso_player="1" asso_strat="0" cx="450" cy="350" r="5"  draggable="false" ondragstart="doMouseDown()"/>
+            <circle class="pay line2" id="Payoff2_12" asso="P2_12" asso_player="1" asso_strat="1" cx="450" cy="350" r="5"  draggable="false" ondragstart="doMouseDown()"/>
+            <circle class="pay line2" id="Payoff2_21" asso="P2_21" asso_player="1" asso_strat="2" cx="650" cy="350" r="5" draggable="false" ondragstart="doMouseDown()"/>
+            <circle class="pay line2" id="Payoff2_22" asso="P2_22" asso_player="1" asso_strat="3" cx="650" cy="350" r="5" draggable="false" ondragstart="doMouseDown()"/>
             
             
             <!-- Drawing the contour-->
@@ -943,40 +955,7 @@ function compute_firstP(){
             <line class="stick" x1="410" y1="700" x2="280" y2="700" marker-end="url(#triangle_down)"/>
             
         </svg>
-        
-        
-        <div>
-            
-            <table border="1">
-                <tr>
-                    <th><p><label class="player1 name">Player I</label></p>
-                        <p><label class="player2">Player II</label></p>
-                    </th>
-                    <th><label><input class="player2 strat" type="text" id="P2S1" onchange="redraw()" value="l"/> </label></th>
-                    <th><label><input class="player2 strat" type="text" id="P2S2" onchange="redraw()" value="r"/> </label></th>
-                </tr>
-                <tr>
-                    <th><label><input class="player1 strat" type="text" id="P1S1" onchange="redraw()" value="T"/> </label></th>
-                    <td><p><input class="player1 payoff" type="text" id="P1_11" onchange="redraw()" value=3></p>
-                        <p><input class="player2 payoff" type="text" id="P2_11"  onchange="redraw()" value=2></p>
-                            </td>
-                    <td><p><input class="player1 payoff" type="text" id="P1_12" onchange="redraw()" value=0></p>
-                        <p><input class="player2 payoff" type="text" id="P2_12" onchange="redraw()" value=0></p>
-                            </td>
-                </tr>
-                <tr>
-                    <th><label><input class="player1 strat" type="text" id="P1S2" onchange="redraw()" value="B"/> </label></th>
-                    <td>
-                        <p><input class="player1 payoff" type="text" id="P1_21" onchange="redraw()" value=0></p>
-                            <p><input class="player2 payoff" type="text" id="P2_21"  onchange="redraw()" value=0></p>
-                                </td>
-                    <td>
-                        <p><input class="player1 payoff" type="text" id="P1_22" onchange="redraw()" value=2></p>
-                            <p><input class="player2 payoff" type="text" id="P2_22"  onchange="redraw()" value=3></p>
-                                </td>
-                </tr>
-            </table>
-        </div>
+
         
         <script src="js/thirdparty/svg.min.js"></script>
         <script src="js/thirdparty/jquery.min.js"></script>
