@@ -34,6 +34,7 @@ GTE.TREE = (function(parentModule) {
             this.isetToolsRan = true;
             var listOfIsets = this.getListOfIsets(tree.extensiveForm[0].node[0], root);
             this.mergeIsets(tree.extensiveForm[0].node[0], root, listOfIsets);
+            this.assignMoves(tree.extensiveForm[0].node[0], root);
             this.assignPayoffs(tree.extensiveForm[0].node[0], root);
         }
         GTE.tree.draw();
@@ -121,6 +122,18 @@ GTE.TREE = (function(parentModule) {
                 if(nodejs.jIndex[i][0] == "outcome") {
                 //    this.mergeIsets(nodejs.outcome[nodejs.jIndex[i][1]], node.children[i]);
                 }
+            }
+        }
+    };
+
+    XmlImporter.prototype.assignMoves = function (nodejs, node) {
+        for( var i = 0 ; i < nodejs.jIndex.length ; i++) {
+            if(nodejs.jIndex[i][0] == "node") {
+                node.iset.moves[i].name = nodejs.node[nodejs.jIndex[i][1]].jAttr.move;
+                this.assignMoves(nodejs.node[nodejs.jIndex[i][1]], node.children[i]);
+            }
+            if(nodejs.jIndex[i][0] == "outcome") {
+                node.iset.moves[i].name = nodejs.outcome[nodejs.jIndex[i][1]].jAttr.move;
             }
         }
     };
