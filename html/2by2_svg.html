@@ -34,6 +34,12 @@
 
     
     function initDraws() {
+
+        document.getElementById("SvgjsSvg1000").addEventListener("click", function(){
+        document.addEventListener("keyup", function(){
+                                  redraw();
+            });
+         });
         precision=1/document.getElementById("precision").value;
         svg = document.getElementById("drawing");
         svgPosition = svg.getBoundingClientRect();
@@ -688,6 +694,9 @@ function compute_firstP(){
             stick[i].setAttributeNS(null, "x",pos);
         }
     }
+
+
+
 
 
 
