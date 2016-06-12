@@ -118,7 +118,6 @@ function doMouseMove(event) {
        //document.getElementById(moving_point.getAttribute("asso")).value=newPos;
        GTE.tree.matrix.matrix[strat].strategy.payoffs[player].value=newPos;
        GTE.tree.matrix.matrix[strat].strategy.payoffs[player].text=newPos;
-       console.log(player+" "+strat+" "+GTE.tree.matrix.matrix[strat].strategy.payoffs[player].value);
        redraw();
     }
     
@@ -160,7 +159,6 @@ function doMouseMoveLine(event) {
 function compute_firstP(){
         var P1_11=Math.round(GTE.tree.matrix.matrix[0].strategy.payoffs[0].value*precision)/precision;
         GTE.tree.matrix.matrix[0].strategy.payoffs[0].value=P1_11;
-        console.log(P1_11);
         var P1_12=Math.round(GTE.tree.matrix.matrix[1].strategy.payoffs[0].value*precision)/precision;
         GTE.tree.matrix.matrix[1].strategy.payoffs[0].value=P1_12;
         var P1_21=Math.round(GTE.tree.matrix.matrix[2].strategy.payoffs[0].value*precision)/precision;
@@ -514,24 +512,17 @@ function compute_firstP(){
                 path2=path2+path2_2+posy+path2_3+posy+path2_4;
                 if(M1_1==0){
                     path1="50,500, 50,700, ";
-                    rad=(posy-500);
-                    temp[4].setAttributeNS(null, "y", 500+Number(rad));
+                    rad=(700-posy);
+                    temp[4].setAttributeNS(null, "y", 700-rad);
                     temp[4].setAttributeNS(null, "x", 40);
                     temp[4].setAttributeNS(null, "height", rad);
                     temp[4].setAttributeNS(null, "width", 20);
                     if(M2_1==1){
-                        rad=(700-posy);
-                        temp[4].setAttributeNS(null, "x", 40);
-                        temp[4].setAttributeNS(null, "y", 700-rad);
-                        temp[4].setAttributeNS(null, "height", rad);
-                        temp[4].setAttributeNS(null, "width", 20)
-                    }
-                    else{;
                         rad=(posy-500);
                         temp[4].setAttributeNS(null, "x", 40);
                         temp[4].setAttributeNS(null, "y", 500);
                         temp[4].setAttributeNS(null, "height", rad);
-                        temp[4].setAttributeNS(null, "width", 20);
+                        temp[4].setAttributeNS(null, "width", 20)
                     }
                 }
                 else if (M1_1==1)
@@ -541,31 +532,36 @@ function compute_firstP(){
                 if(M1_2==0){
                     if(M2_1==1){
                         rad=(700-posy);
-                        temp[4].setAttributeNS(null, "x", 240);
-                        temp[4].setAttributeNS(null, "y", 700-rad);
-                        temp[4].setAttributeNS(null, "height", rad);
-                        temp[4].setAttributeNS(null, "width", 20)
+                        temp[5].setAttributeNS(null, "x", 240);
+                        temp[5].setAttributeNS(null, "y", 700-rad);
+                        temp[5].setAttributeNS(null, "height", rad);
+                        temp[5].setAttributeNS(null, "width", 20)
                     }
                     else{;
                         rad=(posy-500);
-                        temp[4].setAttributeNS(null, "x", 240);
-                        temp[4].setAttributeNS(null, "y", 500);
-                        temp[4].setAttributeNS(null, "height", rad);
-                        temp[4].setAttributeNS(null, "width", 20);
+                        temp[5].setAttributeNS(null, "x", 240);
+                        temp[5].setAttributeNS(null, "y", 500);
+                        temp[5].setAttributeNS(null, "height", rad);
+                        temp[5].setAttributeNS(null, "width", 20);
                     }
                     if (M1_1==1)
                         path1=path1+"250,500, 250,700";
                     else
                         path1=path1+"250,700, 250,500";
                 }
-                else if (M1_2==1){
-                    if(M1_1==1)
-                    path1=path1+"250,500";
+                else {
+                    
+                    temp[5].setAttributeNS(null, "height", 0);
+                    temp[5].setAttributeNS(null, "width", 0);
+                    if (M1_2==1){
+                        if(M1_1==1)
+                            path1=path1+"250,500";
+                        else
+                        path1="250,500, "+path1;
+                    }
                     else
-                    path1="250,500, "+path1;
+                        path1=path1+"250,700";
                 }
-                else
-                    path1=path1+"250,700";
                 if(M1_1==0 && M1_2==0)
                     path1=path1+", 50,500";
             }
@@ -601,24 +597,27 @@ function compute_firstP(){
                         //path2=path2+"50,500, 250,500, ";
                         if(M1_1==1){
                             rad=(250-posx);
-                            temp[4].setAttributeNS(null, "x", 250-Number(rad));
-                            temp[4].setAttributeNS(null, "y", 690);
-                            temp[4].setAttributeNS(null, "height", 20);
-                            temp[4].setAttributeNS(null, "width", rad);
+                            temp[5].setAttributeNS(null, "x", 250-Number(rad));
+                            temp[5].setAttributeNS(null, "y", 690);
+                            temp[5].setAttributeNS(null, "height", 20);
+                            temp[5].setAttributeNS(null, "width", rad);
                         }
                         else{
                             rad=(posx-50);
-                            temp[4].setAttributeNS(null, "x", 50);
-                            temp[4].setAttributeNS(null, "y", 690);
-                            temp[4].setAttributeNS(null, "height", 20);
-                            temp[4].setAttributeNS(null, "width", rad);
+                            temp[5].setAttributeNS(null, "x", 50);
+                            temp[5].setAttributeNS(null, "y", 690);
+                            temp[5].setAttributeNS(null, "height", 20);
+                            temp[5].setAttributeNS(null, "width", rad);
                         }
                         if(M2_1==1)
                         path2=path2+"50,700, 250,700";
                         else
                         path2=path2+"250,700, 50,700";
                     }
-                    else{ if (M2_2==1){
+                    else{
+                        temp[5].setAttributeNS(null, "height", 0);
+                        temp[5].setAttributeNS(null, "width", 0);
+                           if (M2_2==1){
                         if(M2_1==1)
                         path2=path2+"50,700";
                         else
@@ -633,6 +632,8 @@ function compute_firstP(){
                 else{
                     temp[4].setAttributeNS(null, "height", 0);
                     temp[4].setAttributeNS(null, "width", 0);
+                    temp[5].setAttributeNS(null, "height", 0);
+                    temp[5].setAttributeNS(null, "width", 0);
                     if(M1_1==0 &&M1_2==1)
                         path1=path1_4+","+path1;
                     else{
@@ -942,6 +943,7 @@ function compute_firstP(){
             <circle class="br" cx="250" cy="700" r="10"  draggable="false" />
             <circle class="br" cx="250" cy="700" r="10" draggable="false"/>
             <!--mixed equilibrium--->
+            <rect class="br" x="40" y="490" width="20" height="20" fill="green"/>
             <rect class="br" x="40" y="490" width="20" height="20" fill="green"/>
             
             <!--legend -->
