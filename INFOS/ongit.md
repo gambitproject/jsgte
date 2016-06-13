@@ -74,7 +74,7 @@ Short intro to git (very useful and essential): http://gitref.org/
 
 Long intro to git: https://git-scm.com/book/en/v2
 
-### Cloning the directory with git
+### Cloning the repository 
 
 I prefer to use the ssh (secure shell) based interaction
 with the remote which makes most authentication automatic.
@@ -83,7 +83,8 @@ Clone the repository from github
 
     git clone git@github.com:gambitproject/jsgte.git
 
-which will create the directore `jsgte`
+which will create the directory `jsgte` in your current
+directory.
 
 ### Branches
 
@@ -123,6 +124,9 @@ Note that all your work is local on your computer.
 
 ### Synchronization with the remote repository on github
 
+(More details on how to push a newly created branch.
+Creating it on github first seems the simplest.)
+
 Be careful not to commit on the master branch!
 See the guidelines of the JQUERY foundation at
 http://contribute.jquery.org/commits-and-pull-requests/
@@ -143,8 +147,10 @@ Harkirat's repository with
 
 and in response it asks me "please tell me who you are",
 presumably so Harkirat knows who copied from his directory.
-I do this with some configuration that seemed to have been
-lost (including on my editor `vim`).
+I do this with some configuration that was lost (including
+on my editor `vim`) when I started over by cloning the
+repository after some mess-up. So do this first (with your
+own configuration data of course :-) :
 
     git config --global user.email "bvonstengel@gmail.com"
     git config --global user.name "Bernhard von Stengel"
