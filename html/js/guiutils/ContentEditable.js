@@ -101,7 +101,7 @@ GTE.UI.Widgets = (function (parentModule) {
 
         // blur event is used to detect when the contenteditable loses focus
         this.textdiv.addEventListener('blur', function(e) {
-            if (thisContentEditable.functionOnSave !== null){
+            if (thisContentEditable.functionOnSave != null){
                 // Run functionOnSave
                 thisContentEditable.functionOnSave();
             }
