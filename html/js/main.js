@@ -81,8 +81,10 @@
     });
 
     document.getElementById("button-strategic").addEventListener("click", function(){
-        if(GTE.tools.isetToolsRan)
+        if(GTE.tools.isetToolsRan) {
+            document.getElementById("button-solve-lrs").disabled=false;
             GTE.tools.toStrategicForm();
+        }
         else
             alert("first assign payoffs to each player");
         return false;
@@ -211,8 +213,22 @@
         GTE.tree.draw(true);
         return false;
     });
-    
-    var settings = document.getElementById("settings");
+
+    document.getElementById("button-solve-lrs").addEventListener("click", function(){
+        if(GTE.tools.isetToolsRan == false) {
+            alert("assign payoffs first");
+            return false;
+        }
+        var communicate = new GTE.TREE.Communication();
+        var matrix1 = GTE.tree.matrix.getMatrixInStringFormat(0);
+        var matrix2 = GTE.tree.matrix.getMatrixInStringFormat(1);
+        var height = GTE.tree.matrix.getNumberOfStrategies(GTE.tree.players[1]);
+        var width = GTE.tree.matrix.getNumberOfStrategies(GTE.tree.players[2]);
+        communicate.sendPostRequest('/solve', {player1 : matrix1, player2 : matrix2, height: height, width: width});
+        return false;
+    });
+
+        var settings = document.getElementById("settings");
     var settings_bar = document.getElementById("settings_bar");
     var offset = { x: 0, y: 0 };
 
