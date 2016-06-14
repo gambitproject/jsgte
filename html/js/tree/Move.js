@@ -162,7 +162,8 @@ GTE.TREE = (function (parentModule) {
      * @param {String} text New Move's text
      */
     Move.prototype.changeText = function(text) {
-        this.editable.setText("text");
+        this.editable.setText(text);
+        this.changeName(text);
     };
 
     /**

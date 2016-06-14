@@ -172,17 +172,17 @@ GTE.TREE = (function(parentModule) {
         for( var i = 0 ; i < nodejs.jIndex.length ; i++) {
             if(nodejs.jIndex[i][0] == "node") {
                 if(nodejs.node[nodejs.jIndex[i][1]].jAttr.prob != undefined) {
-                    node.iset.moves[i].name = nodejs.node[nodejs.jIndex[i][1]].jAttr.prob;
+                    node.iset.moves[i].changeName(nodejs.node[nodejs.jIndex[i][1]].jAttr.prob);
                 } else {
-                    node.iset.moves[i].name = nodejs.node[nodejs.jIndex[i][1]].jAttr.move;    
+                    node.iset.moves[i].changeText(nodejs.node[nodejs.jIndex[i][1]].jAttr.move);
                 }
                 this.assignMoves(nodejs.node[nodejs.jIndex[i][1]], node.children[i]);
             }
             if(nodejs.jIndex[i][0] == "outcome") {
                 if(nodejs.outcome[nodejs.jIndex[i][1]].jAttr.prob != undefined ) {
-                    node.iset.moves[i].name = nodejs.outcome[nodejs.jIndex[i][1]].jAttr.prob;
+                    node.iset.moves[i].changeName(nodejs.outcome[nodejs.jIndex[i][1]].jAttr.prob);
                 } else  {
-                    node.iset.moves[i].name = nodejs.outcome[nodejs.jIndex[i][1]].jAttr.move;
+                    node.iset.moves[i].changeText(nodejs.outcome[nodejs.jIndex[i][1]].jAttr.move);
                 }
             }
         }
