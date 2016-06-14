@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<body onload="initBallAndEnvironment()">
+
+<script>
+
+var ball;
+var canvas;
+var ctx;
+
+function initBallAndEnvironment() {
+    ball = {x:50, y:50, radius:10, color:"blue"}
+    canvas = document.getElementById("Canvas");
+    ctx = canvas.getContext("2d");
+
+    drawBall(ctx);
+
+    // Hooking up events to mouse
+    canvas.addEventListener("mousedown", doMouseDown);
+    canvas.addEventListener("mouseup", doMouseUp);
+}
+
+function getMousePosition(canvas, e) {
+    var canvasPosition = canvas.getBoundingClientRect();
+
+    return {
+        x: e.clientX - canvasPosition.left,
+        y: e.clientY - canvasPosition.top
+    };
+}
+
+function drawBall(ctx) {
+    ctx.beginPath();
+    ctx.arc(ball.x, ball.y, ball.radius, 0, 2*Math.PI);
+    ctx.fillStyle = ball.color;
+    ctx.fill();
+    ctx.stroke();
+}
+
+function clearCanvas(canvas) {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
+
+function isMouseOverBall(mousePosition, ball) {
+    var distX = mousePosition.x - ball.x;
+    var distY = mousePosition.y - ball.y;
+
+    squareDist = distX*distX + distY*distY;
+    
+    //console.log("Testing distance: Mouse X = " + mousePosition.x + ", Mouse Y = " + mousePosition.y);
+    //console.log("Testing distance: Center X = " + ball.x + ", Center Y = " + ball.y);
+    //console.log("Testing distance: square dist = " + squareDist + ", square radius = " + ball.radius*ball.radius);
+
+    if (squareDist < ball.radius*ball.radius) {
+        return true;
+    }
+        
+    return false;
+}
+
+function doMouseMove(event) {
+    var mousePosition = getMousePosition(canvas, event)
+    
+    ball.x = mousePosition.x;
+    ball.y = mousePosition.y;
+      
+    clearCanvas(canvas);
+    drawBall(ctx)
+
+    console.log("Moving: X = " + mousePosition.x + ", Y = " + mousePosition.y);
+}
+
+function doMouseDown(event) {
+    var mousePosition = getMousePosition(canvas, event)
+
+    var isMouseOver = isMouseOverBall(mousePosition, ball);
+    if (isMouseOver) {
+        canvas.addEventListener("mousemove", doMouseMove);
+    }
+
+    console.log("Pressing: X = " + mousePosition.x + ", Y = " + mousePosition.y);
+}
+
+function doMouseUp(event) {
+    var mousePosition = getMousePosition(canvas, event)
+     
+    canvas.removeEventListener("mousemove", doMouseMove);
+
+    clearCanvas(canvas);
+    drawBall(ctx)
+    console.log("Releasing: X = " + mousePosition.x + ", Y = " + mousePosition.y);
+}
+
+</script>
+
+<canvas id="Canvas" width="500" height="500" style="border:1px solid #d3d3d3;">
+    Your browser does not support the HTML5 canvas tag.</canvas>
+
+<br>
+
+</body>
+</html>
