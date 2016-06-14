@@ -33,8 +33,8 @@ GTE.TREE = (function(parentModule) {
             this.isetToolsRan = true;
             var listOfIsets = this.getListOfIsets(tree.extensiveForm[0].node[0], root, {});
             this.mergeIsets(listOfIsets);
-        //    this.assignMoves(tree.extensiveForm[0].node[0], root);
-        //    this.assignPayoffs(tree.extensiveForm[0].node[0], root);
+            this.assignMoves(tree.extensiveForm[0].node[0], root);
+            this.assignPayoffs(tree.extensiveForm[0].node[0], root);
         }
         GTE.tree.draw();
         GTE.tools.switchMode(GTE.MODES.ADD);
@@ -171,11 +171,19 @@ GTE.TREE = (function(parentModule) {
     XmlImporter.prototype.assignMoves = function (nodejs, node) {
         for( var i = 0 ; i < nodejs.jIndex.length ; i++) {
             if(nodejs.jIndex[i][0] == "node") {
-                node.iset.moves[i].name = nodejs.node[nodejs.jIndex[i][1]].jAttr.move;
+                if(nodejs.node[nodejs.jIndex[i][1]].jAttr.prob != undefined) {
+                    node.iset.moves[i].name = nodejs.node[nodejs.jIndex[i][1]].jAttr.prob;
+                } else {
+                    node.iset.moves[i].name = nodejs.node[nodejs.jIndex[i][1]].jAttr.move;    
+                }
                 this.assignMoves(nodejs.node[nodejs.jIndex[i][1]], node.children[i]);
             }
             if(nodejs.jIndex[i][0] == "outcome") {
-                node.iset.moves[i].name = nodejs.outcome[nodejs.jIndex[i][1]].jAttr.move;
+                if(nodejs.outcome[nodejs.jIndex[i][1]].jAttr.prob != undefined ) {
+                    node.iset.moves[i].name = nodejs.outcome[nodejs.jIndex[i][1]].jAttr.prob;
+                } else  {
+                    node.iset.moves[i].name = nodejs.outcome[nodejs.jIndex[i][1]].jAttr.move;
+                }
             }
         }
     };
@@ -189,13 +197,15 @@ GTE.TREE = (function(parentModule) {
                 if(nodejs.jIndex[i][0] == "outcome") {
                     var outcome = nodejs.outcome[nodejs.jIndex[i][1]];
                     for(var j = 0; j<outcome.payoff.length;j++) {
-                        var index = GTE.tree.players[outcome.payoff[j].jAttr.player].payoffs.map(function(el) {
+                        var index1 = GTE.tree.players.map(function(el) {
+                          return el.name;
+                        }).indexOf(outcome.payoff[j].jAttr.player);
+                        var index = GTE.tree.players[index1].payoffs.map(function(el) {
                           return el.leaf;
                         }).indexOf(node.children[i]);
-
                         if(index != -1) {
-                            GTE.tree.players[outcome.payoff[j].jAttr.player].payoffs[index].setValue(outcome.payoff[j].jValue);
-                            GTE.tree.players[outcome.payoff[j].jAttr.player].payoffs[index].changeText(outcome.payoff[j].jValue);
+                            GTE.tree.players[index1].payoffs[index].setValue(outcome.payoff[j].jValue);
+                            GTE.tree.players[index1].payoffs[index].changeText(outcome.payoff[j].jValue);
                         }
                     }
                 }
