@@ -27,12 +27,11 @@ GTE.TREE = (function(parentModule) {
         GTE.tools.setPlayers(display.color, tree.players[0].player);
         GTE.tools.setDisplayProperties(display);
         this.createTree(tree.extensiveForm[0].node[0], root);
-        root.assignPlayer(GTE.tree.players[tree.extensiveForm[0].node[0].jAttr.player]);
-        //GTE.tools.switchMode(GTE.MODES.MERGE);
+        this.assignChancePlayers(tree.extensiveForm[0].node[0], root);
         if (GTE.tools.ableToSwitchToISetEditingMode()) {
             GTE.tree.initializeISets();
             this.isetToolsRan = true;
-            var listOfIsets = this.getListOfIsets(tree.extensiveForm[0].node[0], root);
+            var listOfIsets = this.getListOfIsets(tree.extensiveForm[0].node[0], root, {});
             this.mergeIsets(tree.extensiveForm[0].node[0], root, listOfIsets);
             this.assignMoves(tree.extensiveForm[0].node[0], root);
             this.assignPayoffs(tree.extensiveForm[0].node[0], root);
@@ -45,7 +44,10 @@ GTE.TREE = (function(parentModule) {
     * Builds the sub-tree for the variable @node
     */
     XmlImporter.prototype.createRecursiveTree = function(node, father) {
-        var currentNode = GTE.tree.addChildNodeTo( father, GTE.tree.players[node.jAttr.player] );
+        var index = GTE.tree.players.map(function(el) {
+                          return el.name;
+                        }).indexOf(node.jAttr.player);
+        var currentNode = GTE.tree.addChildNodeTo(father, GTE.tree.players[index]);
         for( var i = 0 ; i < node.jIndex.length ; i++) {
             if(node.jIndex[i][0] == "node") {
                 this.createRecursiveTree(node.node[node.jIndex[i][1]], currentNode);
@@ -60,6 +62,10 @@ GTE.TREE = (function(parentModule) {
     * Function to create nodes of the laoded tree
     */
     XmlImporter.prototype.createTree = function(node, root) {
+        var index = GTE.tree.players.map(function(el) {
+                  return el.name;
+                }).indexOf(node.jAttr.player);
+        root.assignPlayer(GTE.tree.players[index]);
         //  var root = new GTE.TREE.Node(null, node.jAttr.player);
         for( var i = 0 ; i < node.jIndex.length ; i++) {
             if(node.jIndex[i][0] == "node") {
@@ -70,6 +76,50 @@ GTE.TREE = (function(parentModule) {
             }
         }
         return root;
+    };
+
+
+    /**
+    * Function to assign Chance Players to Nodes recursively
+    */
+    XmlImporter.prototype.assignRecursiveChancePlayers = function(nodejs, node) {
+        if(this.isChanceNode(nodejs)) {
+            node.assignPlayer(GTE.tree.players[0]);
+        }
+        for( var i = 0 ; i < nodejs.jIndex.length ; i++) {
+            if(nodejs.jIndex[i][0] == "node") {
+                this.assignRecursiveChancePlayers(nodejs.node[nodejs.jIndex[i][1]], node.children[i]);
+            }
+        }
+    };
+
+    /**
+    * Function to assign Chance Players to Nodes
+    */
+    XmlImporter.prototype.assignChancePlayers = function(node, root) {
+        if(this.isChanceNode(node)) {
+            root.assignPlayer(GTE.tree.players[0]);
+        }
+        //  var root = new GTE.TREE.Node(null, node.jAttr.player);
+        for( var i = 0 ; i < node.jIndex.length ; i++) {
+            if(node.jIndex[i][0] == "node") {
+                this.assignRecursiveChancePlayers(node.node[node.jIndex[i][1]], root.children[i]);
+            }
+        }
+    };
+
+    XmlImporter.prototype.isChanceNode = function(node) {
+        for( var i = 0 ; i < node.jIndex.length ; i++) {
+            if(node.jIndex[i][0] == "node") {
+                if(node.node[node.jIndex[i][1]].jAttr.prob != undefined)
+                    return true;
+            }
+            if(node.jIndex[i][0] == "outcome") {
+                if(node.outcome[node.jIndex[i][1]].jAttr.prob != undefined)
+                    return true;
+            }
+        }
+        return false;
     };
 
     /**
@@ -92,15 +142,17 @@ GTE.TREE = (function(parentModule) {
     /**
     * Function that returns a list of isets
     */
-    XmlImporter.prototype.getListOfIsets = function(nodejs, node) {
-        var list = [node.iset];
+    XmlImporter.prototype.getListOfIsets = function(nodejs, node, list) {
+        if(nodejs.jAttr.iset != undefined) {
+            if(list[nodejs.jAttr.iset] == undefined){
+                list[nodejs.jAttr.iset] = [];
+            }
+            list[nodejs.jAttr.iset].push(node);
+        }
         if(nodejs.jIndex != undefined) {
             for( var i = 0 ; i < nodejs.jIndex.length ; i++) {
                 if(nodejs.jIndex[i][0] == "node") {
-                    list = list.concat(this.getListOfIsets(nodejs.node[nodejs.jIndex[i][1]], node.children[i]));
-                }
-                if(nodejs.jIndex[i][0] == "outcome") {
-                    list = list.concat((this.getListOfIsets(nodejs.outcome[nodejs.jIndex[i][1]], node.children[i])));
+                    list = this.getListOfIsets(nodejs.node[nodejs.jIndex[i][1]], node.children[i], list);
                 }
             }
         }
