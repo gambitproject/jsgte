@@ -32,9 +32,9 @@ GTE.TREE = (function(parentModule) {
             GTE.tree.initializeISets();
             this.isetToolsRan = true;
             var listOfIsets = this.getListOfIsets(tree.extensiveForm[0].node[0], root, {});
-            this.mergeIsets(tree.extensiveForm[0].node[0], root, listOfIsets);
-            this.assignMoves(tree.extensiveForm[0].node[0], root);
-            this.assignPayoffs(tree.extensiveForm[0].node[0], root);
+            this.mergeIsets(listOfIsets);
+        //    this.assignMoves(tree.extensiveForm[0].node[0], root);
+        //    this.assignPayoffs(tree.extensiveForm[0].node[0], root);
         }
         GTE.tree.draw();
         GTE.tools.switchMode(GTE.MODES.ADD);
@@ -159,21 +159,11 @@ GTE.TREE = (function(parentModule) {
         return list;
     };
 
-    XmlImporter.prototype.mergeIsets = function (nodejs, node, listOfIsets) {
-        if(node.iset != listOfIsets[nodejs.jAttr.iset] && nodejs.jAttr.iset != undefined){
-            var currentIset = node.iset;
-            node.changeISet(listOfIsets[nodejs.jAttr.iset]);
-            listOfIsets.splice(listOfIsets.indexOf(currentIset), 1);
-            GTE.tree.draw();
-        }
-        if(nodejs.jIndex != undefined) {
-            for( var i = 0 ; i < nodejs.jIndex.length ; i++) {
-                if(nodejs.jIndex[i][0] == "node") {
-                    this.mergeIsets(nodejs.node[nodejs.jIndex[i][1]], node.children[i], listOfIsets);
-                }
-                if(nodejs.jIndex[i][0] == "outcome") {
-                //    this.mergeIsets(nodejs.outcome[nodejs.jIndex[i][1]], node.children[i]);
-                }
+    XmlImporter.prototype.mergeIsets = function (listOfIsets) {
+        for (var index in listOfIsets) {
+            for(var i = 1; i<listOfIsets[index].length; i++) {
+                listOfIsets[index][i].changeISet(listOfIsets[index][0].iset);
+                GTE.tree.draw();
             }
         }
     };
