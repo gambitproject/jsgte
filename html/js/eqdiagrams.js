@@ -4,6 +4,7 @@
     // GTE is initialized by the library
     GTE.canvas = SVG('canvas').size("100%", "100%").attr({'style': 'background: #fff'});
     GTE.tools = new GTE.UI.Tools();
+    GTE.diagrams = new GTE.Diagrams();
     // var playerListener = function(picker) {
     //     var closeControl = true;
     //     picker.addEventListener("focus", function() {
@@ -163,7 +164,20 @@
         return false;
     });
 
+    document.getElementById("SvgjsSvg1000").addEventListener("click", function(){
+        document.addEventListener("keyup", function(){
+                                  GTE.diagrams.update();
+            });
+         });
 
+     var payoff=document.getElementsByClassName("pay");
+     var lines=document.getElementsByClassName("line_trans");
+     for(i=0;i<8;i++){
+        payoff[i].addEventListener("mousedown", doMouseDown);
+     }
+     for(i=0;i<4;i++){
+        lines[i].addEventListener("mousedown", doMouseDown);
+     }
     /*
         Hide irrelevant buttons for strategic.html
     */
