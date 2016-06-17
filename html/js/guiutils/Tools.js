@@ -16,6 +16,7 @@ GTE.UI = (function (parentModule) {
     Tools.prototype.newTree = function() {
         this.resetPlayers();
         this.activePlayer = -1;
+        this.isetToolsRan = false;
         var root = new GTE.TREE.Node(null);
         var child1 = new GTE.TREE.Node(root);
         var child2 = new GTE.TREE.Node(root);
@@ -23,7 +24,6 @@ GTE.UI = (function (parentModule) {
 
         this.addChancePlayer();
         this.addPlayer();
-        // Add a second Player
         this.addPlayer();
 
         // GTE.tree.updatePositions();
@@ -95,6 +95,48 @@ GTE.UI = (function (parentModule) {
             this.activePlayer = -1;
         }
     };
+    /**
+    * Function that creates the strategic form and
+    * renders the strategic form to the canvas
+    */
+    Tools.prototype.toStrategicForm = function () {
+        GTE.tree.clear();
+        GTE.tree.matrix = new GTE.TREE.Matrix();
+        GTE.tree.matrix.initialise();
+    };
+
+    /**
+    * Function that creates a strategic form independent 
+    * of the game tree.
+    */
+    Tools.prototype.createIndependentStrategicForm = function (x, y) {
+        GTE.tree.clear();
+        this.isetToolsRan = false;
+        this.resetPlayers();
+        this.activePlayer = -1;
+        var root = new GTE.TREE.Node(null);
+        GTE.tree = new GTE.TREE.Tree(root);
+        this.addChancePlayer();
+        this.addPlayer();
+        this.addPlayer();
+        root.assignPlayer(GTE.tree.players[1]);
+        for(var i = 0; i<x; i++) {
+            GTE.tree.addChildNodeTo(root);
+            root.children[i].assignPlayer(GTE.tree.players[2]);
+        }
+        for(var i = 0; i<root.children.length; i++) {
+            for(var j = 0; j<y; j++) {
+                GTE.tree.addChildNodeTo(root.children[i]);
+            }
+        }
+        GTE.tree.draw();
+        this.switchMode(GTE.MODES.MERGE);
+        GTE.tree.multiActionLines[0].onClick();
+        GTE.tree.draw();
+        this.switchMode(GTE.MODES.ADD);
+        this.toStrategicForm();
+    };
+
 
     /**
     * Function that selects a player
@@ -251,6 +293,40 @@ GTE.UI = (function (parentModule) {
     Tools.prototype.changePlayerColour = function (playerId, colour) {
         var playerButton = document.getElementById("button-player-" + playerId);
         playerButton.style.color = colour;
+    };
+
+    /**
+    *  Zooms out the canvas
+    */
+    Tools.prototype.zoomOut = function () {
+        GTE.canvas.viewbox(0, 0, GTE.canvas.viewbox().width*1.2, GTE.canvas.viewbox().height*1.2);
+    };
+
+    Tools.prototype.parseMatrix = function (mat1, mat2) {
+        mat1 = mat1.trim();
+        mat2 = mat2.trim();
+        mat1 = mat1.split("\n");
+        mat2 = mat2.split("\n");
+        if(mat1.length != mat2.length) {
+            alert("The size of both matrices should be same");
+            return false;
+        }
+        for(var i = 0;i<mat1.length; i++) {
+            mat1[i] = mat1[i].trim();
+            mat2[i] = mat2[i].trim();
+            mat1[i] = mat1[i].split(" ");
+            mat2[i] = mat2[i].split(" ");
+        }
+        var length = mat1[0].length;
+        for(var i = 0;i<mat1.length; i++) {
+            if(mat1[i].length != length || mat2[i].length != length) {
+                alert("the length of matrices should be same");
+                return false;
+            }
+        }
+        var dim = [];
+        dim.push(mat1.length, mat1[0].length);
+        return dim;
     };
 
     // Add class to parent module
