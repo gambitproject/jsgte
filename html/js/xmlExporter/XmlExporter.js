@@ -17,6 +17,7 @@ GTE.TREE = (function (parentModule) {
         this.startProperty("gte", {version : "0.1"}, 0);
         this.exportDisplayProperties();
         this.exportPlayers();
+        this.exportExtensiveForm();
         this.endProperty("gte", 0);
     };
 
@@ -83,6 +84,7 @@ GTE.TREE = (function (parentModule) {
 
         this.endProperty("display",1);
     };
+
     XmlExporter.prototype.exportPlayers = function() {
         this.startProperty("players", {}, 1);
         for(var i = 1; i<GTE.tree.players.length;i++) {
@@ -92,6 +94,32 @@ GTE.TREE = (function (parentModule) {
         }
         this.endProperty("players",1);
     };
+
+    XmlExporter.prototype.exportExtensiveForm= function() {
+        this.startProperty("extensiveform", {}, 1);
+        this.exportNodes();
+        this.endProperty("extensiveform",1);
+    };
+
+    XmlExporter.prototype.exportNodes = function() {
+        this.exportNode(GTE.tree.root, {}, 2);
+    };
+
+    XmlExporter.prototype.exportNode = function(node, parameters, tab) {
+        if(node.children.length == 0 ) {
+            // export as an outcome
+            this.startProperty("outcome", parameters, tab);
+            this.endProperty("outcome", tab);
+        } else {
+            //exprot nodes
+            this.startProperty("node", parameters, tab);
+            for(var i = 0; i<node.children.length; i++) {
+                this.exportNode(node.children[i], {}, tab+1);
+            }
+            this.endProperty("node", tab);
+        }
+    };
+
     XmlExporter.prototype.toString = function() {
         console.log(this.tree);
     };
