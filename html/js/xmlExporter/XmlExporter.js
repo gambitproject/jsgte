@@ -16,6 +16,7 @@ GTE.TREE = (function (parentModule) {
     XmlExporter.prototype.exportGTE = function() {
         this.startProperty("gte", {version : "0.1"}, 0);
         this.exportDisplayProperties();
+        this.exportPlayers();
         this.endProperty("gte", 0);
     };
 
@@ -82,7 +83,15 @@ GTE.TREE = (function (parentModule) {
 
         this.endProperty("display",1);
     };
-
+    XmlExporter.prototype.exportPlayers = function() {
+        this.startProperty("players", {}, 1);
+        for(var i = 1; i<GTE.tree.players.length;i++) {
+            this.startProperty("player", {playerId : i}, 2);
+            this.addBody(GTE.tree.players[i].name, 3);
+            this.endProperty("player", 2);
+        }
+        this.endProperty("players",1);
+    };
     XmlExporter.prototype.toString = function() {
         console.log(this.tree);
     };
