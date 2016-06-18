@@ -25,10 +25,12 @@ GTE.TREE = (function (parentModule) {
         var append = this.assignTab(tab);
         append += "<"+property_name;
         for(var parameter in parameters) {
-            append += (" "+parameter);
-            append += "=\"";
-            append += parameters[parameter];
-            append += "\"";
+            if(parameters[parameter] != undefined) {
+                append += (" "+parameter);
+                append += "=\"";
+                append += parameters[parameter];
+                append += "\"";
+            }
         }
         append += ">\n";
         this.tree += append;
@@ -96,13 +98,17 @@ GTE.TREE = (function (parentModule) {
     };
 
     XmlExporter.prototype.exportExtensiveForm= function() {
-        this.startProperty("extensiveform", {}, 1);
+        this.startProperty("extensiveForm", {}, 1);
         this.exportNodes();
-        this.endProperty("extensiveform",1);
+        this.endProperty("extensiveForm",1);
     };
 
     XmlExporter.prototype.exportNodes = function() {
-        this.exportNode(GTE.tree.root, {}, 2);
+        if(GTE.tree.root.player == null) {
+            this.exportNode(GTE.tree.root, {}, 2);
+        } else {
+            this.exportNode(GTE.tree.root, {player: GTE.tree.root.player.name}, 2);
+        }
     };
 
     XmlExporter.prototype.exportNode = function(node, parameters, tab) {
@@ -114,7 +120,28 @@ GTE.TREE = (function (parentModule) {
             //exprot nodes
             this.startProperty("node", parameters, tab);
             for(var i = 0; i<node.children.length; i++) {
-                this.exportNode(node.children[i], {}, tab+1);
+                if(GTE.tools.isetToolsRan) {
+                    if(node.children[i].player == null) {
+                        if((node.iset.moves[i]).__proto__.constructor.name == "ChanceMove") {
+                            this.exportNode(node.children[i], {prob : node.iset.moves[i].name, iset : GTE.tree.isets.indexOf(node.children[i].iset)}, tab+1);
+                        } else {
+                            this.exportNode(node.children[i], {move : node.iset.moves[i].name, iset : GTE.tree.isets.indexOf(node.children[i].iset)}, tab+1);
+                        }
+                    } else {
+                        if((node.iset.moves[i]).__proto__.constructor.name == "ChanceMove") {
+                            this.exportNode(node.children[i], {player : node.children[i].player.name, prob : node.iset.moves[i].name, iset : GTE.tree.isets.indexOf(node.children[i].iset)}, tab+1);
+                        } else {
+                            this.exportNode(node.children[i], {player : node.children[i].player.name, move : node.iset.moves[i].name, iset : GTE.tree.isets.indexOf(node.children[i].iset)}, tab+1);
+                        }
+                    }
+
+                } else {
+                    if(node.children[i].player == null) {
+                        this.exportNode(node.children[i], {}, tab+1);
+                    } else {
+                        this.exportNode(node.children[i], {player : node.children[i].player.name}, tab+1);
+                    }
+                }
             }
             this.endProperty("node", tab);
         }
