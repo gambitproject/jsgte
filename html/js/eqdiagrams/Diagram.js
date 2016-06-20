@@ -9,10 +9,106 @@ GTE = (function(parentModule) {
         this.precision = 1; // precision for payoffs.
         this.endpoints = [];
         this.lines = []; 
-        this.strategies = [];
-        this.matrix = [];
+       this.moving_endpoint;
+       this.moving_line;
+        this.prev_pos;
+        this.height=400;
+        this.width=300;
+        this.margin=50;
+       this.assignEndpoints();
     }
-
+    
+    
+       Matrix.prototype.assignEndpoints = function() {
+       for(var i=0;i<4;i++){
+       for (var j=0; j<2;j++){
+       this.endpoints.push( new GTE.diagrams.endpoint(50,50,j,i));
+       }
+       }
+       };
+    /*
+    Associate html element to endpoint object.
+    */
+   Diagrams.prototype.doMouseDownEndpoint = function (event){
+      event.preventDefault();
+      var strat=event.currentTarget.getAttribute("asso_strat");
+      var player=event.currentTarget.getAttribute("asso_player")-1;
+      this.moving_endpoint= this.endpoints[player][strat];
+      document.addEventListener("mousemove", doMouseMoveEndpoint);
+      document.addEventListener("mouseup", doMouseupEndpoint);
+      event.currentTarget.removeEventListener("mousedown", doMouseDownEndpoint);
+    }
+       
+   Diagrams.prototype.doMouseDownLine = function (event){
+      event.preventDefault();
+      var strat=event.currentTarget.getAttribute("asso_strat");
+      var player=event.currentTarget.getAttribute("asso_player")-1;
+      this.moving_line= this.lines[player][strat];
+      this.prev_pros=GTE.getMousePosition(event);
+      document.addEventListener("mousemove", doMouseMoveLine);
+      document.addEventListener("mouseup", doMouseupLine);
+      event.currentTarget.removeEventListener("mousedown", doMouseDownLine);
+    }
+    /*
+     Convert mouse's moves in endpoint's moves
+     */
+   Diagrams.prototype.doMouseMoveEndpoint = function (event) {
+       var mousePosition = GTE.getMousePosition(event)
+       svgPosition = GTE.svg.getBoundingClientRect();
+       var newPos=Math.round((2*this.height/(svgPosition.bottom-svgPosition.top)*(-mousePosition.y+svgPosition.top)+this.height-this.margin)/30*this.precision)/this.precision;
+       if (Number(newPos)<0) newPos=0;
+       if (Number(newPos)>10) newPos=10;
+       if( (Number(newPos)-this.moving_endpoint.getpos())*(Number(newPos)-this.moving_endpoint.getpos())>0.005){
+       var player=this.moving_endpoint.getplayer()+1;
+       var strat=this.moving_endpoint.getstrat();
+       GTE.tree.matrix.matrix[strat].strategy.payoffs[player].value=newPos;
+       GTE.tree.matrix.matrix[strat].strategy.payoffs[player].text=newPos;
+       redraw();
+       }
+       }
+       
+    Diagrams.prototype.doMouseMoveLine = function (event) {
+       var mousePosition = getMousePosition(event)
+       diff=mousePosition.y-Pos_prev.y;
+       var player1=moving_line.getplayer1();
+       var strat1=moving_line.getstrat1();
+       var player2=moving_line.getplayer2();
+       var strat1=moving_line.getstrat2();
+       var point1=GTE.tree.matrix.matrix[strat1].strategy.payoffs[player1];
+       var point2=GTE.tree.matrix.matrix[strat2].strategy.payoffs[player2];
+       var diffPos=~~((2*this.height/(svgPosition.bottom-svgPosition.top)*(diff))/30*this.precision)/this.precision;
+       var pos1=Math.round((point1.value-diffPos)*this.precision)/this.precision;
+       var pos2=Math.round((point2.value-diffPos)*this.precision)/this.precision;
+       if (pos2>=0 && pos2<=10 && pos1>=0 && pos1<=10 && diffPos!=0  ){
+       point1.value=pos1;
+       point2.value=pos2;
+       point1.text=pos1;
+       point2.text=pos2;
+       
+       Pos_prev=mousePosition;
+       point1.draw();
+       point2.draw();
+       redraw();
+       }
+       console.log("Moving: X = " + mousePosition.x + ", Y = " + mousePosition.y);
+       }
+     
+     Diagrams.prototype.doMouseupLine = function(event) {
+       mousePosition = getMousePosition(event)
+       document.removeEventListener("mousemove", doMouseMoveLine);
+       document.removeEventListener("mouseup", doMouseupEndpoint);
+       moving_line.addEventListener("mousedown", doMouseDownLine);
+       moving_line=null;
+       }
+       
+       Diagrams.prototype.doMouseupEndpoint = function(event) {
+       mousePosition = getMousePosition(event)
+       document.removeEventListener("mousemove", doMouseMoveEndpoint);
+       document.removeEventListener("mouseup", doMouseupEndpoint);
+       moving_line.addEventListener("mousedown", doMouseDownEndpoint);
+       moving_line=null;
+       }
+       
     Matrix.prototype.assignPlayers = function(players) {
         this.players = [];
         for(var i=0;i<players.length;i++)

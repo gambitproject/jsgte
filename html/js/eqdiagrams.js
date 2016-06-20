@@ -1,10 +1,21 @@
 (function () {
     "use strict";
+   //adding some lines that are to be inserted in structure.js
+    GTE.PAGE_NAME=window.location.pathname.split('/')[window.location.pathname.split('/').length-1];
+    if (GTE.PAGE_NAME=="2by2_svg.html")
+       GTE.PAGE_NAME="eqdiagrams.html";
+ 
+    GTE.PUREQ_RADIUS=10;
+ 
+ 
+ 
+ 
     // Get global canvas and store it in GTE
     // GTE is initialized by the library
     GTE.canvas = SVG('canvas').size("100%", "100%").attr({'style': 'background: #fff'});
     GTE.tools = new GTE.UI.Tools();
     GTE.diagrams = new GTE.Diagrams();
+    GTE.svg = document.getElementById("drawing");
     // var playerListener = function(picker) {
     //     var closeControl = true;
     //     picker.addEventListener("focus", function() {
@@ -23,23 +34,7 @@
     GTE.tools.newTree();
     GTE.tree.clear();
 
-    document.getElementById("button-new").addEventListener("click", function(){
-        GTE.tools.newTree();
-        return false;
-    });
 
-    document.getElementById("button-strategic").addEventListener("click", function(){
-        if(GTE.tools.isetToolsRan)
-            GTE.tools.toStrategicForm();
-        else
-            alert("first assign payoffs to each player");
-        return false;
-    });
-
-    document.getElementById("button-tree").addEventListener("click", function(){
-        GTE.tree.draw();
-        return false;
-    });
 
     document.getElementById("button-independent-strategic-general").addEventListener("click", function(){
         var x=2;
@@ -75,41 +70,12 @@
         return false;
     });
 
-    document.getElementById("button-add").addEventListener("click", function(){
-        GTE.tools.switchMode(GTE.MODES.ADD);
-        return false;
-    });
-
-    document.getElementById("button-remove").addEventListener("click", function(){
-        GTE.tools.switchMode(GTE.MODES.DELETE);
-        return false;
-    });
-
-    document.getElementById("button-merge").addEventListener("click", function(){
-        GTE.tools.switchMode(GTE.MODES.MERGE);
-        return false;
-    });
-
-    document.getElementById("button-dissolve").addEventListener("click", function(){
-        GTE.tools.switchMode(GTE.MODES.DISSOLVE);
-        return false;
-    });
 
     var playerButtons = document.getElementsByClassName("button-player");
     for (var i = 0; i < playerButtons.length; i++) {
         playerButtons[i].addEventListener("click",
             GTE.tools.buttonPlayerHandler(playerButtons[i].getAttribute("player")));
-    }
-
-    document.getElementById("button-player-more").addEventListener("click", function(){
-        GTE.tools.addPlayer();
-        return false;
-    });
-
-    document.getElementById("button-player-less").addEventListener("click", function(){
-        GTE.tools.removeLastPlayer();
-        return false;
-    });
+ }
 
     document.getElementById("button-matrix").addEventListener("click", function(){
         var el = document.getElementById("matrixPopup");
@@ -137,15 +103,6 @@
         return false;
     });
 
-    document.getElementById("button-solve-lrs").addEventListener("click", function(){
-        var communicate = new GTE.TREE.Communication();
-        var matrix1 = GTE.tree.matrix.getMatrixInStringFormat(0);
-        var matrix2 = GTE.tree.matrix.getMatrixInStringFormat(1);
-        var height = GTE.tree.matrix.getNumberOfStrategies(GTE.tree.players[1]);
-        var width = GTE.tree.matrix.getNumberOfStrategies(GTE.tree.players[2]);
-        communicate.sendPostRequest('/solve', {player1 : matrix1, player2 : matrix2, height: height, width: width});
-        return false;
-    });
 
     document.getElementById("button-matrix-save").addEventListener("click", function(e){
         var dimensions = GTE.tools.parseMatrix(document.getElementById('matrix-player-1').value,document.getElementById('matrix-player-2').value )
@@ -159,8 +116,7 @@
             var el = document.getElementById("matrixPopup");
             el.style.display = (el.style.display == "block") ? "none" : "block";
         }
-        if (GTE.PAGE_NAME=="eqdiagrams.html")
-            redraw();
+        redraw();
         return false;
     });
 
@@ -170,14 +126,15 @@
             });
          });
 
-     var payoff=document.getElementsByClassName("pay");
-     var lines=document.getElementsByClassName("line_trans");
-     for(i=0;i<8;i++){
-        payoff[i].addEventListener("mousedown", doMouseDown);
-     }
-     for(i=0;i<4;i++){
-        lines[i].addEventListener("mousedown", doMouseDown);
-     }
+
+    var payoff=document.getElementsByClassName("pay");
+    var lines=document.getElementsByClassName("line_trans");
+    for(i=0;i<8;i++){
+ payoff[i].addEventListener("mousedown", GTE.diagram.doMouseDownEndpoint());
+    }
+    for(i=0;i<4;i++){
+ lines[i].addEventListener("mousedown", GTE.diagram.doMouseDownLine());
+    }
     /*
         Hide irrelevant buttons for strategic.html
     */
@@ -190,13 +147,17 @@
         document.getElementById('button-player-less').style.display = 'none' ;
         document.getElementById('button-merge').style.display = 'none' ;
         document.getElementById('button-dissolve').style.display = 'none' ;
-        if (GTE.PAGE_NAME=="eqdiagrams.html"){
-            document.getElementById('button-solve-lrs').style.display = 'none' ;
-            document.getElementById('button-new').style.display = 'none' ;
+        document.getElementById('button-solve-lrs').style.display = 'none' ;
+        document.getElementById('button-new').style.display = 'none' ;
  
-        }
     };
     hideButtons();
+   GTE.getMousePosition = function(e) {
+      return {
+         x: e.clientX ,
+         y: e.clientY
+       };
+    }
 
     var matrixPopup = document.getElementById("matrixPopup");
     var matrix_bar = document.getElementById("matrix_bar");
