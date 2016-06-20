@@ -11,10 +11,17 @@ GTE.TREE = (function(parentModule) {
         this.json = null;
     }
 
+    /**
+    * Function that parses xml data to
+    * Json using third party software
+    */
     XmlImporter.prototype.parseXmlToJson = function() {
         this.json = X2J.parseXml(this.xml);
     };
 
+    /**
+    * Main function that loads the tree
+    */
     XmlImporter.prototype.loadTree = function() {
         var tree = this.json[0].gte[0];
         var display = this.json[0].gte[0].display[0];
@@ -95,6 +102,10 @@ GTE.TREE = (function(parentModule) {
 
     /**
     * Function to assign Chance Players to Nodes
+    * @param {node} the node to which the chance
+    * player is to be assigned in json
+    * @param {root} Reference to the node to which
+    * chancePlayer is to be assigned
     */
     XmlImporter.prototype.assignChancePlayers = function(node, root) {
         if(this.isChanceNode(node)) {
@@ -108,6 +119,11 @@ GTE.TREE = (function(parentModule) {
         }
     };
 
+    /**
+    * Function that checks if a given node
+    * is has chancePlayer assigned to it
+    * @param {node} node in json format
+    */
     XmlImporter.prototype.isChanceNode = function(node) {
         for( var i = 0 ; i < node.jIndex.length ; i++) {
             if(node.jIndex[i][0] == "node") {
@@ -159,6 +175,12 @@ GTE.TREE = (function(parentModule) {
         return list;
     };
 
+    /**
+    * Function that merges isets according
+    * to the loaded tree
+    * @param {listOfIsets} Object containing a list
+    * of nodes with similar isets
+    */
     XmlImporter.prototype.mergeIsets = function (listOfIsets) {
         for (var index in listOfIsets) {
             for(var i = 1; i<listOfIsets[index].length; i++) {
@@ -168,6 +190,13 @@ GTE.TREE = (function(parentModule) {
         }
     };
 
+    /**
+    * Function that assigns moves to nodes
+    * according to the data returned by their
+    * father node
+    * @param {nodejs} Node in json format
+    * @param {node} Reference to the node
+    */
     XmlImporter.prototype.assignMoves = function (nodejs, node) {
         for( var i = 0 ; i < nodejs.jIndex.length ; i++) {
             if(nodejs.jIndex[i][0] == "node") {
@@ -188,11 +217,17 @@ GTE.TREE = (function(parentModule) {
         }
     };
 
-    XmlImporter.prototype.assignPayoffs = function (nodejs, node, listOfIsets) {
+    /**
+    * Function that assigns payoffs to the
+    * given node
+    * @param {nodejs} Node in json format
+    * @param {node} Reference to the node
+    */
+    XmlImporter.prototype.assignPayoffs = function (nodejs, node) {
         if(nodejs.jIndex != undefined) {
             for( var i = 0 ; i < nodejs.jIndex.length ; i++) {
                 if(nodejs.jIndex[i][0] == "node") {
-                    this.assignPayoffs(nodejs.node[nodejs.jIndex[i][1]], node.children[i], listOfIsets);
+                    this.assignPayoffs(nodejs.node[nodejs.jIndex[i][1]], node.children[i]);
                 }
                 if(nodejs.jIndex[i][0] == "outcome") {
                     var outcome = nodejs.outcome[nodejs.jIndex[i][1]];
