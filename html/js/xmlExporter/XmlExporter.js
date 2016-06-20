@@ -9,10 +9,16 @@ GTE.TREE = (function (parentModule) {
         this.tree = "";
     };
 
+    /**
+    * Exports the tree to xml format
+    */
     XmlExporter.prototype.exportTree = function() {
         this.exportGTE();
     };
 
+    /**
+    * Exports the GTE section of the xml tree
+    */
     XmlExporter.prototype.exportGTE = function() {
         this.startProperty("gte", {version : "0.1"}, 0);
         this.exportDisplayProperties();
@@ -21,7 +27,14 @@ GTE.TREE = (function (parentModule) {
         this.endProperty("gte", 0);
     };
 
-    XmlExporter.prototype.startProperty = function(property_name, parameters, tab, body) {
+    /**
+    *  Function that adds properties in
+    *  xml format.
+    *  @param {property_name} Name of the property to be exported
+    *  @param {parameters} Parameters to be associated with the property
+    *  @param {tab} The amount of tab space to be left in the beginning.
+    */
+    XmlExporter.prototype.startProperty = function(property_name, parameters, tab) {
         var append = this.assignTab(tab);
         append += "<"+property_name;
         for(var parameter in parameters) {
@@ -36,19 +49,34 @@ GTE.TREE = (function (parentModule) {
         this.tree += append;
     };
 
+    /**
+    * Function that adds an ending tag
+    * to a particular property
+    * @param {property_name} Name of the proprety to be exported
+    * @param {tab} The amount of tab space associated with the closing tag
+    */
     XmlExporter.prototype.endProperty = function(property_name, tab) {
         var append = this.assignTab(tab);
         append += "</"+property_name+">\n";
         this.tree += append;
     };
 
+    /**
+    * Function that adds material between the
+    * starting and ending tag
+    * @param {property_name} The content of the body to be added
+    * @param {tab} The amount of tab space to be left in the beginning
+    */
     XmlExporter.prototype.addBody = function(property_name, tab) {
         var append = this.assignTab(tab);
         append += property_name+"\n";
         this.tree += append;
     };
 
-
+    /**
+    * Function that assigns tab space
+    * to the beginning of a tag
+    */
     XmlExporter.prototype.assignTab = function(tab) {
         var string = "";
         for(var i = 0; i<tab; i++) {
@@ -57,6 +85,10 @@ GTE.TREE = (function (parentModule) {
         return string;
     };
 
+    /**
+    * Function that exports the properties inside
+    * the display tag of the xml tree
+    */
     XmlExporter.prototype.exportDisplayProperties = function(tab_space) {
         this.startProperty("display", {}, 1);
         for(var i = 1; i<GTE.tree.players.length; i++) {
@@ -87,6 +119,10 @@ GTE.TREE = (function (parentModule) {
         this.endProperty("display",1);
     };
 
+    /**
+    * Function that exports players inside the
+    * player tag of the xml tree
+    */
     XmlExporter.prototype.exportPlayers = function() {
         this.startProperty("players", {}, 1);
         for(var i = 1; i<GTE.tree.players.length;i++) {
@@ -97,12 +133,20 @@ GTE.TREE = (function (parentModule) {
         this.endProperty("players",1);
     };
 
+    /**
+    * Function that exports the properties
+    * inside the extensiveForm tag
+    */
     XmlExporter.prototype.exportExtensiveForm= function() {
         this.startProperty("extensiveForm", {}, 1);
         this.exportNodes();
         this.endProperty("extensiveForm",1);
     };
 
+    /**
+    * Function that exports the nodes
+    * in the final xml tree
+    */
     XmlExporter.prototype.exportNodes = function() {
         if(GTE.tree.root.player == null) {
             this.exportNode(GTE.tree.root, {}, 2);
@@ -111,12 +155,20 @@ GTE.TREE = (function (parentModule) {
         }
     };
 
+    /**
+    * Funciton that adds payoff tags
+    * to outcomes in the final xml tree
+    */
     XmlExporter.prototype.assignPayoff = function(player, payoff, tab) {
         this.startProperty("payoff", {player : player.name,}, tab);
         this.addBody(payoff.value, tab+1);
         this.endProperty("payoff", tab);
     }
 
+    /**
+    * Function that exports node tags
+    * recursively to the xml tree
+    */
     XmlExporter.prototype.exportNode = function(node, parameters, tab) {
         if(node.children.length == 0 ) {
             // export as an outcome
@@ -162,8 +214,12 @@ GTE.TREE = (function (parentModule) {
         }
     };
 
+    /**
+    * Funciton that returns the tree
+    * in xml format
+    */
     XmlExporter.prototype.toString = function() {
-        console.log(this.tree);
+        return "Tree in xml :\n"+this.tree;
     };
 
     // Add class to parent module
