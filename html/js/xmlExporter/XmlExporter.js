@@ -111,10 +111,25 @@ GTE.TREE = (function (parentModule) {
         }
     };
 
+    XmlExporter.prototype.assignPayoff = function(player, payoff, tab) {
+        this.startProperty("payoff", {player : player.name,}, tab);
+        this.addBody(payoff.value, tab+1);
+        this.endProperty("payoff", tab);
+    }
+
     XmlExporter.prototype.exportNode = function(node, parameters, tab) {
         if(node.children.length == 0 ) {
             // export as an outcome
             this.startProperty("outcome", parameters, tab);
+            if(GTE.tools.isetToolsRan) {
+                // assign payoffs
+                for(var i=1; i<GTE.tree.players.length;i++) {
+                    var index = GTE.tree.players[i].payoffs.map(function(el) {
+                          return el.leaf;
+                    }).indexOf(node);
+                    this.assignPayoff(GTE.tree.players[i], GTE.tree.players[i].payoffs[index], tab+1);    
+                }
+            }
             this.endProperty("outcome", tab);
         } else {
             //exprot nodes
