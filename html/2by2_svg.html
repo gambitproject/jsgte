@@ -1,0 +1,407 @@
+<!doctype html>
+<html class="no-js" lang"">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>2 by 2 games</title>
+        <link rel="stylesheet" href="css/2by2.css">
+    </head>
+</script>
+
+<body onload="initDraws()">
+        <!--[if lt IE 8]>
+            <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+
+<script>
+    var svg1,svg2;
+    var ctx1,ctx2;
+    var points=[];
+    var svgH=400;
+    var svgW=300
+
+    
+    function initDraws() {
+        svg1 = document.getElementById("SVG1");
+        svg2 = document.getElementById("SVG2");
+        pay1_11 = document.getElementById("Payoff1_11");
+        pay1_12 = document.getElementById("Payoff1_12");
+        pay1_21 = document.getElementById("Payoff1_21");
+        pay1_22 = document.getElementById("Payoff1_22");
+        pay2_11 = document.getElementById("Payoff2_11");
+        pay2_12 = document.getElementById("Payoff2_12");
+        pay2_21 = document.getElementById("Payoff2_21");
+        pay2_22 = document.getElementById("Payoff2_22");
+        compute_firstP();
+        compute_secondP();
+        draw();
+        
+        //alert(points[0].y);
+        // mouse event
+        pay1_11.addEventListener("click", doMouseDown);
+        pay1_12.addEventListener("click", doMouseDown);
+        pay1_21.addEventListener("click", doMouseDown);
+        pay1_22.addEventListener("click", doMouseDown);
+        pay2_11.addEventListener("click", doMouseDown);
+        pay2_12.addEventListener("click", doMouseDown);
+        pay2_21.addEventListener("click", doMouseDown);
+        pay2_22.addEventListener("click", doMouseDown);
+        input_user=document.getElementsByTagName("input");
+        for (var i=0; i<input_user.length;i++){
+           //input_user[i].addEventListener("onchange",redraw());
+        }
+    }
+
+
+function redraw(){
+    compute_firstP();
+    compute_secondP();
+    draw();
+}
+
+function getMousePosition(e) {
+    return {
+        x: e.clientX ,
+        y: e.clientY
+  };
+}
+
+
+function doMouseDown(event) {
+    event.preventDefault();
+    //var temp=this.parentNode.childNodes[13];
+    this.parentNode.insertBefore(this,null);
+    
+    this.addEventListener("mousemove", doMouseMove);
+    this.addEventListener("click", doMouseUp);
+    this.removeEventListener("click", doMouseDown);
+    console.log("Down: "+this.getAttribute("id"));
+}
+
+
+function doMouseUp(event) {
+    mousePosition = getMousePosition(event)
+    this.removeEventListener("mousemove", doMouseMove);
+    this.addEventListener("click", doMouseDown);
+    console.log("Releasing: X = " + mousePosition.x + ", Y = " + mousePosition.y);
+}
+
+
+function doMouseMove(event) {
+    var mousePosition = getMousePosition(event)
+    svgPosition = this.parentNode.getBoundingClientRect();
+    var newPos=~~((-mousePosition.y+svgPosition.top+svgH-50)/3)/10;
+    if (Number(newPos)<0) newPos=0;
+    if (Number(newPos)>10) newPos=10;
+    if( (Number(newPos)-this.getAttribute("cy"))*(Number(newPos)-this.getAttribute("cy"))>0.005){
+       document.getElementById(this.getAttribute("asso")).value=newPos;
+       redraw();
+    }
+    
+    console.log("Moving: X = " + mousePosition.x + ", Y = " + mousePosition.y);
+}
+
+
+
+function compute_firstP(){
+        var P1_11=document.getElementById("P1_11").value;
+        var P1_12=document.getElementById("P1_12").value;
+        var P1_21=document.getElementById("P1_21").value;
+        var P1_22=document.getElementById("P1_22").value;
+        pay1_11.setAttributeNS(null, "cy", svgH-50-P1_11*30);
+        pay1_12.setAttributeNS(null, "cy", svgH-50-P1_12*30);
+        pay1_21.setAttributeNS(null, "cy", svgH-50-P1_21*30);
+        pay1_22.setAttributeNS(null, "cy", svgH-50-P1_22*30);
+        var maxP1_1, minP1_1, maxP1_2, minP1_2; // max and min off player1 payoff for strategy 1 or 2 of player2
+        if( Number(P1_11)>Number(P1_21)){
+            maxP1_1=P1_11;
+            minP1_1=P1_21;
+        }else{
+            maxP1_1=P1_21;
+            minP1_1=P1_11;
+        }
+        if( Number(P1_12)>Number(P1_22)){
+            maxP1_2=P1_12;
+            minP1_2=P1_22;
+        }else{
+            maxP1_2=P1_22;
+            minP1_2=P1_12;
+        }
+        if((maxP1_1==P1_11 && maxP1_2==P1_12)||(maxP1_1==P1_21 && maxP1_2==P1_22)){
+            point1_1={x:50,y:svgH-50-maxP1_1*30};
+            point1_2={x:svgW-50,y:svgH-50-maxP1_2*30};
+            point1_3={x:svgW-50,y:svgH-50-maxP1_2*30};}
+        else{
+            var middle_x=(P1_21-P1_11)/(Number(P1_21)- Number(P1_22) + Number(P1_12) - Number(P1_11));
+            var middle_y=Number((P1_12-P1_11)*middle_x)+Number(P1_11);
+            point1_1={x:50, y:svgH-50-maxP1_1*30};
+            point1_2={x:middle_x * (svgW-100)+50,y:svgH-50-middle_y*30};
+            point1_3={x:svgW-50,y:svgH-50-maxP1_2*30};
+        }
+    }
+            
+    function compute_secondP(){
+        var P2_11=document.getElementById("P2_11").value;
+        var P2_12=document.getElementById("P2_12").value;
+        var P2_21=document.getElementById("P2_21").value;
+        var P2_22=document.getElementById("P2_22").value;
+        
+        pay2_11.setAttributeNS(null, "cy", svgH-50-P2_11*30);
+        pay2_12.setAttributeNS(null, "cy", svgH-50-P2_12*30);
+        pay2_21.setAttributeNS(null, "cy", svgH-50-P2_21*30);
+        pay2_22.setAttributeNS(null, "cy", svgH-50-P2_22*30);
+        var maxP2_1, minP2_1, maxP2_2, minP2_2; // max and min off player1 payoff for strategy 1 or 2 of player2
+        if( Number(P2_11)>Number(P2_12)){
+            maxP2_1=P2_11;
+            minP2_1=P2_12;
+        }else{
+            maxP2_1=P2_12;
+            minP2_1=P2_11;
+        }
+        if( Number(P2_21)>Number(P2_22)){
+            maxP2_2=P2_21;
+            minP2_2=P2_22;
+        }else{
+            maxP2_2=P2_22;
+            minP2_2=P2_21;
+        }
+        if((maxP2_1==P2_11 && maxP2_2==P2_21)||(maxP2_1==P2_12 && maxP2_2==P2_22)){
+            point2_1={x:50,y:svgH-50-maxP2_1*30};
+            point2_2={x:svgW-50,y:svgH-50-maxP2_2*30};
+            point2_3={x:svgW-50,y:svgH-50-maxP2_2*30};
+            }
+        else{
+            var middle_x=(P2_12-P2_11)/(Number(P2_12)- Number(P2_22) + Number(P2_21) - Number(P2_11));
+            var middle_y=Number((P2_21-P2_11)*middle_x)+Number(P2_11);
+            point2_1={x:50,y:svgH-50-maxP2_1*30};
+            point2_2={x:middle_x * (svgW-100)+50,y:svgH-50-middle_y*30};
+            point2_3={x:svgW-50,y:svgH-50-maxP2_2*30};
+        }
+    }
+    
+    function draw(){
+        var P1S1=document.getElementById("P1S1").value;
+        var P1S2=document.getElementById("P1S2").value;
+        var P2S1=document.getElementById("P2S1").value;
+        var P2S2=document.getElementById("P2S2").value;
+        // Lines update svg1
+        var lines=svg1.getElementsByTagName("line");
+        lines[0].setAttributeNS(null, "y1", pay1_11.getAttribute("cy"));
+        lines[0].setAttributeNS(null, "y2", pay1_12.getAttribute("cy"));
+        var labelline=svg1.getElementById("text11");
+        labelline.setAttributeNS(null, "y", pay1_11.getAttribute("cy"));
+        labelline.textContent=P1S1;
+        lines[1].setAttributeNS(null, "y1", pay1_21.getAttribute("cy"));
+        lines[1].setAttributeNS(null, "y2", pay1_22.getAttribute("cy"));
+        labelline=svg1.getElementById("text12");
+        labelline.setAttributeNS(null, "y", pay1_22.getAttribute("cy"));
+        labelline.textContent=P1S2;
+        // Lines update svg2
+        lines=svg2.getElementsByTagName("line");
+        lines[0].setAttributeNS(null, "y1", pay2_11.getAttribute("cy"));
+        lines[0].setAttributeNS(null, "y2", pay2_21.getAttribute("cy"));
+        labelline=svg2.getElementById("text21");
+        labelline.setAttributeNS(null, "y", pay2_11.getAttribute("cy"));
+        labelline.textContent=P2S1;
+        lines[1].setAttributeNS(null, "y1", pay2_12.getAttribute("cy"));
+        lines[1].setAttributeNS(null, "y2", pay2_22.getAttribute("cy"));
+        labelline=svg2.getElementById("text22");
+        labelline.setAttributeNS(null, "y", pay2_22.getAttribute("cy"));
+        labelline.textContent=P2S2;
+        //envelop svg1
+        var envelop1=document.getElementById("envelop1");
+        envelop1.setAttributeNS(null,"points", "50,50 "+point1_1.x+","+point1_1.y+" "+point1_2.x+","+point1_2.y+" "+point1_3.x+","+point1_3.y+" 250,50");
+        var inter=svg1.getElementById("inter1");
+        inter.setAttributeNS(null,"cx", point1_2.x);
+        inter.setAttributeNS(null,"cy", point1_2.y);
+        var interlabel=svg1.getElementById("interlabel1");
+        interlabel.setAttributeNS(null, "x",point1_2.x);
+        interlabel.textContent=~~((Number(point1_2.x)-50)/2)/100;
+        var stick=svg1.getElementById("interstick1");
+        stick.setAttributeNS(null, "x1",point1_2.x);
+        stick.setAttributeNS(null, "x2",point1_2.x);
+        //envelop svg2
+        var envelop2=document.getElementById("envelop2");
+        envelop2.setAttributeNS(null,"points", "50,50 "+point2_1.x+","+point2_1.y+" "+point2_2.x+","+point2_2.y+" "+point2_3.x+","+point2_3.y+" 250,50");
+        inter=svg2.getElementById("inter2");
+        inter.setAttributeNS(null,"cx", point2_2.x);
+        inter.setAttributeNS(null,"cy", point2_2.y);
+        interlabel=svg2.getElementById("interlabel2");
+        interlabel.setAttributeNS(null, "x",point2_2.x);
+        interlabel.textContent=~~((Number(point2_2.x)-50)/2)/100;
+        stick=svg2.getElementById("interstick2");
+        stick.setAttributeNS(null, "x1",point2_2.x);
+        stick.setAttributeNS(null, "x2",point2_2.x);
+        
+        //change legend according to strategies name.
+        var temp= svg1.getElementById("y11");
+        temp.textContent=P2S1;
+        temp= svg1.getElementById("y12");
+        temp.textContent=P2S2;
+        temp= svg2.getElementById("y21");
+        temp.textContent=P1S1;
+        temp= svg2.getElementById("y22");
+        temp.textContent=P1S2;
+        temp= svg1.getElementById("prob2");
+        temp.textContent="Player2 "+P2S2+" prob";
+        temp= svg2.getElementById("prob1");
+        temp.textContent="Player1 "+P1S2+" prob";
+    }
+
+</script>
+ <!-- Table for user to update payoff and strategies' names.-->
+        <table border="1">
+  <tr>
+    <th><label class="player1">Player I</label> \ <label class="player2">Player II</label></th>
+    <th><label><input class="player2" type="text" id="P2S1" onchange="redraw()" value="S1"/> </label></th>
+    <th><label><input class="player2" type="text" id="P2S2" onchange="redraw()" value="S2"/> </label></th>
+  </tr>
+  <tr>
+      <th><label><input class="player1" type="text" id="P1S1" onchange="redraw()" value="S1"/> </label></th>
+    <td><input class="player1" type="text" id="P1_11" onchange="redraw()" value=0>\<input class="player2" type="text" id="P2_11"  onchange="redraw()" value=0></td>
+    <td><input class="player1" type="text" id="P1_12" onchange="redraw()" value=0>\<input class="player2" type="text" id="P2_12" onchange="redraw()" value=0></td>
+  </tr>
+  <tr>
+  <th><label><input class="player1" type="text" id="P1S2" onchange="redraw()" value="S2"/> </label></th>
+    <td><input class="player1" type="text" id="P1_21" onchange="redraw()" value=0>\<input class="player2" type="text" id="P2_21"  onchange="redraw()" value=0></td>
+    <td><input class="player1" type="text" id="P1_22" onchange="redraw()" value=0>\<input class="player2" type="text" id="P2_22"  onchange="redraw()" value=0></td>
+  </tr>
+</table>
+        <!-- SVG1 for the first player payoff accordingly to player2's strategies-->
+        <svg id="SVG1" version="1.1" width="300px" height="400px">
+            <!-- Drawing the contour-->
+            <polyline points="50,50 50,350 250,350, 250,50" style="fill:none;stroke:black;stroke-width:2" />
+            <!-- Legend, strategy names will be updated after-->
+            <text x="50" y="40" fill="green" font-family="Arial" font-size="30">Player1 payoff</text>
+            <text id="prob2" x="80" y="385" fill="blue" font-family="Arial" font-size="20">Player2 S2 prob</text>
+            <text id="y11" x="5" y="180" fill="blue" font-family="Arial" font-size="30" transform="rotate(270 30,180)">S1</text>
+            <text id="y12" x="260" y="180" fill="blue" font-family="Arial" font-size="30" transform="rotate(90 270,180)">S2</text>
+            <text x="40" y="368" fill="blue" font-family="Arial" font-size="20">0</text>
+            <text x="250" y="368" fill="blue" font-family="Arial" font-size="20">1</text>
+            <!-- Upper envelop, coordinates will be updated-->
+            <polygon id="envelop1" points="50,50 50,350 250,350 250,50" style="fill:orange;stroke:orange;stroke-width:0" />
+            <!-- First strategy payoff-->
+            <line id="11" x1="50" y1="350" x2="250" y2="350" style="stroke:red;stroke-width:2" />
+            <text id="text11" x="80" y="350" fill="red" font-family="Arial" font-size="20">S1</text>
+            <!-- Second strategy payoff-->
+            <line id="12" x1="50" y1="350" x2="250" y2="350" style="stroke:yellow;stroke-width:2" />
+            <text id="text12" x="200" y="350" fill="yellow" font-family="Arial" font-size="20">S2</text>
+            <!-- Sticks-->
+            <line x1="50" y1="80" x2="45" y2="80" style="stroke:black;stroke-width:1" />
+            <text x="35" y="85" fill="black" font-family="Arial" font-size="15">9</text>
+            <line x1="50" y1="110" x2="45" y2="110" style="stroke:black;stroke-width:1" />
+            <text x="35" y="115" fill="black" font-family="Arial" font-size="15">8</text>
+            <line x1="50" y1="140" x2="45" y2="140" style="stroke:black;stroke-width:1" />
+            <text x="35" y="145" fill="black" font-family="Arial" font-size="15">7</text>
+            <line x1="50" y1="170" x2="45" y2="170" style="stroke:black;stroke-width:1" />
+            <text x="35" y="175" fill="black" font-family="Arial" font-size="15">6</text>
+            <line x1="50" y1="200" x2="45" y2="200" style="stroke:black;stroke-width:1" />
+            <text x="35" y="205" fill="black" font-family="Arial" font-size="15">5</text>
+            <line x1="50" y1="230" x2="45" y2="230" style="stroke:black;stroke-width:1" />
+            <text x="35" y="235" fill="black" font-family="Arial" font-size="15">4</text>
+            <line x1="50" y1="260" x2="45" y2="260" style="stroke:black;stroke-width:1" />
+            <text x="35" y="265" fill="black" font-family="Arial" font-size="15">3</text>
+            <line x1="50" y1="290" x2="45" y2="290" style="stroke:black;stroke-width:1" />
+            <text x="35" y="295" fill="black" font-family="Arial" font-size="15">2</text>
+            <line x1="50" y1="320" x2="45" y2="320" style="stroke:black;stroke-width:1" />
+            <text x="35" y="325" fill="black" font-family="Arial" font-size="15">1</text>
+            <line x1="250" y1="80" x2="255" y2="80" style="stroke:black;stroke-width:1" />
+            <text x="258" y="85" fill="black" font-family="Arial" font-size="15">9</text>
+            <line x1="250" y1="110" x2="255" y2="110" style="stroke:black;stroke-width:1" />
+            <text x="258" y="115" fill="black" font-family="Arial" font-size="15">8</text>
+            <line x1="250" y1="140" x2="255" y2="140" style="stroke:black;stroke-width:1" />
+            <text x="258" y="145" fill="black" font-family="Arial" font-size="15">7</text>
+            <line x1="250" y1="170" x2="255" y2="170" style="stroke:black;stroke-width:1" />
+            <text x="258" y="175" fill="black" font-family="Arial" font-size="15">6</text>
+            <line x1="250" y1="200" x2="255" y2="200" style="stroke:black;stroke-width:1" />
+            <text x="258" y="205" fill="black" font-family="Arial" font-size="15">5</text>
+            <line x1="250" y1="230" x2="255" y2="230" style="stroke:black;stroke-width:1" />
+            <text x="258" y="235" fill="black" font-family="Arial" font-size="15">4</text>
+            <line x1="250" y1="260" x2="255" y2="260" style="stroke:black;stroke-width:1" />
+            <text x="258" y="265" fill="black" font-family="Arial" font-size="15">3</text>
+            <line x1="250" y1="290" x2="255" y2="290" style="stroke:black;stroke-width:1" />
+            <text x="258" y="295" fill="black" font-family="Arial" font-size="15">2</text>
+            <line x1="250" y1="320" x2="255" y2="320" style="stroke:black;stroke-width:1" />
+            <text x="258" y="325" fill="black" font-family="Arial" font-size="15">1</text>
+            <!-- Intersection point-->
+            <circle id="inter1" cx="250" cy="350" r="8" fill="orange" stroke="black" stroke-width="1" draggable="false" ondragstart="doMouseDown()"/>
+            <line id="interstick1" x1="250" y1="350" x2="250" y2="355" style="stroke:black;stroke-width:2" />
+            <text id="interlabel1" x="250" y="368" fill="blue" font-family="Arial" font-size="20">1</text>
+            <!-- Payoff points-->
+            <circle id="Payoff1_11" asso="P1_11" cx="50" cy="350" r="10" fill="red" stroke="black" draggable="false" ondragstart="doMouseDown()"/>
+            <circle id="Payoff1_12" asso="P1_12" cx="250" cy="350" r="10" fill="red" stroke="black" draggable="false" ondragstart="doMouseDown()"/>
+            <circle id="Payoff1_21" asso="P1_21" cx="50" cy="350" r="10" fill="yellow" stroke="black" draggable="false" ondragstart="doMouseDown()"/>
+            <circle id="Payoff1_22" asso="P1_22" cx="250" cy="350" r="10" fill="yellow" stroke="black" draggable="false" ondragstart="doMouseDown()"/>
+            
+        </svg>
+        
+        <!-- SVG2 for the second player payoff accordingly to player1's strategies-->
+        <svg id="SVG2" version="1.1" width="300px" height="400px">
+            <!-- Drawing the contour-->
+            <polyline points="50,50 50,350 250,350, 250,50" style="fill:none;stroke:black;stroke-width:2" />
+            <!-- Legend, strategy names will be updated after-->
+            <text x="50" y="40" fill="blue" font-family="Arial" font-size="30">Player2 payoff</text>
+            <text id="prob1" x="80" y="385" fill="green" font-family="Arial" font-size="20">Player1 S2 prob</text>
+            <text x="40" y="368" fill="green" font-family="Arial" font-size="20">0</text>
+            <text x="250" y="368" fill="green" font-family="Arial" font-size="20">1</text>
+            <text id="y21" x="5" y="180" fill="green" font-family="Arial" font-size="30" transform="rotate(270 30,180)">S1</text>
+            <text id="y22" x="260" y="180" fill="green" font-family="Arial" font-size="30" transform="rotate(90 270,180)">S2</text>
+            <!-- Upper envelop, coordinates will be updated-->
+            <polygon id="envelop2" points="50,50 50,350 250,350 250,50" style="fill:orange;stroke:orange;stroke-width:0" />
+            <!-- First strategy payoff-->
+            <line id="21" x1="50" y1="350" x2="250" y2="350" style="stroke:red;stroke-width:2" />
+            <text id="text21" x="80" y="350" fill="red" font-family="Arial" font-size="20">S1</text>
+            <!-- Second strategy payoff-->
+            <line id="22" x1="50" y1="350" x2="250" y2="350" style="stroke:yellow;stroke-width:2" />
+            <text id="text22" x="200" y="350" fill="yellow" font-family="Arial" font-size="20">S2</text>
+            <!-- Sticks-->
+            <line x1="50" y1="80" x2="45" y2="80" style="stroke:black;stroke-width:1" />
+            <text x="35" y="85" fill="black" font-family="Arial" font-size="15">9</text>
+            <line x1="50" y1="110" x2="45" y2="110" style="stroke:black;stroke-width:1" />
+            <text x="35" y="115" fill="black" font-family="Arial" font-size="15">8</text>
+            <line x1="50" y1="140" x2="45" y2="140" style="stroke:black;stroke-width:1" />
+            <text x="35" y="145" fill="black" font-family="Arial" font-size="15">7</text>
+            <line x1="50" y1="170" x2="45" y2="170" style="stroke:black;stroke-width:1" />
+            <text x="35" y="175" fill="black" font-family="Arial" font-size="15">6</text>
+            <line x1="50" y1="200" x2="45" y2="200" style="stroke:black;stroke-width:1" />
+            <text x="35" y="205" fill="black" font-family="Arial" font-size="15">5</text>
+            <line x1="50" y1="230" x2="45" y2="230" style="stroke:black;stroke-width:1" />
+            <text x="35" y="235" fill="black" font-family="Arial" font-size="15">4</text>
+            <line x1="50" y1="260" x2="45" y2="260" style="stroke:black;stroke-width:1" />
+            <text x="35" y="265" fill="black" font-family="Arial" font-size="15">3</text>
+            <line x1="50" y1="290" x2="45" y2="290" style="stroke:black;stroke-width:1" />
+            <text x="35" y="295" fill="black" font-family="Arial" font-size="15">2</text>
+            <line x1="50" y1="320" x2="45" y2="320" style="stroke:black;stroke-width:1" />
+            <text x="35" y="325" fill="black" font-family="Arial" font-size="15">1</text>
+            <text x="258" y="85" fill="black" font-family="Arial" font-size="15">9</text>
+            <line x1="250" y1="110" x2="255" y2="110" style="stroke:black;stroke-width:1" />
+            <text x="258" y="115" fill="black" font-family="Arial" font-size="15">8</text>
+            <line x1="250" y1="140" x2="255" y2="140" style="stroke:black;stroke-width:1" />
+            <text x="258" y="145" fill="black" font-family="Arial" font-size="15">7</text>
+            <line x1="250" y1="170" x2="255" y2="170" style="stroke:black;stroke-width:1" />
+            <text x="258" y="175" fill="black" font-family="Arial" font-size="15">6</text>
+            <line x1="250" y1="200" x2="255" y2="200" style="stroke:black;stroke-width:1" />
+            <text x="258" y="205" fill="black" font-family="Arial" font-size="15">5</text>
+            <line x1="250" y1="230" x2="255" y2="230" style="stroke:black;stroke-width:1" />
+            <text x="258" y="235" fill="black" font-family="Arial" font-size="15">4</text>
+            <line x1="250" y1="260" x2="255" y2="260" style="stroke:black;stroke-width:1" />
+            <text x="258" y="265" fill="black" font-family="Arial" font-size="15">3</text>
+            <line x1="250" y1="290" x2="255" y2="290" style="stroke:black;stroke-width:1" />
+            <text x="258" y="295" fill="black" font-family="Arial" font-size="15">2</text>
+            <line x1="250" y1="320" x2="255" y2="320" style="stroke:black;stroke-width:1" />
+            <text x="258" y="325" fill="black" font-family="Arial" font-size="15">1</text>
+            <!-- Intersection point-->
+            <circle id="inter2" cx="250" cy="350" r="8" fill="orange" stroke="black" stroke-width="1" draggable="false" ondragstart="doMouseDown()"/>
+            <line id="interstick2" x1="250" y1="350" x2="250" y2="355" style="stroke:black;stroke-width:2" />
+            <text id="interlabel2" x="250" y="368" fill="green" font-family="Arial" font-size="20">1</text>
+            <!-- Payoff points-->
+            <circle id="Payoff2_11" asso="P2_11" cx="50" cy="350" r="10" fill="red" stroke="black" draggable="false" ondragstart="doMouseDown()"/>
+            <circle id="Payoff2_12" asso="P2_12" cx="50" cy="350" r="10" fill="yellow" stroke="black" draggable="false" ondragstart="doMouseDown()"/>
+            <circle id="Payoff2_21" asso="P2_21" cx="250" cy="350" r="10" fill="red" stroke="black" draggable="false" ondragstart="doMouseDown()"/>
+            <circle id="Payoff2_22" asso="P2_22" cx="250" cy="350" r="10" fill="yellow" stroke="black" draggable="false" ondragstart="doMouseDown()"/>
+            
+        </svg>
+        
+                                                                    
+</body>
+</html>

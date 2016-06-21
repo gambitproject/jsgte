@@ -98,6 +98,13 @@
         return false;
     });
 
+    document.getElementById("button-save").addEventListener("click", function(){
+        var exporter = new GTE.TREE.XmlExporter();
+        exporter.exportTree();
+        console.log(exporter.toString());
+        return false;
+    });
+
     document.getElementById("button-add").addEventListener("click", function(){
         GTE.tools.switchMode(GTE.MODES.ADD);
         return false;
