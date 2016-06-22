@@ -5,11 +5,16 @@ GTE.DIAGRAM = (function (parentModule) {
     * Creates a new end point.
     * @class
     */
-    function Endpoint(x,y,p,strat) {
-        this.x=x;
-        this.y=y;
+    function Line(p,strat) {
         this.player=p;
-        this.strat=strat;
+        if (p==0){
+           this.strat1=strat*2;
+           this.strat2=strat*2+1;
+        }
+        else{
+           this.strat1=strat;
+           this.strat2=strat+2;
+       }
 
     }
 

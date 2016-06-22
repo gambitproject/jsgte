@@ -14,7 +14,7 @@
     // GTE is initialized by the library
     GTE.canvas = SVG('canvas').size("100%", "100%").attr({'style': 'background: #fff'});
     GTE.tools = new GTE.UI.Tools();
-    GTE.diagrams = new GTE.Diagrams();
+    GTE.diagram = new GTE.Diagram();
     GTE.svg = document.getElementById("drawing");
     // var playerListener = function(picker) {
     //     var closeControl = true;
