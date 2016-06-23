@@ -424,15 +424,366 @@ function compute_firstP(){
         var path1_3="";
         var path2_3="";
         nb=0;
-        temp[0].setAttributeNS(null, "r", 0);
-        temp[1].setAttributeNS(null, "r", 0);
-        temp[2].setAttributeNS(null, "r", 0);
-        temp[3].setAttributeNS(null, "r", 0);
+        temp[0].setAttributeNS(null, "r", 10);
+        temp[1].setAttributeNS(null, "r", 10);
+        temp[2].setAttributeNS(null, "r", 10);
+        temp[3].setAttributeNS(null, "r", 10);
         temp[4].setAttributeNS(null, "height", 0);
         temp[5].setAttributeNS(null, "height", 0);
+        temp[6].setAttributeNS(null, "height", 0);
+        temp[7].setAttributeNS(null, "height", 0);
+        temp[8].setAttributeNS(null, "height", 0);
         temp[4].setAttributeNS(null, "width", 0);
         temp[5].setAttributeNS(null, "width", 0);
-        if (M2_1==1){
+        temp[6].setAttributeNS(null, "width", 0);
+        temp[7].setAttributeNS(null, "width", 0);
+        temp[8].setAttributeNS(null, "width", 0);
+        //setting player 1 path
+        // We remove pure equilibria that don't correspond to player 1.
+        if (M1_1==M1_2){
+            if (M1_2==0){
+               path1="50,500, 250,500, 250,700, 50,700, 50,500";
+               temp[8].setAttributeNS(null, "x", 45);
+               temp[8].setAttributeNS(null, "y", 495);
+               temp[8].setAttributeNS(null, "height", 210);
+               temp[8].setAttributeNS(null, "width", 210);
+            }
+            else{
+                if (M1_2==1){
+                    path1="50,500, 250,500";
+                    temp[2].setAttributeNS(null, "r", 0);
+                    temp[3].setAttributeNS(null, "r", 0);
+                    
+                    temp[4].setAttributeNS(null, "x", 45);
+                    temp[4].setAttributeNS(null, "y", 495);
+                    temp[4].setAttributeNS(null, "height", 10);
+                    temp[4].setAttributeNS(null, "width", 210);
+                }
+                else {
+                    path1="50,700, 250,700";
+                    temp[0].setAttributeNS(null, "r", 0);
+                    temp[1].setAttributeNS(null, "r", 0);
+                    
+                    temp[6].setAttributeNS(null, "x", 45);
+                    temp[6].setAttributeNS(null, "y", 695);
+                    temp[6].setAttributeNS(null, "height", 10);
+                    temp[6].setAttributeNS(null, "width", 210);
+                }
+            }
+            
+        }
+        else{
+            if (M1_1==0){
+                temp[7].setAttributeNS(null, "x", 45);
+                temp[7].setAttributeNS(null, "y", 495);
+                temp[7].setAttributeNS(null, "height", 210);
+                temp[7].setAttributeNS(null, "width", 10);
+                if (M1_2==1){
+                    path1="50,700, 50,500, 250,500";
+                    temp[2].setAttributeNS(null, "r", 0);
+                    
+                    temp[4].setAttributeNS(null, "x", 45);
+                    temp[4].setAttributeNS(null, "y", 495);
+                    temp[4].setAttributeNS(null, "height", 10);
+                    temp[4].setAttributeNS(null, "width", 210);
+                }
+                else{
+                    path1="50,500, 50,700, 250,700";
+                    temp[1].setAttributeNS(null, "r", 0);
+                    
+                    temp[6].setAttributeNS(null, "x", 45);
+                    temp[6].setAttributeNS(null, "y", 695);
+                    temp[6].setAttributeNS(null, "height", 10);
+                    temp[6].setAttributeNS(null, "width", 210);
+                }
+            }
+            else{
+                if (M1_1==1){
+                    if (M1_2==0){
+                        path1="50,500, 250,500, 250,700";
+                        temp[3].setAttributeNS(null, "r", 0);
+                        
+                        temp[5].setAttributeNS(null, "x", 245);
+                        temp[5].setAttributeNS(null, "y", 495);
+                        temp[5].setAttributeNS(null, "height", 210);
+                        temp[5].setAttributeNS(null, "width", 10);
+                        
+                        temp[4].setAttributeNS(null, "x", 45);
+                        temp[4].setAttributeNS(null, "y", 495);
+                        temp[4].setAttributeNS(null, "height", 10);
+                        temp[4].setAttributeNS(null, "width", 210);
+                    }
+                    else{
+                        path1="50,500, "+point1_2.x+",500, "+point1_2.x+",700, 250,700";
+                        temp[8].setAttributeNS(null, "x", point1_2.x-5);
+                        temp[8].setAttributeNS(null, "y", 495);
+                        temp[8].setAttributeNS(null, "height", 210);
+                        temp[8].setAttributeNS(null, "width", 10);
+                        
+                        temp[4].setAttributeNS(null, "x", 45);
+                        temp[4].setAttributeNS(null, "y", 495);
+                        temp[4].setAttributeNS(null, "height", 10);
+                        temp[4].setAttributeNS(null, "width", ~~(point1_2.x-50)+10);
+                        
+                        temp[6].setAttributeNS(null, "x", point1_2.x-5);
+                        temp[6].setAttributeNS(null, "y", 695);
+                        temp[6].setAttributeNS(null, "height", 10);
+                        temp[6].setAttributeNS(null, "width", ~~(250-point1_2.x)+10);
+                        
+                        temp[1].setAttributeNS(null, "r", 0);
+                        temp[3].setAttributeNS(null, "r", 0);
+                    }
+                }
+                else{
+                    if (M1_2==1){
+                        path1="50,700, "+point1_2.x+",700, "+point1_2.x+",500, 250,500";
+                        temp[6].setAttributeNS(null, "x", 45);
+                        temp[6].setAttributeNS(null, "y", 695);
+                        temp[6].setAttributeNS(null, "height", 10);
+                        temp[6].setAttributeNS(null, "width", ~~(point1_2.x-50)+10);
+                        
+                        temp[8].setAttributeNS(null, "x", point1_2.x-5);
+                        temp[8].setAttributeNS(null, "y", 495);
+                        temp[8].setAttributeNS(null, "height", 210);
+                        temp[8].setAttributeNS(null, "width", 10);
+                        
+                        temp[4].setAttributeNS(null, "x", point1_2.x-5);
+                        temp[4].setAttributeNS(null, "y", 495);
+                        temp[4].setAttributeNS(null, "height", 10);
+                        temp[4].setAttributeNS(null, "width", ~~(250-point1_2.x)+10);
+                        
+                        temp[0].setAttributeNS(null, "r", 0);
+                        temp[2].setAttributeNS(null, "r", 0);
+                    }
+                    else{
+                        path1="50,700, 250,700, 250,500";
+                        temp[0].setAttributeNS(null, "r", 0);
+                        
+                        temp[5].setAttributeNS(null, "x", 245);
+                        temp[5].setAttributeNS(null, "y", 495);
+                        temp[5].setAttributeNS(null, "height", 210);
+                        temp[5].setAttributeNS(null, "width", 10);
+                        
+                        temp[6].setAttributeNS(null, "x", 45);
+                        temp[6].setAttributeNS(null, "y", 695);
+                        temp[6].setAttributeNS(null, "height", 10);
+                        temp[6].setAttributeNS(null, "width", 210);
+                    }
+                }
+            }
+        }
+        
+        //setting player 2 path
+        // We remove pure and mixed equilibria that don't correspond to player 2.
+        if (M2_1==M2_2){
+            if (M2_2==0){
+                path2="50,500, 250,500, 250,700, 50,700, 50,500";
+            }
+            else{
+                if (M2_2==1){
+                    path2="50,500, 50,700";
+                    temp[1].setAttributeNS(null, "r", 0);
+                    temp[2].setAttributeNS(null, "r", 0);
+                    temp[4].setAttributeNS(null, "height", 0);
+                    temp[5].setAttributeNS(null, "height", 0);
+                    temp[6].setAttributeNS(null, "height", 0);
+                    temp[8].setAttributeNS(null, "height", 0);
+                    temp[4].setAttributeNS(null, "width", 0);
+                    temp[5].setAttributeNS(null, "width", 0);
+                    temp[6].setAttributeNS(null, "width", 0);
+                    temp[8].setAttributeNS(null, "width", 0);
+                }
+                else {
+                    path2="250,500, 250,700";
+                    temp[0].setAttributeNS(null, "r", 0);
+                    temp[3].setAttributeNS(null, "r", 0);
+                    temp[4].setAttributeNS(null, "height", 0);
+                    temp[6].setAttributeNS(null, "height", 0);
+                    temp[7].setAttributeNS(null, "height", 0);
+                    temp[8].setAttributeNS(null, "height", 0);
+                    temp[4].setAttributeNS(null, "width", 0);
+                    temp[6].setAttributeNS(null, "width", 0);
+                    temp[7].setAttributeNS(null, "width", 0);
+                    temp[8].setAttributeNS(null, "width", 0);
+                }
+            }
+            
+        }
+        else {
+            if (M2_1==0){
+                if (M2_2==1){
+                    path2="50,700, 50,500, 250,500";
+                    temp[2].setAttributeNS(null, "r", 0);
+                    temp[5].setAttributeNS(null, "height", 0);
+                    temp[6].setAttributeNS(null, "height", 0);
+                    temp[8].setAttributeNS(null, "height", 0);
+                    temp[5].setAttributeNS(null, "width", 0);
+                    temp[6].setAttributeNS(null, "width", 0);
+                    temp[8].setAttributeNS(null, "width", 0);
+                }
+                else{
+                    path2="50,500, 250,500, 250,700";
+                    temp[3].setAttributeNS(null, "r", 0);
+                    temp[6].setAttributeNS(null, "height", 0);
+                    temp[7].setAttributeNS(null, "height", 0);
+                    temp[8].setAttributeNS(null, "height", 0);
+                    temp[6].setAttributeNS(null, "width", 0);
+                    temp[7].setAttributeNS(null, "width", 0);
+                    temp[8].setAttributeNS(null, "width", 0);
+                }
+            }
+            else{
+                if (M2_1==1){
+                    if (M2_2==0){
+                        path2="50,500, 50,700, 250,700";
+                        temp[1].setAttributeNS(null, "r", 0);
+                        temp[4].setAttributeNS(null, "height", 0);
+                        temp[5].setAttributeNS(null, "height", 0);
+                        temp[8].setAttributeNS(null, "height", 0);
+                        temp[4].setAttributeNS(null, "width", 0);
+                        temp[5].setAttributeNS(null, "width", 0);
+                        temp[8].setAttributeNS(null, "width", 0);
+                    }
+                    else{
+                        path2="50,500, 50,"+Number(point2_2.x+Number(50))+", 250,"+Number(point2_2.x+Number(50))+", 250,700";
+                        temp[1].setAttributeNS(null, "r", 0);
+                        temp[3].setAttributeNS(null, "r", 0);
+                        if (M1_2>0 && M1_1>0){
+                            temp[4].setAttributeNS(null, "height", 0);
+                            temp[5].setAttributeNS(null, "height", 0);
+                            temp[6].setAttributeNS(null, "height", 0);
+                            temp[7].setAttributeNS(null, "height", 0);
+                            temp[8].setAttributeNS(null, "height", 10);
+                            temp[4].setAttributeNS(null, "width", 0);
+                            temp[5].setAttributeNS(null, "width", 0);
+                            temp[6].setAttributeNS(null, "width", 0);
+                            temp[7].setAttributeNS(null, "width", 0);
+                            temp[8].setAttributeNS(null, "y", Number(point2_2.x+Number(45)));
+                        }
+                        if (M1_1==0 && M1_2>0){
+                            temp[4].setAttributeNS(null, "height", 0);
+                            temp[5].setAttributeNS(null, "height", 0);
+                            temp[6].setAttributeNS(null, "height", 0);
+                            temp[7].setAttributeNS(null, "height", Number(point2_2.x-Number(500)+Number(50)));
+                            temp[8].setAttributeNS(null, "height", 0);
+                            temp[4].setAttributeNS(null, "width", 0);
+                            temp[5].setAttributeNS(null, "width", 0);
+                            temp[6].setAttributeNS(null, "width", 0);
+                            temp[8].setAttributeNS(null, "y", 0);
+                        }
+                        if (M1_2==0 && M1_1>0){
+                            temp[4].setAttributeNS(null, "height", 0);
+                            temp[7].setAttributeNS(null, "height", 0);
+                            temp[6].setAttributeNS(null, "height", 0);
+                            temp[8].setAttributeNS(null, "height", 0);
+                            temp[4].setAttributeNS(null, "width", 0);
+                            temp[5].setAttributeNS(null, "height",Number(700-Number(point2_2.x)+Number(50)) );
+                            temp[5].setAttributeNS(null, "y", Number(point2_2.x+Number(45)));
+                            temp[7].setAttributeNS(null, "width", 0);
+                            temp[6].setAttributeNS(null, "width", 0);
+                            temp[8].setAttributeNS(null, "y", 0);
+                        }
+                        if (M1_2==0 && M1_1==0){
+                            
+                            temp[7].setAttributeNS(null, "x", 45);
+                            temp[7].setAttributeNS(null, "y", 495);
+                            temp[7].setAttributeNS(null, "height", Number(point2_2.x-Number(500)+Number(50)));
+                            temp[7].setAttributeNS(null, "width", 10);
+                            
+                            temp[8].setAttributeNS(null, "x", 45);
+                            temp[8].setAttributeNS(null, "y", Number(point2_2.x+Number(45)));
+                            temp[8].setAttributeNS(null, "height", 10);
+                            temp[8].setAttributeNS(null, "width", 210);
+                            
+                            temp[5].setAttributeNS(null, "x", 245);
+                            temp[5].setAttributeNS(null, "y", Number(point2_2.x+Number(45)));
+                            temp[5].setAttributeNS(null, "height",Number(700-Number(point2_2.x)+Number(50)) );
+                            temp[5].setAttributeNS(null, "width", 10);
+                        }
+                    }
+                }
+                else{
+                    if (M2_2==1){
+                        path2="50,700, 50,"+Number(point2_2.x+Number(50))+", 250,"+Number(point2_2.x+Number(50))+", 250,500";
+                        temp[0].setAttributeNS(null, "r", 0);
+                        temp[2].setAttributeNS(null, "r", 0);
+                        if (M1_2>0 && M1_1>0){
+                            temp[4].setAttributeNS(null, "height", 0);
+                            temp[5].setAttributeNS(null, "height", 0);
+                            temp[6].setAttributeNS(null, "height", 0);
+                            temp[7].setAttributeNS(null, "height", 0);
+                            temp[8].setAttributeNS(null, "height", 10);
+                            temp[4].setAttributeNS(null, "width", 0);
+                            temp[5].setAttributeNS(null, "width", 0);
+                            temp[6].setAttributeNS(null, "width", 0);
+                            temp[7].setAttributeNS(null, "width", 0);
+                            temp[8].setAttributeNS(null, "y", Number(point2_2.x+Number(45)));
+                        }
+                        if (M1_1==0 && M1_2>0){
+                            temp[4].setAttributeNS(null, "height", 0);
+                            temp[5].setAttributeNS(null, "height", 0);
+                            temp[6].setAttributeNS(null, "height", 0);
+                            temp[7].setAttributeNS(null, "height", Number(700-Number(point2_2.x)+Number(50)));
+                            temp[7].setAttributeNS(null, "y", Number(point2_2.x+Number(45)));
+                            temp[8].setAttributeNS(null, "height", 0);
+                            temp[4].setAttributeNS(null, "width", 0);
+                            temp[5].setAttributeNS(null, "width", 0);
+                            temp[6].setAttributeNS(null, "width", 0);
+                            temp[8].setAttributeNS(null, "y", 0);
+                        }
+                        if (M1_2==0 && M1_1>0){
+                            temp[4].setAttributeNS(null, "height", 0);
+                            temp[7].setAttributeNS(null, "height", 0);
+                            temp[6].setAttributeNS(null, "height", 0);
+                            temp[8].setAttributeNS(null, "height", 0);
+                            temp[4].setAttributeNS(null, "width", 0);
+                            temp[5].setAttributeNS(null, "height", Number(point2_2.x-Number(500)+Number(50) ));
+                            temp[7].setAttributeNS(null, "width", 0);
+                            temp[6].setAttributeNS(null, "width", 0);
+                            temp[8].setAttributeNS(null, "y", 0);
+                        }
+                        if (M1_2==0 && M1_1==0){
+                            
+                            temp[7].setAttributeNS(null, "x", 45);
+                            temp[7].setAttributeNS(null, "y", Number(point2_2.x+Number(45)));
+                            temp[7].setAttributeNS(null, "height", Number(700-Number(point2_2.x)+Number(50)));
+                            temp[7].setAttributeNS(null, "width", 10);
+                            
+                            temp[8].setAttributeNS(null, "x", 45);
+                            temp[8].setAttributeNS(null, "y", Number(point2_2.x+Number(45)));
+                            temp[8].setAttributeNS(null, "height", 10);
+                            temp[8].setAttributeNS(null, "width", 210);
+                            
+                            temp[5].setAttributeNS(null, "x", 245);
+                            temp[5].setAttributeNS(null, "y", 495);
+                            temp[5].setAttributeNS(null, "height",Number(point2_2.x-Number(500)+Number(50) ));
+                            temp[5].setAttributeNS(null, "width", 10);
+                        }
+                    }
+                    else{
+                        path2="50,700, 250,700, 250,500";
+                        temp[0].setAttributeNS(null, "r", 0);
+                        temp[4].setAttributeNS(null, "height", 0);
+                        temp[7].setAttributeNS(null, "height", 0);
+                        temp[8].setAttributeNS(null, "height", 0);
+                        temp[4].setAttributeNS(null, "width", 0);
+                        temp[7].setAttributeNS(null, "width", 0);
+                        temp[8].setAttributeNS(null, "width", 0);
+                    }
+                }
+            }
+        }
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+       /* if (M2_1==1){
             path2="50,500";
             path2_2=", 50,";
             if (M1_1==1 || M1_1==0){
@@ -689,7 +1040,7 @@ function compute_firstP(){
                         path2=path2+", 50,500";
                 }
             }
-       }
+       }*/
         temp2[0].setAttributeNS(null, "points", path1);
         temp2[1].setAttributeNS(null, "points", path2);
         
@@ -971,11 +1322,14 @@ function compute_firstP(){
             <!-- Best player2 --->
             <polyline class="brline line2" points="50,500 50,700 250,700, 250,500"/>
             <!--pure equilibrium--->
+            <circle class="br" cx="50" cy="500" r="10"  draggable="false" />
+            <circle class="br" cx="250" cy="500" r="10" draggable="false"/>
             <circle class="br" cx="250" cy="700" r="10"  draggable="false" />
-            <circle class="br" cx="250" cy="700" r="10" draggable="false"/>
-            <circle class="br" cx="250" cy="700" r="10"  draggable="false" />
-            <circle class="br" cx="250" cy="700" r="10" draggable="false"/>
+            <circle class="br" cx="50" cy="700" r="10" draggable="false"/>
             <!--mixed equilibrium--->
+            <rect class="br" x="40" y="490" width="20" height="20" fill="green"/>
+            <rect class="br" x="40" y="490" width="20" height="20" fill="green"/>
+            <rect class="br" x="40" y="490" width="20" height="20" fill="green"/>
             <rect class="br" x="40" y="490" width="20" height="20" fill="green"/>
             <rect class="br" x="40" y="490" width="20" height="20" fill="green"/>
             
