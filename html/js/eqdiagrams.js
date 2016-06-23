@@ -14,7 +14,7 @@
     // GTE is initialized by the library
     GTE.canvas = SVG('canvas').size("100%", "100%").attr({'style': 'background: #fff'});
     GTE.tools = new GTE.UI.Tools();
-    GTE.diagram = new GTE.Diagram();
+   // GTE.diagram = new GTE.Diagram(); //new
     GTE.svg = document.getElementById("drawing");
     // var playerListener = function(picker) {
     //     var closeControl = true;
@@ -120,7 +120,7 @@
         return false;
     });
 
-    document.getElementById("SvgjsSvg1000").addEventListener("click", function(){
+   /* document.getElementById("SvgjsSvg1000").addEventListener("click", function(){
         document.addEventListener("keyup", function(){
                                   GTE.diagrams.update();
             });
@@ -134,7 +134,7 @@
     }
     for(i=0;i<4;i++){
  lines[i].addEventListener("mousedown", GTE.diagram.doMouseDownLine());
-    }
+    }new */
     /*
         Hide irrelevant buttons for strategic.html
     */
@@ -149,6 +149,7 @@
         document.getElementById('button-dissolve').style.display = 'none' ;
         document.getElementById('button-solve-lrs').style.display = 'none' ;
         document.getElementById('button-new').style.display = 'none' ;
+        document.getElementById('player-buttons').style.display = 'none' ;
  
     };
     hideButtons();

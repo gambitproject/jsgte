@@ -51,11 +51,37 @@
         for(i=0;i<4;i++){
             lines[i].addEventListener("mousedown", doMouseDown);
         }
+        /*var s22= svg.getElementsByClassName("strat22");
+        var s21= svg.getElementsByClassName("strat21");
+        var s12= svg.getElementsByClassName("strat12");
+        var s11= svg.getElementsByClassName("strat11");
+        for (i=0;i<s22.length;i++)
+            s22[i].addEventListener("keyup",edit_text);
+        for (i=0;i<s21.length;i++)
+            s21[i].addEventListener("keyup",edit_text);
+        for (i=0;i<s11.length;i++)
+            s11[i].addEventListener("keyup",edit_text);
+        for (i=0;i<s12.length;i++)
+            s12[i].addEventListener("keyup",edit_text);*/
         compute_firstP();
         compute_secondP();
         draw();
     }
 
+
+/*function keyup(event) {
+    temp=event.currentTarget;
+    console.log("Down: "+this.getAttribute("class"));
+    moving_point=this;
+    if (this.getAttribute("class").includes("line_trans")){
+        Pos_prev=getMousePosition(event);
+        document.addEventListener("mousemove", doMouseMoveLine);
+    }
+    else
+    document.addEventListener("mousemove", doMouseMove);
+    document.addEventListener("mouseup", doMouseUp);
+    this.removeEventListener("mousedown", doMouseDown);
+}*/
 
 function redraw(){
 
@@ -85,8 +111,9 @@ function doMouseDown(event) {
         Pos_prev=getMousePosition(event);
         document.addEventListener("mousemove", doMouseMoveLine);
     }
-    else
+    else{
         document.addEventListener("mousemove", doMouseMove);
+    }
     document.addEventListener("mouseup", doMouseUp);
     this.removeEventListener("mousedown", doMouseDown);
 }
@@ -94,10 +121,12 @@ function doMouseDown(event) {
 
 function doMouseUp(event) {
     mousePosition = getMousePosition(event)
-    if (moving_point.getAttribute("class")=="line_trans")
+    if (moving_point.getAttribute("class").includes("line_trans")){
         document.removeEventListener("mousemove", doMouseMoveLine);
-    else
+    }
+    else{
         document.removeEventListener("mousemove", doMouseMove);
+    }
     document.removeEventListener("mouseup", doMouseUp);
     moving_point.addEventListener("mousedown", doMouseDown);
     moving_point=null;
@@ -107,7 +136,7 @@ function doMouseUp(event) {
 
 function doMouseMove(event) {
     var mousePosition = getMousePosition(event)
-    console.log("Down: "+moving_point.getAttribute("class"));
+    //console.log("Down: "+moving_point.getAttribute("class"));
     svgPosition = svg.getBoundingClientRect();
     //var newPos=~~((-mousePosition.y+svgPosition.top+svgH-50)/3)/10;
     var newPos=Math.round((2*svgH/(svgPosition.bottom-svgPosition.top)*(-mousePosition.y+svgPosition.top)+svgH-50)/30*precision)/precision;
@@ -152,7 +181,7 @@ function doMouseMoveLine(event) {
     }
 
     
-    console.log("Moving: X = " + mousePosition.x + ", Y = " + mousePosition.y);
+    //console.log("Moving: X = " + mousePosition.x + ", Y = " + mousePosition.y);
 }
 
 
@@ -427,7 +456,6 @@ function compute_firstP(){
                 temp[nb].setAttributeNS(null, "cy", 500);
                 nb++;
             }
-            
             if (M2_1==2){
                 path2="250,500";
                 path2_2=", 250," ;
@@ -802,8 +830,8 @@ function compute_firstP(){
             <!-- Drawing the contour-->
             <polyline class="contour" points="50,50 50,350 250,350, 250,50"/>
             <!-- Legend, strategy names will be updated after-->
-            <text class="player1 title" x="150" y="40">Player1 payoff</text>
-            <text class="player2 legendh" x="140" y="390">Player2 proba of</text><text class="player2 strat_left strat22" x="205" y="390">S2 </text>
+            <text class="player1 title" x="150" y="40">Player I payoff</text>
+            <text class="player2 legendh" x="140" y="390">Player II proba of</text><text class="player2 strat_left strat22" x="205" y="390">S2 </text>
             <!--
             <text class="player2 legendv" id="y11" x="20" y="200" transform="rotate(270 20,200)">S1</text>
             <text class="player2 legendv" id="y12" x="280" y="200" transform="rotate(90 280,200)">S2</text>
@@ -870,8 +898,8 @@ function compute_firstP(){
             <!-- Drawing the contour-->
             <polyline class="contour" points="450,50 450,350 650,350, 650,50" draggable="false"/>
             <!-- Legend, strategy names will be updated after-->
-            <text class="player2 title" x="550" y="40">Player2 payoff</text>
-            <text class="player1 legendh" x="540" y="390">Player1 proba of </text><text class="player1 strat_left strat12" x="605" y="390">S2 </text>
+            <text class="player2 title" x="550" y="40">Player II payoff</text>
+            <text class="player1 legendh" x="540" y="390">Player I proba of </text><text class="player1 strat_left strat12" x="605" y="390">S2 </text>
             <text class="player1 legendh" x="450" y="370">0</text>
             <text class="player1 legendh" x="650" y="370">1</text>
             <!--
