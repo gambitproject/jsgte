@@ -153,6 +153,7 @@
  
     };
     hideButtons();
+ 
    GTE.getMousePosition = function(e) {
       return {
          x: e.clientX ,
