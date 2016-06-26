@@ -219,7 +219,7 @@ GTE.TREE = (function (parentModule) {
     * in xml format
     */
     XmlExporter.prototype.toString = function() {
-        return "Tree in xml :\n"+this.tree;
+        return this.tree;
     };
 
     // Add class to parent module

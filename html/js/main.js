@@ -101,7 +101,7 @@
     document.getElementById("button-save").addEventListener("click", function(){
         var exporter = new GTE.TREE.XmlExporter();
         exporter.exportTree();
-        console.log(exporter.toString());
+        saveData(exporter.toString(),"tree.xml");
         return false;
     });
 
@@ -225,5 +225,20 @@
         settings.style.top = top + 'px';
         settings.style.left = left + 'px';
     }
+
+    var saveData = (function () {
+        var a = document.createElement("a");
+        document.body.appendChild(a);
+        a.style = "display: none";
+        return function (data, fileName) {
+            var curData = data,
+                blob = new Blob([curData], {type: "text/plain"}),
+                url = window.URL.createObjectURL(blob);
+            a.href = url;
+            a.download = fileName;
+            a.click();
+            window.URL.revokeObjectURL(url);
+        };
+    }());
 
 }());
