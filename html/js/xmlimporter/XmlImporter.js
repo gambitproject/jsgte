@@ -37,7 +37,7 @@ GTE.TREE = (function(parentModule) {
         this.assignChancePlayers(tree.extensiveForm[0].node[0], root);
         if (GTE.tools.ableToSwitchToISetEditingMode()) {
             GTE.tree.initializeISets();
-            this.isetToolsRan = true;
+            GTE.tools.isetToolsRan = true;
             var listOfIsets = this.getListOfIsets(tree.extensiveForm[0].node[0], root, {});
             this.mergeIsets(listOfIsets);
             this.assignMoves(tree.extensiveForm[0].node[0], root);
