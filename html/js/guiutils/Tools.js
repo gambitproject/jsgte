@@ -297,7 +297,7 @@ GTE.UI = (function (parentModule) {
     Tools.prototype.setPlayers = function (colour,name) {
         for(var i=1; i<=name.length; i++)
         {
-            this.addPlayer(colour[i-1].jValue, i, name[i-1].jValue);
+            this.addPlayer(colour[i-1].jValue.trim(), i, name[i-1].jValue.trim());
         }
     };
 
@@ -305,9 +305,9 @@ GTE.UI = (function (parentModule) {
     * Sets display properties of the tree
     */
     Tools.prototype.setDisplayProperties = function (display) {
-        GTE.STORAGE.settingsLineThickness = display.strokeWidth[0].jValue;
-        GTE.STORAGE.settingsCircleSize = display.nodeDiameter[0].jValue;
-        GTE.STORAGE.settingsDistLevels = display.levelDistance[0].jValue;
+        GTE.STORAGE.settingsLineThickness = display.strokeWidth[0].jValue.trim();
+        GTE.STORAGE.settingsCircleSize = display.nodeDiameter[0].jValue.trim();
+        GTE.STORAGE.settingsDistLevels = display.levelDistance[0].jValue.trim();
     };
 
     /**
