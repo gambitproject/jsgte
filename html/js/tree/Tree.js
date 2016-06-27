@@ -998,7 +998,7 @@ GTE.TREE = (function (parentModule) {
         if (node === undefined) {
             node = this.root;
         }
-        if (node.children.length !== 0 && node.player === null) {
+        if (node.children.length !== 0 && (node.player === null || node.player === undefined)) {
             return false;
         }
         for (var i = 0; i < node.children.length; i++) {
