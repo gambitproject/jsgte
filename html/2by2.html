@@ -5,97 +5,360 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <title>2 by 2 games</title>
         <link rel="stylesheet" href="css/2by2.css">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
     </head>
-
-<script>
-$(document).ready(function(){
-    $("input").change(function(){
-   // alert("test");
-    var c=document.getElementById("Payoff2");
-    var ctx = c.getContext("2d");
-    ctx.moveTo(0,0);
-    ctx.clearRect(0,0,c.width,c.height);
-    ctx.beginPath();
-    var P11_1=parseInt($("[name='P11_1']").val(),10);
-    var P12_1=parseInt($("[name='P12_1']").val(),10);
-    var maxP1_1;
-    var maxP1_2;
-    var minP1_1;
-    var minP1_2;
-    var P21_1=parseInt($("[name='P21_1']").val(),10);
-    var P22_1=parseInt($("[name='P22_1']").val(),10);
-    if( P11_1>P21_1){
-        maxP1_1=P11_1;
-        minP1_1=P21_1;
-    }else{
-       maxP1_1=P21_1;
-       minP1_1=P11_1;
-   }
-   if( P12_1>P22_1){
-        maxP1_2=P12_1;
-        minP1_2=P22_1;
-    }else{
-       maxP1_2=P22_1;
-       minP1_2=P12_1;
-   }
-   // alert(P11_1);
-    ctx.moveTo(0,c.height-P11_1*100);
-    ctx.lineTo(c.width,c.height-P12_1*100);
-    ctx.moveTo(0,c.height-P21_1*100);
-    ctx.lineTo(c.width,c.height-P22_1*100);
-    ctx.lineWidth = 2;
-    ctx.strokeStyle = '#ff0000';
-    ctx.stroke();
-    ctx.closePath();
-    ctx.beginPath();
-    if((maxP1_1==P11_1 && maxP1_2==P12_1)||(maxP1_1==P21_1 && maxP1_2==P22_1)){
-        ctx.moveTo(0,0);
-        ctx.lineTo(0,c.height-maxP1_2*100);
-        ctx.lineTo(c.width,c.height-maxP1_1*100);
-        ctx.lineTo(c.width,0);
-        ctx.lineTo(0,0);
-    }
-    else{
-        var middle_x=(P21_1-P11_1)/(Number(P12_1)- Number(P22_1) + Number(P21_1) - Number(P11_1));
-        var middle_y=Number((P12_1-P11_1)*middle_x)+Number(P11_1);
-        ctx.moveTo(0,0);
-        ctx.lineTo(0,c.height-maxP1_1*100);
-        ctx.lineTo(middle_x*c.width,c.height-middle_y*100);
-        ctx.lineTo(c.width,c.height-maxP1_2*100);
-        ctx.lineTo(c.width,0);
-        ctx.lineTo(0,0);
-    }
-    ctx.fillStyle="#ff6666";
-    ctx.fill();
-    ctx.closePath();
-    });
-});
 </script>
 
-    <body>
+<body onload="initDraws()">
         <!--[if lt IE 8]>
             <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
 
+<script>
+    var canvas1,canvas2;
+    var ctx1,ctx2;
+    var points=[];
+    
+    function redraw(){
+        ctx1.clearRect(0,0,canvas1.width,canvas1.height);
+        ctx2.clearRect(0,0,canvas2.width,canvas2.height);
+        compute_firstP();
+        compute_secondP();
+        draw();
+    }
+    
+    function initDraws() {
+        canvas1 = document.getElementById("Payoff1");
+        canvas2 = document.getElementById("Payoff2");
+        ctx1 = canvas1.getContext("2d");
+        ctx2 = canvas2.getContext("2d");
+        compute_firstP();
+        compute_secondP();
+        alert(points[0].y);
+        draw();
+        
+        //alert(points[0].y);
+        // mouse event
+        canvas1.addEventListener("mousedown",doMouseDown);
+        canvas1.addEventListener("mouseup",doMouseUp);
+        canvas2.addEventListener("mousedown",doMouseDown);
+        canvas2.addEventListener("mouseup",doMouseUp);
+        input_user=document.getElementsByTagName("input");
+        for (var i=0; i<input_user.length;i++){
+           //input_user[i].addEventListener("onchange",redraw());
+        }
+    }
+
+function getMousePosition(e) {
+    return {
+        x: e.clientX ,
+        y: e.clientY
+  };
+}
+
+
+function doMouseDown(event) {
+    mousePosition = getMousePosition( event)
+    
+    var isMouseOver = isMouseOverPoint(mousePosition);
+
+    console.log("Pressing2: X = " + mousePosition.x + ", Y = " + mousePosition.y);
+}
+
+function doMouseUp(event) {
+    mousePosition = getMousePosition(event)
+    
+    canvas1.removeEventListener("mousemove", doMouseMove);
+    canvas2.removeEventListener("mousemove", doMouseMove);
+
+    redraw()
+    console.log("Releasing: X = " + mousePosition.x + ", Y = " + mousePosition.y);
+}
+
+function isMouseOverPoint(mousePosition) {
+    var canvasPosition = canvas1.getBoundingClientRect();
+    for (var i=0 ; i< points.length/2;i++){
+        distX = mousePosition.x - (points[i].x)-canvasPosition.left;
+        distY = mousePosition.y -points[i].y-canvasPosition.top;
+        var squareDist = distX*distX + distY*distY;
+        if (squareDist < 100) {
+            canvas1.addEventListener("mousemove", doMouseMove);
+            point_moving=i;
+            return i;
+        }
+    }
+    canvasPosition = canvas2.getBoundingClientRect();
+    for (var i=points.length/2 ; i< points.length;i++){
+        distX = mousePosition.x - points[i].x-canvasPosition.left;
+        distY = mousePosition.y - points[i].y-canvasPosition.top;
+        var squareDist = distX*distX + distY*distY;
+        if (squareDist < 100) {
+            (canvas2).addEventListener("mousemove", doMouseMove);
+            point_moving=i;
+            return i;
+        }
+    }
+    
+    return -1;
+}
+
+function doMouseMove(event) {
+    //alert("moving "+point_moving);
+    if (point_moving<points.length/2){
+        mousePosition = getMousePosition(event)
+        var canvasPosition = canvas1.getBoundingClientRect();
+         points[point_moving].y = mousePosition.y-canvasPosition.top;
+         var newPos=~~((-points[point_moving].y+canvas1.height-50)/3)/10;
+         if (Number(newPos)<0) newPos=0;
+         if (Number(newPos)>10) newPos=10;
+         if(point_moving==0) document.getElementById("P1_11").value=newPos;
+         if(point_moving==1) document.getElementById("P1_12").value=newPos;
+         if(point_moving==2) document.getElementById("P1_21").value=newPos;
+         if(point_moving==3) document.getElementById("P1_22").value=newPos;
+    }
+    if (point_moving>=points.length/2){
+        mousePosition = getMousePosition(event)
+        var canvasPosition = canvas2.getBoundingClientRect();
+        points[point_moving].y = mousePosition.y-canvasPosition.top;
+        var newPos=~~((-points[point_moving].y+canvas2.height-50)/3)/10;
+        if (Number(newPos)<0) newPos=0;
+        if (Number(newPos)>10) newPos=10;
+        if(point_moving==4) document.getElementById("P2_11").value=newPos;
+        if(point_moving==5) document.getElementById("P2_12").value=newPos;
+        if(point_moving==6) document.getElementById("P2_21").value=newPos;
+        if(point_moving==7) document.getElementById("P2_22").value=newPos;
+    }
+    redraw()
+    
+    console.log("Moving: X = " + mousePosition.x + ", Y = " + mousePosition.y);
+}
+
+
+
+function compute_firstP(){
+        var P1_11=document.getElementById("P1_11").value;
+        var P1_12=document.getElementById("P1_12").value;
+        var P1_21=document.getElementById("P1_21").value;
+        var P1_22=document.getElementById("P1_22").value;
+        payoff1_11={x:50, y:canvas1.height-50-P1_11*30, radius:5, color:"yellow"};
+        payoff1_12={x:canvas1.width-50, y:canvas1.height-50-P1_12*30, radius:5, color:"yellow"};
+        payoff1_21={x:50, y:canvas1.height-50-P1_21*30, radius:5, color:"yellow"};
+        payoff1_22={x:canvas1.width-50, y:canvas1.height-50-P1_22*30, radius:5, color:"yellow"};
+        var maxP1_1, minP1_1, maxP1_2, minP1_2; // max and min off player1 payoff for strategy 1 or 2 of player2
+        if( Number(P1_11)>Number(P1_21)){
+            maxP1_1=P1_11;
+            minP1_1=P1_21;
+        }else{
+            maxP1_1=P1_21;
+            minP1_1=P1_11;
+        }
+        if( Number(P1_12)>Number(P1_22)){
+            maxP1_2=P1_12;
+            minP1_2=P1_22;
+        }else{
+            maxP1_2=P1_22;
+            minP1_2=P1_12;
+        }
+        if((maxP1_1==P1_11 && maxP1_2==P1_12)||(maxP1_1==P1_21 && maxP1_2==P1_22)){
+            point1_1={x:50,y:canvas1.height-50-maxP1_1*30};
+            point1_2={x:canvas1.width-50,y:canvas1.height-50-maxP1_2*30};
+            point1_3={x:canvas1.width-50,y:canvas1.height-50-maxP1_2*30};}
+        else{
+            var middle_x=(P1_21-P1_11)/(Number(P1_21)- Number(P1_22) + Number(P1_12) - Number(P1_11));
+            var middle_y=Number((P1_12-P1_11)*middle_x)+Number(P1_11);
+            point1_1={x:50, y:canvas1.height-50-maxP1_1*30};
+            point1_2={x:middle_x * (canvas1.width-100)+50,y:canvas1.height-50-middle_y*30};
+            point1_3={x:canvas1.width-50,y:canvas1.height-50-maxP1_2*30};
+        }
+    }
+            
+    function compute_secondP(){
+        var P2_11=document.getElementById("P2_11").value;
+        var P2_12=document.getElementById("P2_12").value;
+        var P2_21=document.getElementById("P2_21").value;
+        var P2_22=document.getElementById("P2_22").value;
+        payoff2_11={x:50, y:canvas2.height-50-P2_11*30, radius:5, color:"yellow"};
+        payoff2_12={x:50, y:canvas2.height-50-P2_12*30, radius:5, color:"yellow"};
+        payoff2_21={x:canvas2.width-50, y:canvas2.height-50-P2_21*30, radius:5, color:"yellow"};
+        payoff2_22={x:canvas2.width-50, y:canvas2.height-50-P2_22*30, radius:5, color:"yellow"};
+        points=[payoff1_11, payoff1_12, payoff1_21, payoff1_22, payoff2_11, payoff2_12, payoff2_21, payoff2_22];
+        var maxP2_1, minP2_1, maxP2_2, minP2_2; // max and min off player1 payoff for strategy 1 or 2 of player2
+        if( Number(P2_11)>Number(P2_12)){
+            maxP2_1=P2_11;
+            minP2_1=P2_12;
+        }else{
+            maxP2_1=P2_12;
+            minP2_1=P2_11;
+        }
+        if( Number(P2_21)>Number(P2_22)){
+            maxP2_2=P2_21;
+            minP2_2=P2_22;
+        }else{
+            maxP2_2=P2_22;
+            minP2_2=P2_21;
+        }
+        if((maxP2_1==P2_11 && maxP2_2==P2_21)||(maxP2_1==P2_12 && maxP2_2==P2_22)){
+            point2_1={x:50,y:canvas2.height-50-maxP2_1*30};
+            point2_2={x:canvas2.width-50,y:canvas2.height-50-maxP2_2*30};
+            point2_3={x:canvas2.width-50,y:canvas2.height-50-maxP2_2*30};
+            }
+        else{
+            var middle_x=(P2_12-P2_11)/(Number(P2_12)- Number(P2_22) + Number(P2_21) - Number(P2_11));
+            var middle_y=Number((P2_21-P2_11)*middle_x)+Number(P2_11);
+            point2_1={x:50,y:canvas2.height-50-maxP2_1*30};
+            point2_2={x:middle_x * (canvas2.width-100)+50,y:canvas2.height-50-middle_y*30};
+            point2_3={x:canvas2.width-50,y:canvas2.height-50-maxP2_2*30};
+        }
+    }
+    
+    function draw(){
+        ctx1.beginPath(); //limits of the drawing
+        ctx1.moveTo(50,50);
+        ctx1.lineTo(50,canvas1.height-50);
+        ctx1.lineTo(canvas1.width-50,canvas1.height-50);
+        ctx1.lineTo(canvas1.width-50,50);
+        ctx1.lineWidth = 2;
+        ctx1.strokeStyle = '#000000';
+        ctx1.stroke();
+        ctx1.closePath();
+        ctx1.beginPath(); // Two lines
+        ctx1.moveTo(payoff1_11.x,payoff1_11.y);
+        ctx1.lineTo(payoff1_12.x,payoff1_12.y);
+        ctx1.moveTo(payoff1_21.x,payoff1_21.y);
+        ctx1.lineTo(payoff1_22.x,payoff1_22.y);
+        ctx1.lineWidth = 2;
+        ctx1.strokeStyle = '#ff0000';
+        ctx1.stroke();
+        ctx1.closePath();
+        ctx1.beginPath();//best response surface
+        ctx1.moveTo(50,50);
+        ctx1.lineTo(point1_1.x,point1_1.y);
+        ctx1.lineTo(point1_2.x,point1_2.y);
+        ctx1.lineTo(point1_3.x,point1_3.y);
+        ctx1.lineTo(canvas1.width-50,50);
+        ctx1.lineTo(50,50);
+        ctx1.fillStyle="#ff6666";
+        ctx1.fill();
+        ctx1.closePath();
+        ctx1.beginPath();// Points
+        ctx1.arc(payoff1_11.x, payoff1_11.y, payoff1_11.radius, 0, 2*Math.PI);
+        ctx1.fillStyle = payoff1_11.color;
+        ctx1.fill();
+        ctx1.stroke();
+        ctx1.closePath();
+        ctx1.beginPath();
+        ctx1.arc(payoff1_12.x, payoff1_12.y, payoff1_12.radius, 0, 2*Math.PI);
+        ctx1.fillStyle = payoff1_11.color;
+        ctx1.fill();
+        ctx1.stroke();
+        ctx1.closePath();
+        ctx1.beginPath();
+        ctx1.arc(payoff1_21.x, payoff1_21.y, payoff1_21.radius, 0, 2*Math.PI);
+        ctx1.fillStyle = payoff1_11.color;
+        ctx1.fill();
+        ctx1.stroke();
+        ctx1.closePath();
+        ctx1.beginPath();
+        ctx1.arc(payoff1_22.x, payoff1_22.y, payoff1_22.radius, 0, 2*Math.PI);
+        ctx1.fillStyle = payoff1_11.color;
+        ctx1.fill();
+        ctx1.stroke();
+        ctx1.closePath();
+        ctx1.fillStyle = '#000000';
+        ctx1.font='30px Arial';
+        ctx1.fillText("Player1 payoff",50,40);
+        ctx1.font='20px Arial';
+        ctx1.fillStyle = '#0000ff';
+        ctx1.fillText("0",40,370);
+        ctx1.fillText("1",260,370);
+        ctx1.fillText("Player2 "+document.getElementById("P2S2").value+" prob ",80,380);
+        
+        ctx2.beginPath(); //limits of the drawing
+        ctx2.moveTo(50,50);
+        ctx2.lineTo(50,canvas2.height-50);
+        ctx2.lineTo(canvas2.width-50,canvas2.height-50);
+        ctx2.lineTo(canvas2.width-50,50);
+        ctx2.lineWidth = 2;
+        ctx2.strokeStyle = '#000000';
+        ctx2.stroke();
+        ctx2.closePath();
+        ctx2.beginPath();// Two lines
+        ctx2.moveTo(payoff2_11.x,payoff2_11.y);
+        ctx2.lineTo(payoff2_21.x,payoff2_21.y);
+        ctx2.moveTo(payoff2_12.x,payoff2_12.y);
+        ctx2.lineTo(payoff2_22.x,payoff2_22.y);
+        ctx2.lineWidth = 2;
+        ctx2.strokeStyle = '#0000ff';
+        ctx2.stroke();
+        ctx2.closePath();
+        ctx2.beginPath();//best response surface
+        ctx2.moveTo(50,50);
+        ctx2.lineTo(point2_1.x,point2_1.y);
+        ctx2.lineTo(point2_2.x,point2_2.y);
+        ctx2.lineTo(point2_3.x,point2_3.y);
+        ctx2.lineTo(canvas1.width-50,50);
+        ctx2.lineTo(50,50);
+        ctx2.fillStyle="#6666ff";
+        ctx2.fill();
+        ctx2.closePath();
+        ctx2.beginPath();// Points
+        ctx2.arc(payoff2_11.x, payoff2_11.y, payoff2_11.radius, 0, 2*Math.PI);
+        ctx2.fillStyle = payoff2_11.color;
+        ctx2.fill();
+        ctx2.stroke();
+        ctx2.closePath();
+        ctx2.beginPath();
+        ctx2.arc(payoff2_12.x, payoff2_12.y, payoff2_12.radius, 0, 2*Math.PI);
+        ctx2.fillStyle = payoff2_11.color;
+        ctx2.fill();
+        ctx2.stroke();
+        ctx2.closePath();
+        ctx2.beginPath();
+        ctx2.arc(payoff2_21.x, payoff2_21.y, payoff2_21.radius, 0, 2*Math.PI);
+        ctx2.fillStyle = payoff2_11.color;
+        ctx2.fill();
+        ctx2.stroke();
+        ctx2.closePath();
+        ctx2.beginPath();
+        ctx2.arc(payoff2_22.x, payoff2_22.y, payoff2_22.radius, 0, 2*Math.PI);
+        ctx2.fillStyle = payoff2_11.color;
+        ctx2.fill();
+        ctx2.stroke();
+        ctx2.closePath();
+        ctx2.fillStyle = '#000000';
+        ctx2.font='30px Arial';
+        ctx2.fillText("Player2 payoff",50,40);
+        ctx2.font='20px Arial';
+        ctx2.fillStyle = '#ff0000';
+        ctx2.fillText("0",40,370);
+        ctx2.fillText("1",260,370);
+        ctx2.fillText("Player1 "+document.getElementById("P1S2").value+" prob ",80,380);
+    }
+
+</script>
+
         <table border="1">
   <tr>
     <th><label class="player1">Player I</label> \ <label class="player2">Player II</label></th>
-    <th><label><input class="player2" type="text" name=2s1 value="S1"/> </label></th>
-    <th><label><input class="player2" type="text" name=2s2 value="S2"/> </label></th>
+    <th><label><input class="player2" type="text" id="P2S1" onchange="redraw()" value="S1"/> </label></th>
+    <th><label><input class="player2" type="text" id="P2S2" onchange="redraw()" value="S2"/> </label></th>
   </tr>
   <tr>
-      <th><label><input class="player1" type="text" name=1s1 value="S1"/> </label></th>
-    <td><input class="player1" type="text" name="P11_1" value=0>\<input class="player2" type="text" name=P11_2  value=0></td>
-    <td><input class="player1" type="text" name=P12_1  value=0>\<input class="player2" type="text" name=P12_2 value=0></td>
+      <th><label><input class="player1" type="text" id="P1S1" onchange="redraw()" value="S1"/> </label></th>
+    <td><input class="player1" type="text" id="P1_11" onchange="redraw()" value=0>\<input class="player2" type="text" id="P2_11"  onchange="redraw()" value=0></td>
+    <td><input class="player1" type="text" id="P1_12" onchange="redraw()" value=0>\<input class="player2" type="text" id="P2_12" onchange="redraw()" value=0></td>
   </tr>
   <tr>
-  <th><label><input class="player1" type="text" name=1s2 value="S2"/> </label></th>
-    <td><input class="player1" type="text" name=P21_1  value=0>\<input class="player2" type="text" name=P21_2  value=0></td>
-    <td><input class="player1" type="text" name=P22_1 value=0>\<input class="player2" type="text" name=P22_2  value=0></td>
+  <th><label><input class="player1" type="text" id="P1S2" onchange="redraw()" value="S2"/> </label></th>
+    <td><input class="player1" type="text" id="P1_21" onchange="redraw()" value=0>\<input class="player2" type="text" id="P2_21"  onchange="redraw()" value=0></td>
+    <td><input class="player1" type="text" id="P1_22" onchange="redraw()" value=0>\<input class="player2" type="text" id="P2_22"  onchange="redraw()" value=0></td>
   </tr>
 </table>
-        <canvas id="Payoff2" width="200" height="500">
+        <canvas id="Payoff1" width="300px" height="400px">
         </canvas>
+        
+        <canvas id="Payoff2" width="300px" height="400px">
+        </canvas>
+        
+                                                                    
 </body>
 </html>

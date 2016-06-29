@@ -569,8 +569,8 @@ GTE.TREE = (function (parentModule) {
     * @param  {Node} parentNode Node that will get a new child
     * @return {Node} newNode    Node that has been added
     */
-    Tree.prototype.addChildNodeTo = function (parentNode) {
-        var newNode = new GTE.TREE.Node(parentNode);
+    Tree.prototype.addChildNodeTo = function (parentNode, player, reachedBy, iset) {
+        var newNode = new GTE.TREE.Node(parentNode, player, reachedBy, iset);
         this.positionsUpdated = false;
         return newNode;
     };
@@ -849,18 +849,19 @@ GTE.TREE = (function (parentModule) {
     *                           get this player's colour from the list of colours
     * @return {Player} player   Created player
     */
-    Tree.prototype.newPlayer = function (colour) {
+    Tree.prototype.newPlayer = function (colour, id, name) {
         // Player ID is incremental
         var id;
-        if (this.players.length >= 1) {
-            id = this.players[this.players.length-1].id+1;
-        } else {
-            id = GTE.TREE.Player.CHANCE;
+        if(id == null) {
+            if (this.players.length >= 1) {
+                    id = this.players[this.players.length-1].id+1;
+                } else {
+                    id = GTE.TREE.Player.CHANCE;
+            }
         }
-
         colour = colour || GTE.tools.getColour(this.players.length);
         // Create the new player
-        var player = new GTE.TREE.Player(id, colour);
+        var player = new GTE.TREE.Player(id, colour, name);
         // Add the player to the list of players and return it
         return this.addPlayer(player);
     };
@@ -997,7 +998,7 @@ GTE.TREE = (function (parentModule) {
         if (node === undefined) {
             node = this.root;
         }
-        if (node.children.length !== 0 && node.player === null) {
+        if (node.children.length !== 0 && (node.player === null || node.player === undefined)) {
             return false;
         }
         for (var i = 0; i < node.children.length; i++) {

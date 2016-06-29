@@ -59,3 +59,9 @@
 .icon-cog:before {
 	content: "\e900";
 }
+.icon-save:before {
+	content: "\f15b";
+}
+.icon-load:before {
+	content: "\f15b	";
+}

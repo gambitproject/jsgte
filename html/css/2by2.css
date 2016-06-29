@@ -1,5 +1,5 @@
 .player1{
-    color:red
+    color:green
 }
 
 .player2{
@@ -9,4 +9,9 @@
 input{
     width: 50px;
    text-align: center;
+}
+
+canvas{
+    #padding: 30px;
+    margin: 50px;
 }

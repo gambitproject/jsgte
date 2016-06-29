@@ -7,6 +7,7 @@ GTE.UI = (function (parentModule) {
     */
     function Tools() {
         this.activePlayer = -1;
+        this.isetToolsRan = false;
     }
 
     /**
@@ -14,8 +15,9 @@ GTE.UI = (function (parentModule) {
     * It creates a new Tree and draws it
     */
     Tools.prototype.newTree = function() {
-        this.resetPlayers();
+        this.resetPlayers(1);
         this.activePlayer = -1;
+        this.isetToolsRan = false;
         var root = new GTE.TREE.Node(null);
         var child1 = new GTE.TREE.Node(root);
         var child2 = new GTE.TREE.Node(root);
@@ -30,6 +32,47 @@ GTE.UI = (function (parentModule) {
         // Create a node and draw it
         GTE.tree.draw();
         this.switchMode(GTE.MODES.ADD);
+    };
+
+    /**
+    * Function used to create new tree according
+    * to the xml data received.
+    */
+    Tools.prototype.loadTree = function(xml) {
+        var importer = new GTE.TREE.XmlImporter(xml);
+        importer.parseXmlToJson();
+        importer.loadTree();
+    };
+
+    /**
+    * Builds the sub-tree for the variable @node
+    */
+    Tools.prototype.createRecursiveTree = function(node, father) {
+        var currentNode = GTE.tree.addChildNodeTo( father, GTE.tree.players[node.jAttr.player] );
+        for( var i = 0 ; i < node.jIndex.length ; i++) {
+            if(node.jIndex[i][0] == "node") {
+                this.createRecursiveTree(node.node[node.jIndex[i][1]], currentNode);
+            }
+            if(node.jIndex[i][0] == "outcome") {
+                GTE.tree.addChildNodeTo(currentNode, GTE.tree.players[node.outcome[node.jIndex[i][1]].jAttr.player]);
+            }
+        }
+    };
+
+    /**
+    * Function to create nodes of the laoded tree
+    */
+    Tools.prototype.createTree = function(node, root) {
+        //  var root = new GTE.TREE.Node(null, node.jAttr.player);
+        for( var i = 0 ; i < node.jIndex.length ; i++) {
+            if(node.jIndex[i][0] == "node") {
+                this.createRecursiveTree(node.node[node.jIndex[i][1]], root);
+            }
+            if(node.jIndex[i][0] == "outcome") {
+                GTE.tree.addChildNodeTo(root, GTE.tree.players[node.outcome[node.jIndex[i][1]].jAttr.player]);
+            }
+        }
+        return root;
     };
 
     /**
@@ -119,10 +162,10 @@ GTE.UI = (function (parentModule) {
     /**
     * Function that adds a player button to the toolbar
     */
-    Tools.prototype.addPlayer = function () {
+    Tools.prototype.addPlayer = function (colour, id, name) {
         if (GTE.tree.numberOfPlayers() < GTE.CONSTANTS.MAX_PLAYERS) {
             // Create a new player
-            var player = GTE.tree.newPlayer();
+            var player = GTE.tree.newPlayer(colour, id, name);
             if (player !== null) {
                 if (player.id == GTE.CONSTANTS.MIN_PLAYERS + 1) {
                     document.getElementById("button-player-less").className =
@@ -239,18 +282,74 @@ GTE.UI = (function (parentModule) {
     };
 
     /**
-    * Removes all players from the toolbar
+    * Resets the length of the players to @length in the toolbar.
     */
-    Tools.prototype.resetPlayers = function () {
+    Tools.prototype.resetPlayers = function (length) {
         var buttons = document.getElementsByClassName("button-player");
-        while(buttons.length > 2) {
+        while(buttons.length > length + 1) {
             this.removePlayerButton(buttons[buttons.length-1]);
         }
     };
 
-    Tools.prototype.changePlayerColour = function (playerId, colour) {
-        var playerButton = document.getElementById("button-player-" + playerId);
-        playerButton.style.color = colour;
+    /**
+    * Adds new players to the according to color and name arrays
+    */
+    Tools.prototype.setPlayers = function (colour,name) {
+        for(var i=1; i<=name.length; i++)
+        {
+            this.addPlayer(colour[i-1].jValue.trim(), i, name[i-1].jValue.trim());
+        }
+    };
+
+    /**
+    * Sets display properties of the tree
+    */
+    Tools.prototype.setDisplayProperties = function (display) {
+        GTE.STORAGE.settingsLineThickness = display.strokeWidth[0].jValue.trim();
+        GTE.STORAGE.settingsCircleSize = display.nodeDiameter[0].jValue.trim();
+        GTE.STORAGE.settingsDistLevels = display.levelDistance[0].jValue.trim();
+    };
+
+    /**
+    * Sets isets for the loaded tree
+    */
+    Tools.prototype.setIsets = function (nodejs, node) {
+
+    //        var nodes = GTE.tree.getAllNodes(true);
+    //        for (var i = 0; i < nodes.length; i++) {
+    //            GTE.tree.createSingletonISet(nodes[i]);
+    //       }
+        GTE.tree.createSingletonISet(node);
+
+        if(nodejs.jIndex != undefined) {
+            for( var i = 0 ; i < nodejs.jIndex.length ; i++) {
+                if(nodejs.jIndex[i][0] == "node") {
+                    this.setIsets(nodejs.node[nodejs.jIndex[i][1]], node.children[i]);
+                }
+                if(nodejs.jIndex[i][0] == "outcome") {
+                    this.setIsets(nodejs.outcome[nodejs.jIndex[i][1]], node.children[i]);
+                }
+            }
+        }
+    };
+
+    Tools.prototype.mergeIsets = function (nodejs, node, listOfIsets) {
+        if(node.iset != listOfIsets[nodejs.jAttr.iset] && nodejs.jAttr.iset != undefined){
+//            GTE.MODE = GTE.MODES.MERGE;
+            node.changeISet(listOfisets[nodejs.jAttr.iset]);
+            GTE.tree.draw();
+//            GTE.tree.merge(node.iset, GTE.tree.isets[nodejs.jAttr.iset]);
+        }
+        if(nodejs.jIndex != undefined) {
+            for( var i = 0 ; i < nodejs.jIndex.length ; i++) {
+                if(nodejs.jIndex[i][0] == "node") {
+                    this.mergeIsets(nodejs.node[nodejs.jIndex[i][1]], node.children[i], listOfIsets);
+                }
+                if(nodejs.jIndex[i][0] == "outcome") {
+                //    this.mergeIsets(nodejs.outcome[nodejs.jIndex[i][1]], node.children[i]);
+                }
+            }
+        }
     };
 
     // Add class to parent module
