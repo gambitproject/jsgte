@@ -101,9 +101,16 @@ GTE.UI.Widgets = (function (parentModule) {
 
         // blur event is used to detect when the contenteditable loses focus
         this.textdiv.addEventListener('blur', function(e) {
-            if (thisContentEditable.functionOnSave !== null){
+            if (thisContentEditable.functionOnSave != null){
                 // Run functionOnSave
                 thisContentEditable.functionOnSave();
+            }
+        });
+
+        this.textdiv.addEventListener('focus', function(e) {
+            if (thisContentEditable.functionOnSave != null){
+                //Select the div completely
+                document.execCommand('selectAll',false,null);
             }
         });
 
@@ -243,6 +250,11 @@ GTE.UI.Widgets = (function (parentModule) {
         this.textdiv.style.color = colour;
         this.colour = colour;
         return this;
+    };
+                  
+    ContentEditable.prototype.index = function (i) {
+        this.index = i;
+    return this;
     };
 
     if (parentModule === undefined) {
