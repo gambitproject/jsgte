@@ -6,6 +6,7 @@
     GTE.tools = new GTE.UI.Tools();
     // Initialize settings
     var setSettingsToDefaults = function() {
+        GTE.STORAGE.settingsBlockSize = GTE.CONSTANTS.BLOCK_SIZE;
         GTE.STORAGE.settingsCircleSize = GTE.CONSTANTS.CIRCLE_SIZE;
         GTE.STORAGE.settingsLineThickness = GTE.CONSTANTS.LINE_THICKNESS;
         GTE.STORAGE.settingsDistLevels = GTE.CONSTANTS.DIST_BETWEEN_LEVELS;
@@ -76,6 +77,44 @@
 
     document.getElementById("button-new").addEventListener("click", function(){
         GTE.tools.newTree();
+        return false;
+    });
+
+    document.getElementById("button-strategic").addEventListener("click", function(){
+        if(GTE.tools.isetToolsRan) {
+            document.getElementById("button-solve-lrs").disabled=false;
+            GTE.tools.toStrategicForm();
+        }
+        else
+            alert("first assign payoffs to each player");
+        return false;
+    });
+
+    document.getElementById("button-tree").addEventListener("click", function(){
+        GTE.tree.draw();
+        return false;
+    });
+
+    document.getElementById("button-independent-strategic-general").addEventListener("click", function(){
+        var x = prompt("Enter the number of moves for the first player", "2");
+        var y = prompt("Enter the number of moves for the second player", "2");
+        GTE.STRATEGICFORMMODE = GTE.STRATEGICFORMMODES.GENERAL;
+        GTE.tools.createIndependentStrategicForm(x, y);
+        return false;
+    });
+
+    document.getElementById("button-independent-strategic-zerosum").addEventListener("click", function(){
+        var x = prompt("Enter the number of moves for the first player", "2");
+        var y = prompt("Enter the number of moves for the second player", "2");
+        GTE.STRATEGICFORMMODE = GTE.STRATEGICFORMMODES.ZEROSUM;
+        GTE.tools.createIndependentStrategicForm(x, y);
+        return false;
+    });
+
+    document.getElementById("button-independent-strategic-symmetric").addEventListener("click", function(){
+        var x = prompt("Enter the number of moves for the game", "2");
+        GTE.STRATEGICFORMMODE = GTE.STRATEGICFORMMODES.SYMMETRIC;
+        GTE.tools.createIndependentStrategicForm(x, x);
         return false;
     });
 
@@ -174,8 +213,22 @@
         GTE.tree.draw(true);
         return false;
     });
-    
-    var settings = document.getElementById("settings");
+
+    document.getElementById("button-solve-lrs").addEventListener("click", function(){
+        if(GTE.tools.isetToolsRan == false) {
+            alert("assign payoffs first");
+            return false;
+        }
+        var communicate = new GTE.TREE.Communication();
+        var matrix1 = GTE.tree.matrix.getMatrixInStringFormat(0);
+        var matrix2 = GTE.tree.matrix.getMatrixInStringFormat(1);
+        var height = GTE.tree.matrix.getNumberOfStrategies(GTE.tree.players[1]);
+        var width = GTE.tree.matrix.getNumberOfStrategies(GTE.tree.players[2]);
+        communicate.sendPostRequest('/solve', {player1 : matrix1, player2 : matrix2, height: height, width: width});
+        return false;
+    });
+
+        var settings = document.getElementById("settings");
     var settings_bar = document.getElementById("settings_bar");
     var offset = { x: 0, y: 0 };
 
