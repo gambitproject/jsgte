@@ -8,9 +8,13 @@ GTE.TREE = (function (parentModule) {
     */
     function Changes(mode) {
         var change = [];
-        var type = mode || null;
     }
 
+    Changes.prototype.undo= function() {
+        for (var i = 0; i<this.changes.length; i++) {
+            this.changes[i].undo();
+        }
+    };
     // Add class to parent module
     parentModule.Changes = Changes;
 
