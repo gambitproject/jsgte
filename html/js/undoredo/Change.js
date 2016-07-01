@@ -6,17 +6,17 @@ GTE.TREE = (function (parentModule) {
     * @class
     * @param {node} Represents the node that was affected by this change.
     */
-    function Change(node, from, to) {
+    function Change(node, mode, from, to) {
         var node = node || null;
+        var mode = mode || null;
         var from = from || null;
         var to = to || null;
-        var mode = mode || null;
     }
 
     Change.prototype.undo = function() {
         switch (this.mode) {
             case GTE.MODES.ADD:
-
+                this.node.delete();
                 break;
             case GTE.MODES.DELETE:
 
