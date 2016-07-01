@@ -85,18 +85,27 @@ GTE.TREE = (function(parentModule) {
                 // of the tree (i.e. even if some nodes are leaves already,
                 // do not delete them). otherwise (that is, ALL nodes in the
                 // multiaction line are leaves), delete all these leaves.
+                var changes = new GTE.TREE.Changes();
                 var allLeaves = true;
                 for (var k = 0; k < this.nodesInLine.length; k++) {
                     if (this.nodesInLine[k].children.length > 0) {
                         allLeaves = false;
-                        this.nodesInLine[k].onClick();
+                        if(this.nodesInLine[k].isLeaf()) {
+                            changes.addChange(GTE.MODES.DELETE, this.nodesInLine[k]);
+                        } else {
+                            changes.addChange(GTE.MODES.PLAYER_ASSIGNMENT, this.nodesInLine[k]);
+                            changes.pushChildrenDeleted(this.nodesInLine[k]);
+                        }
+                        this.nodesInLine[k].onClick(false);
                     }
                 }
                 if (allLeaves) {
                     for (k = 0; k < this.nodesInLine.length; k++) {
-                        this.nodesInLine[k].onClick();
+                        changes.addChange(GTE.MODES.DELETE, this.nodesInLine[k]);
+                        this.nodesInLine[k].onClick(false);
                     }
                 }
+                GTE.UNDOQUEUE.push(changes);
                 break;
             case GTE.MODES.PLAYER_ASSIGNMENT:
                 // set all nodes on the multiaction line to belong to the
