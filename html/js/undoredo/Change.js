@@ -7,10 +7,10 @@ GTE.TREE = (function (parentModule) {
     * @param {node} Represents the node that was affected by this change.
     */
     function Change(node, mode, from, to) {
-        var node = node || null;
-        var mode = mode || null;
-        var from = from || null;
-        var to = to || null;
+        this.node = node || null;
+        this.mode = mode || null;
+        this.from = from || null;
+        this.to = to || null;
     }
 
     Change.prototype.undo = function() {
@@ -39,6 +39,7 @@ GTE.TREE = (function (parentModule) {
                 break;
         }
     };
+
     // Add class to parent module
     parentModule.Change = Change;
 

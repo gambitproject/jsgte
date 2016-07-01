@@ -132,7 +132,9 @@ GTE.TREE = (function (parentModule) {
     /**
     * Function that defines the behaviour of the node on click
     */
-    Node.prototype.onClick = function () {
+    Node.prototype.onClick = function (undo) {
+        if(undo !== false)
+            undo = undo || true;
         switch (GTE.MODE) {
             case GTE.MODES.ADD:
                 // As talked in email "the phases of creating a game tree"
@@ -145,28 +147,42 @@ GTE.TREE = (function (parentModule) {
                 // if (this.iset.numberOfNodes > 1) {
                 //     this.createSingletonISetWithNode();
                 // }
+                changes = new GTE.TREE.Changes();
                 if (this.iset === null) {
                     if (this.isLeaf()) {
                         // If no children, add two, since one child only doesn't
                         // make sense
-                        GTE.tree.addChildNodeTo(this);
+                        var nodeCur = GTE.tree.addChildNodeTo(this);
+                        if(undo)
+                            changes.addChange(GTE.MODES.ADD, nodeCur);
                     }
-                    GTE.tree.addChildNodeTo(this);
+                    var nodeCur = GTE.tree.addChildNodeTo(this);
+                    if(undo)
+                        changes.addChange(GTE.MODES.ADD, nodeCur);
                     // Tell the tree to redraw itself
                     GTE.tree.draw();
                 } else {
                     this.iset.onClick();
                 }
+                if(undo)
+                    GTE.UNDOQUEUE.push(changes);
                 break;
             case GTE.MODES.DELETE:
                 if (this.iset === null) {
+                    var changes = new GTE.TREE.Changes();
                     // If it is a leaf, delete itself, if not, delete all children
                     if (this.isLeaf()) {
+                        if(undo)
+                            changes.addChange(GTE.MODES.DELETE, this);
                         this.delete();
                     } else {
+                        if(undo)
+                            changes.pushChildrenDeleted(this);
                         GTE.tree.deleteChildrenOf(this);
                         this.deassignPlayer();
                     }
+                    if(undo)
+                        GTE.UNDOQUEUE.push(changes);
                     // Tell the tree to redraw itself
                     GTE.tree.draw();
                 } else {

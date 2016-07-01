@@ -287,7 +287,8 @@ GTE.TREE = (function (parentModule) {
                     GTE.tree.addChildISetTo(this);
                 } else {
                     GTE.tree.addChildNodeToISet(this);
-                }// Tell the tree to redraw itself
+                }
+                // Tell the tree to redraw itself
                 GTE.tree.draw();
                 break;
             case GTE.MODES.DELETE:

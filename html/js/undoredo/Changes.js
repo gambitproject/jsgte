@@ -7,7 +7,7 @@ GTE.TREE = (function (parentModule) {
     * @param {type} Represents the type of the changes.
     */
     function Changes(mode) {
-        var queue = [];
+        this.queue = [];
     }
 
     Changes.prototype.undo= function() {
@@ -31,7 +31,7 @@ GTE.TREE = (function (parentModule) {
                     newNode.index = node.parent.children.indexOf(node);
                 }
                 var change = new GTE.TREE.Change(node, GTE.MODES.DELETE, newNode);
-                this.queue.push(change, GTE)
+                this.queue.push(change)
                 break;
             case GTE.MODES.MERGE:
 
@@ -46,7 +46,12 @@ GTE.TREE = (function (parentModule) {
                 break;
         }
     };
-
+    Changes.prototype.pushChildrenDeleted = function(node) {
+        for(var i = 0; i<node.children.length; i++) {
+            this.pushChildrenDeleted(node.children[i]);
+            this.addChange(GTE.MODES.DELETE, node.children[i]);
+        }
+    };
     // Add class to parent module
     parentModule.Changes = Changes;
 
