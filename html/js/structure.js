@@ -93,5 +93,6 @@ var GTE = (function () {
         DEFAULT_CHANCE_NAME: "chance"
     };
 
+    GTE.UNDOQUEUE = [];
     return GTE;
 }());
