@@ -7,8 +7,8 @@ GTE.TREE = (function (parentModule) {
     * @param {node} Represents the node that was affected by this change.
     */
     function Change(node, mode, from, to) {
-        this.node = node || null;
-        this.mode = mode || null;
+        this.node = node;
+        this.mode = mode;
         this.from = from || null;
         this.to = to || null;
     }
@@ -17,6 +17,8 @@ GTE.TREE = (function (parentModule) {
         switch (this.mode) {
             case GTE.MODES.ADD:
                 this.node.delete();
+                GTE.tree.positionsUpdated = false;
+                GTE.tree.draw();
                 break;
             case GTE.MODES.DELETE:
                 this.node.player = this.from.player;
@@ -25,6 +27,8 @@ GTE.TREE = (function (parentModule) {
                 if(this.node.parent != null) {
                     this.node.parent.children.splice(this.from.index, 0, this.node);
                 }
+                GTE.tree.positionsUpdated = false;
+                GTE.tree.draw();
                 break;
             case GTE.MODES.MERGE:
 

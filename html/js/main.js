@@ -115,6 +115,11 @@
         return false;
     });
 
+    document.getElementById("button-undo").addEventListener("click", function(){
+         GTE.tools.undo();
+         return false;
+     });
+
     document.getElementById("button-settings").addEventListener("click", function(){
         var el = document.getElementById("settings");
         el.style.display = (el.style.display == "block") ? "none" : "block";

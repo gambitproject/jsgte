@@ -189,6 +189,12 @@ GTE.UI = (function (parentModule) {
         }
     };
 
+    Tools.prototype.undo = function() {
+        if(GTE.UNDOQUEUE.length > 0) {
+            GTE.UNDOQUEUE.pop().undo();
+        }
+    }
+
     /**
     * Returns the colour correspondent to a given index. It is used to get the
     * player colour. Player id would be the same as colourIndex

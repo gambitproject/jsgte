@@ -48,8 +48,8 @@ GTE.TREE = (function (parentModule) {
     };
     Changes.prototype.pushChildrenDeleted = function(node) {
         for(var i = 0; i<node.children.length; i++) {
-            this.pushChildrenDeleted(node.children[i]);
             this.addChange(GTE.MODES.DELETE, node.children[i]);
+            this.pushChildrenDeleted(node.children[i]);
         }
     };
     // Add class to parent module

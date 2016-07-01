@@ -645,11 +645,11 @@ GTE.TREE = (function (parentModule) {
     */
     Tree.prototype.recursiveDeleteChildren = function (node) {
         if (!node.isLeaf()) {
-            for (var i=0; i < node.children.length; i++) {
-                this.recursiveDeleteChildren(node.children[i]);
+            while(node.children.length !== 0) {
+                this.recursiveDeleteChildren(node.children[0]);
             }
         }
-        node.delete();
+    node.delete();
     };
 
     /**
