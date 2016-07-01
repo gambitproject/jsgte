@@ -56,10 +56,14 @@ GTE.TREE = (function(parentModule) {
                 // for the nodes in the line
                 var smallestAndLargest = this.findSmallestAndLargest();
                 // If S < L, add children to those nodes so that ALL nodes have L children now.
+                var changes = new GTE.TREE.Changes();
                 if (smallestAndLargest.smallest < smallestAndLargest.largest) {
                     for (var i = 0; i < this.nodesInLine.length; i++) {
                         while (this.nodesInLine[i].children.length < smallestAndLargest.largest) {
-                            this.nodesInLine[i].onClick();
+                            var nodesAdded = this.nodesInLine[i].onClick(false);
+                            for(var j = 0; j<nodesAdded.length; j++) {
+                                changes.addChange(GTE.MODES.ADD, nodesAdded[j]);
+                            }
                         }
                     }
                 }
@@ -67,9 +71,13 @@ GTE.TREE = (function(parentModule) {
                 // If S = L, add one child to each node on the multiaction line.
                 else if (smallestAndLargest.largest === 0 || smallestAndLargest.smallest === smallestAndLargest.largest) {
                     for (var j = 0; j < this.nodesInLine.length; j++) {
-                        this.nodesInLine[j].onClick();
+                        var nodesAdded = this.nodesInLine[j].onClick(false);
+                        for(var k = 0; k<nodesAdded.length; k++) {
+                            changes.addChange(GTE.MODES.ADD, nodesAdded[k]);
+                        }
                     }
                 }
+                GTE.UNDOQUEUE.push(changes);
                 break;
             case GTE.MODES.DELETE:
                 // if ANY of the nodes in the multiaction line have children,

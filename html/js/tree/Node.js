@@ -149,14 +149,17 @@ GTE.TREE = (function (parentModule) {
                 // }
                 changes = new GTE.TREE.Changes();
                 if (this.iset === null) {
+                    var nodes = [];
                     if (this.isLeaf()) {
                         // If no children, add two, since one child only doesn't
                         // make sense
                         var nodeCur = GTE.tree.addChildNodeTo(this);
+                        nodes.push(nodeCur);
                         if(undo)
                             changes.addChange(GTE.MODES.ADD, nodeCur);
                     }
                     var nodeCur = GTE.tree.addChildNodeTo(this);
+                    nodes.push(nodeCur);
                     if(undo)
                         changes.addChange(GTE.MODES.ADD, nodeCur);
                     // Tell the tree to redraw itself
@@ -166,6 +169,7 @@ GTE.TREE = (function (parentModule) {
                 }
                 if(undo)
                     GTE.UNDOQUEUE.push(changes);
+                return nodes;
                 break;
             case GTE.MODES.DELETE:
                 if (this.iset === null) {
