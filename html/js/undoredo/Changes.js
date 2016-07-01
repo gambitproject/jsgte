@@ -23,7 +23,15 @@ GTE.TREE = (function (parentModule) {
                 this.queue.push(change);
                 break;
             case GTE.MODES.DELETE:
-
+                var newNode = new GTE.TREE.Node();
+                newNode.player = node.player;
+                newNode.parent = node.parent;
+                newNode.reachedBy = node.reachedBy;
+                if(node.parent != null) {
+                    newNode.index = node.parent.children.indexOf(node);
+                }
+                var change = new GTE.TREE.Change(node, GTE.MODES.DELETE, newNode);
+                this.queue.push(change, GTE)
                 break;
             case GTE.MODES.MERGE:
 

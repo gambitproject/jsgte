@@ -19,7 +19,12 @@ GTE.TREE = (function (parentModule) {
                 this.node.delete();
                 break;
             case GTE.MODES.DELETE:
-
+                this.node.player = this.from.player;
+                this.node.parent = this.from.parent;
+                this.node.reachedBy = this.from.reachedBy;
+                if(this.node.parent != null) {
+                    this.node.parent.children.splice(this.from.index, 0, this.node);
+                }
                 break;
             case GTE.MODES.MERGE:
 
