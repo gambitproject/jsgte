@@ -37,7 +37,12 @@ GTE.TREE = (function (parentModule) {
 
                 break;
             case GTE.MODES.PLAYER_ASSIGNMENT:
-
+                if(this.from) {
+                    this.node.assignPlayer(this.from);
+                } else {
+                    this.node.deassignPlayer();
+                    GTE.tree.draw();
+                }
                 break;
             default:
                 break;

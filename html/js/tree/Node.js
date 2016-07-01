@@ -176,8 +176,10 @@ GTE.TREE = (function (parentModule) {
                             changes.addChange(GTE.MODES.DELETE, this);
                         this.delete();
                     } else {
-                        if(undo)
+                        if(undo) {
+                            changes.addChange(GTE.MODES.PLAYER_ASSIGNMENT, this);
                             changes.pushChildrenDeleted(this);
+                        }
                         GTE.tree.deleteChildrenOf(this);
                         this.deassignPlayer();
                     }
@@ -212,7 +214,11 @@ GTE.TREE = (function (parentModule) {
                     if (this.iset !== null) {
                         this.iset.onClick();
                     } else {
-
+                        if(undo) {
+                            var changes = new GTE.TREE.Changes();
+                            changes.addChange(GTE.MODES.PLAYER_ASSIGNMENT, this);
+                            GTE.UNDOQUEUE.push(changes);
+                        }
                         GTE.tree.assignSelectedPlayerToNode(this);
                         GTE.tree.draw();
                     }

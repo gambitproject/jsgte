@@ -40,7 +40,8 @@ GTE.TREE = (function (parentModule) {
 
                 break;
             case GTE.MODES.PLAYER_ASSIGNMENT:
-
+                var change = new GTE.TREE.Change(node, GTE.MODES.PLAYER_ASSIGNMENT, node.player, null);
+                this.queue.push(change);
                 break;
             default:
                 break;
