@@ -446,6 +446,21 @@ GTE.TREE = (function (parentModule) {
         return GTE.tree.getPathToRoot(this);
     };
 
+    Node.prototype.getRecursiveNodesBelowThis = function(node) {
+        var listOfNodes = [];
+        for(var i = 0; i<node.children.length; i++) {
+            listOfNodes = listOfNodes.concat(this.getRecursiveNodesBelowThis(node.children[i]));
+        }
+        listOfNodes.push(node);
+        return listOfNodes;
+    }
+    Node.prototype.getNodesBelowThis = function() {
+        var listOfNodes = [];
+        for(var i = 0; i<this.children.length; i++) {
+            listOfNodes = listOfNodes.concat(this.getRecursiveNodesBelowThis(this.children[i]));
+        }
+        return listOfNodes;
+    }
     // Add class to parent module
     parentModule.Node = Node;
 
