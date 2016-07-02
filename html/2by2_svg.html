@@ -456,6 +456,34 @@ function compute_firstP(){
                temp[8].setAttributeNS(null, "y", 495);
                temp[8].setAttributeNS(null, "height", 210);
                temp[8].setAttributeNS(null, "width", 210);
+               
+               temp[4].setAttributeNS(null, "x", 45);
+               temp[4].setAttributeNS(null, "y", 495);
+               temp[4].setAttributeNS(null, "height", 10);
+               temp[4].setAttributeNS(null, "width", 210);
+               
+               
+               temp[5].setAttributeNS(null, "x", 245);
+               temp[5].setAttributeNS(null, "y", 495);
+               temp[5].setAttributeNS(null, "height", 210);
+               temp[5].setAttributeNS(null, "width", 10);
+               
+               
+               temp[6].setAttributeNS(null, "x", 45);
+               temp[6].setAttributeNS(null, "y", 695);
+               temp[6].setAttributeNS(null, "height", 10);
+               temp[6].setAttributeNS(null, "width", 210);
+               
+               
+               temp[7].setAttributeNS(null, "x", 45);
+               temp[7].setAttributeNS(null, "y", 495);
+               temp[7].setAttributeNS(null, "height", 210);
+               temp[7].setAttributeNS(null, "width", 10);
+               //remove all pure equilibria
+               temp[0].setAttributeNS(null, "r", 0);
+               temp[1].setAttributeNS(null, "r", 0);
+               temp[2].setAttributeNS(null, "r", 0);
+               temp[3].setAttributeNS(null, "r", 0);
             }
             else{
                 if (M1_2==1){
@@ -587,6 +615,11 @@ function compute_firstP(){
         if (M2_1==M2_2){
             if (M2_2==0){
                 path2="50,500, 250,500, 250,700, 50,700, 50,500";
+                //remove all pure equilibria
+                temp[0].setAttributeNS(null, "r", 0);
+                temp[1].setAttributeNS(null, "r", 0);
+                temp[2].setAttributeNS(null, "r", 0);
+                temp[3].setAttributeNS(null, "r", 0);
             }
             else{
                 if (M2_2==1){
@@ -601,6 +634,10 @@ function compute_firstP(){
                     temp[5].setAttributeNS(null, "width", 0);
                     temp[6].setAttributeNS(null, "width", 0);
                     temp[8].setAttributeNS(null, "width", 0);
+                    if (temp[7].getAttribute("y")==495 && temp[7].getAttribute("width")>0)
+                        temp[0].setAttributeNS(null, "r", 0);//remove end point
+                    if (Number(temp[7].getAttribute("y"))+Number(temp[7].getAttribute("height"))==705)
+                        temp[3].setAttributeNS(null, "r", 0);//remove end point
                 }
                 else {
                     path2="250,500, 250,700";
@@ -614,6 +651,10 @@ function compute_firstP(){
                     temp[6].setAttributeNS(null, "width", 0);
                     temp[7].setAttributeNS(null, "width", 0);
                     temp[8].setAttributeNS(null, "width", 0);
+                    if (temp[5].getAttribute("y")==495 && temp[5].getAttribute("width")>0)
+                    temp[1].setAttributeNS(null, "r", 0);//remove end point
+                    if (Number(temp[5].getAttribute("y"))+Number(temp[5].getAttribute("height"))==705)
+                    temp[2].setAttributeNS(null, "r", 0);//remove end point
                 }
             }
             
@@ -629,6 +670,14 @@ function compute_firstP(){
                     temp[5].setAttributeNS(null, "width", 0);
                     temp[6].setAttributeNS(null, "width", 0);
                     temp[8].setAttributeNS(null, "width", 0);
+                    if (temp[7].getAttribute("y")==495 && temp[7].getAttribute("width")>0)
+                    temp[0].setAttributeNS(null, "r", 0);//remove end point
+                    if (Number(temp[7].getAttribute("y"))+Number(temp[7].getAttribute("height"))==705)
+                    temp[3].setAttributeNS(null, "r", 0);//remove end point
+                    if (temp[4].getAttribute("x")==45 && temp[4].getAttribute("width")>0)
+                    temp[0].setAttributeNS(null, "r", 0);//remove end point
+                    if (Number(temp[4].getAttribute("x"))+Number(temp[4].getAttribute("width"))==255)
+                    temp[1].setAttributeNS(null, "r", 0);//remove end point
                 }
                 else{
                     path2="50,500, 250,500, 250,700";
@@ -639,6 +688,14 @@ function compute_firstP(){
                     temp[6].setAttributeNS(null, "width", 0);
                     temp[7].setAttributeNS(null, "width", 0);
                     temp[8].setAttributeNS(null, "width", 0);
+                    if (temp[5].getAttribute("y")==495 && temp[5].getAttribute("width")>0 )
+                    temp[1].setAttributeNS(null, "r", 0);//remove end point
+                    if (Number(temp[5].getAttribute("y"))+Number(temp[5].getAttribute("height"))==705)
+                    temp[2].setAttributeNS(null, "r", 0);//remove end point
+                    if (temp[4].getAttribute("x")==45 && temp[4].getAttribute("width")>0)
+                    temp[0].setAttributeNS(null, "r", 0);//remove end point
+                    if (Number(temp[4].getAttribute("x"))+Number(temp[4].getAttribute("width"))==255)
+                    temp[1].setAttributeNS(null, "r", 0);//remove end point
                 }
             }
             else{
@@ -652,6 +709,14 @@ function compute_firstP(){
                         temp[4].setAttributeNS(null, "width", 0);
                         temp[5].setAttributeNS(null, "width", 0);
                         temp[8].setAttributeNS(null, "width", 0);
+                        if (temp[7].getAttribute("y")==495 && temp[7].getAttribute("width")>0)
+                        temp[0].setAttributeNS(null, "r", 0);//remove end point
+                        if (Number(temp[7].getAttribute("y"))+Number(temp[7].getAttribute("height"))==705)
+                        temp[3].setAttributeNS(null, "r", 0);//remove end point
+                        if (temp[6].getAttribute("x")==45 && temp[6].getAttribute("width")>0)
+                        temp[3].setAttributeNS(null, "r", 0);//remove end point
+                        if (Number(temp[6].getAttribute("x"))+Number(temp[6].getAttribute("width"))==255)
+                        temp[2].setAttributeNS(null, "r", 0);//remove end point
                     }
                     else{
                         path2="50,500, 50,"+Number(point2_2.x+Number(50))+", 250,"+Number(point2_2.x+Number(50))+", 250,700";
@@ -673,12 +738,13 @@ function compute_firstP(){
                             temp[4].setAttributeNS(null, "height", 0);
                             temp[5].setAttributeNS(null, "height", 0);
                             temp[6].setAttributeNS(null, "height", 0);
-                            temp[7].setAttributeNS(null, "height", Number(point2_2.x-Number(500)+Number(50)));
+                            temp[7].setAttributeNS(null, "height", Number(point2_2.x-Number(500)+Number(60)));
                             temp[8].setAttributeNS(null, "height", 0);
                             temp[4].setAttributeNS(null, "width", 0);
                             temp[5].setAttributeNS(null, "width", 0);
                             temp[6].setAttributeNS(null, "width", 0);
                             temp[8].setAttributeNS(null, "y", 0);
+                            temp[0].setAttributeNS(null, "r", 0);//remove end point
                         }
                         if (M1_2==0 && M1_1>0){
                             temp[4].setAttributeNS(null, "height", 0);
@@ -686,17 +752,19 @@ function compute_firstP(){
                             temp[6].setAttributeNS(null, "height", 0);
                             temp[8].setAttributeNS(null, "height", 0);
                             temp[4].setAttributeNS(null, "width", 0);
-                            temp[5].setAttributeNS(null, "height",Number(700-Number(point2_2.x)+Number(50)) );
+                            temp[5].setAttributeNS(null, "height",Number(700-Number(point2_2.x)-Number(40)) );
                             temp[5].setAttributeNS(null, "y", Number(point2_2.x+Number(45)));
                             temp[7].setAttributeNS(null, "width", 0);
                             temp[6].setAttributeNS(null, "width", 0);
                             temp[8].setAttributeNS(null, "y", 0);
+                            temp[2].setAttributeNS(null, "r", 0);//remove end point
                         }
                         if (M1_2==0 && M1_1==0){
                             
+                            temp[0].setAttributeNS(null, "r", 0);//remove end point
                             temp[7].setAttributeNS(null, "x", 45);
                             temp[7].setAttributeNS(null, "y", 495);
-                            temp[7].setAttributeNS(null, "height", Number(point2_2.x-Number(500)+Number(50)));
+                            temp[7].setAttributeNS(null, "height", Number(point2_2.x-Number(500)+Number(60)));
                             temp[7].setAttributeNS(null, "width", 10);
                             
                             temp[8].setAttributeNS(null, "x", 45);
@@ -704,9 +772,10 @@ function compute_firstP(){
                             temp[8].setAttributeNS(null, "height", 10);
                             temp[8].setAttributeNS(null, "width", 210);
                             
+                            temp[2].setAttributeNS(null, "r", 0);//remove end point
                             temp[5].setAttributeNS(null, "x", 245);
                             temp[5].setAttributeNS(null, "y", Number(point2_2.x+Number(45)));
-                            temp[5].setAttributeNS(null, "height",Number(700-Number(point2_2.x)+Number(50)) );
+                            temp[5].setAttributeNS(null, "height",Number(700-Number(point2_2.x)-Number(40)) );
                             temp[5].setAttributeNS(null, "width", 10);
                         }
                     }
@@ -732,13 +801,14 @@ function compute_firstP(){
                             temp[4].setAttributeNS(null, "height", 0);
                             temp[5].setAttributeNS(null, "height", 0);
                             temp[6].setAttributeNS(null, "height", 0);
-                            temp[7].setAttributeNS(null, "height", Number(700-Number(point2_2.x)+Number(50)));
+                            temp[7].setAttributeNS(null, "height", Number(700-Number(point2_2.x)-Number(40)));
                             temp[7].setAttributeNS(null, "y", Number(point2_2.x+Number(45)));
                             temp[8].setAttributeNS(null, "height", 0);
                             temp[4].setAttributeNS(null, "width", 0);
                             temp[5].setAttributeNS(null, "width", 0);
                             temp[6].setAttributeNS(null, "width", 0);
                             temp[8].setAttributeNS(null, "y", 0);
+                            temp[3].setAttributeNS(null, "r", 0);//remove end point
                         }
                         if (M1_2==0 && M1_1>0){
                             temp[4].setAttributeNS(null, "height", 0);
@@ -746,16 +816,18 @@ function compute_firstP(){
                             temp[6].setAttributeNS(null, "height", 0);
                             temp[8].setAttributeNS(null, "height", 0);
                             temp[4].setAttributeNS(null, "width", 0);
-                            temp[5].setAttributeNS(null, "height", Number(point2_2.x-Number(500)+Number(50) ));
+                            temp[5].setAttributeNS(null, "height", Number(point2_2.x-Number(500)+Number(60) ));
                             temp[7].setAttributeNS(null, "width", 0);
                             temp[6].setAttributeNS(null, "width", 0);
                             temp[8].setAttributeNS(null, "y", 0);
+                            temp[1].setAttributeNS(null, "r", 0);//remove end point
                         }
                         if (M1_2==0 && M1_1==0){
                             
+                            temp[3].setAttributeNS(null, "r", 0);//remove end point
                             temp[7].setAttributeNS(null, "x", 45);
                             temp[7].setAttributeNS(null, "y", Number(point2_2.x+Number(45)));
-                            temp[7].setAttributeNS(null, "height", Number(700-Number(point2_2.x)+Number(50)));
+                            temp[7].setAttributeNS(null, "height", Number(700-Number(point2_2.x)-Number(40)));
                             temp[7].setAttributeNS(null, "width", 10);
                             
                             temp[8].setAttributeNS(null, "x", 45);
@@ -763,9 +835,10 @@ function compute_firstP(){
                             temp[8].setAttributeNS(null, "height", 10);
                             temp[8].setAttributeNS(null, "width", 210);
                             
+                            temp[1].setAttributeNS(null, "r", 0);//remove end point
                             temp[5].setAttributeNS(null, "x", 245);
                             temp[5].setAttributeNS(null, "y", 495);
-                            temp[5].setAttributeNS(null, "height",Number(point2_2.x-Number(500)+Number(50) ));
+                            temp[5].setAttributeNS(null, "height",Number(point2_2.x-Number(500)+Number(60) ));
                             temp[5].setAttributeNS(null, "width", 10);
                         }
                     }
@@ -778,6 +851,14 @@ function compute_firstP(){
                         temp[4].setAttributeNS(null, "width", 0);
                         temp[7].setAttributeNS(null, "width", 0);
                         temp[8].setAttributeNS(null, "width", 0);
+                        if (temp[5].getAttribute("y")==495 && temp[5].getAttribute("width")>0)
+                        temp[1].setAttributeNS(null, "r", 0);//remove end point
+                        if (Number(temp[5].getAttribute("y"))+Number(temp[5].getAttribute("height"))==705)
+                        temp[2].setAttributeNS(null, "r", 0);//remove end point
+                        if (Number(temp[6].getAttribute("x"))==45 && temp[6].getAttribute("width")>0)
+                        temp[3].setAttributeNS(null, "r", 0);//remove end point
+                        if (Number(temp[6].getAttribute("x"))+Number(temp[6].getAttribute("width"))==255)
+                        temp[2].setAttributeNS(null, "r", 0);//remove end point
                     }
                 }
             }
