@@ -160,12 +160,8 @@ GTE.TREE = (function(parentModule) {
             .index(i)
             .onSave( function() {
                     var text = this.getCleanedText();
-                        if (text === "") {
-                        window.alert("Strategy's name should not be empty.");
-                        } else {
                     thisMatrix.strategies[1][this.index].moves[0].name=text;
-                        }
-                    }
+                    redraw();}
                     );
         }
 
@@ -184,11 +180,8 @@ GTE.TREE = (function(parentModule) {
             .index(i)
             .onSave( function() {
                     var text = this.getCleanedText();
-                        if (text === "") {
-                        window.alert("Strategy's name should not be empty.");
-                        } else {
                     thisMatrix.strategies[2][this.index].moves[0].name=text;
-                        }
+                    redraw();
                     }
                     );
         }
