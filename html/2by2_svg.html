@@ -415,7 +415,7 @@ function compute_firstP(){
         
         
         //Best reponse path
-        temp= svg.getElementsByClassName("br");
+        temp=[];
         temp2= svg.getElementsByClassName("brline");
         var path1="";
         var path2="";
@@ -424,6 +424,15 @@ function compute_firstP(){
         var path1_3="";
         var path2_3="";
         nb=0;
+        temp.push(svg.getElementsByClassName("p1")[0]);
+        temp.push(svg.getElementsByClassName("p2")[0]);
+        temp.push(svg.getElementsByClassName("p3")[0]);
+        temp.push(svg.getElementsByClassName("p4")[0]);
+        temp.push(svg.getElementsByClassName("m1")[0]);
+        temp.push(svg.getElementsByClassName("m2")[0]);
+        temp.push(svg.getElementsByClassName("m3")[0]);
+        temp.push(svg.getElementsByClassName("m4")[0]);
+        temp.push(svg.getElementsByClassName("m5")[0]);
         temp[0].setAttributeNS(null, "r", 10);
         temp[1].setAttributeNS(null, "r", 10);
         temp[2].setAttributeNS(null, "r", 10);
@@ -432,7 +441,7 @@ function compute_firstP(){
         temp[5].setAttributeNS(null, "height", 0);
         temp[6].setAttributeNS(null, "height", 0);
         temp[7].setAttributeNS(null, "height", 0);
-        temp[8].setAttributeNS(null, "height", 0);
+        temp[5].setAttributeNS(null, "height", 0);
         temp[4].setAttributeNS(null, "width", 0);
         temp[5].setAttributeNS(null, "width", 0);
         temp[6].setAttributeNS(null, "width", 0);
@@ -1181,7 +1190,7 @@ function compute_firstP(){
             <!-- Drawing the contour-->
             <polyline class="contour" points="50,50 50,350 250,350, 250,50"/>
             <!-- Legend, strategy names will be updated after-->
-            <text class="player1 title" x="150" y="40">I's payoff</text>
+            <text class="player1 title" x="150" y="40">Payoff to I</text>
             <text class="player2 legendh" x="140" y="390">II's probability of</text><text class="player2 strat_left strat22" x="205" y="390">S2 </text>
             <!--
             <text class="player2 legendv" id="y11" x="20" y="200" transform="rotate(270 20,200)">S1</text>
@@ -1249,7 +1258,7 @@ function compute_firstP(){
             <!-- Drawing the contour-->
             <polyline class="contour" points="450,50 450,350 650,350, 650,50" draggable="false"/>
             <!-- Legend, strategy names will be updated after-->
-            <text class="player2 title" x="550" y="40">II's payoff</text>
+            <text class="player2 title" x="550" y="40">Payoff to II</text>
             <text class="player1 legendh" x="540" y="390">I's probability of </text><text class="player1 strat_left strat12" x="605" y="390">S2 </text>
             <text class="player1 legendh" x="450" y="370">0</text>
             <text class="player1 legendh" x="650" y="370">1</text>
@@ -1315,6 +1324,12 @@ function compute_firstP(){
             <circle class="pay line2" id="Payoff2_22" asso="P2_22" asso_player="1" asso_strat="3" cx="650" cy="350" r="5" draggable="false" ondragstart="doMouseDown()"/>
             
             
+            <!--mixed equilibrium--->
+            <rect class="br m1" x="40" y="490" width="20" height="20" fill="green"/>
+            <rect class="br m2" x="40" y="490" width="20" height="20" fill="green"/>
+            <rect class="br m3" x="40" y="490" width="20" height="20" fill="green"/>
+            <rect class="br m4" x="40" y="490" width="20" height="20" fill="green"/>
+            <rect class="br m5" x="40" y="490" width="20" height="20" fill="green"/>
             <!-- Drawing the contour-->
             <polyline class="contour" points="50,500 50,700 250,700, 250,500, 50,500"/>
             <!-- Best player1 --->
@@ -1322,16 +1337,10 @@ function compute_firstP(){
             <!-- Best player2 --->
             <polyline class="brline line2" points="50,500 50,700 250,700, 250,500"/>
             <!--pure equilibrium--->
-            <circle class="br" cx="50" cy="500" r="10"  draggable="false" />
-            <circle class="br" cx="250" cy="500" r="10" draggable="false"/>
-            <circle class="br" cx="250" cy="700" r="10"  draggable="false" />
-            <circle class="br" cx="50" cy="700" r="10" draggable="false"/>
-            <!--mixed equilibrium--->
-            <rect class="br" x="40" y="490" width="20" height="20" fill="green"/>
-            <rect class="br" x="40" y="490" width="20" height="20" fill="green"/>
-            <rect class="br" x="40" y="490" width="20" height="20" fill="green"/>
-            <rect class="br" x="40" y="490" width="20" height="20" fill="green"/>
-            <rect class="br" x="40" y="490" width="20" height="20" fill="green"/>
+            <circle class="br p1" cx="50" cy="500" r="10"  draggable="false" />
+            <circle class="br p2" cx="250" cy="500" r="10" draggable="false"/>
+            <circle class="br p3" cx="250" cy="700" r="10"  draggable="false" />
+            <circle class="br p4" cx="50" cy="700" r="10" draggable="false"/>
             
             <!--legend -->
             <line class="line2" x1="50" y1="450" x2="250" y2="450"/>
