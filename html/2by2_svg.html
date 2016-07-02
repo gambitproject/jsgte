@@ -437,6 +437,11 @@ function compute_firstP(){
         temp[1].setAttributeNS(null, "r", 10);
         temp[2].setAttributeNS(null, "r", 10);
         temp[3].setAttributeNS(null, "r", 10);
+        temp[4].setAttributeNS(null, "fill", "green");
+        temp[5].setAttributeNS(null, "fill", "green");
+        temp[6].setAttributeNS(null, "fill", "green");
+        temp[7].setAttributeNS(null, "fill", "green");
+        temp[8].setAttributeNS(null, "fill", "green");
         temp[4].setAttributeNS(null, "height", 0);
         temp[5].setAttributeNS(null, "height", 0);
         temp[6].setAttributeNS(null, "height", 0);
@@ -456,6 +461,7 @@ function compute_firstP(){
                temp[8].setAttributeNS(null, "y", 495);
                temp[8].setAttributeNS(null, "height", 210);
                temp[8].setAttributeNS(null, "width", 210);
+               temp[8].setAttributeNS(null, "fill", "pink");
                
                temp[4].setAttributeNS(null, "x", 45);
                temp[4].setAttributeNS(null, "y", 495);
@@ -620,6 +626,35 @@ function compute_firstP(){
                 temp[1].setAttributeNS(null, "r", 0);
                 temp[2].setAttributeNS(null, "r", 0);
                 temp[3].setAttributeNS(null, "r", 0);
+                if (M1_1==0 && M1_2==0)
+                    temp[8].setAttributeNS(null, "fill", "green");
+                else {
+                    if (temp[8].getAttribute("width")==0){
+                        temp[8].setAttributeNS(null, "x", 45);
+                        temp[8].setAttributeNS(null, "y", 495);
+                        temp[8].setAttributeNS(null, "height", 210);
+                        temp[8].setAttributeNS(null, "width", 210);
+                        temp[8].setAttributeNS(null, "fill", "cyan");
+                    }
+                    else{
+                        if (temp[5].getAttribute("width")==0){
+                        temp[5].setAttributeNS(null, "x", 45);
+                        temp[5].setAttributeNS(null, "y", 495);
+                        temp[5].setAttributeNS(null, "height", 210);
+                        temp[5].setAttributeNS(null, "width", 210);
+                        temp[5].setAttributeNS(null, "fill", "cyan");
+                        svg.insertBefore(temp[5],temp[8]);
+                        }
+                        else {
+                            temp[7].setAttributeNS(null, "x", 45);
+                            temp[7].setAttributeNS(null, "y", 495);
+                            temp[7].setAttributeNS(null, "height", 210);
+                            temp[7].setAttributeNS(null, "width", 210);
+                            temp[7].setAttributeNS(null, "fill", "cyan");
+                            svg.insertBefore(temp[7],temp[8]);
+                        }
+                    }
+                }
             }
             else{
                 if (M2_2==1){
@@ -629,11 +664,12 @@ function compute_firstP(){
                     temp[4].setAttributeNS(null, "height", 0);
                     temp[5].setAttributeNS(null, "height", 0);
                     temp[6].setAttributeNS(null, "height", 0);
-                    temp[8].setAttributeNS(null, "height", 0);
+                    if (M1_1 >0 || M1_2 >0){
+                        temp[8].setAttributeNS(null, "height", 0);
+                        temp[8].setAttributeNS(null, "width", 0);}
                     temp[4].setAttributeNS(null, "width", 0);
                     temp[5].setAttributeNS(null, "width", 0);
                     temp[6].setAttributeNS(null, "width", 0);
-                    temp[8].setAttributeNS(null, "width", 0);
                     if (temp[7].getAttribute("y")==495 && temp[7].getAttribute("width")>0)
                         temp[0].setAttributeNS(null, "r", 0);//remove end point
                     if (Number(temp[7].getAttribute("y"))+Number(temp[7].getAttribute("height"))==705)
@@ -646,11 +682,13 @@ function compute_firstP(){
                     temp[4].setAttributeNS(null, "height", 0);
                     temp[6].setAttributeNS(null, "height", 0);
                     temp[7].setAttributeNS(null, "height", 0);
-                    temp[8].setAttributeNS(null, "height", 0);
+                    if (M1_1 >0 || M1_2 >0){
+                        temp[8].setAttributeNS(null, "height", 0);
+                        temp[8].setAttributeNS(null, "width", 0);
+                    }
                     temp[4].setAttributeNS(null, "width", 0);
                     temp[6].setAttributeNS(null, "width", 0);
                     temp[7].setAttributeNS(null, "width", 0);
-                    temp[8].setAttributeNS(null, "width", 0);
                     if (temp[5].getAttribute("y")==495 && temp[5].getAttribute("width")>0)
                     temp[1].setAttributeNS(null, "r", 0);//remove end point
                     if (Number(temp[5].getAttribute("y"))+Number(temp[5].getAttribute("height"))==705)
@@ -666,10 +704,12 @@ function compute_firstP(){
                     temp[2].setAttributeNS(null, "r", 0);
                     temp[5].setAttributeNS(null, "height", 0);
                     temp[6].setAttributeNS(null, "height", 0);
-                    temp[8].setAttributeNS(null, "height", 0);
+                    if (M1_1 >0 || M1_2 >0){
+                        temp[8].setAttributeNS(null, "height", 0);
+                        temp[8].setAttributeNS(null, "width", 0);
+                    }
                     temp[5].setAttributeNS(null, "width", 0);
                     temp[6].setAttributeNS(null, "width", 0);
-                    temp[8].setAttributeNS(null, "width", 0);
                     if (temp[7].getAttribute("y")==495 && temp[7].getAttribute("width")>0)
                     temp[0].setAttributeNS(null, "r", 0);//remove end point
                     if (Number(temp[7].getAttribute("y"))+Number(temp[7].getAttribute("height"))==705)
@@ -684,10 +724,12 @@ function compute_firstP(){
                     temp[3].setAttributeNS(null, "r", 0);
                     temp[6].setAttributeNS(null, "height", 0);
                     temp[7].setAttributeNS(null, "height", 0);
-                    temp[8].setAttributeNS(null, "height", 0);
+                    if (M1_1 >0 || M1_2 >0){
+                        temp[8].setAttributeNS(null, "height", 0);
+                        temp[8].setAttributeNS(null, "width", 0);
+                    }
                     temp[6].setAttributeNS(null, "width", 0);
                     temp[7].setAttributeNS(null, "width", 0);
-                    temp[8].setAttributeNS(null, "width", 0);
                     if (temp[5].getAttribute("y")==495 && temp[5].getAttribute("width")>0 )
                     temp[1].setAttributeNS(null, "r", 0);//remove end point
                     if (Number(temp[5].getAttribute("y"))+Number(temp[5].getAttribute("height"))==705)
@@ -705,10 +747,12 @@ function compute_firstP(){
                         temp[1].setAttributeNS(null, "r", 0);
                         temp[4].setAttributeNS(null, "height", 0);
                         temp[5].setAttributeNS(null, "height", 0);
-                        temp[8].setAttributeNS(null, "height", 0);
+                        if (M1_1 >0 || M1_2 >0){
+                            temp[8].setAttributeNS(null, "height", 0);
+                            temp[8].setAttributeNS(null, "width", 0);
+                        }
                         temp[4].setAttributeNS(null, "width", 0);
                         temp[5].setAttributeNS(null, "width", 0);
-                        temp[8].setAttributeNS(null, "width", 0);
                         if (temp[7].getAttribute("y")==495 && temp[7].getAttribute("width")>0)
                         temp[0].setAttributeNS(null, "r", 0);//remove end point
                         if (Number(temp[7].getAttribute("y"))+Number(temp[7].getAttribute("height"))==705)
@@ -733,33 +777,50 @@ function compute_firstP(){
                             temp[6].setAttributeNS(null, "width", 0);
                             temp[7].setAttributeNS(null, "width", 0);
                             temp[8].setAttributeNS(null, "y", Number(point2_2.x+Number(45)));
+                            if (M1_1 ==0 || M1_2 ==0){
+                                temp[4].setAttributeNS(null, "height", 210);
+                                temp[4].setAttributeNS(null, "width", 210);
+                                temp[4].setAttributeNS(null, "x", 45);
+                                temp[4].setAttributeNS(null, "y", 495);
+                                temp[4].setAttributeNS(null, "fill", "pink");
+                                svg.insertBefore(temp[4],temp[8]);
+                            }
                         }
                         if (M1_1==0 && M1_2>0){
                             temp[4].setAttributeNS(null, "height", 0);
                             temp[5].setAttributeNS(null, "height", 0);
                             temp[6].setAttributeNS(null, "height", 0);
                             temp[7].setAttributeNS(null, "height", Number(point2_2.x-Number(500)+Number(60)));
-                            temp[8].setAttributeNS(null, "height", 0);
+                            if (M1_1 >0 || M1_2 >0){
+                                temp[8].setAttributeNS(null, "height", 0);
+                                temp[8].setAttributeNS(null, "width", 0);
+                            }
                             temp[4].setAttributeNS(null, "width", 0);
                             temp[5].setAttributeNS(null, "width", 0);
                             temp[6].setAttributeNS(null, "width", 0);
-                            temp[8].setAttributeNS(null, "y", 0);
                             temp[0].setAttributeNS(null, "r", 0);//remove end point
                         }
                         if (M1_2==0 && M1_1>0){
                             temp[4].setAttributeNS(null, "height", 0);
                             temp[7].setAttributeNS(null, "height", 0);
                             temp[6].setAttributeNS(null, "height", 0);
-                            temp[8].setAttributeNS(null, "height", 0);
+                            if (M1_1 >0 || M1_2 >0){
+                                temp[8].setAttributeNS(null, "height", 0);
+                                temp[8].setAttributeNS(null, "width", 0);
+                            }
                             temp[4].setAttributeNS(null, "width", 0);
                             temp[5].setAttributeNS(null, "height",Number(700-Number(point2_2.x)-Number(40)) );
                             temp[5].setAttributeNS(null, "y", Number(point2_2.x+Number(45)));
                             temp[7].setAttributeNS(null, "width", 0);
                             temp[6].setAttributeNS(null, "width", 0);
-                            temp[8].setAttributeNS(null, "y", 0);
                             temp[2].setAttributeNS(null, "r", 0);//remove end point
                         }
                         if (M1_2==0 && M1_1==0){
+                            
+                            temp[4].setAttributeNS(null, "height", 0);
+                            temp[6].setAttributeNS(null, "height", 0);
+                            temp[4].setAttributeNS(null, "width", 0);
+                            temp[6].setAttributeNS(null, "width", 0);
                             
                             temp[0].setAttributeNS(null, "r", 0);//remove end point
                             temp[7].setAttributeNS(null, "x", 45);
@@ -777,6 +838,15 @@ function compute_firstP(){
                             temp[5].setAttributeNS(null, "y", Number(point2_2.x+Number(45)));
                             temp[5].setAttributeNS(null, "height",Number(700-Number(point2_2.x)-Number(40)) );
                             temp[5].setAttributeNS(null, "width", 10);
+                            
+                            if (M1_1 ==0 || M1_2 ==0){
+                                temp[4].setAttributeNS(null, "height", 210);
+                                temp[4].setAttributeNS(null, "width", 210);
+                                temp[4].setAttributeNS(null, "x", 45);
+                                temp[4].setAttributeNS(null, "y", 495);
+                                temp[4].setAttributeNS(null, "fill", "pink");
+                                svg.insertBefore(temp[4],temp[8]);
+                            }
                         }
                     }
                 }
@@ -796,6 +866,14 @@ function compute_firstP(){
                             temp[6].setAttributeNS(null, "width", 0);
                             temp[7].setAttributeNS(null, "width", 0);
                             temp[8].setAttributeNS(null, "y", Number(point2_2.x+Number(45)));
+                            if (M1_1 ==0 || M1_2 ==0){
+                                temp[4].setAttributeNS(null, "height", 210);
+                                temp[4].setAttributeNS(null, "width", 210);
+                                temp[4].setAttributeNS(null, "x", 45);
+                                temp[4].setAttributeNS(null, "y", 495);
+                                temp[4].setAttributeNS(null, "fill", "pink");
+                                svg.insertBefore(temp[4],temp[8]);
+                            }
                         }
                         if (M1_1==0 && M1_2>0){
                             temp[4].setAttributeNS(null, "height", 0);
@@ -803,26 +881,35 @@ function compute_firstP(){
                             temp[6].setAttributeNS(null, "height", 0);
                             temp[7].setAttributeNS(null, "height", Number(700-Number(point2_2.x)-Number(40)));
                             temp[7].setAttributeNS(null, "y", Number(point2_2.x+Number(45)));
-                            temp[8].setAttributeNS(null, "height", 0);
+                            if (M1_1 >0 || M1_2 >0){
+                                temp[8].setAttributeNS(null, "height", 0);
+                                temp[8].setAttributeNS(null, "width", 0);
+                            }
                             temp[4].setAttributeNS(null, "width", 0);
                             temp[5].setAttributeNS(null, "width", 0);
                             temp[6].setAttributeNS(null, "width", 0);
-                            temp[8].setAttributeNS(null, "y", 0);
                             temp[3].setAttributeNS(null, "r", 0);//remove end point
                         }
                         if (M1_2==0 && M1_1>0){
                             temp[4].setAttributeNS(null, "height", 0);
                             temp[7].setAttributeNS(null, "height", 0);
                             temp[6].setAttributeNS(null, "height", 0);
-                            temp[8].setAttributeNS(null, "height", 0);
+                            if (M1_1 >0 || M1_2 >0){
+                                temp[8].setAttributeNS(null, "height", 0);
+                                temp[8].setAttributeNS(null, "width", 0);
+                            }
                             temp[4].setAttributeNS(null, "width", 0);
                             temp[5].setAttributeNS(null, "height", Number(point2_2.x-Number(500)+Number(60) ));
                             temp[7].setAttributeNS(null, "width", 0);
                             temp[6].setAttributeNS(null, "width", 0);
-                            temp[8].setAttributeNS(null, "y", 0);
                             temp[1].setAttributeNS(null, "r", 0);//remove end point
                         }
                         if (M1_2==0 && M1_1==0){
+                            
+                            temp[4].setAttributeNS(null, "height", 0);
+                            temp[6].setAttributeNS(null, "height", 0);
+                            temp[4].setAttributeNS(null, "width", 0);
+                            temp[6].setAttributeNS(null, "width", 0);
                             
                             temp[3].setAttributeNS(null, "r", 0);//remove end point
                             temp[7].setAttributeNS(null, "x", 45);
@@ -840,6 +927,15 @@ function compute_firstP(){
                             temp[5].setAttributeNS(null, "y", 495);
                             temp[5].setAttributeNS(null, "height",Number(point2_2.x-Number(500)+Number(60) ));
                             temp[5].setAttributeNS(null, "width", 10);
+                            
+                            if (M1_1 ==0 || M1_2 ==0){
+                                temp[4].setAttributeNS(null, "height", 210);
+                                temp[4].setAttributeNS(null, "width", 210);
+                                temp[4].setAttributeNS(null, "x", 45);
+                                temp[4].setAttributeNS(null, "y", 495);
+                                temp[4].setAttributeNS(null, "fill", "pink");
+                                svg.insertBefore(temp[4],temp[8]);
+                            }
                         }
                     }
                     else{
@@ -847,10 +943,12 @@ function compute_firstP(){
                         temp[0].setAttributeNS(null, "r", 0);
                         temp[4].setAttributeNS(null, "height", 0);
                         temp[7].setAttributeNS(null, "height", 0);
-                        temp[8].setAttributeNS(null, "height", 0);
+                        if (M1_1 >0 || M1_2 >0){
+                            temp[8].setAttributeNS(null, "height", 0);
+                            temp[8].setAttributeNS(null, "width", 0);
+                        }
                         temp[4].setAttributeNS(null, "width", 0);
                         temp[7].setAttributeNS(null, "width", 0);
-                        temp[8].setAttributeNS(null, "width", 0);
                         if (temp[5].getAttribute("y")==495 && temp[5].getAttribute("width")>0)
                         temp[1].setAttributeNS(null, "r", 0);//remove end point
                         if (Number(temp[5].getAttribute("y"))+Number(temp[5].getAttribute("height"))==705)
@@ -1406,11 +1504,11 @@ function compute_firstP(){
             
             
             <!--mixed equilibrium--->
-            <rect class="br m1" x="40" y="490" width="20" height="20" fill="green"/>
+            <rect class="br m5" x="40" y="490" width="20" height="20" fill="green"/>
+            <rect class="br m1" x="40" y="490" width="20" height="20" fill="green" />
             <rect class="br m2" x="40" y="490" width="20" height="20" fill="green"/>
             <rect class="br m3" x="40" y="490" width="20" height="20" fill="green"/>
             <rect class="br m4" x="40" y="490" width="20" height="20" fill="green"/>
-            <rect class="br m5" x="40" y="490" width="20" height="20" fill="green"/>
             <!-- Drawing the contour-->
             <polyline class="contour" points="50,500 50,700 250,700, 250,500, 50,500"/>
             <!-- Best player1 --->
@@ -1418,10 +1516,10 @@ function compute_firstP(){
             <!-- Best player2 --->
             <polyline class="brline line2" points="50,500 50,700 250,700, 250,500"/>
             <!--pure equilibrium--->
-            <circle class="br p1" cx="50" cy="500" r="10"  draggable="false" />
-            <circle class="br p2" cx="250" cy="500" r="10" draggable="false"/>
-            <circle class="br p3" cx="250" cy="700" r="10"  draggable="false" />
-            <circle class="br p4" cx="50" cy="700" r="10" draggable="false"/>
+            <circle class="br p1" cx="50" cy="500" r="10"  draggable="false" fill="green" />
+            <circle class="br p2" cx="250" cy="500" r="10" draggable="false" fill="green"/>
+            <circle class="br p3" cx="250" cy="700" r="10"  draggable="false" fill="green"/>
+            <circle class="br p4" cx="50" cy="700" r="10" draggable="false" fill="green"/>
             
             <!--legend -->
             <line class="line2" x1="50" y1="450" x2="250" y2="450"/>
