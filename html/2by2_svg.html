@@ -35,10 +35,9 @@
     
     function initDraws() {
 
-        document.getElementById("SvgjsSvg1000").addEventListener("click", function(){
-        document.addEventListener("keyup", function(){
-                                  redraw();
-            });
+     document.getElementById("SvgjsSvg1000").addEventListener("click", function(){
+            console.log("click");
+             document.getElementById("SvgjsSvg1000").addEventListener("keypress", validatefunction);
          });
         precision=1/document.getElementById("precision").value;
         svg = document.getElementById("drawing");
@@ -68,6 +67,12 @@
         draw();
     }
 
+    function validatefunction (event){
+       if (event.keycode ==13 || event.which==13){
+           redraw();
+           document.getElementById("SvgjsSvg1000").removeEventListener("mousemove",validatefunction);
+       }
+    }
 
 /*function keyup(event) {
     temp=event.currentTarget;
