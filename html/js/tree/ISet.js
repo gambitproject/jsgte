@@ -321,6 +321,9 @@ GTE.TREE = (function (parentModule) {
                 break;
             case GTE.MODES.MERGE:
                 if (this.getPlayer().id !== 0) {
+                    var changes = new GTE.TREE.Changes();
+                    changes.addChange(GTE.MODES.MERGE, null, this);
+                    GTE.UNDOQUEUE.push(changes);
                     this.select();
                 }
                 break;

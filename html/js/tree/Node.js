@@ -148,8 +148,8 @@ GTE.TREE = (function (parentModule) {
                 //     this.createSingletonISetWithNode();
                 // }
                 changes = new GTE.TREE.Changes();
+                var nodes = [];
                 if (this.iset === null) {
-                    var nodes = [];
                     if (this.isLeaf()) {
                         // If no children, add two, since one child only doesn't
                         // make sense

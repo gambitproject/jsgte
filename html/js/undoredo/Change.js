@@ -31,7 +31,13 @@ GTE.TREE = (function (parentModule) {
                 GTE.tree.draw();
                 break;
             case GTE.MODES.MERGE:
+                if(this.selected) {
+                    if (this.node.shape !== null) {
+                        this.node.shape.toggleClass('selected');
+                    }
+                } else {
 
+                }
                 break;
             case GTE.MODES.DISSOLVE:
 
@@ -44,6 +50,10 @@ GTE.TREE = (function (parentModule) {
                 }
                 GTE.tree.draw();
                 break;
+            case GTE.UNDO.POPSELECTEDQUEUE:
+                GTE.tree.selected.pop();
+                break;
+
             default:
                 break;
         }

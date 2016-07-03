@@ -16,7 +16,7 @@ GTE.TREE = (function (parentModule) {
         }   
     };
 
-    Changes.prototype.addChange= function(mode, node) {
+    Changes.prototype.addChange= function(mode, node, iset) {
         switch (mode) {
             case GTE.MODES.ADD:
                 var change = new GTE.TREE.Change(node, GTE.MODES.ADD);
@@ -34,7 +34,27 @@ GTE.TREE = (function (parentModule) {
                 this.queue.push(change)
                 break;
             case GTE.MODES.MERGE:
-
+                if (GTE.tree.selected.length > 0 ) {
+                    var firstSelected = GTE.tree.selected.pop();
+                    // There are two selected nodes. Merge
+                    if (this !== firstSelected) {
+                        GTE.tree.merge(firstSelected, this);
+                    }
+                    GTE.tree.draw();
+                } else {
+                    if (iset.shape !== null) {
+                        var change =  new GTE.TREE.Change(iset, GTE.MODES.MERGE);
+                        change.selected = true;
+                        this.queue.push(change);
+                    }
+                    var nodes = iset.getNodes();
+                    for (var i = 0; i < nodes.length; i++) {
+                        var change =  new GTE.TREE.Change(nodes[i], GTE.MODES.MERGE);
+                        change.selected = true;
+                        this.queue.push(change);
+                    }
+                    this.queue.push(new GTE.TREE.Change(iset, GTE.UNDO.POPSELECTEDQUEUE))
+                }
                 break;
             case GTE.MODES.DISSOLVE:
 
@@ -47,12 +67,15 @@ GTE.TREE = (function (parentModule) {
                 break;
         }
     };
+
     Changes.prototype.pushChildrenDeleted = function(node) {
         for(var i = 0; i<node.children.length; i++) {
             this.addChange(GTE.MODES.DELETE, node.children[i]);
             this.pushChildrenDeleted(node.children[i]);
         }
     };
+
+
     // Add class to parent module
     parentModule.Changes = Changes;
 

@@ -93,6 +93,10 @@ var GTE = (function () {
         DEFAULT_CHANCE_NAME: "chance"
     };
 
+    GTE.UNDO = {
+      POPSELECTEDQUEUE : 5
+    };
+
     GTE.UNDOQUEUE = [];
     return GTE;
 }());
