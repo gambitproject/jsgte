@@ -1260,7 +1260,18 @@ function compute_firstP(){
             pos=(point2_2.x+Number(650))/2;
             stick[i].setAttributeNS(null, "x",pos);
         }
-        
+        if (point2_2.x>450 && point2_2.x <650){
+            var t1=Number(point2_2.x)-Number(410);
+            var t2=460+Number(point2_2.x)-Number(410);
+            svg.getElementsByClassName("arc player2")[0].setAttributeNS(null, "d", "M"+point2_2.x+",460 A"+t1+","+t1+" 0 0,1 410,"+t2);
+            svg.getElementsByClassName("stick player2")[0].setAttributeNS(null, "y1", t2);
+            svg.getElementsByClassName("stick player2")[0].setAttributeNS(null, "y2", t2);
+            
+        }
+        if (point1_2.x>50 && point1_2.x<250){
+            svg.getElementsByClassName("stick player1")[0].setAttributeNS(null, "x1", point1_2.x);
+            svg.getElementsByClassName("stick player1")[0].setAttributeNS(null, "x2", point1_2.x);
+        }
         var stick=svg.getElementsByClassName("middle11");
         for (i=0;i<stick.length;i++){
             if(point1_2.x==250){
@@ -1532,7 +1543,7 @@ function compute_firstP(){
             <line class="stick" x1="250" y1="445" x2="250" y2="455"/>
             <line class="line2 interstick1" x1="50" y1="445" x2="50" y2="455"/>
             <text class="player2 strat_right strat22" x="25" y="455">S2 </text><text class="player2" x="35" y="455">=0</text>
-            <text class="player2 strat_left strat21" x="255" y="455">S1 </text><text class="player2" x="270" y="455">=0</text>
+            <text class="player2 strat_left strat21" x="255" y="455">S1 </text><text class="player2" x="272" y="455">=0</text>
             <text class="player1 strat_right strat11" x="35" y="505">S2 </text>
             <text class="player1 strat_right strat12" x="35" y="705">S1 </text>
             <text class="player2 strat strat21" x="50" y="720">S2 </text>
@@ -1552,10 +1563,13 @@ function compute_firstP(){
             
             <line class="stick" x1="50" y1="460" x2="50" y2="480" marker-end="url(#triangle_down)"/>
             <line class="stick" x1="250" y1="460" x2="250" y2="480" marker-end="url(#triangle_down)"/>
+            <line class="stick player1" x1="250" y1="460" x2="250" y2="480" marker-end="url(#triangle_down)"/>
             <path class="arc" d="M450,460 A40,40 0 0,1 410,500"/>
             <path class="arc" d="M650,460 A240,240 0 0,1 410,700"/>
+            <path class="arc player2" d="M650,460 A240,240 0 0,1 410,700"/>
             <line class="stick" x1="410" y1="500" x2="280" y2="500" marker-end="url(#triangle_down)"/>
             <line class="stick" x1="410" y1="700" x2="280" y2="700" marker-end="url(#triangle_down)"/>
+            <line class="stick player2" x1="410" y1="700" x2="280" y2="700" marker-end="url(#triangle_down)"/>
             
         </svg>
 
