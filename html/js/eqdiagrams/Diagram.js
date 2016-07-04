@@ -146,20 +146,20 @@ GTE = (function(parentModule) {
       moving_line=null;
    }
 
-   /* Return the stratey couple of player i knowing the strategy of the other player
+   /* Return the strategy couple of player i knowing the strategy of the other player
     */
     Diagram.prototype.couple_strat = function (i,j) {
        if (i==0){
           if (j==0)
-             return [0,2];
+             return [0,2]; // meaning 11 and 21 (player 1 plays 1 and 2 while player 2 plays 1)
           else
-             return [1,3];
+             return [1,3]; // meaning 12 and 22 (player 1 plays 1 and 2 while player 2 plays 2)
        }
        else {
           if (j==0)
-             return [0,1];
+             return [0,1]; // meaning 11 and 12 
           else
-             return [2,3];
+             return [2,3]; // meaning 21 and 22
        }
    }
        
