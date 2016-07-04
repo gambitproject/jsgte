@@ -28,7 +28,7 @@
     var svgW=300;
     var moving_point;
     var payoff=[];
-    var precision;
+    var precision=1;
     var path=window.location.pathname;
     
 
@@ -38,7 +38,13 @@
      document.getElementById("SvgjsSvg1000").addEventListener("click", function(){
              document.getElementById("SvgjsSvg1000").addEventListener("keypress", validatefunction);
          });
-        precision=1/document.getElementById("precision").value;
+         if (Number(document.getElementById("precision").value) >0){
+             precision=1/Number(document.getElementById("precision").value);
+             document.getElementById("precision").value=Number(document.getElementById("precision").value);
+         }
+         else{
+             document.getElementById("precision").value=1/precision;
+         }
         svg = document.getElementById("drawing");
         svgPosition = svg.getBoundingClientRect();
         payoff=document.getElementsByClassName("pay");
@@ -88,8 +94,13 @@
 }*/
 
 function redraw(){
-
-    precision=1/document.getElementById("precision").value;
+    if (Number(document.getElementById("precision").value) >0){
+        precision=1/Number(document.getElementById("precision").value);
+        document.getElementById("precision").value=Number(document.getElementById("precision").value);
+        }
+    else{
+       document.getElementById("precision").value=1/precision;
+    }
     GTE.tree.clear();
     document.getElementById('matrix-player-1').value = GTE.tree.matrix.getMatrixInStringFormat(0);
     document.getElementById('matrix-player-2').value = GTE.tree.matrix.getMatrixInStringFormat(1);

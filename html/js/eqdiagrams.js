@@ -65,6 +65,7 @@
         }
         GTE.STRATEGICFORMMODE = GTE.STRATEGICFORMMODES.GENERAL;
         GTE.tools.createIndependentStrategicForm(x, y);
+        redraw();
         return false;
     });
 
@@ -77,6 +78,7 @@
         }
         GTE.STRATEGICFORMMODE = GTE.STRATEGICFORMMODES.ZEROSUM;
         GTE.tools.createIndependentStrategicForm(x, y);
+        redraw();
         return false;
     });
 
@@ -87,6 +89,7 @@
         }
         GTE.STRATEGICFORMMODE = GTE.STRATEGICFORMMODES.SYMMETRIC;
         GTE.tools.createIndependentStrategicForm(x, x);
+        redraw();
         return false;
     });
 
