@@ -24,7 +24,7 @@ box-sizing: border-box;
     float:left;
     margin :0;
     padding : 0;
-    width:25vw;
+    width:20vw;
 box-sizing: border-box;
 }
 
@@ -59,7 +59,7 @@ table .player2{
 
 /*-------------Drawing style-------------*/
 #drawing{
-  width:75vw;
+  width:70vw;
   /*height:100vh;*/
   float:right;
     margin :0;
