@@ -323,6 +323,10 @@ GTE.TREE = (function (parentModule) {
                 if (this.getPlayer().id !== 0) {
                     var changes = new GTE.TREE.Changes();
                     changes.addChange(GTE.MODES.MERGE, null, this);
+                    if(GTE.tree.selected.length != 0) {
+                        changes.select = true;
+                        changes.iset = GTE.tree.selected[0];
+                    }
                     GTE.UNDOQUEUE.push(changes);
                     this.select();
                 }
@@ -366,7 +370,6 @@ GTE.TREE = (function (parentModule) {
                 this.removeNode(nodes[i]);
             }
         } else { // If there are no nodes
-            this.moves = []; //remove references to moves
             GTE.tree.deleteISetFromList(this);
         }
     };

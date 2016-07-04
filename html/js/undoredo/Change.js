@@ -36,7 +36,7 @@ GTE.TREE = (function (parentModule) {
                         this.node.shape.toggleClass('selected');
                     }
                 } else {
-
+                    this.node.changeISet(this.from);
                 }
                 break;
             case GTE.MODES.DISSOLVE:
@@ -56,6 +56,8 @@ GTE.TREE = (function (parentModule) {
             case GTE.UNDO.INITIALIZEISETS:
                 GTE.tree.deinitializeISets();
                 break;
+            case GTE.UNDO.POPISET:
+                GTE.tree.isets.splice(this.index, 0, this.node);
             default:
                 break;
         }

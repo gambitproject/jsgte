@@ -6,14 +6,19 @@ GTE.TREE = (function (parentModule) {
     * @class
     * @param {type} Represents the type of the changes.
     */
-    function Changes(mode) {
+    function Changes(mode, select ) {
         this.queue = [];
+        this.select = select || null;
     }
 
     Changes.prototype.undo= function() {
         for (var i = 0; i<this.queue.length; i++) {
             this.queue[i].undo();
-        }   
+        }
+        GTE.tree.draw();
+        if(this.select) {
+            this.iset.select();
+        }
     };
 
     Changes.prototype.addChange= function(mode, node, iset) {
@@ -35,12 +40,16 @@ GTE.TREE = (function (parentModule) {
                 break;
             case GTE.MODES.MERGE:
                 if (GTE.tree.selected.length > 0 ) {
-                    var firstSelected = GTE.tree.selected.pop();
-                    // There are two selected nodes. Merge
-                    if (this !== firstSelected) {
-                        GTE.tree.merge(firstSelected, this);
+                    var selectedIset = GTE.tree.selected[0];
+                    var nodesInA = selectedIset.getNodes();
+                    var change = new GTE.TREE.Change(selectedIset, GTE.UNDO.POPISET);
+                    change.index = GTE.tree.isets.indexOf(selectedIset);
+                    this.queue.push(change);
+                    for (var i = 0; i < nodesInA.length; i++) {
+                        var change = new GTE.TREE.Change(nodesInA[i], GTE.MODES.MERGE, selectedIset);
+                        change.from = selectedIset;
+                        this.queue.push(change);
                     }
-                    GTE.tree.draw();
                 } else {
                     if (iset.shape !== null) {
                         var change =  new GTE.TREE.Change(iset, GTE.MODES.MERGE);
