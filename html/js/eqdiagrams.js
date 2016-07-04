@@ -30,10 +30,30 @@
     // };
     GTE.STORAGE = window.localStorage;
 
-    // Always start with root and two children
-    GTE.tools.newTree();
-    GTE.tree.clear();
 
+    var setSettingsToDefaults = function() {
+       GTE.STORAGE.settingsBlockSize = GTE.CONSTANTS.BLOCK_SIZE;
+       GTE.STORAGE.settingsCircleSize = GTE.CONSTANTS.CIRCLE_SIZE;
+       GTE.STORAGE.settingsLineThickness = GTE.CONSTANTS.LINE_THICKNESS;
+       GTE.STORAGE.settingsDistLevels = GTE.CONSTANTS.DIST_BETWEEN_LEVELS;
+       var colorNames = Object.keys(GTE.COLOURS);
+       var colours = [];
+       colours.push(GTE.COLOURS[colorNames[0]]);
+       for (var i = 1; i <= GTE.CONSTANTS.MAX_PLAYERS; i++) {
+          colours.push(GTE.COLOURS[colorNames[i]]);
+       }
+       GTE.STORAGE.settingsPlayersColours = JSON.stringify(colours);
+       GTE.STORAGE.settingsOrientation = GTE.CONSTANTS.DEFAULT_ORIENTATION;
+    };
+ 
+ if (GTE.STORAGE.length === 0) {
+ setSettingsToDefaults();
+ }
+ 
+ 
+ // Always start with root and two children
+ GTE.tools.newTree();
+ GTE.tree.clear();
 
 
     document.getElementById("button-independent-strategic-general").addEventListener("click", function(){
