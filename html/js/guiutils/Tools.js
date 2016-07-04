@@ -62,6 +62,9 @@ GTE.UI = (function (parentModule) {
                     // If iset tools have never been chosen
                     if (!this.isetToolsRan) {
                         // Assign singleton isets to each node with no iset
+                        var changes = new GTE.TREE.Changes();
+                        changes.pushSingletonChange(GTE.UNDO.INITIALIZEISETS);
+                        GTE.UNDOQUEUE.push(changes);
                         GTE.tree.initializeISets();
                         this.isetToolsRan = true;
                     }

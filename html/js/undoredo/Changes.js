@@ -75,6 +75,9 @@ GTE.TREE = (function (parentModule) {
         }
     };
 
+    Changes.prototype.pushSingletonChange = function(mode, node) {
+        this.queue.push(new GTE.TREE.Change(node, mode));
+    };
 
     // Add class to parent module
     parentModule.Changes = Changes;

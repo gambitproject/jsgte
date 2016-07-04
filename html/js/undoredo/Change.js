@@ -53,7 +53,9 @@ GTE.TREE = (function (parentModule) {
             case GTE.UNDO.POPSELECTEDQUEUE:
                 GTE.tree.selected.pop();
                 break;
-
+            case GTE.UNDO.INITIALIZEISETS:
+                GTE.tree.deinitializeISets();
+                break;
             default:
                 break;
         }

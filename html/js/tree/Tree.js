@@ -514,6 +514,17 @@ GTE.TREE = (function (parentModule) {
     };
 
     /**
+    * Function that deletes payoffs assigned to all players
+    */
+    Tree.prototype.deletePayoffs = function () {
+        for (var i = 1; i < this.players.length; i++) {
+                this.players[i].payoffs = [];
+        }
+    };
+
+
+
+    /**
     * Function that removes a node from the tree
     * @param {Node} node Node that will be deleted
     */
@@ -1019,6 +1030,23 @@ GTE.TREE = (function (parentModule) {
         this.draw();
         // Clean memory
         this.cleanMemoryAfterISetInitialization();
+    };
+
+    /**
+    * Undo things done by initializeISets
+    */
+    Tree.prototype.deinitializeISets = function () {
+        // Get nodes breadth first
+        var nodes = this.getAllNodes(true);
+        for(var i = 0; i<nodes.length; i++) {
+            nodes[i].iset = null;
+            nodes[i].reachedBy = null;
+        }
+        this.deletePayoffs();
+        GTE.tree.isets = [];
+        GTE.tools.isetToolsRan = false;
+        GTE.tools.switchMode(GTE.MODES.ADD);
+        this.draw();
     };
 
     /**

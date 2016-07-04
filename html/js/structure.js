@@ -94,7 +94,8 @@ var GTE = (function () {
     };
 
     GTE.UNDO = {
-      POPSELECTEDQUEUE : 5
+      POPSELECTEDQUEUE : 5,
+      INITIALIZEISETS : 6
     };
 
     GTE.UNDOQUEUE = [];
