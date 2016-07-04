@@ -36,7 +36,6 @@
     function initDraws() {
 
      document.getElementById("SvgjsSvg1000").addEventListener("click", function(){
-            console.log("click");
              document.getElementById("SvgjsSvg1000").addEventListener("keypress", validatefunction);
          });
         precision=1/document.getElementById("precision").value;
@@ -307,6 +306,17 @@ function compute_firstP(){
         var P1S2=GTE.tree.matrix.strategies[1][1].moves[0].name;
         var P2S1=GTE.tree.matrix.strategies[2][0].moves[0].name;
         var P2S2=GTE.tree.matrix.strategies[2][1].moves[0].name;
+        
+        //upates player's names
+        var name_player=svg.getElementsByClassName("player1_name");
+        for (var i=0;i<2;i++)
+        name_player[i].textContent=GTE.tree.matrix.players[1].name;
+        
+        name_player=svg.getElementsByClassName("player2_name");
+        for (var i=0;i<2;i++)
+        name_player[i].textContent=GTE.tree.matrix.players[2].name;
+        
+        
         
         // Lines update svg1
         var lines=svg.getElementsByClassName("lined1");
@@ -1366,7 +1376,7 @@ function compute_firstP(){
  </div>
 
         
-        <svg id="drawing" version="1.1" currentScale="1" height="750" width="700"> <!-- viewBox="0 0 700 750" -->
+        <svg id="drawing" version="1.1" currentScale="1" viewBox="0 0 700 750"> <!-- viewBox="0 0 700 750" --><!-- height="750" width="700"-->
             <marker id="triangle_left"
                 viewBox="0 0 10 10" refX="0" refY="0"
                 markerUnits="strokeWidth"
@@ -1385,8 +1395,8 @@ function compute_firstP(){
             <!-- Drawing the contour-->
             <polyline class="contour" points="50,50 50,350 250,350, 250,50"/>
             <!-- Legend, strategy names will be updated after-->
-            <text class="player1 title" x="150" y="40">Payoff to I</text>
-            <text class="player2 legendh" x="140" y="390">II's probability of</text><text class="player2 strat_left strat22" x="205" y="390">S2 </text>
+            <text class="player1 title" x="150" y="40">Payoff to </text><text class="player1_name player1 title" x="230" y="40">I</text>
+            <text class="player2_name player2 legendh" x="90" y="390">II</text><text class="player2 legendh" x="150" y="390">'s probability of</text><text class="player2 strat_left strat22" x="205" y="390">S2 </text>
             <!--
             <text class="player2 legendv" id="y11" x="20" y="200" transform="rotate(270 20,200)">S1</text>
             <text class="player2 legendv" id="y12" x="280" y="200" transform="rotate(90 280,200)">S2</text>
@@ -1453,8 +1463,8 @@ function compute_firstP(){
             <!-- Drawing the contour-->
             <polyline class="contour" points="450,50 450,350 650,350, 650,50" draggable="false"/>
             <!-- Legend, strategy names will be updated after-->
-            <text class="player2 title" x="550" y="40">Payoff to II</text>
-            <text class="player1 legendh" x="540" y="390">I's probability of </text><text class="player1 strat_left strat12" x="605" y="390">S2 </text>
+            <text class="player2 title" x="550" y="40">Payoff to</text><text class="player2_name player2 title" x="630" y="40"> II</text>
+            <text class="player1_name player1 legendh" x="490" y="390">I</text><text class="player1 legendh" x="550" y="390">'s probability of </text><text class="player1 strat_left strat12" x="605" y="390">S2 </text>
             <text class="player1 legendh" x="450" y="372">0</text>
             <text class="player1 legendh" x="650" y="372">1</text>
             <!--

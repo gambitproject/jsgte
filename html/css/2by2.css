@@ -22,9 +22,9 @@ box-sizing: border-box;
 
 #canvas{
     float:left;
-    margin :0;
+    /*margin :0;*/
     padding : 0;
-    width:29vw;
+    width:28vw;
 box-sizing: border-box;
 }
 
@@ -62,7 +62,7 @@ table .player2{
   width:70vw;
   /*height:100vh;*/
   float:right;
-    margin :0;
+  margin:0;
 box-sizing: border-box;
 }
 

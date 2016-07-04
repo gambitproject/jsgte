@@ -136,14 +136,47 @@ GTE.TREE = (function(parentModule) {
         this.player1 = new GTE.UI.Widgets.ContentEditable(
                 GTE.CONSTANTS.MATRIX_X - 50, GTE.CONSTANTS.MATRIX_Y,
                 GTE.CONSTANTS.CONTENT_EDITABLE_GROW_TO_RIGHT,
-                "I", "player 1")
+                this.players[1].name, "player 1")
             .colour(this.players[1].colour)
+            .onSave(function () {
+                    // Removes all blankspaces. Substitutes &nbsp; characters
+                    // with spaces and then trims the text so that there are no
+                    // spaces both at the begin and end of the text
+                    console.log(GTE.tree)
+                    var text = this.getCleanedText();
+                    console.log(text);
+                    if (text === "") {
+                    window.alert("Player name should not be empty.");
+                    } else {
+                    GTE.tree.matrix.players[1].changeName(text);
+                    }
+                    // Redraw all content editables that represent this Player
+                    // across the tree
+                    GTE.tree.updatePlayerNames(GTE.tree.matrix.players[1]);
+                    });
 
         this.player2 = new GTE.UI.Widgets.ContentEditable(
                 GTE.CONSTANTS.MATRIX_X , GTE.CONSTANTS.MATRIX_Y - 50,
                 GTE.CONSTANTS.CONTENT_EDITABLE_GROW_TO_RIGHT,
-                "II", "player 2")
+                this.players[2].name, "player 2")
             .colour(this.players[2].colour)
+            .onSave(function () {
+                    // Removes all blankspaces. Substitutes &nbsp; characters
+                    // with spaces and then trims the text so that there are no
+                    // spaces both at the begin and end of the text
+                    var text = this.getCleanedText();
+                    console.log(text);
+                    if (text === "") {
+                    window.alert("Player name should not be empty.");
+                    } else {
+                    GTE.tree.matrix.players[2].changeName(text);
+                    }
+                    
+                    console.log(text);
+                    // Redraw all content editables that represent this Player
+                    // across the tree
+                    GTE.tree.updatePlayerNames(GTE.tree.matrix.players[2]);
+                    });
 
         for(var i=0; i<this.strategies[1].length; i++) {
             var string = "";
