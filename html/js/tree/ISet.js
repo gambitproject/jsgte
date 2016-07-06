@@ -311,9 +311,13 @@ GTE.TREE = (function (parentModule) {
             case GTE.MODES.PLAYER_ASSIGNMENT:
                 // Change the player of every node in the iset
                 var nodes = this.getNodes();
+                var changes = new GTE.TREE.Changes();
                 for (var j = 0; j < nodes.length; j++) {
+                    changes.addChange(GTE.MODES.PLAYER_ASSIGNMENT, nodes[j]);
                     GTE.tree.assignSelectedPlayerToNode(nodes[j]);
                 }
+                changes.pushSingletonChange(GTE.UNDO.ASSIGNMOVES, this);
+                GTE.UNDOQUEUE.push(changes);
                 // Reassign moves (create new moves and assign them to the
                 // children nodes as reachedBy)
                 this.reassignMoves();

@@ -12,8 +12,8 @@ GTE.TREE = (function (parentModule) {
     }
 
     Changes.prototype.undo= function() {
-        for (var i = 0; i<this.queue.length; i++) {
-            this.queue[i].undo();
+        while(this.queue.length != 0) {
+            this.queue.pop().undo();
         }
         GTE.tree.draw();
         if(this.select) {
@@ -84,10 +84,22 @@ GTE.TREE = (function (parentModule) {
         }
     };
 
-    Changes.prototype.pushSingletonChange = function(mode, node) {
-        this.queue.push(new GTE.TREE.Change(node, mode));
+    Changes.prototype.pushSingletonChange = function(mode, node, from) {
+        this.queue.push(new GTE.TREE.Change(node, mode, from));
     };
 
+    Changes.prototype.pushMultiactionMerge = function(iset, mergedIset) {
+        var selectedIset = iset;
+        var nodesInA = selectedIset.getNodes();
+        var change = new GTE.TREE.Change(selectedIset, GTE.UNDO.POPISET);
+        change.index = GTE.tree.isets.indexOf(selectedIset);
+        this.queue.push(change);
+        for (var i = 0; i < nodesInA.length; i++) {
+            var change = new GTE.TREE.Change(nodesInA[i], GTE.MODES.MERGE, selectedIset);
+            change.from = selectedIset;
+            this.queue.push(change);
+        }
+    }
     // Add class to parent module
     parentModule.Changes = Changes;
 

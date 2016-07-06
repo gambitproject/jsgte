@@ -131,14 +131,19 @@ GTE.TREE = (function(parentModule) {
                 var playerInLoop = null;
                 var numberOfChildrenInLoop = -1;
                 var isetInLoop = null;
+                var changes = new GTE.TREE.Changes();
                 for (var m = 0; m < this.nodesInLine.length; m++) {
                     if (playerInLoop === this.nodesInLine[m].player &&
                         numberOfChildrenInLoop === this.nodesInLine[m].children.length) {
+                        changes.pushMultiactionMerge(isetInLoop, this.nodesInLine[m].iset);
                         isetInLoop = GTE.tree.merge(isetInLoop, this.nodesInLine[m].iset);
                     }
                     isetInLoop = this.nodesInLine[m].iset;
                     numberOfChildrenInLoop = this.nodesInLine[m].children.length;
                     playerInLoop = this.nodesInLine[m].player;
+                }
+                if(changes.queue.length >= 0) {
+                    GTE.UNDOQUEUE.push(changes);
                 }
                 GTE.tree.draw();
                 break;

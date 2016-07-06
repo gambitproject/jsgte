@@ -58,6 +58,8 @@ GTE.TREE = (function (parentModule) {
                 break;
             case GTE.UNDO.POPISET:
                 GTE.tree.isets.splice(this.index, 0, this.node);
+            case GTE.UNDO.ASSIGNMOVES:
+                this.node.reassignMoves();
             default:
                 break;
         }
