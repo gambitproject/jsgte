@@ -293,11 +293,15 @@ GTE.TREE = (function (parentModule) {
                 break;
             case GTE.MODES.DELETE:
                 var children = this.getChildrenNodes();
+                var changes = new GTE.TREE.Changes();
                 if (children.length === 0) {
                     // Delete node
+                    changes.addChange(GTE.MODES.DELETE, this.firstNode);
+                    changes.pushRemovedIset(this);
                     GTE.tree.deleteNode(this.firstNode);
                 } else {
                     // Delete all children
+                    changes.assignChangesOnDeletingIset(this);
                     for (var i = 0; i < children.length; i++) {
                         // deleteNode() will delete everything below as well
                         GTE.tree.deleteNode(children[i]);
@@ -305,6 +309,7 @@ GTE.TREE = (function (parentModule) {
                     // Dissolve current iset
                     this.dissolve();
                 }
+                GTE.UNDOQUEUE.push(changes);
                 // Tell the tree to redraw itself
                 GTE.tree.draw();
                 break;

@@ -32,6 +32,9 @@ GTE.TREE = (function (parentModule) {
                 newNode.player = node.player;
                 newNode.parent = node.parent;
                 newNode.reachedBy = node.reachedBy;
+                if(node.iset !== null) {
+                    newNode.iset = node.iset;
+                }
                 if(node.parent != null) {
                     newNode.index = node.parent.children.indexOf(node);
                 }
@@ -100,6 +103,40 @@ GTE.TREE = (function (parentModule) {
             this.queue.push(change);
         }
     }
+
+    Changes.prototype.pushSingleNodeWithRemovedIset = function(node) {
+        var change = new GTE.TREE.Change(node, GTE.MODES.MERGE, node.iset);
+        change.from = node.iset;
+        this.queue.push(change);
+    }
+
+    Changes.prototype.pushRemovedIset = function(iset) {
+        var change = new GTE.TREE.Change(iset, GTE.UNDO.POPISET);
+        change.index = GTE.tree.isets.indexOf(iset);
+        this.queue.push(change);
+    }
+
+    Changes.prototype.assignChangesOnDeletingIset = function(iset) {
+        var children = iset.getChildrenNodes();
+        for(var i = 0; i<children.length; i++) {
+            this.assignChangesOnDeletingIsetToNode(children[i]);
+        }
+        var nodes = iset.getNodes();
+        for(var i = 0; i<nodes.length; i++) {
+            this.addChange(GTE.MODES.PLAYER_ASSIGNMENT, nodes[i]);
+        }
+        for(var i = 0; i<GTE.tree.isets.length; i++) {
+            this.pushRemovedIset(GTE.tree.isets[i]);
+        }
+    }
+
+    Changes.prototype.assignChangesOnDeletingIsetToNode = function(node) {
+        for(var i = 0; i<node.children.length; i++) {
+            assignChangesOnDeletingIsetToNode(node.children[i]);
+        }
+        this.addChange(GTE.MODES.DELETE, node);
+    }
+
     // Add class to parent module
     parentModule.Changes = Changes;
 

@@ -24,11 +24,13 @@ GTE.TREE = (function (parentModule) {
                 this.node.player = this.from.player;
                 this.node.parent = this.from.parent;
                 this.node.reachedBy = this.from.reachedBy;
-                if(this.node.parent != null) {
+                if(this.node.parent !== null) {
                     this.node.parent.children.splice(this.from.index, 0, this.node);
                 }
+                if(this.from.iset !== null) {
+                    this.from.iset.addNode(this.node);
+                }
                 GTE.tree.positionsUpdated = false;
-                GTE.tree.draw();
                 break;
             case GTE.MODES.MERGE:
                 if(this.selected) {
@@ -57,7 +59,8 @@ GTE.TREE = (function (parentModule) {
                 GTE.tree.deinitializeISets();
                 break;
             case GTE.UNDO.POPISET:
-                GTE.tree.isets.splice(this.index, 0, this.node);
+                if(GTE.tree.isets.indexOf(this.node) == -1)
+                    GTE.tree.isets.splice(this.index, 0, this.node);
             case GTE.UNDO.ASSIGNMOVES:
                 this.node.reassignMoves();
             default:
