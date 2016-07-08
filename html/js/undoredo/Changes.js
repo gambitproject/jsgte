@@ -119,12 +119,16 @@ GTE.TREE = (function (parentModule) {
     Changes.prototype.assignChangesOnDeletingIset = function(iset) {
         var children = iset.getChildrenNodes();
         for(var i = 0; i<children.length; i++) {
+            this.assignIsetOnDeletingIsetToNode(children[i]);
+        }
+        for(var i = 0; i<children.length; i++) {
             this.assignChangesOnDeletingIsetToNode(children[i]);
         }
         var nodes = iset.getNodes();
         for(var i = 0; i<nodes.length; i++) {
             this.addChange(GTE.MODES.PLAYER_ASSIGNMENT, nodes[i]);
         }
+        this.assignMovesOnDeletingIset(iset);
         for(var i = 0; i<GTE.tree.isets.length; i++) {
             this.pushRemovedIset(GTE.tree.isets[i]);
         }
@@ -137,6 +141,33 @@ GTE.TREE = (function (parentModule) {
         this.addChange(GTE.MODES.DELETE, node);
     }
 
+    Changes.prototype.assignIsetOnDeletingIsetToNode = function(node) {
+        for(var i = 0; i<node.children.length; i++) {
+            this.assignIsetOnDeletingIsetToNode(node.children[i]);
+        }
+        this.queue.push(new GTE.TREE.Change(node, GTE.UNDO.ASSIGNISET, node.iset));
+    }
+
+    Changes.prototype.assignMovesOnDeletingIset = function(iset) {
+        var children = iset.getChildrenNodes();
+        for(var i = 0; i<children.length; i++) {
+            this.assignMovesOnDeletingIset(children[i].iset);
+        }
+        for(var i = iset.moves.length-1; i>=0 ; i--) {
+            var change = new GTE.TREE.Change(iset, GTE.UNDO.POPMOVES);
+            change.index = i;
+            change.move = iset.moves[i];
+            this.queue.push(change);
+        }
+    }
+
+    Changes.prototype.assignSingletonIsetDeletion = function(iset) {
+        this.queue.push(new GTE.TREE.Change(iset.firstNode, GTE.UNDO.ASSIGNISET, iset.firstNode.iset));
+        this.pushRemovedIset(iset);
+        this.assignMovesOnDeletingIset(iset.firstNode.parent.iset);
+        this.addChange(GTE.MODES.PLAYER_ASSIGNMENT, iset.firstNode.parent);
+        this.addChange(GTE.MODES.DELETE, iset.firstNode);
+    }
     // Add class to parent module
     parentModule.Changes = Changes;
 

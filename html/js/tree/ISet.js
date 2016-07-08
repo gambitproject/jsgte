@@ -296,8 +296,7 @@ GTE.TREE = (function (parentModule) {
                 var changes = new GTE.TREE.Changes();
                 if (children.length === 0) {
                     // Delete node
-                    changes.addChange(GTE.MODES.DELETE, this.firstNode);
-                    changes.pushRemovedIset(this);
+                    changes.assignSingletonIsetDeletion(this);
                     GTE.tree.deleteNode(this.firstNode);
                 } else {
                     // Delete all children

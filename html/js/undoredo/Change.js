@@ -24,11 +24,9 @@ GTE.TREE = (function (parentModule) {
                 this.node.player = this.from.player;
                 this.node.parent = this.from.parent;
                 this.node.reachedBy = this.from.reachedBy;
+                this.node.deleted = false;
                 if(this.node.parent !== null) {
                     this.node.parent.children.splice(this.from.index, 0, this.node);
-                }
-                if(this.from.iset !== null) {
-                    this.from.iset.addNode(this.node);
                 }
                 GTE.tree.positionsUpdated = false;
                 break;
@@ -61,8 +59,18 @@ GTE.TREE = (function (parentModule) {
             case GTE.UNDO.POPISET:
                 if(GTE.tree.isets.indexOf(this.node) == -1)
                     GTE.tree.isets.splice(this.index, 0, this.node);
+                break;
             case GTE.UNDO.ASSIGNMOVES:
                 this.node.reassignMoves();
+                break;
+            case GTE.UNDO.POPMOVES:
+                if(this.node.moves.indexOf(this.move) == -1) {
+                    this.node.moves.splice(this.index, 0, this.move);
+                }
+                break;
+            case GTE.UNDO.ASSIGNISET:
+               this.from.addNode(this.node);
+                break;
             default:
                 break;
         }
