@@ -132,7 +132,7 @@ GTE.TREE = (function (parentModule) {
 
     Changes.prototype.assignChangesOnDeletingIsetToNode = function(node) {
         for(var i = 0; i<node.children.length; i++) {
-            assignChangesOnDeletingIsetToNode(node.children[i]);
+            this.assignChangesOnDeletingIsetToNode(node.children[i]);
         }
         this.addChange(GTE.MODES.DELETE, node);
     }
