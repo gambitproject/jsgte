@@ -340,7 +340,10 @@ GTE.TREE = (function (parentModule) {
                 }
                 break;
             case GTE.MODES.DISSOLVE:
+                var changes = new GTE.TREE.Changes();
+                changes.pushChangesBeforeDisolving(this);
                 this.dissolve();
+                GTE.UNDOQUEUE.push(changes);
                 GTE.tree.draw();
                 break;
             default:

@@ -69,7 +69,12 @@ GTE.TREE = (function (parentModule) {
                 }
                 break;
             case GTE.UNDO.ASSIGNISET:
-               this.from.addNode(this.node);
+                if(this.to) {
+                    this.node.changeISet(this.from);
+                }
+                else if(this.from != null) {
+                   this.from.addNode(this.node);
+                }
                 break;
             default:
                 break;

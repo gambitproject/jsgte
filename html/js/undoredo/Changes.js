@@ -168,6 +168,15 @@ GTE.TREE = (function (parentModule) {
         this.addChange(GTE.MODES.PLAYER_ASSIGNMENT, iset.firstNode.parent);
         this.addChange(GTE.MODES.DELETE, iset.firstNode);
     }
+
+    Changes.prototype.pushChangesBeforeDisolving = function(iset) {
+        var nodes = iset.getNodes();
+        for(var i = 0; i<nodes.length; i++) {
+            this.queue.push(new GTE.TREE.Change(nodes[i], GTE.UNDO.ASSIGNISET, iset, true));
+        }
+        this.assignMovesOnDeletingIset(iset);
+        this.pushRemovedIset(iset);
+    }
     // Add class to parent module
     parentModule.Changes = Changes;
 
