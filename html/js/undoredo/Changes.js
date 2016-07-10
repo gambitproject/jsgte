@@ -169,8 +169,10 @@ GTE.TREE = (function (parentModule) {
         this.addChange(GTE.MODES.DELETE, iset.firstNode);
     }
 
-    Changes.prototype.pushChangesBeforeDisolving = function(iset) {
+    Changes.prototype.pushChangesBeforeDissolving = function(iset) {
         var nodes = iset.getNodes();
+        if(nodes.length <= 1)
+            return false;
         for(var i = 0; i<nodes.length; i++) {
             this.queue.push(new GTE.TREE.Change(nodes[i], GTE.UNDO.ASSIGNISET, iset, true));
         }
