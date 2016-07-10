@@ -281,7 +281,6 @@ GTE.TREE = (function (parentModule) {
         switch (GTE.MODE) {
             case GTE.MODES.ADD:
                 var changes = new GTE.TREE.Changes();
-                changes.pushChangesBeforeDisolving(this);
                 if (this.numberOfMoves() === 0) {
                     // If no children, add two, since one child only doesn't
                     // make sense
@@ -290,6 +289,8 @@ GTE.TREE = (function (parentModule) {
                     var iset = GTE.tree.addChildISetTo(this);
                     changes.pushChangesAfterAddingIsets(iset);
                 } else {
+                    if(this.getNodes().length > 1)
+                        changes.pushChangesBeforeDisolving(this);
                     var isets = GTE.tree.addChildNodeToISet(this);
                     changes.pushChangesAfterAddingIsetsToArray(isets);
                 }
@@ -355,7 +356,6 @@ GTE.TREE = (function (parentModule) {
             default:
                 break;
         }
-
     };
 
     /**

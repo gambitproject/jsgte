@@ -164,11 +164,11 @@ GTE.TREE = (function (parentModule) {
                         changes.addChange(GTE.MODES.ADD, nodeCur);
                     // Tell the tree to redraw itself
                     GTE.tree.draw();
+                    if(undo)
+                        GTE.UNDOQUEUE.push(changes);
                 } else {
                     this.iset.onClick();
                 }
-                if(undo)
-                    GTE.UNDOQUEUE.push(changes);
                 return nodes;
                 break;
             case GTE.MODES.DELETE:
