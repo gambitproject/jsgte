@@ -177,6 +177,16 @@ GTE.TREE = (function (parentModule) {
         this.assignMovesOnDeletingIset(iset);
         this.pushRemovedIset(iset);
     }
+
+    Changes.prototype.pushChangesAfterAddingIsets = function(iset) {
+        this.queue.push(new GTE.TREE.Change(iset, GTE.UNDO.ADDISET));
+    }
+    Changes.prototype.pushChangesAfterAddingIsetsToArray = function(isets) {
+        for(var i = 0; i<isets.length; i++) {
+            this.pushChangesAfterAddingIsets(isets[i]);
+        }
+    }
+
     // Add class to parent module
     parentModule.Changes = Changes;
 

@@ -280,14 +280,20 @@ GTE.TREE = (function (parentModule) {
     ISet.prototype.onClick = function () {
         switch (GTE.MODE) {
             case GTE.MODES.ADD:
+                var changes = new GTE.TREE.Changes();
+                changes.pushChangesBeforeDisolving(this);
                 if (this.numberOfMoves() === 0) {
                     // If no children, add two, since one child only doesn't
                     // make sense
-                    GTE.tree.addChildISetTo(this);
-                    GTE.tree.addChildISetTo(this);
+                    var iset = GTE.tree.addChildISetTo(this);
+                    changes.pushChangesAfterAddingIsets(iset);
+                    var iset = GTE.tree.addChildISetTo(this);
+                    changes.pushChangesAfterAddingIsets(iset);
                 } else {
-                    GTE.tree.addChildNodeToISet(this);
+                    var isets = GTE.tree.addChildNodeToISet(this);
+                    changes.pushChangesAfterAddingIsetsToArray(isets);
                 }
+                GTE.UNDOQUEUE.push(changes);
                 // Tell the tree to redraw itself
                 GTE.tree.draw();
                 break;

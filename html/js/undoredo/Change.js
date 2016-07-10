@@ -76,6 +76,9 @@ GTE.TREE = (function (parentModule) {
                    this.from.addNode(this.node);
                 }
                 break;
+            case GTE.UNDO.ADDISET:
+                GTE.tree.deleteNode(this.node.firstNode);
+            break;
             default:
                 break;
         }
