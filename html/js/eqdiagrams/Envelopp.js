@@ -1,4 +1,4 @@
-GTE.DIAGRAM = (function (parentModule) {
+GTE.DIAGRAM = (function (P) {
     "use strict";
 
     /**
@@ -6,20 +6,20 @@ GTE.DIAGRAM = (function (parentModule) {
     * @class
     */
     function Envelopp(p) {
-        this.player = p;
-        this.points = [[0,0],[0,0],[0,0]]; // left, middle and right points.
-    }
+       this.player = p;
+       /* this.points = [[0,0],[0,0],[0,0]]; // left, middle and right points.*/
+               };
     
     /*
     Return player
     */
-    Envelopp.prototype.setPoint = function(i,x,y){
-       this.points[i] = [x , y];
-    }
+    /*Envelopp.prototype.setPoint = function(i,x,y){
+       this.points[i] = [x,y];
+               };*/
 
 
     // Add class to parent module
-    parentModule.Envelopp = Envelopp;
+    P.Envelopp = Envelopp;
 
-    return parentModule;
+    return P;
 }(GTE.DIAGRAM)); // Add to GTE.DIAGRAM sub-module

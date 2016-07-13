@@ -2,7 +2,7 @@
     "use strict";
    //adding some lines that are to be inserted in structure.js
     GTE.PAGE_NAME=window.location.pathname.split('/')[window.location.pathname.split('/').length-1];
-    if (GTE.PAGE_NAME=="2by2_svg.html")
+    if (GTE.PAGE_NAME=="2byn.html")
        GTE.PAGE_NAME="eqdiagrams.html";
  
     GTE.PUREQ_RADIUS=10;
@@ -14,20 +14,8 @@
     // GTE is initialized by the library
     GTE.canvas = SVG('canvas').size("100%", "100%").attr({'style': 'background: #fff'});
     GTE.tools = new GTE.UI.Tools();
-   // GTE.diagram = new GTE.Diagram(); //new
+    GTE.diagram = new GTE.Diagram(); //new
     GTE.svg = document.getElementById("drawing");
-    // var playerListener = function(picker) {
-    //     var closeControl = true;
-    //     picker.addEventListener("focus", function() {
-    //         // Focus is fired both when the picker opens and closes
-    //         // closeControl variable is used to control whether the
-    //         // picker is opening or closing
-    //         closeControl = !closeControl;
-    //         if (closeControl) {
-    //             GTE.tree.changePlayerColour(picker.getAttribute("player"), picker.value);
-    //         }
-    //     });
-    // };
     GTE.STORAGE = window.localStorage;
 
 
@@ -59,10 +47,7 @@
     document.getElementById("button-independent-strategic-general").addEventListener("click", function(){
         var x=2;
         var y=2;
-        if ( GTE.PAGE_NAME!="eqdiagrams.html"){
-            x = prompt("Enter the number of moves for the first player", "2");
-            y = prompt("Enter the number of moves for the second player", "2");
-        }
+        x = prompt("Enter the number of moves for the first player", "2");
         GTE.STRATEGICFORMMODE = GTE.STRATEGICFORMMODES.GENERAL;
         GTE.tools.createIndependentStrategicForm(x, y);
         redraw();
@@ -72,10 +57,7 @@
     document.getElementById("button-independent-strategic-zerosum").addEventListener("click", function(){
         var x=2;
         var y=2;
-        if ( GTE.PAGE_NAME!="eqdiagrams.html"){
-            x = prompt("Enter the number of moves for the first player", "2");
-            y = prompt("Enter the number of moves for the second player", "2");
-        }
+        x = prompt("Enter the number of moves for the first player", "2");
         GTE.STRATEGICFORMMODE = GTE.STRATEGICFORMMODES.ZEROSUM;
         GTE.tools.createIndependentStrategicForm(x, y);
         redraw();
@@ -143,7 +125,7 @@
         return false;
     });
 
-   /* document.getElementById("SvgjsSvg1000").addEventListener("click", function(){
+    document.getElementById("SvgjsSvg1000").addEventListener("click", function(){
         document.addEventListener("keyup", function(){
                                   GTE.diagrams.update();
             });
@@ -157,7 +139,7 @@
     }
     for(i=0;i<4;i++){
  lines[i].addEventListener("mousedown", GTE.diagram.doMouseDownLine());
-    }new */
+    }
     /*
         Hide irrelevant buttons for strategic.html
     */

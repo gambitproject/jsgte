@@ -14,7 +14,7 @@
     </head>
 </script>
 
-<body onload="initDraws()">
+<body>
         <!--[if lt IE 8]>
             <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
@@ -33,7 +33,7 @@
     
 
     
-    function initDraws() {
+   /* function initDraws() {
 
      document.getElementById("SvgjsSvg1000").addEventListener("click", function(){
              document.getElementById("SvgjsSvg1000").addEventListener("keypress", validatefunction);
@@ -55,45 +55,21 @@
         for(i=0;i<4;i++){
             lines[i].addEventListener("mousedown", doMouseDown);
         }
-        /*var s22= svg.getElementsByClassName("strat22");
-        var s21= svg.getElementsByClassName("strat21");
-        var s12= svg.getElementsByClassName("strat12");
-        var s11= svg.getElementsByClassName("strat11");
-        for (i=0;i<s22.length;i++)
-            s22[i].addEventListener("keyup",edit_text);
-        for (i=0;i<s21.length;i++)
-            s21[i].addEventListener("keyup",edit_text);
-        for (i=0;i<s11.length;i++)
-            s11[i].addEventListener("keyup",edit_text);
-        for (i=0;i<s12.length;i++)
-            s12[i].addEventListener("keyup",edit_text);*/
         compute_firstP();
         compute_secondP();
         draw();
-    }
+    }*/
 
-    function validatefunction (event){
+    /*function validatefunction (event){
        if (event.keycode ==13 || event.which==13){
            redraw();
            document.getElementById("SvgjsSvg1000").removeEventListener("mousemove",validatefunction);
        }
-    }
+    }*/
 
-/*function keyup(event) {
-    temp=event.currentTarget;
-    console.log("Down: "+this.getAttribute("class"));
-    moving_point=this;
-    if (this.getAttribute("class").includes("line_trans")){
-        Pos_prev=getMousePosition(event);
-        document.addEventListener("mousemove", doMouseMoveLine);
-    }
-    else
-    document.addEventListener("mousemove", doMouseMove);
-    document.addEventListener("mouseup", doMouseUp);
-    this.removeEventListener("mousedown", doMouseDown);
-}*/
 
-function redraw(){
+
+/*function redraw(){
     if (Number(document.getElementById("precision").value) >0){
         precision=1/Number(document.getElementById("precision").value);
         document.getElementById("precision").value=Number(document.getElementById("precision").value);
@@ -108,17 +84,17 @@ function redraw(){
     compute_firstP();
     compute_secondP();
     draw();
-}
+}*/
 
-function getMousePosition(e) {
+/*function getMousePosition(e) {
     return {
         x: e.clientX ,
         y: e.clientY
   };
-}
+}*/
 
 
-function doMouseDown(event) {
+/*function doMouseDown(event) {
     event.preventDefault();
     console.log("Down: "+this.getAttribute("class"));
     moving_point=this;
@@ -311,8 +287,8 @@ function compute_firstP(){
             point2_3={x:svgW-50+400,y:svgH-50-maxP2_2*30};
         }
     }
-    
-    function draw(){
+*/
+   /* function draw(){
         var P1S1=GTE.tree.matrix.strategies[1][0].moves[0].name;
         var P1S2=GTE.tree.matrix.strategies[1][1].moves[0].name;
         var P2S1=GTE.tree.matrix.strategies[2][0].moves[0].name;
@@ -412,16 +388,7 @@ function compute_firstP(){
             stick[i].setAttributeNS(null, "x1",point2_2.x);
             stick[i].setAttributeNS(null, "x2",point2_2.x);
         }
-        
-        //change legend according to strategies name.
-        /*var temp= svg.getElementById("y11");
-        temp.textContent=P2S1;
-        temp= svg.getElementById("y12");
-        temp.textContent=P2S2;
-        temp= svg.getElementById("y21");
-        temp.textContent=P1S1;
-        temp= svg.getElementById("y22");
-        temp.textContent=P1S2;*/
+
         var temp= svg.getElementsByClassName("strat22");
         for (i=0;i<temp.length;i++){
             temp[i].textContent=P2S2;
@@ -987,274 +954,7 @@ function compute_firstP(){
                 }
             }
         }
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-       /* if (M2_1==1){
-            path2="50,500";
-            path2_2=", 50,";
-            if (M1_1==1 || M1_1==0){
-                temp[nb].setAttributeNS(null, "r", 10);
-                temp[nb].setAttributeNS(null, "cx", 50);
-                temp[nb].setAttributeNS(null, "cy", 500);
-                nb++;
-            }
-            
-        }
-        else{
-            if (M2_1==0 &&(M1_1==1 || M1_1==0)){
-                temp[nb].setAttributeNS(null, "r", 10);
-                temp[nb].setAttributeNS(null, "cx", 50);
-                temp[nb].setAttributeNS(null, "cy", 500);
-                nb++;
-            }
-            if (M1_2==1 || M1_2==0){
-                temp[nb].setAttributeNS(null, "r", 10);
-                temp[nb].setAttributeNS(null, "cx", 250);
-                temp[nb].setAttributeNS(null, "cy", 500);
-                nb++;
-            }
-            if (M2_1==2){
-                path2="250,500";
-                path2_2=", 250," ;
-            }
-            else{
-                path2="50,500, 250,500";
-                path2_2=", 250,";
-            }
-        }
-        if (M2_2==1){
-            path2_3=", 50,"
-            path2_4=", 50,700";
-            if (M1_1==2|| M1_1==0){
-                temp[nb].setAttributeNS(null, "r", 10);
-                temp[nb].setAttributeNS(null, "cx", 50);
-                temp[nb].setAttributeNS(null, "cy", 700);
-                nb++;
-            }
-            
-        }
-        else{
-            
-            if (M2_2==0&&(M1_1==2|| M1_1==0)){
-                temp[nb].setAttributeNS(null, "r", 10);
-                temp[nb].setAttributeNS(null, "cx", 50);
-                temp[nb].setAttributeNS(null, "cy", 700);
-                nb++;
-            }
-            path2_3=", 250,"
-                if (M1_2==2 || M1_2==0){
-                    temp[nb].setAttributeNS(null, "r", 10);
-                    temp[nb].setAttributeNS(null, "cx", 250);
-                    temp[nb].setAttributeNS(null, "cy", 700);
-                    nb++;
-                }
-                
-            if (M2_2==0){
-                path2_4=", 250,700, 50,700";
-            }
-            else{
-                path2_4=", 250,700";
-            }
-        }
-        if (M1_1==1){
-            path1="50,500, ";
-            path1_2=",500, ";
-        }
-        else{
-            if(M1_1==2){
-            path1="50,700, ";
-            path1_2=",700, ";
-            }
-            else{
-                path1="50,500, 50,700, ";
-                path1_2=",700, ";
-            }
-        }
-        if (M1_2==1){
-            path1_3=",500, ";
-            path1_4="250,500";
-        }
-        else{
-            if(M1_2==2){
-                path1_3=",700, ";
-                path1_4="250,700";}
-            else{
-                path1_3=",700, ";
-            path1_4="250,700, 250,500";
-            }
-        }
-        if (point1_2.x>50 && point1_2.x<250 && point2_2.x>450 && point2_2.x<650){
-            var posx=~~(50+point1_2.x-50);
-            temp[4].setAttributeNS(null, "x", posx-10);
-            var posy=~~(500+point2_2.x-450);
-            temp[4].setAttributeNS(null, "y", posy-10);
-            temp[4].setAttributeNS(null, "height", 20);
-            temp[4].setAttributeNS(null, "width", 20);
-            path1=path1+posx+path1_2+posx+path1_3+path1_4;
-            path2=path2+path2_2+posy+path2_3+posy+path2_4;
-       }
-        else{
-            if (point2_2.x>450 && point2_2.x<650){
-                posy=~~(500+point2_2.x-450);
-                temp[4].setAttributeNS(null, "y", posy-10);
-                temp[4].setAttributeNS(null, "height", 20);
-                temp[4].setAttributeNS(null, "width", 20);
-                path2=path2+path2_2+posy+path2_3+posy+path2_4;
-                if(M1_1==0){
-                    path1="50,500, 50,700, ";
-                    rad=(700-posy);
-                    temp[4].setAttributeNS(null, "y", 700-rad);
-                    temp[4].setAttributeNS(null, "x", 40);
-                    temp[4].setAttributeNS(null, "height", rad);
-                    temp[4].setAttributeNS(null, "width", 20);
-                    if(M2_1==1){
-                        rad=(posy-500);
-                        temp[4].setAttributeNS(null, "x", 40);
-                        temp[4].setAttributeNS(null, "y", 500);
-                        temp[4].setAttributeNS(null, "height", rad);
-                        temp[4].setAttributeNS(null, "width", 20)
-                    }
-                }
-                else if (M1_1==1)
-                    path1="50,500, ";
-                else
-                    path1="50,700, ";
-                if(M1_2==0){
-                    if(M2_1==1){
-                        rad=(700-posy);
-                        temp[5].setAttributeNS(null, "x", 240);
-                        temp[5].setAttributeNS(null, "y", 700-rad);
-                        temp[5].setAttributeNS(null, "height", rad);
-                        temp[5].setAttributeNS(null, "width", 20)
-                    }
-                    else{;
-                        rad=(posy-500);
-                        temp[5].setAttributeNS(null, "x", 240);
-                        temp[5].setAttributeNS(null, "y", 500);
-                        temp[5].setAttributeNS(null, "height", rad);
-                        temp[5].setAttributeNS(null, "width", 20);
-                    }
-                    if (M1_1==1)
-                        path1=path1+"250,500, 250,700";
-                    else
-                        path1=path1+"250,700, 250,500";
-                }
-                else {
-                    
-                    temp[5].setAttributeNS(null, "height", 0);
-                    temp[5].setAttributeNS(null, "width", 0);
-                    if (M1_2==1){
-                        if(M1_1==1)
-                            path1=path1+"250,500";
-                        else
-                        path1="250,500, "+path1;
-                    }
-                    else
-                        path1=path1+"250,700";
-                }
-                if(M1_1==0 && M1_2==0)
-                    path1=path1+", 50,500";
-            }
-            else{
-                if(point1_2.x>50 && point1_2.x<250){
-                    var posx=~~(50+point1_2.x-50);
-                    temp[4].setAttributeNS(null, "x", posx-10);
-                    temp[4].setAttributeNS(null, "height", 20);
-                    temp[4].setAttributeNS(null, "width", 20);
-                    path1=path1+posx+path1_2+posx+path1_3+path1_4;
-                    if(M2_1==0){
-                        path2="50,500, 250,500, ";
-                        if(M1_1==1){
-                            rad=(posx-50);
-                            temp[4].setAttributeNS(null, "x", 50);
-                            temp[4].setAttributeNS(null, "y", 490);
-                            temp[4].setAttributeNS(null, "height", 20);
-                            temp[4].setAttributeNS(null, "width", rad);
-                        }
-                        else{
-                            rad=(250-posx);
-                            temp[4].setAttributeNS(null, "x", 250-Number(rad));
-                            temp[4].setAttributeNS(null, "y", 490);
-                            temp[4].setAttributeNS(null, "height", 20);
-                            temp[4].setAttributeNS(null, "width", rad);
-                        }
-                    }
-                    else if (M2_1==1)
-                    path2="50,500, ";
-                    else
-                    path2="250,500, ";
-                    if (M2_2==0){
-                        //path2=path2+"50,500, 250,500, ";
-                        if(M1_1==1){
-                            rad=(250-posx);
-                            temp[5].setAttributeNS(null, "x", 250-Number(rad));
-                            temp[5].setAttributeNS(null, "y", 690);
-                            temp[5].setAttributeNS(null, "height", 20);
-                            temp[5].setAttributeNS(null, "width", rad);
-                        }
-                        else{
-                            rad=(posx-50);
-                            temp[5].setAttributeNS(null, "x", 50);
-                            temp[5].setAttributeNS(null, "y", 690);
-                            temp[5].setAttributeNS(null, "height", 20);
-                            temp[5].setAttributeNS(null, "width", rad);
-                        }
-                        if(M2_1==1)
-                        path2=path2+"50,700, 250,700";
-                        else
-                        path2=path2+"250,700, 50,700";
-                    }
-                    else{
-                        temp[5].setAttributeNS(null, "height", 0);
-                        temp[5].setAttributeNS(null, "width", 0);
-                           if (M2_2==1){
-                        if(M2_1==1)
-                        path2=path2+"50,700";
-                        else
-                        path2="50,700, "+path2;
-                        }
-                        else
-                        path2=path2+"250,700";
-                    }
-                    if(M2_1==0 && M2_2==0)
-                    path2=path2+", 50,500";
-                }
-                else{
-                    temp[4].setAttributeNS(null, "height", 0);
-                    temp[4].setAttributeNS(null, "width", 0);
-                    temp[5].setAttributeNS(null, "height", 0);
-                    temp[5].setAttributeNS(null, "width", 0);
-                    if(M1_1==0 &&M1_2==1)
-                        path1=path1_4+","+path1;
-                    else{
-                        if(M1_2==0 &&M1_1==1)
-                            path1=path1_4+","+path1;
-                        else
-                            path1=path1+path1_4;
-                    }
-                    if(M1_1==0 && M1_2==0)
-                        path1=path1+", 50,500";
-                    if(M2_1==0 && M2_2==1)
-                        path2="50,700"+path2_4+","+path2;
-                    else{
-                        if(M2_2==0 && M2_1==1)
-                            path2="50,700"+path2_4+","+path2;
-                        else
-                            path2=path2+path2_4;
-                        }
-                    if(M2_1==0 && M2_2==0)
-                        path2=path2+", 50,500";
-                }
-            }
-       }*/
+
         temp2[0].setAttributeNS(null, "points", path1);
         temp2[1].setAttributeNS(null, "points", path2);
         
@@ -1315,7 +1015,7 @@ function compute_firstP(){
             pos=(point1_2.x+Number(250))/2;
             stick[i].setAttributeNS(null, "x",pos);
         }
-    }
+    }*/
 
 
 
@@ -1614,6 +1314,10 @@ function compute_firstP(){
         <script src="js/strategic/Strategy.js"></script>
         <script src="js/strategic/Matrix.js"></script>
         <script src="js/strategic/StrategicUnit.js"></script>
+        <script src="js/eqdiagrams/Endpoints.js"></script>
+        <script src="js/eqdiagrams/Lines.js"></script>
+        <script src="js/eqdiagrams/Diagrams.js"></script>
+        <script src="js/eqdiagrams/Envelopp.js"></script>
         <script src="js/eqdiagrams.js"></script>
         <script src="js/servercomm/Communication.js"></script>
                                                                     

@@ -16,7 +16,7 @@ GTE.DIAGRAM = (function (parentModule) {
            this.strat2=strat+2;
        }
 
-    }
+               };
     /*Strategy does not have the same meaning for end point and line.
     For line strategy one correspond to the left endpoint and strategy two to the right end point.
     */
@@ -26,18 +26,18 @@ GTE.DIAGRAM = (function (parentModule) {
     */
     Line.prototype.getPlayer = function(){
        return this.player;
-    }
+               };
                
     /*
     Return strategy
     */
     Line.prototype.getStrat1 = function(){
         return this.strat1;
-    }
+               };
                
     Line.prototype.getStrat2 = function(){
         return this.strat2;
-    }
+               };
 
     // Add class to parent module
     parentModule.Line = Line;

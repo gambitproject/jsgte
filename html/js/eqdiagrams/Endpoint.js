@@ -20,34 +20,41 @@ GTE.DIAGRAM = (function (parentModule) {
      -1 means that this point correspond to a mixed equilibria.
      */
 
-    }
+               };
     /*
      Link to html
      */
     Endpoint.prototype.assign_html = function () {
         this.html_element=document.getElementsByClassName("pay")[this.player*4+this.strat];
-    }
+               };
                
     /*
      Return player
     */
     Endpoint.prototype.getPlayer = function(){
        return this.player;
-    }
+               };
     
     /*
     Return strategy
     */
     Endpoint.prototype.getStrat = function(){
         return this.strat;
-    }
+               };
                
     /*
-    Return strategy
+    Return y position
     */
     Endpoint.prototype.getPosy = function(){
         return this.y;
-    }
+               };
+               
+    /*
+    Return x position
+    */
+    Endpoint.prototype.getPosx = function(){
+    return this.x;
+               };
 
 
     /*
@@ -65,7 +72,7 @@ GTE.DIAGRAM = (function (parentModule) {
     Endpoint.prototype.move = function (new_x) {
         this.x = new_x;
         this.html_element.setAttributeNS(null, "cy", new_x);
-    }
+               };
     
     
     // Add class to parent module
