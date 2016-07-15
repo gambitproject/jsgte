@@ -1,4 +1,4 @@
-GTE.DIAGRAM = (function (parentModule) {
+GTE = (function (parentModule) {
     "use strict";
 
     /**
@@ -11,7 +11,7 @@ GTE.DIAGRAM = (function (parentModule) {
         this.player=p; //player that recieves the payoff.
         this.strat=strat;
         this.html_element=null;
-        assign_html();
+        this.assign_html();
     /*
      Strategy 0 means first strategy for both players.
      1 means first strategy for player one and second strategy for player two.
@@ -79,4 +79,4 @@ GTE.DIAGRAM = (function (parentModule) {
     parentModule.Endpoint = Endpoint;
 
     return parentModule;
-}(GTE.DIAGRAM)); // Add to GTE.DIAGRAM sub-module
+}(GTE)); // Add to GTE.DIAGRAM sub-module

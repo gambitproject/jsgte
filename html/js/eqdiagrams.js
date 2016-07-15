@@ -12,9 +12,11 @@
  
     // Get global canvas and store it in GTE
     // GTE is initialized by the library
+ 
     GTE.canvas = SVG('canvas').size("100%", "100%").attr({'style': 'background: #fff'});
     GTE.tools = new GTE.UI.Tools();
-    GTE.diagram = new GTE.Diagram(); //new
+    GTE.diag=3;
+    GTE.diag = new GTE.Diagram(); //new
     GTE.svg = document.getElementById("drawing");
     GTE.STORAGE = window.localStorage;
 
@@ -127,7 +129,7 @@
 
     document.getElementById("SvgjsSvg1000").addEventListener("click", function(){
         document.addEventListener("keyup", function(){
-                                  GTE.diagrams.update();
+                                  GTE.diag.update();
             });
          });
 
@@ -135,10 +137,10 @@
     var payoff=document.getElementsByClassName("pay");
     var lines=document.getElementsByClassName("line_trans");
     for(i=0;i<8;i++){
- payoff[i].addEventListener("mousedown", GTE.diagram.doMouseDownEndpoint());
+ payoff[i].addEventListener("mousedown", GTE.diag.doMouseDownEndpoint);
     }
     for(i=0;i<4;i++){
- lines[i].addEventListener("mousedown", GTE.diagram.doMouseDownLine());
+ lines[i].addEventListener("mousedown", GTE.diag.doMouseDownLine);
     }
     /*
         Hide irrelevant buttons for strategic.html

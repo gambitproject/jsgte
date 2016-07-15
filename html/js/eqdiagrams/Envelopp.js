@@ -1,4 +1,4 @@
-GTE.DIAGRAM = (function (P) {
+GTE = (function (P) {
     "use strict";
 
     /**
@@ -22,4 +22,4 @@ GTE.DIAGRAM = (function (P) {
     P.Envelopp = Envelopp;
 
     return P;
-}(GTE.DIAGRAM)); // Add to GTE.DIAGRAM sub-module
+}(GTE)); // Add to GTE.DIAGRAM sub-module

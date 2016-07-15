@@ -8,8 +8,8 @@ GTE = (function(parentModule) {
        this.precision = 1/document.getElementById("precision").value; // precision for payoffs.
        this.endpoints = []; //two dimension array [player][strat] that contains endpoints.
        this.lines = []; //two dimension array [player][strat_player] that contains lines.
-       this.payoffs = [][]; //two dimension array [player][strat] that contains payoffs
-       this.best_response = [][]; // two dimensions array [player][strat_other_player] that contains the best respons of a player. -1 means the two strategies are equivalent.
+       this.payoffs = [[]]; //two dimension array [player][strat] that contains payoffs
+       this.best_response = [[]]; // two dimensions array [player][strat_other_player] that contains the best respons of a player. -1 means the two strategies are equivalent.
        this.envelopps= []; // two envelopp for each best response.
        this.moving_endpoint;
        this.moving_line;
@@ -21,24 +21,24 @@ GTE = (function(parentModule) {
        this.min=0;
        this.step= (this.height-Number(2*this.margin))/(this.max-Number(this.min));
        
-       assignEndpoints();
-       assignEnvelopps();
-       assignLines();
-       ini_arrays();
+       this.assignEndpoints();
+       this.assignEnvelopps();
+       this.assignLines();
+       this.ini_arrays();
        };
        
-       Diagram.assignEnvelopps = function () {
-       this.envelopps.push( new GTE.diagram.envelopp(0) );
-       this.envelopps.push( new GTE.diagram.envelopp(1) );
+       Diagram.prototype.assignEnvelopps = function () {
+       this.envelopps.push( new GTE.Envelopp(0) );
+       this.envelopps.push( new GTE.Envelopp(1) );
        };
        
        Diagram.prototype.assignEndpoints = function() {
        for (var j=0; j<2;j++){
        this.endpoints.push([]);
        for(var i=0;i<4;i++){
-       this.endpoints[j].push( new GTE.diagram.endpoint(this.margin,this.margin,j,i));
+       this.endpoints[j].push( new GTE.Endpoint(this.margin,this.margin,j,i));
        }
-       this.endpoints[j].push( new GTE.diagram.endpoint(this.margin,this.margin,j,-1));
+       this.endpoints[j].push( new GTE.Endpoint(this.margin,this.margin,j,-1));
        }
        };
        
@@ -46,12 +46,12 @@ GTE = (function(parentModule) {
        for (var j=0; j<2;j++){
        this.lines.push([]);
        for(var i=0;i<2;i++){
-       this.lines[j].push( new GTE.diagram.line(j,i));
+       this.lines[j].push( new GTE.Line(j,i));
        }
        }
        };
        
-       Diagram.prototypr.ini_arrays = function() {
+       Diagram.prototype.ini_arrays = function() {
        for (var i=0; i<2; i++){
        this.payoffs.push([]);
        this.best_response.push([]);
@@ -68,24 +68,25 @@ GTE = (function(parentModule) {
         Associate html element to endpoint object.
         */
        Diagram.prototype.doMouseDownEndpoint = function (event){
-       event.preventDefault();
-       var strat=event.currentTarget.getAttribute("asso_strat");
-       var player=event.currentTarget.getAttribute("asso_player");
-       this.moving_endpoint= this.endpoints[player][strat];
-       document.addEventListener("mousemove", doMouseMoveEndpoint);
-       document.addEventListener("mouseup", doMouseupEndpoint);
-       event.currentTarget.removeEventListener("mousedown", doMouseDownEndpoint);
+       console.log("mouse down");
+          event.preventDefault();
+          var strat=event.currentTarget.getAttribute("asso_strat");
+          var player=event.currentTarget.getAttribute("asso_player");
+          GTE.diag.moving_endpoint= GTE.diag.endpoints[player][strat];
+          document.addEventListener("mousemove", GTE.diag.doMouseMoveEndpoint);
+          document.addEventListener("mouseup", GTE.diag.doMouseupEndpoint);
+          event.currentTarget.removeEventListener("mousedown", GTE.diag.doMouseDownEndpoint);
        };
        
        Diagram.prototype.doMouseDownLine = function (event){
        event.preventDefault();
        var strat=event.currentTarget.getAttribute("asso_strat");
        var player=event.currentTarget.getAttribute("asso_player");
-       this.moving_line= this.lines[player][strat];
-       this.prev_pros=GTE.getMousePosition(event);
-       document.addEventListener("mousemove", doMouseMoveLine);
-       document.addEventListener("mouseup", doMouseupLine);
-       event.currentTarget.removeEventListener("mousedown", doMouseDownLine);
+       GTE.diag.moving_line= GTE.diag.lines[player][strat];
+       GTE.diag.prev_pros=GTE.getMousePosition(event);
+       document.addEventListener("mousemove", GTE.diag.doMouseMoveLine);
+       document.addEventListener("mouseup", GTE.diag.doMouseupLine);
+       event.currentTarget.removeEventListener("mousedown", GTE.diag.doMouseDownLine);
        };
        
        /*
@@ -94,12 +95,12 @@ GTE = (function(parentModule) {
        Diagram.prototype.doMouseMoveEndpoint = function (event) {
        var mousePosition = GTE.getMousePosition(event)
        var svgPosition = GTE.svg.getBoundingClientRect();
-       var newPos=Math.round((2*this.height/(svgPosition.bottom-svgPosition.top)*(-mousePosition.y+svgPosition.top)+this.height-this.margin)/this.step*this.precision)/this.precision;
-       if (Number(newPos)<this.min) newPos=this.min;
-       if (Number(newPos)>this.max) newPos=this.max;
-       if( (Number(newPos)-this.moving_endpoint.getpos())*(Number(newPos)-this.moving_endpoint.getpos())>0.005){
-       var player=this.moving_endpoint.getplayer();
-       var strat=this.moving_endpoint.getstrat();
+       var newPos=Math.round((2*GTE.diag.height/(svgPosition.bottom-svgPosition.top)*(-mousePosition.y+svgPosition.top)+GTE.diag.height-GTE.diag.margin)/GTE.diag.step*GTE.diag.precision)/GTE.diag.precision;
+       if (Number(newPos)<GTE.diag.min) newPos=GTE.diag.min;
+       if (Number(newPos)>GTE.diag.max) newPos=GTE.diag.max;
+       if( (Number(newPos)-GTE.diag.moving_endpoint.getPosy())*(Number(newPos)-GTE.diag.moving_endpoint.getPosy())>0.005){
+       var player=GTE.diag.moving_endpoint.getplayer();
+       var strat=GTE.diag.moving_endpoint.getstrat();
        GTE.tree.matrix.matrix[strat].strategy.payoffs[player].value=newPos;
        GTE.tree.matrix.matrix[strat].strategy.payoffs[player].text=newPos;
        redraw();
@@ -115,10 +116,10 @@ GTE = (function(parentModule) {
        var strat2=moving_line.getstrat2();
        var point1=GTE.tree.matrix.matrix[strat1].strategy.payoffs[player];
        var point2=GTE.tree.matrix.matrix[strat2].strategy.payoffs[player];
-       var diffPos=~~((2*this.height/(svgPosition.bottom-svgPosition.top)*(diff))/this.step*this.precision)/this.precision;
-       var pos1=Math.round((point1.value-diffPos)*this.precision)/this.precision;
-       var pos2=Math.round((point2.value-diffPos)*this.precision)/this.precision;
-       if (pos2>=this.min && pos2<=this.max && pos1>=this.min && pos1<=this.max && diffPos!=0  ){
+       var diffPos=~~((2*GTE.diag.height/(svgPosition.bottom-svgPosition.top)*(diff))/GTE.diag.step*GTE.diag.precision)/GTE.diag.precision;
+       var pos1=Math.round((point1.value-diffPos)*GTE.diag.precision)/GTE.diag.precision;
+       var pos2=Math.round((point2.value-diffPos)*GTE.diag.precision)/GTE.diag.precision;
+       if (pos2>=GTE.diag.min && pos2<=GTE.diag.max && pos1>=GTE.diag.min && pos1<=GTE.diag.max && diffPos!=0  ){
        point1.value=pos1;
        point2.value=pos2;
        point1.text=pos1;
@@ -133,17 +134,17 @@ GTE = (function(parentModule) {
        
        Diagram.prototype.doMouseupLine = function(event) {
        mousePosition = getMousePosition(event)
-       document.removeEventListener("mousemove", doMouseMoveLine);
-       document.removeEventListener("mouseup", doMouseupEndpoint);
-       moving_line.addEventListener("mousedown", doMouseDownLine);
+       document.removeEventListener("mousemove", GTE.diag.doMouseMoveLine);
+       document.removeEventListener("mouseup", GTE.diag.doMouseupEndpoint);
+       moving_line.addEventListener("mousedown", GTE.diag.doMouseDownLine);
        moving_line=null;
        };
        
        Diagram.prototype.doMouseupEndpoint = function(event) {
        mousePosition = getMousePosition(event)
-       document.removeEventListener("mousemove", doMouseMoveEndpoint);
-       document.removeEventListener("mouseup", doMouseupEndpoint);
-       moving_line.addEventListener("mousedown", doMouseDownEndpoint);
+       document.removeEventListener("mousemove", GTE.diag.doMouseMoveEndpoint);
+       document.removeEventListener("mouseup", GTE.diag.doMouseupEndpoint);
+       moving_line.addEventListener("mousedown", GTE.diag.doMouseDownEndpoint);
        moving_line=null;
        };
        
@@ -225,7 +226,7 @@ GTE = (function(parentModule) {
        lines[1].setAttributeNS(null, "y2", this.payoffs[0][1]);
        if (this.best_response[0][0]==1 || this.best_response[0][1]==1 || (this.best_response[0][0]==0 && this.best_response[0][1]==0)){//Label strategy iff they are part of a best reponse
        var labelline=svg.getElementById("text11");
-       labelline.setAttributeNS(null, "y", Number(this.payoffs[0][0])+Number((this.payoffs[0][1])-(this.payoffs[0][0]))/200*30)+Number(20));
+       labelline.setAttributeNS(null, "y", Number(this.payoffs[0][0])+Number((this.payoffs[0][1])-(this.payoffs[0][0]))/200*30+Number(20));
 labelline.textContent=GTE.tree.matrix.strategies[1][0].moves[0].name;
 }
 else {
@@ -253,7 +254,7 @@ lines[1].setAttributeNS(null, "y1", this.payoffs[1][0]);
 lines[1].setAttributeNS(null, "y2", this.payoffs[1][2]);
 if (this.best_response[1][0]==1 || this.best_response[1][1]==1 || (this.best_response[1][0]==0 && this.best_response[1][1]==0)){//Label strategy iff they are part of a best reponse
     labelline=svg.getElementById("text21");
-    labelline.setAttributeNS(null, "y", Number(this.payoffs[1][0])+Number((this.payoffs[1][2])-(this.payoffs[1][0]))/200*30)+Number(20));
+    labelline.setAttributeNS(null, "y", Number(this.payoffs[1][0])+Number((this.payoffs[1][2])-(this.payoffs[1][0]))/200*30+Number(20));
     labelline.textContent=GTE.tree.matrix.strategies[2][0].moves[0].name;
 }
 else {
@@ -320,7 +321,7 @@ for (i=0;i<temp.length;i++){
 };
 
 
-Diagram.protoyype.redraw = function (){
+Diagram.prototype.redraw = function (){
     if (Number(document.getElementById("precision").value) >0){
         precision=1/Number(document.getElementById("precision").value);
         document.getElementById("precision").value=Number(document.getElementById("precision").value);

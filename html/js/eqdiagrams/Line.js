@@ -1,4 +1,4 @@
-GTE.DIAGRAM = (function (parentModule) {
+GTE = (function (parentModule) {
     "use strict";
 
     /**
@@ -43,4 +43,4 @@ GTE.DIAGRAM = (function (parentModule) {
     parentModule.Line = Line;
 
     return parentModule;
-}(GTE.DIAGRAM)); // Add to GTE.DIAGRAM sub-module
+}(GTE)); // Add to GTE.DIAGRAM sub-module
