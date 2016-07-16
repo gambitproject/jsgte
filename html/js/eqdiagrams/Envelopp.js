@@ -7,15 +7,18 @@ GTE = (function (P) {
     */
     function Envelopp(p) {
        this.player = p;
-       /* this.points = [[0,0],[0,0],[0,0]]; // left, middle and right points.*/
+       this.points = []; // left, middle and right points.
+       this.points.push([0,0]);
+       this.points.push([0,0]);
+       this.points.push([0,0]);
                };
     
     /*
     Return player
     */
-    /*Envelopp.prototype.setPoint = function(i,x,y){
+    Envelopp.prototype.setPoint = function(i,x,y){
        this.points[i] = [x,y];
-               };*/
+               };
 
 
     // Add class to parent module

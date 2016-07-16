@@ -52,7 +52,7 @@
         x = prompt("Enter the number of moves for the first player", "2");
         GTE.STRATEGICFORMMODE = GTE.STRATEGICFORMMODES.GENERAL;
         GTE.tools.createIndependentStrategicForm(x, y);
-        redraw();
+        GTE.diag.redraw();
         return false;
     });
 
@@ -62,7 +62,7 @@
         x = prompt("Enter the number of moves for the first player", "2");
         GTE.STRATEGICFORMMODE = GTE.STRATEGICFORMMODES.ZEROSUM;
         GTE.tools.createIndependentStrategicForm(x, y);
-        redraw();
+        GTE.diag.redraw();
         return false;
     });
 
@@ -73,7 +73,7 @@
         }
         GTE.STRATEGICFORMMODE = GTE.STRATEGICFORMMODES.SYMMETRIC;
         GTE.tools.createIndependentStrategicForm(x, x);
-        redraw();
+        GTE.diag.redraw();
         return false;
     });
 
@@ -123,7 +123,7 @@
             var el = document.getElementById("matrixPopup");
             el.style.display = (el.style.display == "block") ? "none" : "block";
         }
-        redraw();
+        GTE.diag.redraw();
         return false;
     });
 
@@ -174,4 +174,5 @@
     //initialise the matrix
     GTE.STRATEGICFORMMODE = GTE.STRATEGICFORMMODES.GENERAL;
     GTE.tools.createIndependentStrategicForm(2, 2);
+ GTE.diag.redraw();
 }());
