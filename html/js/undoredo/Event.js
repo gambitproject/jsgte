@@ -9,6 +9,13 @@ GTE.TREE = (function (parentModule) {
         this.unit = unit;
     }
 
+
+    Event.prototype.redo = function() {
+        this.unit.onClick();
+    };
+
+
+
     // Add class to parent module
     parentModule.Event = Event;
 
