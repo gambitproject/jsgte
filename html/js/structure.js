@@ -104,5 +104,6 @@ var GTE = (function () {
     };
 
     GTE.UNDOQUEUE = [];
+    GTE.REDOQUEUE = [];
     return GTE;
 }());
