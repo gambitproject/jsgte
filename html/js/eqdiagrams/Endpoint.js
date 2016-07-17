@@ -69,9 +69,9 @@ GTE = (function (parentModule) {
     /**
     * Change position
     */
-    Endpoint.prototype.move = function (new_x) {
-        this.x = new_x;
-        this.html_element.setAttributeNS(null, "cy", new_x);
+    Endpoint.prototype.move = function (new_y) {
+        this.y = new_y;
+        this.html_element.setAttributeNS(null, "cy", new_y);
                };
     
     

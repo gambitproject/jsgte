@@ -128,11 +128,14 @@
     });
 
     document.getElementById("SvgjsSvg1000").addEventListener("click", function(){
-        document.addEventListener("keyup", function(){
-                                  GTE.diag.update();
-            });
+        document.getElementById("SvgjsSvg1000").addEventListener("keypress", validatefunction);
          });
-
+    function validatefunction (event){
+       if (event.keycode ==13 || event.which==13){
+         GTE.diag.redraw();
+         document.getElementById("SvgjsSvg1000").removeEventListener("mousemove",validatefunction);
+        }
+    };
 
     var payoff=document.getElementsByClassName("pay");
     var lines=document.getElementsByClassName("line_trans");

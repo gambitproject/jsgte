@@ -194,7 +194,7 @@ GTE.TREE = (function(parentModule) {
             .onSave( function() {
                     var text = this.getCleanedText();
                     thisMatrix.strategies[1][this.index].moves[0].name=text;
-                    redraw();}
+                    GTE.diag.redraw();}
                     );
         }
 
@@ -214,7 +214,7 @@ GTE.TREE = (function(parentModule) {
             .onSave( function() {
                     var text = this.getCleanedText();
                     thisMatrix.strategies[2][this.index].moves[0].name=text;
-                    redraw();
+                    GTE.diag.redraw();
                     }
                     );
         }
