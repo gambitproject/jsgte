@@ -14,8 +14,6 @@ GTE.TREE = (function (parentModule) {
         this.unit.onClick();
     };
 
-
-
     // Add class to parent module
     parentModule.Event = Event;
 
