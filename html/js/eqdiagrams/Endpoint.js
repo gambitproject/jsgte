@@ -11,7 +11,10 @@ GTE = (function (parentModule) {
         this.player=p; //player that recieves the payoff.
         this.strat=strat;
         this.html_element=null;
-        this.assign_html();
+       if (strat>-1){
+       this.draw();}
+       
+       this.assign_html();
     /*
      Strategy 0 means first strategy for both players.
      1 means first strategy for player one and second strategy for player two.
@@ -21,6 +24,34 @@ GTE = (function (parentModule) {
      */
 
                };
+       
+       Endpoint.prototype.draw = function (){
+       if (this.player==0){
+       var e=document.createElementNS("http://www.w3.org/2000/svg", "circle");
+       e.setAttribute("cx",this.x);
+       e.setAttribute("cy",this.y);
+       e.setAttribute("r",GTE.POINT_RADIUS);
+       e.setAttribute("asso_player",this.player);
+       e.setAttribute("asso_strat",this.strat);
+       e.setAttribute("class","pay line1");
+       var i=document.getElementsByClassName("contour");
+       GTE.svg.appendChild(e);
+       GTE.svg.insertBefore(e,i[1]);
+       }
+       else{
+       var e=document.createElementNS("http://www.w3.org/2000/svg", "circle");
+       e.setAttribute("cx",this.x);
+       e.setAttribute("cy",this.y);
+       e.setAttribute("r",GTE.POINT_RADIUS);
+       e.setAttribute("asso_player",this.player);
+       e.setAttribute("asso_strat",this.strat);
+       e.setAttribute("class","pay line2");
+       var i=document.getElementsByClassName("m5");
+       GTE.svg.appendChild(e);
+       GTE.svg.insertBefore(e,i[0]);
+       }
+       };
+       
     /*
      Link to html
      */

@@ -7,7 +7,7 @@
  
     GTE.PUREQ_RADIUS=10;
  
- 
+ GTE.POINT_RADIUS=5;
  
  
     // Get global canvas and store it in GTE
@@ -15,9 +15,9 @@
  
     GTE.canvas = SVG('canvas').size("100%", "100%").attr({'style': 'background: #fff'});
     GTE.tools = new GTE.UI.Tools();
-    GTE.diag=3;
+ 
+ GTE.svg = document.getElementById("drawing");
     GTE.diag = new GTE.Diagram(); //new
-    GTE.svg = document.getElementById("drawing");
     GTE.STORAGE = window.localStorage;
 
 

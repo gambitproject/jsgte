@@ -188,7 +188,7 @@ GTE.TREE = (function(parentModule) {
                 GTE.CONSTANTS.MATRIX_X - 40,
                 GTE.CONSTANTS.MATRIX_Y + 40 + i * GTE.CONSTANTS.MATRIX_SIZE,
                 GTE.CONSTANTS.CONTENT_EDITABLE_GROW_TO_RIGHT,
-                string, "player 2")
+                string, "player 1")
             .colour(this.players[1].colour)
             .index(i)
             .onSave( function() {

@@ -15,7 +15,7 @@ GTE = (function(parentModule) {
         this.moving_line;
         this.moving;
         this.prev_pos;
-        this.rad=5;
+        this.rad=GTE.POINT_RADIUS;
         this.side=200;
         this.height=400;
         this.width=300;
@@ -36,12 +36,13 @@ GTE = (function(parentModule) {
     };
     
     Diagram.prototype.assignEndpoints = function() {
+       var table_x=[[50,250,50,250],[450,450,650,650]];
         for (var j=0; j<2;j++){
             this.endpoints.push([]);
             for(var i=0;i<4;i++){
-                this.endpoints[j].push( new GTE.Endpoint(this.margin,this.margin,j,i));
+                this.endpoints[j].push( new GTE.Endpoint(table_x[j][i],this.height-this.margin,j,i));
             }
-            this.endpoints[j].push( new GTE.Endpoint(this.margin,this.margin,j,-1));
+            this.endpoints[j].push( new GTE.Endpoint(table_x[j][0],this.height-this.margin,j,-1));
         }
     };
     

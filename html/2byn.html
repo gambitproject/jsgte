@@ -21,7 +21,7 @@
 
 
 <script>
-    var svg;
+    /*var svg;
     var ctx1,ctx2;
     var points=[];
     var svgH=400;
@@ -29,7 +29,7 @@
     var moving_point;
     var payoff=[];
     var precision=1;
-    var path=window.location.pathname;
+    var path=window.location.pathname;*/
     
 
     
@@ -1117,12 +1117,8 @@ function compute_firstP(){
             <!-- Upper envelop, coordinates will be updated-->
             <polygon id="envelop1" points="50,50 50,350 250,350 250,50"/>
             <!-- First strategy payoff-->
-            <line class="line1 lined1"  id="11" x1="50" y1="350" x2="250" y2="350"/>
-            <line class="line_trans lined1" asso_player="0" asso_strat="0" asso1="P1_11"  asso2="P1_12" asso_player1="0" asso_strat1="0" asso_player2="0" asso_strat2="1" x1="50" y1="350" x2="250" y2="350"/>
             <text id="text11" class="player1 strat" x="80" y="350">S1</text>
             <!-- Second strategy payoff-->
-            <line class="line1 lined1" id="12" x1="50" y1="350" x2="250" y2="350"/>
-            <line class="line_trans lined1" asso_player="0" asso_strat="1" asso1="P1_21"  asso2="P1_22" asso_player1="0" asso_strat1="2" asso_player2="0" asso_strat2="3" x1="50" y1="350" x2="250" y2="350"/>
             <text id="text12" class="player1 strat" x="220" y="350">S2</text>
             <!-- Sticks-->
             <line class="stick" x1="50" y1="80" x2="45" y2="80"/>
@@ -1165,11 +1161,6 @@ function compute_firstP(){
             <circle class="inter" id="inter1" cx="250" cy="350" r="5" draggable="false"/>
             <line class="line2 interstick1" x1="250" y1="350" x2="250" y2="355"/>
             <text class="player2 legendh" id="interlabel1" x="250" y="372">1</text>
-            <!-- Payoff points-->
-            <circle class="pay line1" id="Payoff1_11" asso="P1_11" asso_player="0" asso_strat="0" cx="50" cy="350" r="5" draggable="false" />
-            <circle class="pay line1" id="Payoff1_12" asso="P1_12" asso_player="0" asso_strat="1" cx="250" cy="350" r="5"  draggable="false" />
-            <circle class="pay line1" id="Payoff1_21" asso="P1_21" asso_player="0" asso_strat="2" cx="50" cy="350" r="5"  draggable="false" />
-            <circle class="pay line1" id="Payoff1_22" asso="P1_22" asso_player="0" asso_strat="3" cx="250" cy="350" r="5" draggable="false" />
 
             <!-- Drawing the contour-->
             <polyline class="contour" points="450,50 450,350 650,350, 650,50" draggable="false"/>
@@ -1185,12 +1176,8 @@ function compute_firstP(){
             <!-- Upper envelop, coordinates will be updated-->
             <polygon id="envelop2" points="450,50 450,350 450,350 450,50"/>
             <!-- First strategy payoff-->
-            <line class="line2 lined2" id="21" x1="450" y1="350" x2="650" y2="350"/>
-            <line class="line_trans lined2"  asso_player="1" asso_strat="0" asso1="P2_11"  asso2="P2_21" asso_player1="1" asso_strat1="0" asso_player2="1" asso_strat2="2"  x1="450" y1="350" x2="650" y2="350"/>
             <text id="text21" class="player2 legendv" x="480" y="350">S1</text>
             <!-- Second strategy payoff-->
-            <line class="line2 lined2"  id="22" x1="450" y1="350" x2="650" y2="350"/>
-            <line class="line_trans lined2" asso_player="1" asso_strat="1" asso1="P2_12"  asso2="P2_22" asso_player1="1" asso_strat1="1" asso_player2="1" asso_strat2="3" x1="450" y1="350" x2="650" y2="350"/>
             <text id="text22" class="player2 legendv" x="620" y="350">S2</text>
             <!-- Sticks-->
             <line class="stick" x1="450" y1="80" x2="445" y2="80"/>
@@ -1233,11 +1220,6 @@ function compute_firstP(){
             <circle class="inter" id="inter2" cx="650" cy="350" r="5" draggable="false"/>
             <line class="line1 interstick2" x1="650" y1="350" x2="650" y2="355"/>
             <text class="player1 legendh" id="interlabel2" x="650" y="372">1</text>
-            <!-- Payoff points-->
-            <circle class="pay line2" id="Payoff2_11" asso="P2_11" asso_player="1" asso_strat="0" cx="450" cy="350" r="5"  draggable="false" />
-            <circle class="pay line2" id="Payoff2_12" asso="P2_12" asso_player="1" asso_strat="1" cx="450" cy="350" r="5"  draggable="false" />
-            <circle class="pay line2" id="Payoff2_21" asso="P2_21" asso_player="1" asso_strat="2" cx="650" cy="350" r="5" draggable="false" />
-            <circle class="pay line2" id="Payoff2_22" asso="P2_22" asso_player="1" asso_strat="3" cx="650" cy="350" r="5" draggable="false" />
             
             
             <!--mixed equilibrium--->
