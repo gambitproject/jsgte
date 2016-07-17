@@ -16,8 +16,7 @@
     GTE.canvas = SVG('canvas').size("100%", "100%").attr({'style': 'background: #fff'});
     GTE.tools = new GTE.UI.Tools();
  
- GTE.svg = document.getElementById("drawing");
-    GTE.diag = new GTE.Diagram(); //new
+
     GTE.STORAGE = window.localStorage;
 
 
@@ -52,6 +51,8 @@
         x = prompt("Enter the number of moves for the first player", "2");
         GTE.STRATEGICFORMMODE = GTE.STRATEGICFORMMODES.GENERAL;
         GTE.tools.createIndependentStrategicForm(x, y);
+        GTE.diag.clear();
+        GTE.diag.ini();
         GTE.diag.redraw();
         return false;
     });
@@ -62,6 +63,8 @@
         x = prompt("Enter the number of moves for the first player", "2");
         GTE.STRATEGICFORMMODE = GTE.STRATEGICFORMMODES.ZEROSUM;
         GTE.tools.createIndependentStrategicForm(x, y);
+        GTE.diag.clear();
+        GTE.diag.ini();
         GTE.diag.redraw();
         return false;
     });
@@ -73,6 +76,8 @@
         }
         GTE.STRATEGICFORMMODE = GTE.STRATEGICFORMMODES.SYMMETRIC;
         GTE.tools.createIndependentStrategicForm(x, x);
+        GTE.diag.clear();
+        GTE.diag.ini();
         GTE.diag.redraw();
         return false;
     });
@@ -137,14 +142,7 @@
         }
     };
 
-    var payoff=document.getElementsByClassName("pay");
-    var lines=document.getElementsByClassName("line_trans");
-    for(i=0;i<8;i++){
- payoff[i].addEventListener("mousedown", GTE.diag.doMouseDownEndpoint);
-    }
-    for(i=0;i<4;i++){
- lines[i].addEventListener("mousedown", GTE.diag.doMouseDownLine);
-    }
+
     /*
         Hide irrelevant buttons for strategic.html
     */
@@ -177,5 +175,16 @@
     //initialise the matrix
     GTE.STRATEGICFORMMODE = GTE.STRATEGICFORMMODES.GENERAL;
     GTE.tools.createIndependentStrategicForm(2, 2);
+ 
+ GTE.svg = document.getElementById("drawing");
+ GTE.diag = new GTE.Diagram(); //new
+ var payoff=document.getElementsByClassName("pay");
+ var lines=document.getElementsByClassName("line_trans");
+ for(i=0;i<8;i++){
+ payoff[i].addEventListener("mousedown", GTE.diag.doMouseDownEndpoint);
+ }
+ for(i=0;i<4;i++){
+ lines[i].addEventListener("mousedown", GTE.diag.doMouseDownLine);
+ }
  GTE.diag.redraw();
 }());

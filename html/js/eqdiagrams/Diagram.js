@@ -11,6 +11,7 @@ GTE = (function(parentModule) {
         this.payoffs = [[]]; //two dimension array [player][strat] that contains payoffs
         this.best_response = [[]]; // two dimensions array [player][strat_other_player] that contains the best respons of a player. -1 means the two strategies are equivalent.
         this.envelopps= []; // two envelopp for each best response.
+       this.nb_strat= [2,2];// Player's number of strategies.
         this.moving_endpoint;
         this.moving_line;
         this.moving;
@@ -23,12 +24,17 @@ GTE = (function(parentModule) {
         this.max=10;
         this.min=0;
         this.step= (this.height-Number(2*this.margin))/(this.max-Number(this.min));
-        
-        this.assignEndpoints();
-        this.assignEnvelopps();
-        this.assignLines();
-        this.ini_arrays();
+       this.ini();
+       
     };
+       
+       Diagram.prototype.ini =function (){
+       this.nb_strat=[GTE.tree.matrix.strategies[1].length,GTE.tree.matrix.strategies[2].length];
+       this.assignEndpoints();
+       this.assignEnvelopps();
+       this.assignLines();
+       this.ini_arrays();
+       }
     
     Diagram.prototype.assignEnvelopps = function () {
         this.envelopps.push( new GTE.Envelopp(0) );
@@ -36,20 +42,24 @@ GTE = (function(parentModule) {
     };
     
     Diagram.prototype.assignEndpoints = function() {
-       var table_x=[[50,250,50,250],[450,450,650,650]];
+       var table_x=[[50,250,50,250,50,250,50,250,50,250,50,250,50,250,50,250],[450,450,650,650]];
         for (var j=0; j<2;j++){
             this.endpoints.push([]);
-            for(var i=0;i<4;i++){
-                this.endpoints[j].push( new GTE.Endpoint(table_x[j][i],this.height-this.margin,j,i));
-            }
-            this.endpoints[j].push( new GTE.Endpoint(table_x[j][0],this.height-this.margin,j,-1));
+            for(var i=0;i<2*this.nb_strat[j];i++){
+       console.log(j+" "+i+" assign");
+                 this.endpoints[j].push( new GTE.Endpoint(table_x[j][i],this.height-this.margin,j,i));
+             }
         }
+       
+       for (var j=0; j<2;j++){
+       this.endpoints[j].push( new GTE.Endpoint(table_x[j][0],this.height-this.margin,j,-1));
+       }
     };
     
     Diagram.prototype.assignLines = function() {
         for (var j=0; j<2;j++){
             this.lines.push([]);
-            for(var i=0;i<2;i++){
+            for(var i=0;i<this.nb_strat[j];i++){
                 this.lines[j].push( new GTE.Line(j,i));
             }
         }
@@ -59,10 +69,10 @@ GTE = (function(parentModule) {
         for (var i=0; i<2; i++){
             this.payoffs.push([]);
             this.best_response.push([]);
-            for (var j=0; j<4; j++){
+       for (var j=0; j<this.nb_strat[0]*this.nb_strat[1]; j++){
                 this.payoffs[i].push(0);
             }
-            for (var j=0; j<2; j++){
+            for (var j=0; j<GTE.tree.matrix.strategies[1+i].length; j++){
                 this.best_response.push(-1);
             }
         }
@@ -181,6 +191,7 @@ GTE = (function(parentModule) {
         else{
             document.getElementById("precision").value=1/GTE.diag.precision;
         }
+       this.nb_strat=[GTE.tree.matrix.strategies[1].length,GTE.tree.matrix.strategies[2].length];
         GTE.tree.clear();
         document.getElementById('matrix-player-1').value = GTE.tree.matrix.getMatrixInStringFormat(0);
         document.getElementById('matrix-player-2').value = GTE.tree.matrix.getMatrixInStringFormat(1);
@@ -192,9 +203,10 @@ GTE = (function(parentModule) {
     
     Diagram.prototype.compute_best_response = function() {
         for ( var i=0;i<2;i++){
-            for (var j=0;j<4;j++){ // updating payoff between matrix and drawing
+            for (var j=0;j<2*this.nb_strat[i];j++){ // updating payoff between matrix and drawing
                 this.payoffs[i][j]=(Math.round(GTE.tree.matrix.matrix[j].strategy.payoffs[i].value*GTE.diag.precision)/GTE.diag.precision);
                 GTE.tree.matrix.matrix[j].strategy.payoffs[i].value=this.payoffs[i][j];
+       console.log(i+" "+j);
                 this.endpoints[i][j].move(this.height-this.margin-this.payoffs[i][j]*this.step);
             }
             for (var j=0;j<2;j++){
@@ -966,6 +978,27 @@ GTE = (function(parentModule) {
         
         
     };
+       
+       Diagram.prototype.clear = function(){
+       for (var i=0;i<this.lines.length;i++){
+       for (var j=0;j<this.lines[i].length;j++){
+       var temp=this.lines[i][j].html_element[0];
+       GTE.svg.removeChild(temp);
+       temp=this.lines[i][j].html_element[1];
+       GTE.svg.removeChild(temp);
+       }
+       }
+       for (var i=0;i<this.endpoints.length;i++){
+       for (var j=0;j<this.endpoints[i].length-1;j++){
+       temp=this.endpoints[i][j].html_element;
+       GTE.svg.removeChild(temp);
+       }
+       }
+       this.endpoints=[];
+       this.lines=[];
+       this.best_response=[[]];
+       this.payoffs=[[]];
+       }
     
     
     // Add class to parent module

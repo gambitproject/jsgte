@@ -13,8 +13,7 @@ GTE = (function (parentModule) {
         this.html_element=null;
        if (strat>-1){
        this.draw();}
-       
-       this.assign_html();
+
     /*
      Strategy 0 means first strategy for both players.
      1 means first strategy for player one and second strategy for player two.
@@ -50,14 +49,9 @@ GTE = (function (parentModule) {
        GTE.svg.appendChild(e);
        GTE.svg.insertBefore(e,i[0]);
        }
+       this.html_element=e;
        };
        
-    /*
-     Link to html
-     */
-    Endpoint.prototype.assign_html = function () {
-        this.html_element=document.getElementsByClassName("pay")[this.player*4+this.strat];
-               };
                
     /*
      Return player
@@ -100,7 +94,8 @@ GTE = (function (parentModule) {
     /**
     * Change position
     */
-    Endpoint.prototype.move = function (new_y) {
+       Endpoint.prototype.move = function (new_y) {
+       console.log(this.player+" "+this.strat);
         this.y = new_y;
         this.html_element.setAttributeNS(null, "cy", new_y);
                };

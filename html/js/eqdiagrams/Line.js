@@ -15,6 +15,7 @@ GTE = (function (parentModule) {
            this.strat1=strat;
            this.strat2=strat+2;
        }
+       this.html_element=[];
        this.draw();
 
                };
@@ -30,6 +31,7 @@ GTE = (function (parentModule) {
        l1.setAttribute("x2","250");
        l1.setAttribute("y2","350");
        l1.setAttribute("class","line1 lined1");
+       this.html_element.push(l1);
        var l2=document.createElementNS("http://www.w3.org/2000/svg", "line");
        l2.setAttribute("x1","50");
        l2.setAttribute("y1","350");
@@ -40,6 +42,7 @@ GTE = (function (parentModule) {
        l2.setAttribute("asso_strat1",this.strat1);
        l2.setAttribute("asso_player2","1");
        l2.setAttribute("asso_strat2",this.strat2);
+       this.html_element.push(l2);
        var env=document.getElementsByClassName("stick");
        GTE.svg.appendChild(l1);
        GTE.svg.appendChild(l2);
@@ -53,6 +56,7 @@ GTE = (function (parentModule) {
        l1.setAttribute("x2","650");
        l1.setAttribute("y2","350");
        l1.setAttribute("class","line2 lined2");
+       this.html_element.push(l1);
        var l2=document.createElementNS("http://www.w3.org/2000/svg", "line");
        l2.setAttribute("x1","450");
        l2.setAttribute("y1","350");
@@ -63,6 +67,7 @@ GTE = (function (parentModule) {
        l2.setAttribute("asso_strat1",this.strat1);
        l2.setAttribute("asso_player2","1");
        l2.setAttribute("asso_strat2",this.strat2);
+       this.html_element.push(l2);
        var env=document.getElementsByClassName("stick");
        GTE.svg.appendChild(l1);
        GTE.svg.appendChild(l2);
