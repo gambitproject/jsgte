@@ -178,13 +178,6 @@
  
  GTE.svg = document.getElementById("drawing");
  GTE.diag = new GTE.Diagram(); //new
- var payoff=document.getElementsByClassName("pay");
- var lines=document.getElementsByClassName("line_trans");
- for(i=0;i<8;i++){
- payoff[i].addEventListener("mousedown", GTE.diag.doMouseDownEndpoint);
- }
- for(i=0;i<4;i++){
- lines[i].addEventListener("mousedown", GTE.diag.doMouseDownLine);
- }
+ GTE.diag.ini();
  GTE.diag.redraw();
 }());

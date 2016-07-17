@@ -74,6 +74,7 @@ GTE = (function (parentModule) {
        GTE.svg.insertBefore(l1,env[18]);
        GTE.svg.insertBefore(l2,env[18]);
        }
+       l2.addEventListener("mousedown", GTE.diag.doMouseDownLine);
     }
     /*
     Return player

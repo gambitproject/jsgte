@@ -24,7 +24,6 @@ GTE = (function(parentModule) {
         this.max=10;
         this.min=0;
         this.step= (this.height-Number(2*this.margin))/(this.max-Number(this.min));
-       this.ini();
        
     };
        
@@ -46,7 +45,6 @@ GTE = (function(parentModule) {
         for (var j=0; j<2;j++){
             this.endpoints.push([]);
             for(var i=0;i<2*this.nb_strat[j];i++){
-       console.log(j+" "+i+" assign");
                  this.endpoints[j].push( new GTE.Endpoint(table_x[j][i],this.height-this.margin,j,i));
              }
         }
@@ -206,7 +204,6 @@ GTE = (function(parentModule) {
             for (var j=0;j<2*this.nb_strat[i];j++){ // updating payoff between matrix and drawing
                 this.payoffs[i][j]=(Math.round(GTE.tree.matrix.matrix[j].strategy.payoffs[i].value*GTE.diag.precision)/GTE.diag.precision);
                 GTE.tree.matrix.matrix[j].strategy.payoffs[i].value=this.payoffs[i][j];
-       console.log(i+" "+j);
                 this.endpoints[i][j].move(this.height-this.margin-this.payoffs[i][j]*this.step);
             }
             for (var j=0;j<2;j++){
@@ -268,13 +265,20 @@ GTE = (function(parentModule) {
         name_player=GTE.svg.getElementsByClassName("player2_name");
         for (var i=0;i<2;i++)
         name_player[i].textContent=GTE.tree.matrix.players[2].name;
+       // Lines update
+       for (var i=0 ; i< this.lines.length ; i++){
+          for (var j=0 ; j< this.lines[i].length ; j++){
+             var temp=this.lines[i][j];
+             for (var h=0; h<2; h++){
+       console.log(temp.getPlayer()+" "+temp.getStrat1());
+                temp.html_element[h].setAttributeNS(null, "y1", this.endpoints[temp.getPlayer()][temp.getStrat1()].getPosy());
+       
+                temp.html_element[h].setAttributeNS(null, "y2", this.endpoints[temp.getPlayer()][temp.getStrat2()].getPosy());
+             }
+          }
+       }
         
-        // Lines update svg1
-        var lines=GTE.svg.getElementsByClassName("lined1");
-        lines[0].setAttributeNS(null, "y1", this.endpoints[0][0].getPosy());
-        lines[0].setAttributeNS(null, "y2", this.endpoints[0][1].getPosy());
-        lines[1].setAttributeNS(null, "y1", this.endpoints[0][0].getPosy());
-        lines[1].setAttributeNS(null, "y2", this.endpoints[0][1].getPosy());
+        
         if (this.best_response[0][0]==1 || this.best_response[0][1]==1 || (this.best_response[0][0]==0 && this.best_response[0][1]==0)){//Label strategy iff they are part of a best reponse
             var labelline=GTE.svg.getElementById("text11");
             labelline.setAttributeNS(null, "y", Number(this.endpoints[0][0].getPosy())+(Number(this.endpoints[0][1].getPosy())-Number(this.endpoints[0][0].getPosy()))/200*30+Number(20));
@@ -284,10 +288,6 @@ GTE = (function(parentModule) {
             labelline=GTE.svg.getElementById("text11");
             labelline.textContent="";
         }
-        lines[2].setAttributeNS(null, "y1", this.endpoints[0][2].getPosy());
-        lines[2].setAttributeNS(null, "y2", this.endpoints[0][3].getPosy());
-        lines[3].setAttributeNS(null, "y1", this.endpoints[0][2].getPosy());
-        lines[3].setAttributeNS(null, "y2", this.endpoints[0][3].getPosy());
         if(this.best_response[0][0]==2 || this.best_response[0][1]==2 || (this.best_response[0][0]==0 && this.best_response[0][1]==0)){//Label strategy iff they are part of a best reponse
             labelline=GTE.svg.getElementById("text12");
             labelline.setAttributeNS(null, "y", Number(this.endpoints[0][3].getPosy())+(Number(this.endpoints[0][2].getPosy())-Number(this.endpoints[0][3].getPosy()))/200*30+Number(20));
@@ -298,11 +298,6 @@ GTE = (function(parentModule) {
             labelline.textContent="";
         }
         // Lines update svg2
-        lines=GTE.svg.getElementsByClassName("lined2");
-        lines[0].setAttributeNS(null, "y1", this.endpoints[1][0].getPosy());
-        lines[0].setAttributeNS(null, "y2", this.endpoints[1][2].getPosy());
-        lines[1].setAttributeNS(null, "y1", this.endpoints[1][0].getPosy());
-        lines[1].setAttributeNS(null, "y2", this.endpoints[1][2].getPosy());
         if (this.best_response[1][0]==1 || this.best_response[1][1]==1 || (this.best_response[1][0]==0 && this.best_response[1][1]==0)){//Label strategy iff they are part of a best reponse
             labelline=GTE.svg.getElementById("text21");
             labelline.setAttributeNS(null, "y", Number(this.endpoints[1][0].getPosy())+(Number(this.endpoints[1][2].getPosy())-Number(this.endpoints[1][0].getPosy()))/200*30+Number(20));
@@ -312,10 +307,6 @@ GTE = (function(parentModule) {
             labelline=GTE.svg.getElementById("text21");
             labelline.textContent="";
         }
-        lines[2].setAttributeNS(null, "y1", this.endpoints[1][1].getPosy());
-        lines[2].setAttributeNS(null, "y2", this.endpoints[1][3].getPosy());
-        lines[3].setAttributeNS(null, "y1", this.endpoints[1][1].getPosy());
-        lines[3].setAttributeNS(null, "y2", this.endpoints[1][3].getPosy());
         if (this.best_response[1][0]==2 || this.best_response[1][1]==2 || (this.best_response[1][0]==0 && this.best_response[1][1]==0)){//Label strategy iff they are part of a best reponse
             labelline=GTE.svg.getElementById("text22");
             labelline.setAttributeNS(null, "y", Number(this.endpoints[1][3].getPosy())+(Number(this.endpoints[1][1].getPosy()-Number(this.endpoints[1][3].getPosy()))/200*30)+Number(20));

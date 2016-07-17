@@ -49,6 +49,7 @@ GTE = (function (parentModule) {
        GTE.svg.appendChild(e);
        GTE.svg.insertBefore(e,i[0]);
        }
+       e.addEventListener("mousedown", GTE.diag.doMouseDownEndpoint);
        this.html_element=e;
        };
        
@@ -95,7 +96,6 @@ GTE = (function (parentModule) {
     * Change position
     */
        Endpoint.prototype.move = function (new_y) {
-       console.log(this.player+" "+this.strat);
         this.y = new_y;
         this.html_element.setAttributeNS(null, "cy", new_y);
                };
