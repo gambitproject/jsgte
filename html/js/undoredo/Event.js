@@ -10,7 +10,7 @@ GTE.TREE = (function (parentModule) {
     }
 
 
-    Event.prototype.redo = function() {
+    Event.prototype.execute = function() {
         this.unit.onClick();
     };
 
