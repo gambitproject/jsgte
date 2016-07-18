@@ -13,7 +13,7 @@ GTE.TREE = (function (parentModule) {
         this.to = to || null;
     }
 
-    Change.prototype.undo = function() {
+    Change.prototype.execute = function() {
         switch (this.mode) {
             case GTE.MODES.ADD:
                 this.node.delete();

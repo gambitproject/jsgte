@@ -18,7 +18,7 @@ GTE.TREE = (function (parentModule) {
         }
         GTE.REDOQUEUE.push(changes);
         for(var i = this.queue.length-1; i>=0; i--) {
-            this.queue[i].undo();
+            this.queue[i].execute();
         }
         GTE.tree.draw();
         if(this.select) {
@@ -33,7 +33,7 @@ GTE.TREE = (function (parentModule) {
         }
         GTE.UNDOQUEUE.push(changes);
         for(var i = this.queue.length-1; i>=0; i--) {
-            this.queue[i].undo();
+            this.queue[i].execute();
         }
         GTE.tree.draw();
         if(this.select) {
