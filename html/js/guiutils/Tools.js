@@ -198,6 +198,10 @@ GTE.UI = (function (parentModule) {
         }
     }
 
+    Tools.prototype.redo = function() {
+
+    }
+
     /**
     * Returns the colour correspondent to a given index. It is used to get the
     * player colour. Player id would be the same as colourIndex

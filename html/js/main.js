@@ -118,7 +118,12 @@
     document.getElementById("button-undo").addEventListener("click", function(){
          GTE.tools.undo();
          return false;
-     });
+    });
+
+    document.getElementById("button-redo").addEventListener("click", function(){
+         GTE.tools.redo();
+         return false;
+    });
 
     document.getElementById("button-settings").addEventListener("click", function(){
         var el = document.getElementById("settings");
