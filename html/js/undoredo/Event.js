@@ -5,13 +5,17 @@ GTE.TREE = (function (parentModule) {
     * Creates a new Event.
     * @class
     */
-    function Event(unit) {
+    function Event(unit, mode) {
         this.unit = unit;
+        this.mode = mode;
     }
 
 
     Event.prototype.execute = function() {
+        var curMode = GTE.MODE;
+        GTE.MODE  = this.mode;
         this.unit.onClick();
+        GTE.MODE = curMode;
     };
 
     // Add class to parent module
