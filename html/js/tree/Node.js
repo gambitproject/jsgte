@@ -147,7 +147,7 @@ GTE.TREE = (function (parentModule) {
                 // if (this.iset.numberOfNodes > 1) {
                 //     this.createSingletonISetWithNode();
                 // }
-                changes = new GTE.TREE.Changes();
+                changes = new GTE.TREE.Changes(this, null, GTE.MODES.ADD);
                 var nodes = [];
                 if (this.iset === null) {
                     if (this.isLeaf()) {

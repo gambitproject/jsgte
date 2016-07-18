@@ -9,12 +9,31 @@ GTE.TREE = (function (parentModule) {
     function Changes(unit, select, mode) {
         this.queue = [];
         this.select = select || null;
-        this.event = new GTE.TREE.Event(unit, mode);
     }
 
     Changes.prototype.undo= function() {
-        while(this.queue.length != 0) {
-            this.queue.pop().undo();
+        var changes = new GTE.TREE.Changes();
+        for(var i = this.queue.length-1; i>=0; i--) {
+            this.queue[i].convertChangeToRedo(changes);
+        }
+        GTE.REDOQUEUE.push(changes);
+        for(var i = this.queue.length-1; i>=0; i--) {
+            this.queue[i].undo();
+        }
+        GTE.tree.draw();
+        if(this.select) {
+            this.iset.select();
+        }
+    };
+
+    Changes.prototype.redo= function() {
+        var changes = new GTE.TREE.Changes();
+        for(var i = this.queue.length-1; i>=0; i--) {
+            this.queue[i].convertChangeToUndo(changes);
+        }
+        GTE.UNDOQUEUE.push(changes);
+        for(var i = this.queue.length-1; i>=0; i--) {
+            this.queue[i].undo();
         }
         GTE.tree.draw();
         if(this.select) {

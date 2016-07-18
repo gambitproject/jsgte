@@ -84,6 +84,28 @@ GTE.TREE = (function (parentModule) {
         }
     };
 
+    Change.prototype.convertChangeToRedo = function(changes) {
+        switch (this.mode) {
+            case GTE.MODES.ADD:
+                changes.addChange(GTE.MODES.DELETE, this.node);
+                break;
+            case GTE.MODES.DELETE:
+                changes.addChange(GTE.MODES.ADD, this.node);
+                break;
+        }
+    }
+
+    Change.prototype.convertChangeToUndo = function(changes) {
+        switch (this.mode) {
+            case GTE.MODES.ADD:
+                changes.addChange(GTE.MODES.DELETE, this.node);
+                break;
+            case GTE.MODES.DELETE:
+                changes.addChange(GTE.MODES.ADD, this.node);
+                break;
+        }
+    }
+
     // Add class to parent module
     parentModule.Change = Change;
 

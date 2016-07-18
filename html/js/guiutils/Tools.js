@@ -194,15 +194,13 @@ GTE.UI = (function (parentModule) {
 
     Tools.prototype.undo = function() {
         if(GTE.UNDOQUEUE.length > 0) {
-            var changes = GTE.UNDOQUEUE.pop();
-            GTE.REDOQUEUE.push(changes.event);
-            changes.undo();
+            GTE.UNDOQUEUE.pop().undo();
         }
     }
 
     Tools.prototype.redo = function() {
         if(GTE.REDOQUEUE.length > 0) {
-            GTE.REDOQUEUE.pop().execute();
+            GTE.REDOQUEUE.pop().redo();
         }
     }
 
