@@ -9,13 +9,15 @@ GTE.TREE = (function (parentModule) {
     function Changes(unit, select, mode) {
         this.queue = [];
         this.select = select || null;
+        this.toggleQueue = null;
     }
 
-    Changes.prototype.undo= function() {
+    Changes.prototype.undo = function() {
         var changes = new GTE.TREE.Changes();
         for(var i = this.queue.length-1; i>=0; i--) {
             this.queue[i].convertChangeToRedo(changes);
         }
+        changes.toggleQueue = this.queue;
         GTE.REDOQUEUE.push(changes);
         for(var i = this.queue.length-1; i>=0; i--) {
             this.queue[i].execute();
@@ -26,11 +28,9 @@ GTE.TREE = (function (parentModule) {
         }
     };
 
-    Changes.prototype.redo= function() {
+    Changes.prototype.redo = function() {
         var changes = new GTE.TREE.Changes();
-        for(var i = this.queue.length-1; i>=0; i--) {
-            this.queue[i].convertChangeToUndo(changes);
-        }
+        changes.queue = this.toggleQueue;
         GTE.UNDOQUEUE.push(changes);
         for(var i = this.queue.length-1; i>=0; i--) {
             this.queue[i].execute();
@@ -41,7 +41,7 @@ GTE.TREE = (function (parentModule) {
         }
     };
 
-    Changes.prototype.addChange= function(mode, node, iset) {
+    Changes.prototype.addChange = function(mode, node, iset) {
         switch (mode) {
             case GTE.MODES.ADD:
                 var change = new GTE.TREE.Change(node, GTE.MODES.ADD);
