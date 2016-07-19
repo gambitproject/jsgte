@@ -93,7 +93,7 @@ GTE.TREE = (function (parentModule) {
                 changes.addChange(GTE.MODES.ADD, this.node);
                 break;
             case GTE.MODES.PLAYER_ASSIGNMENT:
-                var change = new GTE.TREE.Change(this.node, GTE.MODES.PLAYER_ASSIGNMENT, GTE.tree.getActivePlayer());
+                var change = new GTE.TREE.Change(this.node, GTE.MODES.PLAYER_ASSIGNMENT, this.to);
                 changes.queue.push(change);
                 break;
         }
