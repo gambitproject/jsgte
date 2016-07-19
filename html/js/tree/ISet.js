@@ -293,7 +293,7 @@ GTE.TREE = (function (parentModule) {
                     var isets = GTE.tree.addChildNodeToISet(this);
                     changes.pushChangesAfterAddingIsetsToArray(isets);
                 }
-                GTE.UNDOQUEUE.push(changes);
+                changes.endSetOfChanges();
                 // Tell the tree to redraw itself
                 GTE.tree.draw();
                 break;
@@ -314,7 +314,7 @@ GTE.TREE = (function (parentModule) {
                     // Dissolve current iset
                     this.dissolve();
                 }
-                GTE.UNDOQUEUE.push(changes);
+                changes.endSetOfChanges();
                 // Tell the tree to redraw itself
                 GTE.tree.draw();
                 break;
@@ -327,7 +327,7 @@ GTE.TREE = (function (parentModule) {
                     GTE.tree.assignSelectedPlayerToNode(nodes[j]);
                 }
                 changes.pushSingletonChange(GTE.UNDO.ASSIGNMOVES, this);
-                GTE.UNDOQUEUE.push(changes);
+                changes.endSetOfChanges();
                 // Reassign moves (create new moves and assign them to the
                 // children nodes as reachedBy)
                 this.reassignMoves();
@@ -341,14 +341,14 @@ GTE.TREE = (function (parentModule) {
                         changes.select = true;
                         changes.iset = GTE.tree.selected[0];
                     }
-                    GTE.UNDOQUEUE.push(changes);
+                    changes.endSetOfChanges();
                     this.select();
                 }
                 break;
             case GTE.MODES.DISSOLVE:
                 var changes = new GTE.TREE.Changes();
                 if(changes.pushChangesBeforeDissolving(this))
-                    GTE.UNDOQUEUE.push(changes);
+                    changes.endSetOfChanges();
                 this.dissolve();
                 GTE.tree.draw();
                 break;

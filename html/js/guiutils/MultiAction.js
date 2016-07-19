@@ -77,7 +77,7 @@ GTE.TREE = (function(parentModule) {
                         }
                     }
                 }
-                GTE.UNDOQUEUE.push(changes);
+                changes.endSetOfChanges();
                 break;
             case GTE.MODES.DELETE:
                 // if ANY of the nodes in the multiaction line have children,
@@ -105,7 +105,7 @@ GTE.TREE = (function(parentModule) {
                         this.nodesInLine[k].onClick(false);
                     }
                 }
-                GTE.UNDOQUEUE.push(changes);
+                changes.endSetOfChanges();
                 break;
             case GTE.MODES.PLAYER_ASSIGNMENT:
                 // set all nodes on the multiaction line to belong to the
@@ -115,7 +115,7 @@ GTE.TREE = (function(parentModule) {
                     changes.addChange(GTE.MODES.PLAYER_ASSIGNMENT, this.nodesInLine[l]);
                     this.nodesInLine[l].onClick(false);
                 }
-                GTE.UNDOQUEUE.push(changes);
+                changes.endSetOfChanges();
                 break;
             case GTE.MODES.MERGE:
                 // note that this mode button only works if every node belongs
@@ -143,7 +143,7 @@ GTE.TREE = (function(parentModule) {
                     playerInLoop = this.nodesInLine[m].player;
                 }
                 if(changes.queue.length >= 0) {
-                    GTE.UNDOQUEUE.push(changes);
+                    changes.endSetOfChanges();
                 }
                 GTE.tree.draw();
                 break;

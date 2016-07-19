@@ -64,7 +64,7 @@ GTE.UI = (function (parentModule) {
                         // Assign singleton isets to each node with no iset
                         var changes = new GTE.TREE.Changes();
                         changes.pushSingletonChange(GTE.UNDO.INITIALIZEISETS);
-                        GTE.UNDOQUEUE.push(changes);
+                        changes.endSetOfChanges();
                         GTE.tree.initializeISets();
                         this.isetToolsRan = true;
                     }

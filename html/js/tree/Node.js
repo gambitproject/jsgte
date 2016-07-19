@@ -165,7 +165,7 @@ GTE.TREE = (function (parentModule) {
                     // Tell the tree to redraw itself
                     GTE.tree.draw();
                     if(undo)
-                        GTE.UNDOQUEUE.push(changes);
+                        changes.endSetOfChanges();
                 } else {
                     this.iset.onClick();
                 }
@@ -188,7 +188,7 @@ GTE.TREE = (function (parentModule) {
                         this.deassignPlayer();
                     }
                     if(undo)
-                        GTE.UNDOQUEUE.push(changes);
+                        changes.endSetOfChanges();
                     // Tell the tree to redraw itself
                     GTE.tree.draw();
                 } else {
@@ -221,7 +221,7 @@ GTE.TREE = (function (parentModule) {
                         if(undo) {
                             var changes = new GTE.TREE.Changes();
                             changes.addChange(GTE.MODES.PLAYER_ASSIGNMENT, this);
-                            GTE.UNDOQUEUE.push(changes);
+                            changes.endSetOfChanges();
                         }
                         GTE.tree.assignSelectedPlayerToNode(this);
                         GTE.tree.draw();
