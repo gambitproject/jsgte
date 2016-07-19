@@ -7,9 +7,10 @@ GTE = (function (parentModule) {
     */
     function Line(p,strat) {
         this.player=p;
+       this.strat=strat; // strategy of the player
         if (p==0){
-           this.strat1=strat*2;
-           this.strat2=strat*2+1;
+           this.strat1=strat*2; // couple of strategies of the left endpoint.
+           this.strat2=strat*2+1; // couple of strategies of the right endpoint.
         }
         else{
            this.strat1=strat;
@@ -38,10 +39,8 @@ GTE = (function (parentModule) {
        l2.setAttribute("x2","250");
        l2.setAttribute("y2","350");
        l2.setAttribute("class","line_trans lined1");
-       l2.setAttribute("asso_player1","0");
-       l2.setAttribute("asso_strat1",this.strat1);
-       l2.setAttribute("asso_player2","1");
-       l2.setAttribute("asso_strat2",this.strat2);
+       l2.setAttribute("asso_player","0");
+       l2.setAttribute("asso_strat",this.strat);
        this.html_element.push(l2);
        var env=document.getElementsByClassName("stick");
        GTE.svg.appendChild(l1);
@@ -63,10 +62,8 @@ GTE = (function (parentModule) {
        l2.setAttribute("x2","650");
        l2.setAttribute("y2","350");
        l2.setAttribute("class","line_trans lined2");
-       l2.setAttribute("asso_player1","0");
-       l2.setAttribute("asso_strat1",this.strat1);
-       l2.setAttribute("asso_player2","1");
-       l2.setAttribute("asso_strat2",this.strat2);
+       l2.setAttribute("asso_player","1");
+       l2.setAttribute("asso_strat",this.strat);
        this.html_element.push(l2);
        var env=document.getElementsByClassName("stick");
        GTE.svg.appendChild(l1);

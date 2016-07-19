@@ -33,9 +33,10 @@ GTE = (function (parentModule) {
        e.setAttribute("asso_player",this.player);
        e.setAttribute("asso_strat",this.strat);
        e.setAttribute("class","pay line1");
-       var i=document.getElementsByClassName("contour");
+       var env=document.getElementsByClassName("sticklabel");
        GTE.svg.appendChild(e);
-       GTE.svg.insertBefore(e,i[1]);
+       GTE.svg.insertBefore(e,env[17]);
+       GTE.svg.insertBefore(env[17],e);
        }
        else{
        var e=document.createElementNS("http://www.w3.org/2000/svg", "circle");
@@ -45,9 +46,10 @@ GTE = (function (parentModule) {
        e.setAttribute("asso_player",this.player);
        e.setAttribute("asso_strat",this.strat);
        e.setAttribute("class","pay line2");
-       var i=document.getElementsByClassName("m5");
+       var env=document.getElementsByClassName("sticklabel");
        GTE.svg.appendChild(e);
-       GTE.svg.insertBefore(e,i[0]);
+       GTE.svg.insertBefore(e,env[35]);
+       GTE.svg.insertBefore(env[35],e);
        }
        e.addEventListener("mousedown", GTE.diag.doMouseDownEndpoint);
        this.html_element=e;

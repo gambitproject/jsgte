@@ -8,10 +8,11 @@ GTE = (function(parentModule) {
         this.precision = 1/document.getElementById("precision").value; // precision for payoffs.
         this.endpoints = []; //two dimension array [player][strat] that contains endpoints.
         this.lines = []; //two dimension array [player][strat_player] that contains lines.
-        this.payoffs = [[]]; //two dimension array [player][strat] that contains payoffs
-        this.best_response = [[]]; // two dimensions array [player][strat_other_player] that contains the best respons of a player. -1 means the two strategies are equivalent.
+        this.payoffs = []; //two dimension array [player][strat] that contains payoffs
+        this.best_response = []; // two dimensions array [player][strat_other_player] that contains the best respons of a player. -1 means the two strategies are equivalent.
         this.envelopps= []; // two envelopp for each best response.
        this.nb_strat= [2,2];// Player's number of strategies.
+       this.intersect= []; // 2 arrays containing the mixed equilibrium.
         this.moving_endpoint;
         this.moving_line;
         this.moving;
@@ -32,6 +33,7 @@ GTE = (function(parentModule) {
        this.assignEndpoints();
        this.assignEnvelopps();
        this.assignLines();
+       this.assignIntersections();
        this.ini_arrays();
        }
     
@@ -62,6 +64,21 @@ GTE = (function(parentModule) {
             }
         }
     };
+       
+    Diagram.prototype.assignIntersections = function(){
+       for (var i=0; i<2 ; i++){
+          this.intersect.push([]);
+          for (var j=0 ; j< this.nb_strat[i]-1 ; j++){
+             for (var k=j+1; k<this.nb_strat[i]; k++){
+                var temp=new GTE.Intersection(i, j, k);
+                temp.attachLine(this.lines[i][j]);
+                temp.attachLine(this.lines[i][k]);
+                this.intersect[i].push( temp);
+       
+             }
+          }
+       }
+    };
     
     Diagram.prototype.ini_arrays = function() {
         for (var i=0; i<2; i++){
@@ -71,7 +88,7 @@ GTE = (function(parentModule) {
                 this.payoffs[i].push(0);
             }
             for (var j=0; j<GTE.tree.matrix.strategies[1+i].length; j++){
-                this.best_response.push(-1);
+                this.best_response[i].push(-1);
             }
         }
     };
@@ -151,7 +168,7 @@ GTE = (function(parentModule) {
     Diagram.prototype.doMouseupLine = function(event) {
         var mousePosition = GTE.getMousePosition(event)
         document.removeEventListener("mousemove", GTE.diag.doMouseMoveLine);
-        document.removeEventListener("mouseup", GTE.diag.doMouseupEndpoint);
+        document.removeEventListener("mouseup", GTE.diag.doMouseupLine);
         GTE.diag.moving.addEventListener("mousedown", GTE.diag.doMouseDownLine);
         GTE.diag.moving=null;
     };
@@ -198,6 +215,7 @@ GTE = (function(parentModule) {
         this.draw_up();
        this.draw_down();
     };
+       
     
     Diagram.prototype.compute_best_response = function() {
         for ( var i=0;i<2;i++){
@@ -270,7 +288,6 @@ GTE = (function(parentModule) {
           for (var j=0 ; j< this.lines[i].length ; j++){
              var temp=this.lines[i][j];
              for (var h=0; h<2; h++){
-       console.log(temp.getPlayer()+" "+temp.getStrat1());
                 temp.html_element[h].setAttributeNS(null, "y1", this.endpoints[temp.getPlayer()][temp.getStrat1()].getPosy());
        
                 temp.html_element[h].setAttributeNS(null, "y2", this.endpoints[temp.getPlayer()][temp.getStrat2()].getPosy());
@@ -987,8 +1004,11 @@ GTE = (function(parentModule) {
        }
        this.endpoints=[];
        this.lines=[];
-       this.best_response=[[]];
-       this.payoffs=[[]];
+       this.best_response=[];
+       this.payoffs=[];
+       for (var i=0;i<this.intersect.length;i++)
+       this.intersect[i].clear();
+       this.intersect=[];
        }
     
     
