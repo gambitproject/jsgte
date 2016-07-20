@@ -5,11 +5,12 @@ GTE = (function (parentModule) {
      * Creates a new end point.
      * @class
      */
-    function Endpoint(x,y,p,strat) {
+    function Endpoint(x,y,p,strat, strat_matrix) {
         this.x=x;
         this.y=y;
         this.player=p; //player that recieves the payoff.
         this.strat=strat;
+        this.strat_matrix=strat_matrix;
         this.html_element=null;
         if (strat>-1){
             this.draw();}
@@ -74,14 +75,7 @@ GTE = (function (parentModule) {
      Return strategy
      */
     Endpoint.prototype.getStrat_mat = function(){
-        if (this.player==0)
-        return this.strat;
-        else {
-            if (this.strat<GTE.diag.nb_strat[0])
-            return 2*this.strat;
-            else
-            return this.strat+this.strat%2-1;
-        }
+       return this.strat_matrix;
     };
     
     /*
@@ -103,7 +97,7 @@ GTE = (function (parentModule) {
      ToString function
      */
     Endpoint.prototype.toString = function () {
-        return "Player "+this.player+" payoff of strategy "+this.strat+" at position "+this.x+ " "+thi.y+".";
+        return "Player "+this.player+" payoff of strategy "+this.strat+" strategy matrix "+this.strat_matrix+" at position "+this.x+ " "+this.y+".";
     };
     
     

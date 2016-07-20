@@ -43,17 +43,31 @@ GTE = (function(parentModule) {
     };
     
     Diagram.prototype.assignEndpoints = function() {
-        var table_x=[[50,250,50,250,50,250,50,250,50,250,50,250,50,250,50,250],[450,650,450,650,450,650,450,650,450,650,450,650,450,650,450,650]];
+        var table_x=[[50,250],[450,650]];
         for (var j=0; j<2;j++){
             this.endpoints.push([]);
-            for(var i=0;i<2*this.nb_strat[j];i++){
-                this.endpoints[j].push( new GTE.Endpoint(table_x[j][i],this.height-this.margin,j,i));
+            for(var i=0;i<this.nb_strat[j];i++){
+                if (j==0){
+                this.endpoints[j].push( new GTE.Endpoint(table_x[j%2][i%2],this.height-this.margin,j,i,i));
+                }
+                else{
+                this.endpoints[j].push( new GTE.Endpoint(table_x[j%2][i%2],this.height-this.margin,j,i,2*i));
+                }
+            }
+            for(var i=0;i<this.nb_strat[j];i++){
+                var ind=this.nb_strat[j]+i;
+                if (j==0){
+                this.endpoints[j].push( new GTE.Endpoint(table_x[j%2][ind%2],this.height-this.margin,j,ind,ind));
+                }
+                else{
+                this.endpoints[j].push( new GTE.Endpoint(table_x[j%2][ind%2],this.height-this.margin,j,ind,Number(2*i+1)));
+                }
             }
         }
         
-        for (var j=0; j<2;j++){
+      /*  for (var j=0; j<2;j++){
             this.endpoints[j].push( new GTE.Endpoint(table_x[j][0],this.height-this.margin,j,-1));
-        }
+        }*/
     };
     
     Diagram.prototype.assignLines = function() {
@@ -100,7 +114,6 @@ GTE = (function(parentModule) {
      Associate html element to endpoint object.
      */
     Diagram.prototype.doMouseDownEndpoint = function (event){
-        console.log(event.currentTarget);
         event.preventDefault();
         var strat=event.currentTarget.getAttribute("asso_strat");
         var player=event.currentTarget.getAttribute("asso_player");
@@ -129,7 +142,7 @@ GTE = (function(parentModule) {
      Convert mouse's moves in endpoint's moves
      */
     Diagram.prototype.doMouseMoveEndpoint = function (event) {
-        console.log(GTE.diag.moving_endpoint);
+        //console.log(GTE.diag.moving_endpoint);
         var mousePosition = GTE.getMousePosition(event);
         var svgPosition = GTE.svg.getBoundingClientRect();
         var newPos=Math.round((2*GTE.diag.height/(svgPosition.bottom-svgPosition.top)*(-mousePosition.y+svgPosition.top)+GTE.diag.height-GTE.diag.margin)/GTE.diag.step*GTE.diag.precision)/GTE.diag.precision;
@@ -215,32 +228,37 @@ GTE = (function(parentModule) {
         document.getElementById('matrix-player-1').value = GTE.tree.matrix.getMatrixInStringFormat(0);
         document.getElementById('matrix-player-2').value = GTE.tree.matrix.getMatrixInStringFormat(1);
         GTE.tree.matrix.drawMatrix();
-        for (var i=0;i<this.nb_strat[0]-1;i++){
-            for (var j=i; j<this.nb_strat[0];j++){
+        /*for (var i=0;i<this.nb_strat[0]-1;i++){
+            for (var j=i+1; j<this.nb_strat[0];j++){
                 
                 this.compute_best_response_bis(i,j,0,1);
             }
-        }
+        }*/
+        this.compute_best_response_bis(0,1,0,1);
         this.draw_up();
         this.draw_down();
     };
     
     Diagram.prototype.compute_best_response_bis = function(strat11=0, strat12=1, strat21=0, strat22=1) {
         for (var i=0;i<this.nb_strat[0];i++){
-            for (var j=0;j<this.nb_strat[1];j++){
-                this.payoffs[0][i][j]=(Math.round(GTE.tree.matrix.matrix[i*this.nb_strat[1]+j].strategy.payoffs[0].value*GTE.diag.precision)/GTE.diag.precision);
-                GTE.tree.matrix.matrix[i*this.nb_strat[1]+j].strategy.payoffs[0].value=this.payoffs[0][i][j];
-                this.payoffs[1][i][j]=(Math.round(GTE.tree.matrix.matrix[i*this.nb_strat[1]+j].strategy.payoffs[1].value*GTE.diag.precision)/GTE.diag.precision);
-                GTE.tree.matrix.matrix[i*this.nb_strat[1]+j].strategy.payoffs[1].value=this.payoffs[1][i][j];
-            }
+            this.payoffs[0][i][strat21]=(Math.round(GTE.tree.matrix.matrix[Number(i*this.nb_strat[1]+strat21)].strategy.payoffs[0].value*GTE.diag.precision)/GTE.diag.precision);
+            GTE.tree.matrix.matrix[Number(i*this.nb_strat[1]+strat21)].strategy.payoffs[0].value=this.payoffs[0][i][strat21];
+            this.payoffs[0][i][strat22]=(Math.round(GTE.tree.matrix.matrix[Number(i*this.nb_strat[1]+strat22)].strategy.payoffs[0].value*GTE.diag.precision)/GTE.diag.precision);
+            GTE.tree.matrix.matrix[Number(i*this.nb_strat[1]+strat22)].strategy.payoffs[0].value=this.payoffs[0][i][strat22];
+        }
+        for (var j=0;j<this.nb_strat[1];j++){
+            this.payoffs[1][strat11][j]=(Math.round(GTE.tree.matrix.matrix[Number(strat11*this.nb_strat[1]+j)].strategy.payoffs[1].value*GTE.diag.precision)/GTE.diag.precision);
+            GTE.tree.matrix.matrix[Number(strat11*this.nb_strat[1]+j)].strategy.payoffs[1].value=this.payoffs[1][strat11][j];
+            this.payoffs[1][strat12][j]=(Math.round(GTE.tree.matrix.matrix[Number(strat12*this.nb_strat[1]+j)].strategy.payoffs[1].value*GTE.diag.precision)/GTE.diag.precision);
+            GTE.tree.matrix.matrix[Number(strat12*this.nb_strat[1]+j)].strategy.payoffs[1].value=this.payoffs[1][strat12][j];
         }
         for (var i=0;i<this.nb_strat[0];i++){
             this.endpoints[0][i*2].move(this.height-this.margin-this.payoffs[0][i][strat21]*this.step);
-            this.endpoints[0][i*2+1].move(this.height-this.margin-this.payoffs[0][i][strat22]*this.step);
+            this.endpoints[0][Number(i*2+1)].move(this.height-this.margin-this.payoffs[0][i][strat22]*this.step);
         }
         for (var i=0;i<this.nb_strat[1];i++){
             this.endpoints[1][i*2].move(this.height-this.margin-this.payoffs[1][strat11][i]*this.step);
-            this.endpoints[1][i*2+1].move(this.height-this.margin-this.payoffs[1][strat12][i]*this.step);
+            this.endpoints[1][Number(i*2+1)].move(this.height-this.margin-this.payoffs[1][strat12][i]*this.step);
         }
         // compute all intersect points
         var Y11; //left extremity of the first line
@@ -279,18 +297,18 @@ GTE = (function(parentModule) {
                     this.envelopps[0].setPoint(2,this.width-Number(this.margin), this.endpoints[0][2*j+1].getPosy());
                 }
                 else{
-                   if (Y11<Y21 && Y12<Y22){
-                       var middle_x=1;
-                       var middle_y=-1; //there is no intersection point
-                       this.best_response[0][0]=1;
-                       this.best_response[0][1]=1;
-                       this.envelopps[0].setPoint(0,this.margin, this.endpoints[0][2*k].getPosy());
-                       this.envelopps[0].setPoint(1,this.width-Number(this.margin), this.endpoints[0][2*k+1].getPosy());
-                       this.envelopps[0].setPoint(2,this.width-Number(this.margin), this.endpoints[0][2*k+1].getPosy());
-                   }
+                    if (Y11<Y21 && Y12<Y22){
+                        var middle_x=1;
+                        var middle_y=-1; //there is no intersection point
+                        this.best_response[0][0]=1;
+                        this.best_response[0][1]=1;
+                        this.envelopps[0].setPoint(0,this.margin, this.endpoints[0][2*k].getPosy());
+                        this.envelopps[0].setPoint(1,this.width-Number(this.margin), this.endpoints[0][2*k+1].getPosy());
+                        this.envelopps[0].setPoint(2,this.width-Number(this.margin), this.endpoints[0][2*k+1].getPosy());
+                    }
                     else {
                         if (Y11==Y21){
-                           var middle_x=0;
+                            var middle_x=0;
                             var middle_y=Y21; //there is no intersection point
                             this.best_response[0][0]=-1;
                             this.envelopps[0].setPoint(0,this.margin, this.endpoints[0][2*k].getPosy());
@@ -311,19 +329,19 @@ GTE = (function(parentModule) {
                             }
                         }else{
                             if (Y12==Y22){
-                             var middle_x=1;
-                             var middle_y=Y22; //there is no intersection point
-                             this.best_response[0][1]=-1;
-                             this.envelopps[0].setPoint(1,this.width-Number(this.margin), this.endpoints[0][2*k+1].getPosy());
-                             this.envelopps[0].setPoint(2,this.width-Number(this.margin), this.endpoints[0][2*k+1].getPosy());
-                              if (Y11>Y21){
-                                  this.envelopps[0].setPoint(0,this.margin, this.endpoints[0][2*j].getPosy());
-                                  this.best_response[0][0]=0;}
-                              else{
-                                  this.envelopps[0].setPoint(0,this.margin, this.endpoints[0][2*k].getPosy());
-                                  this.best_response[0][0]=1;}
-                          }
-                     }
+                                var middle_x=1;
+                                var middle_y=Y22; //there is no intersection point
+                                this.best_response[0][1]=-1;
+                                this.envelopps[0].setPoint(1,this.width-Number(this.margin), this.endpoints[0][2*k+1].getPosy());
+                                this.envelopps[0].setPoint(2,this.width-Number(this.margin), this.endpoints[0][2*k+1].getPosy());
+                                if (Y11>Y21){
+                                    this.envelopps[0].setPoint(0,this.margin, this.endpoints[0][2*j].getPosy());
+                                    this.best_response[0][0]=0;}
+                                else{
+                                    this.envelopps[0].setPoint(0,this.margin, this.endpoints[0][2*k].getPosy());
+                                    this.best_response[0][0]=1;}
+                            }
+                        }
                     }
                 }
                 this.intersect[0][j*this.nb_strat[0]-2*Number(j)+k-1].move(this.margin+middle_x*(this.width-2*Number(this.margin)),this.height-Number(this.margin)-Number(this.step)*middle_y);
@@ -1196,7 +1214,7 @@ GTE = (function(parentModule) {
             }
         }
         for (var i=0;i<this.endpoints.length;i++){
-            for (var j=0;j<this.endpoints[i].length-1;j++){
+            for (var j=0;j<this.endpoints[i].length;j++){
                 temp=this.endpoints[i][j].html_element;
                 GTE.svg.removeChild(temp);
             }
