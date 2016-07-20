@@ -55,6 +55,11 @@ GTE.TREE = (function (parentModule) {
                 break;
             case GTE.UNDO.INITIALIZEISETS:
                 GTE.tree.deinitializeISets();
+                this.isetToolsRan = false;
+                break;
+            case GTE.UNDO.DEINITIALIZEISETS:
+                GTE.tree.initializeISets();
+                this.isetToolsRan = true;
                 break;
             case GTE.UNDO.POPISET:
                 if(GTE.tree.isets.indexOf(this.node) == -1)
@@ -94,6 +99,14 @@ GTE.TREE = (function (parentModule) {
                 break;
             case GTE.MODES.PLAYER_ASSIGNMENT:
                 var change = new GTE.TREE.Change(this.node, GTE.MODES.PLAYER_ASSIGNMENT, this.to, this.from);
+                changes.queue.push(change);
+                break;
+            case GTE.UNDO.INITIALIZEISETS:
+                var change = new GTE.TREE.Change(null, GTE.UNDO.DEINITIALIZEISETS);
+                changes.queue.push(change);
+                break;
+            case GTE.UNDO.DEINITIALIZEISETS:
+                var change = new GTE.TREE.Change(null, GTE.UNDO.INITIALIZEISETS);
                 changes.queue.push(change);
                 break;
         }
