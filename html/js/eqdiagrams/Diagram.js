@@ -64,10 +64,7 @@ GTE = (function(parentModule) {
                 }
             }
         }
-        
-      /*  for (var j=0; j<2;j++){
-            this.endpoints[j].push( new GTE.Endpoint(table_x[j][0],this.height-this.margin,j,-1));
-        }*/
+
     };
     
     Diagram.prototype.assignLines = function() {
@@ -234,12 +231,12 @@ GTE = (function(parentModule) {
                 this.compute_best_response_bis(i,j,0,1);
             }
         }*/
-        this.compute_best_response_bis(0,1,0,1);
+        this.compute_best_response(0,1,0,1);
         this.draw_up();
         this.draw_down();
     };
     
-    Diagram.prototype.compute_best_response_bis = function(strat11=0, strat12=1, strat21=0, strat22=1) {
+    Diagram.prototype.compute_best_response = function(strat11=0, strat12=1, strat21=0, strat22=1) {
         for (var i=0;i<this.nb_strat[0];i++){
             this.payoffs[0][i][strat21]=(Math.round(GTE.tree.matrix.matrix[Number(i*this.nb_strat[1]+strat21)].strategy.payoffs[0].value*GTE.diag.precision)/GTE.diag.precision);
             GTE.tree.matrix.matrix[Number(i*this.nb_strat[1]+strat21)].strategy.payoffs[0].value=this.payoffs[0][i][strat21];
@@ -261,232 +258,147 @@ GTE = (function(parentModule) {
             this.endpoints[1][Number(i*2+1)].move(this.height-this.margin-this.payoffs[1][strat12][i]*this.step);
         }
         // compute all intersect points
+        var strat=[[strat21,strat22],[strat11,strat12]]
         var Y11; //left extremity of the first line
         var Y12; //right extremity of the first line
         var Y21; //left extremity of the second line
         var Y22; //right extremity of the second line
         //first diagram
+        for (var i=0;i<2;i++){
         for (var j=0; j< this.nb_strat[0]-1;j++){
             for (var k=j+1 ; k<this.nb_strat[0];k++){
-                Y11=this.payoffs[0][j][strat21];
-                Y12=this.payoffs[0][j][strat22];
-                Y21=this.payoffs[0][k][strat21];
-                Y22=this.payoffs[0][k][strat22];
+                if (i==0){
+                Y11=this.payoffs[i][j][strat[i][0]];
+                Y12=this.payoffs[i][j][strat[i][1]];
+                Y21=this.payoffs[i][k][strat[i][0]];
+                Y22=this.payoffs[i][k][strat[i][1]];}
+                else{
+                    Y11=this.payoffs[i][strat[i][0]][j];
+                    Y12=this.payoffs[i][strat[i][1]][j];
+                    Y21=this.payoffs[i][strat[i][0]][k];
+                    Y22=this.payoffs[i][strat[i][1]][k];
+                    
+                }
                 var middle_x=(Y21-Number(Y11))/(Y21-Number(Y22)+Y12-Number(Y11));
                 var middle_y=(Y12-Number(Y11))*middle_x+Number(Y11);
-                this.envelopps[0].setPoint(1,Number(this.margin)+middle_x*(this.width-2*Number(this.margin)), this.height-this.margin-(middle_y)*this.step);
+                this.envelopps[i].setPoint(1,i*(2*this.margin+this.width)+Number(this.margin)+middle_x*(this.width-2*Number(this.margin)), this.height-this.margin-(middle_y)*this.step);
                 if (Y11>Y21){
-                    this.envelopps[0].setPoint(0,this.margin, this.endpoints[0][2*j].getPosy());
+                    this.envelopps[i].setPoint(0,i*(2*this.margin+this.width)+this.margin, this.endpoints[i][2*j].getPosy());
                 }
                 else{
-                    this.envelopps[0].setPoint(0,this.margin, this.endpoints[0][2*k].getPosy());
+                    this.envelopps[i].setPoint(0,i*(2*this.margin+this.width)+this.margin, this.endpoints[i][2*k].getPosy());
                 }
                 if (Y12>Y22){
-                    this.envelopps[0].setPoint(2,this.width-Number(this.margin), this.endpoints[0][2*j+1].getPosy());
+                    this.envelopps[i].setPoint(2,i*(2*this.margin+this.width)+this.width-Number(this.margin), this.endpoints[i][2*j+1].getPosy());
                 }
                 else{
-                    this.envelopps[0].setPoint(2,this.width-Number(this.margin), this.endpoints[0][2*k+1].getPosy());
+                    this.envelopps[i].setPoint(2,i*(2*this.margin+this.width)+this.width-Number(this.margin), this.endpoints[i][2*k+1].getPosy());
                 }
                 if (Number(Y11)>Number(Y21) && Number(Y12)>Number(Y22)){
                     var middle_x=0;
                     var middle_y=-1; //there is no intersection point
-                    this.best_response[0][0]=0;
-                    this.best_response[0][1]=0;
-                    this.envelopps[0].setPoint(0,this.margin, this.endpoints[0][2*j].getPosy());
-                    this.envelopps[0].setPoint(1,this.margin, this.endpoints[0][2*j].getPosy());
-                    this.envelopps[0].setPoint(2,this.width-Number(this.margin), this.endpoints[0][2*j+1].getPosy());
+                    this.best_response[i][0]=0;
+                    this.best_response[i][1]=0;
+                    this.envelopps[i].setPoint(0,i*(2*this.margin+this.width)+this.margin, this.endpoints[i][2*j].getPosy());
+                    this.envelopps[i].setPoint(1,i*(2*this.margin+this.width)+this.margin, this.endpoints[i][2*j].getPosy());
+                    this.envelopps[i].setPoint(2,i*(2*this.margin+this.width)+this.width-Number(this.margin), this.endpoints[i][2*j+1].getPosy());
                 }
                 else{
                     if (Y11<Y21 && Y12<Y22){
                         var middle_x=1;
                         var middle_y=-1; //there is no intersection point
-                        this.best_response[0][0]=1;
-                        this.best_response[0][1]=1;
-                        this.envelopps[0].setPoint(0,this.margin, this.endpoints[0][2*k].getPosy());
-                        this.envelopps[0].setPoint(1,this.width-Number(this.margin), this.endpoints[0][2*k+1].getPosy());
-                        this.envelopps[0].setPoint(2,this.width-Number(this.margin), this.endpoints[0][2*k+1].getPosy());
+                        this.best_response[i][0]=1;
+                        this.best_response[i][1]=1;
+                        this.envelopps[i].setPoint(0,i*(2*this.margin+this.width)+this.margin, this.endpoints[i][2*k].getPosy());
+                        this.envelopps[i].setPoint(1,i*(2*this.margin+this.width)+this.width-Number(this.margin), this.endpoints[i][2*k+1].getPosy());
+                        this.envelopps[i].setPoint(2,i*(2*this.margin+this.width)+this.width-Number(this.margin), this.endpoints[i][2*k+1].getPosy());
                     }
                     else {
                         if (Y11==Y21){
                             var middle_x=0;
                             var middle_y=Y21; //there is no intersection point
-                            this.best_response[0][0]=-1;
-                            this.envelopps[0].setPoint(0,this.margin, this.endpoints[0][2*k].getPosy());
-                            this.envelopps[0].setPoint(1,this.margin, this.endpoints[0][2*k].getPosy());
+                            this.best_response[i][0]=-1;
+                            this.envelopps[i].setPoint(0,i*(2*this.margin+this.width)+this.margin, this.endpoints[i][2*k].getPosy());
+                            this.envelopps[i].setPoint(1,i*(2*this.margin+this.width)+this.margin, this.endpoints[i][2*k].getPosy());
                             if (Y12>Y22){
-                                this.best_response[0][1]=1;
-                                this.envelopps[0].setPoint(2,this.width-Number(this.margin), this.endpoints[0][2*j+1].getPosy());
+                                this.best_response[i][1]=1;
+                                this.envelopps[i].setPoint(2,i*(2*this.margin+this.width)+this.width-Number(this.margin), this.endpoints[i][2*j+1].getPosy());
                             }
                             else{
                                 if (Y12==Y22){
-                                    this.best_response[0][1]=-1;
-                                    this.envelopps[0].setPoint(2,this.width-Number(this.margin), this.endpoints[0][2*k+1].getPosy());
+                                    this.best_response[i][1]=-1;
+                                    this.envelopps[i].setPoint(2,i*(2*this.margin+this.width)+this.width-Number(this.margin), this.endpoints[i][2*k+1].getPosy());
                                 }
                                 else {
-                                    this.best_response[0][1]=0;
-                                    this.envelopps[0].setPoint(2,this.width-Number(this.margin), this.endpoints[0][2*k+1].getPosy());
+                                    this.best_response[i][1]=0;
+                                    this.envelopps[i].setPoint(2,i*(2*this.margin+this.width)+this.width-Number(this.margin), this.endpoints[i][2*k+1].getPosy());
                                 }
                             }
                         }else{
                             if (Y12==Y22){
                                 var middle_x=1;
                                 var middle_y=Y22; //there is no intersection point
-                                this.best_response[0][1]=-1;
-                                this.envelopps[0].setPoint(1,this.width-Number(this.margin), this.endpoints[0][2*k+1].getPosy());
-                                this.envelopps[0].setPoint(2,this.width-Number(this.margin), this.endpoints[0][2*k+1].getPosy());
+                                this.best_response[i][1]=-1;
+                                this.envelopps[i].setPoint(1,i*(2*this.margin+this.width)+this.width-Number(this.margin), this.endpoints[i][2*k+1].getPosy());
+                                this.envelopps[i].setPoint(2,i*(2*this.margin+this.width)+this.width-Number(this.margin), this.endpoints[i][2*k+1].getPosy());
                                 if (Y11>Y21){
-                                    this.envelopps[0].setPoint(0,this.margin, this.endpoints[0][2*j].getPosy());
-                                    this.best_response[0][0]=0;}
+                                    this.envelopps[i].setPoint(0,i*(2*this.margin+this.width)+this.margin, this.endpoints[i][2*j].getPosy());
+                                    this.best_response[i][0]=0;}
                                 else{
-                                    this.envelopps[0].setPoint(0,this.margin, this.endpoints[0][2*k].getPosy());
-                                    this.best_response[0][0]=1;}
+                                    this.envelopps[i].setPoint(0,i*(2*this.margin+this.width)+this.margin, this.endpoints[i][2*k].getPosy());
+                                    this.best_response[i][0]=1;}
                             }
                         }
                     }
                 }
-                this.intersect[0][j*this.nb_strat[0]-2*Number(j)+k-1].move(this.margin+middle_x*(this.width-2*Number(this.margin)),this.height-Number(this.margin)-Number(this.step)*middle_y);
+                this.intersect[i][j*this.nb_strat[i]-2*Number(j)+k-1].move(i*(2*this.margin+this.width)+this.margin+middle_x*(this.width-2*Number(this.margin)),this.height-Number(this.margin)-Number(this.step)*middle_y);
             }
         }
-        //second diagram
-        for (var j=0; j< this.nb_strat[1]-1;j++){
-            for (var k=j+1 ; k<this.nb_strat[1];k++){
-                Y11=this.payoffs[1][strat11][j];
-                Y12=this.payoffs[1][strat12][j];
-                Y21=this.payoffs[1][strat11][k];
-                Y22=this.payoffs[1][strat12][k];
-                var middle_x=(Y21-Number(Y11))/(Y21-Number(Y22)+Y12-Number(Y11));
-                var middle_y=(Y12-Number(Y11))*middle_x+Number(Y11);
-                this.envelopps[1].setPoint(1,2*this.margin+this.width+Number(this.margin)+middle_x*(this.width-2*Number(this.margin)), this.height-this.margin-(middle_y)*this.step);
-                if (Y11>Y21){
-                    this.envelopps[1].setPoint(0,2*this.margin+this.width+this.margin, this.endpoints[1][2*j].getPosy());
+        }
+        var envelop1=document.getElementById("envelop1");
+        envelop1.setAttributeNS(null,"points", "50,50 "+this.envelopps[0].points[0][0]+","+this.envelopps[0].points[0][1]+" "+this.envelopps[0].points[1][0]+","+this.envelopps[0].points[1][1]+" "+this.envelopps[0].points[2][0]+","+this.envelopps[0].points[2][1]+" 250,50");
+        var envelop2=document.getElementById("envelop2");
+        envelop2.setAttributeNS(null,"points", "450,50 "+this.envelopps[1].points[0][0]+","+this.envelopps[1].points[0][1]+" "+this.envelopps[1].points[1][0]+","+this.envelopps[1].points[1][1]+" "+this.envelopps[1].points[2][0]+","+this.envelopps[1].points[2][1]+" 650,50");
+        
+        //upates player's names
+        var name_player=GTE.svg.getElementsByClassName("player1_name");
+        for (var i=0;i<2;i++)
+        name_player[i].textContent=GTE.tree.matrix.players[1].name;
+        
+        name_player=GTE.svg.getElementsByClassName("player2_name");
+        for (var i=0;i<2;i++)
+        name_player[i].textContent=GTE.tree.matrix.players[2].name;
+        
+        // Lines update
+        for (var i=0 ; i< this.lines.length ; i++){
+            for (var j=0 ; j< this.lines[i].length ; j++){
+                var temp=this.lines[i][j];
+                for (var h=0; h<2; h++){
+                    temp.html_element[h].setAttributeNS(null, "y1", this.endpoints[temp.getPlayer()][temp.getStrat1()].getPosy());
+                    
+                    temp.html_element[h].setAttributeNS(null, "y2", this.endpoints[temp.getPlayer()][temp.getStrat2()].getPosy());
                 }
-                else{
-                    this.envelopps[1].setPoint(0,2*this.margin+this.width+this.margin, this.endpoints[1][2*k].getPosy());
-                }
-                if (Y12>Y22){
-                    this.envelopps[1].setPoint(2,2*this.margin+this.width+this.width-Number(this.margin), this.endpoints[1][2*j+1].getPosy());
-                }
-                else{
-                    this.envelopps[1].setPoint(2,2*this.margin+this.width+this.width-Number(this.margin), this.endpoints[1][2*k+1].getPosy());
-                }
-                if (Number(Y11)>Number(Y21) && Number(Y12)>Number(Y22)){
-                    var middle_x=0;
-                    var middle_y=-1; //there is no intersection point
-                    this.best_response[1][0]=0;
-                    this.best_response[1][1]=0;
-                    this.envelopps[1].setPoint(0,2*this.margin+this.width+this.margin, this.endpoints[1][2*j].getPosy());
-                    this.envelopps[1].setPoint(1,2*this.margin+this.width+this.margin, this.endpoints[1][2*j].getPosy());
-                    this.envelopps[1].setPoint(2,2*this.margin+this.width+this.width-Number(this.margin), this.endpoints[1][2*j+1].getPosy());
-                }
-                else{
-                    if (Y11<Y21 && Y12<Y22){
-                        var middle_x=1;
-                        var middle_y=-1; //there is no intersection point
-                        this.best_response[1][0]=1;
-                        this.best_response[1][1]=1;
-                        this.envelopps[1].setPoint(0,2*this.margin+this.width+this.margin, this.endpoints[1][2*k].getPosy());
-                        this.envelopps[1].setPoint(1,2*this.margin+this.width+this.width-Number(this.margin), this.endpoints[1][2*k+1].getPosy());
-                        this.envelopps[1].setPoint(2,2*this.margin+this.width+this.width-Number(this.margin), this.endpoints[1][2*k+1].getPosy());
-                    }
-                    else {
-                        if (Y11==Y21){
-                            var middle_x=0;
-                            var middle_y=Y21; //there is no intersection point
-                            this.best_response[1][0]=-1;
-                            this.envelopps[1].setPoint(0,2*this.margin+this.width+this.margin, this.endpoints[1][2*k].getPosy());
-                            this.envelopps[1].setPoint(1,2*this.margin+this.width+this.margin, this.endpoints[1][2*k].getPosy());
-                            if (Y12>Y22){
-                                this.best_response[1][1]=1;
-                                this.envelopps[1].setPoint(2,2*this.margin+this.width+this.width-Number(this.margin), this.endpoints[1][2*j+1].getPosy());
-                            }
-                            else{
-                                if (Y12==Y22){
-                                    this.best_response[1][1]=-1;
-                                    this.envelopps[1].setPoint(2,2*this.margin+this.width+this.width-Number(this.margin), this.endpoints[1][2*k+1].getPosy());
-                                }
-                                else {
-                                    this.best_response[1][1]=0;
-                                    this.envelopps[1].setPoint(2,2*this.margin+this.width+this.width-Number(this.margin), this.endpoints[1][2*k+1].getPosy());
-                                }
-                            }
-                        }else{
-                            if (Y12==Y22){
-                                var middle_x=1;
-                                var middle_y=Y22; //there is no intersection point
-                                this.best_response[1][1]=-1;
-                                this.envelopps[1].setPoint(1,2*this.margin+this.width+this.width-Number(this.margin), this.endpoints[1][2*k+1].getPosy());
-                                this.envelopps[1].setPoint(2,2*this.margin+this.width+this.width-Number(this.margin), this.endpoints[1][2*k+1].getPosy());
-                                if (Y11>Y21){
-                                    this.envelopps[1].setPoint(0,2*this.margin+this.width+this.margin, this.endpoints[1][2*j].getPosy());
-                                    this.best_response[1][0]=0;}
-                                else{
-                                    this.envelopps[1].setPoint(0,2*this.margin+this.width+this.margin, this.endpoints[1][2*k].getPosy());
-                                    this.best_response[1][0]=1;}
-                            }
-                        }
-                    }
-                }
-                this.intersect[1][j*this.nb_strat[1]-2*Number(j)+k-1].move(2*this.margin+this.width+this.margin+middle_x*(this.width-2*Number(this.margin)),this.height-Number(this.margin)-Number(this.step)*middle_y);
             }
         }
         
-        
+        var temp= GTE.svg.getElementsByClassName("strat22");
+        for (i=0;i<temp.length;i++){
+            temp[i].textContent=GTE.tree.matrix.strategies[2][1].moves[0].name;
+        }
+        temp= GTE.svg.getElementsByClassName("strat21");
+        for (i=0;i<temp.length;i++){
+            temp[i].textContent=GTE.tree.matrix.strategies[2][0].moves[0].name;
+        }
+        temp= GTE.svg.getElementsByClassName("strat12");
+        for (i=0;i<temp.length;i++){
+            temp[i].textContent=GTE.tree.matrix.strategies[1][1].moves[0].name;
+        }
+        temp= GTE.svg.getElementsByClassName("strat11");
+        for (i=0;i<temp.length;i++){
+            temp[i].textContent=GTE.tree.matrix.strategies[1][0].moves[0].name;
+        }
     }
-    
-    
-    Diagram.prototype.compute_best_response = function() {
-        for ( var i=0;i<2;i++){
-            for (var j=0;j<2*this.nb_strat[i];j++){ // updating payoff between matrix and drawing
-                this.payoffs[i][j]=(Math.round(GTE.tree.matrix.matrix[j].strategy.payoffs[i].value*GTE.diag.precision)/GTE.diag.precision);
-                GTE.tree.matrix.matrix[j].strategy.payoffs[i].value=this.payoffs[i][j];
-                this.endpoints[i][j].move(this.height-this.margin-this.payoffs[i][j]*this.step);
-            }
-            for (var j=0;j<2;j++){
-                if (Number(this.payoffs[i][this.couple_strat(i,j)[0]])==Number(this.payoffs[i][this.couple_strat(i,j)[1]])){
-                    this.best_response[i][j]=-1;
-                }
-                else {
-                    if (Number(this.payoffs[i][this.couple_strat(i,j)[0]])>Number(this.payoffs[i][this.couple_strat(i,j)[1]])){
-                        this.best_response[i][j]=0;
-                    }
-                    else {
-                        this.best_response[i][j]=1;
-                    }
-                }
-            }
-            if (this.best_response[i][0]==0 && this.best_response[i][1]==0) { ////If 0 is the best strategy, the middle point is on the left
-                this.envelopps[i].setPoint(0, i*(this.width+2*this.margin)+this.margin, this.endpoints[i][this.couple_strat(i,0)[0]].getPosy());
-                this.envelopps[i].setPoint(1, i*(this.width+2*this.margin)+this.margin, this.endpoints[i][this.couple_strat(i,0)[0]].getPosy());
-                this.envelopps[i].setPoint(2, i*(this.width+2*this.margin)-this.margin+this.width, this.endpoints[i][this.couple_strat(i,1)[0]].getPosy());
-            }
-            else {
-                if ((this.best_response[i][0]==1 && this.best_response[i][1]==1 )|| (this.best_response[i][0]==-1 && this.best_response[i][1]==-1)){ ////If 1 is the best strategy, the middle point is on the right
-                    this.envelopps[i].setPoint(0, i*(this.width+2*this.margin)+this.margin, this.endpoints[i][this.couple_strat(i,0)[1]].getPosy());
-                    this.envelopps[i].setPoint(1, i*(this.width+2*this.margin)+this.width-this.margin, this.endpoints[i][this.couple_strat(i,1)[1]].getPosy());
-                    this.envelopps[i].setPoint(2, i*(this.width+2*this.margin)+this.width-this.margin, this.endpoints[i][this.couple_strat(i,1)[1]].getPosy());
-                }
-                else{
-                    var middle_x=(this.payoffs[i][this.couple_strat(i,0)[1]]-Number(this.payoffs[i][this.couple_strat(i,0)[0]]))/(this.payoffs[i][this.couple_strat(i,0)[1]]- Number(this.payoffs[i][this.couple_strat(i,1)[1]]) + Number(this.payoffs[i][this.couple_strat(i,1)[0]]) - Number(this.payoffs[i][this.couple_strat(i,0)[0]]));
-                    
-                    var middle_y =(this.payoffs[i][this.couple_strat(i,1)[0]]-Number(this.payoffs[i][this.couple_strat(i,0)[0]]))*middle_x + this.payoffs[i][this.couple_strat(i,0)[0]];
-                    if (this.best_response[i][0]>-1){
-                        this.envelopps[i].setPoint(0, i*(this.width+2*this.margin)+this.margin, this.endpoints[i][this.couple_strat(i,0)[this.best_response[i][0]]].getPosy());
-                    }
-                    else {
-                        this.envelopps[i].setPoint(0, i*(this.width+2*this.margin)+this.margin, this.endpoints[i][this.couple_strat(i,0)[0]].getPosy());
-                    }
-                    this.envelopps[i].setPoint(1, i*(this.width+2*this.margin)+this.margin+ middle_x*(this.width-2*this.margin), this.height-this.margin-middle_y*this.step);
-                    if (this.best_response[i][1]>-1){
-                        this.envelopps[i].setPoint(2, i*(this.width+2*this.margin)-this.margin+this.width, this.endpoints[i][this.couple_strat(i,1)[this.best_response[i][1]]].getPosy());
-                    }
-                    else{
-                        this.envelopps[i].setPoint(2, i*(this.width+2*this.margin)-this.margin+this.width, this.endpoints[i][this.couple_strat(i,1)[0]].getPosy());
-                    }
-                    
-                }
-            }
-        }
-    };
+
     
     
     
