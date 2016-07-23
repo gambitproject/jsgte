@@ -101,7 +101,8 @@ var GTE = (function () {
       POPMOVES : 9,
       ASSIGNISET : 10,
       ADDISET : 11,
-      DEINITIALIZEISETS : 12
+      DEINITIALIZEISETS : 12,
+      PUSHSELECTEDQUEUE : 13,
     };
 
     GTE.UNDOQUEUE = [];

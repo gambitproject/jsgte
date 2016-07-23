@@ -24,6 +24,15 @@ GTE.TREE = (function (parentModule) {
         GTE.tree.draw();
         if(this.select) {
             this.iset.select();
+        } else if (GTE.tree.selected.length > 0) {
+            var iset = GTE.tree.selected[0];
+            if (iset.shape !== null) {
+                iset.shape.toggleClass('selected');
+            }
+            var nodes = iset.getNodes();
+            for (var i = 0; i < nodes.length; i++) {
+                nodes[i].select();
+            }
         }
     };
 
@@ -39,6 +48,15 @@ GTE.TREE = (function (parentModule) {
         GTE.tree.draw();
         if(this.select) {
             this.iset.select();
+        } else if (GTE.tree.selected.length > 0) {
+            var iset = GTE.tree.selected[0];
+            if (iset.shape !== null) {
+                iset.shape.toggleClass('selected');
+            }
+            var nodes = iset.getNodes();
+            for (var i = 0; i < nodes.length; i++) {
+                nodes[i].select();
+            }
         }
     };
 

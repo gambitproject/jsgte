@@ -53,6 +53,9 @@ GTE.TREE = (function (parentModule) {
             case GTE.UNDO.POPSELECTEDQUEUE:
                 GTE.tree.selected.pop();
                 break;
+            case GTE.UNDO.PUSHSELECTEDQUEUE:
+                GTE.tree.selected.push(this.node);
+                break;
             case GTE.UNDO.INITIALIZEISETS:
                 GTE.tree.deinitializeISets();
                 this.isetToolsRan = false;
@@ -100,6 +103,19 @@ GTE.TREE = (function (parentModule) {
             case GTE.MODES.PLAYER_ASSIGNMENT:
                 var change = new GTE.TREE.Change(this.node, GTE.MODES.PLAYER_ASSIGNMENT, this.to, this.from);
                 changes.queue.push(change);
+                break;
+            case GTE.MODES.MERGE:
+                if(this.selected) {
+                        var change =  new GTE.TREE.Change(this.node, GTE.MODES.MERGE);
+                        change.selected = true;
+                        changes.queue.push(change);
+                }
+                break;
+            case GTE.UNDO.POPSELECTEDQUEUE:
+                changes.queue.push(new GTE.TREE.Change(this.node, GTE.UNDO.PUSHSELECTEDQUEUE));
+                break;
+            case GTE.UNDO.PUSHSELECTEDQUEUE:
+                changes.queue.push(new GTE.TREE.Change(this.node, GTE.UNDO.POPSELECTEDQUEUE));
                 break;
             case GTE.UNDO.INITIALIZEISETS:
                 var change = new GTE.TREE.Change(null, GTE.UNDO.DEINITIALIZEISETS);
