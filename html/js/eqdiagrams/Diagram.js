@@ -48,23 +48,23 @@ GTE = (function(parentModule) {
             this.endpoints.push([]);
             for(var i=0;i<this.nb_strat[j];i++){
                 if (j==0){
-                this.endpoints[j].push( new GTE.Endpoint(table_x[j%2][i%2],this.height-this.margin,j,i,i));
+                    this.endpoints[j].push( new GTE.Endpoint(table_x[j%2][i%2],this.height-this.margin,j,i,i));
                 }
                 else{
-                this.endpoints[j].push( new GTE.Endpoint(table_x[j%2][i%2],this.height-this.margin,j,i,2*i));
+                    this.endpoints[j].push( new GTE.Endpoint(table_x[j%2][i%2],this.height-this.margin,j,i,2*i));
                 }
             }
             for(var i=0;i<this.nb_strat[j];i++){
                 var ind=this.nb_strat[j]+i;
                 if (j==0){
-                this.endpoints[j].push( new GTE.Endpoint(table_x[j%2][ind%2],this.height-this.margin,j,ind,ind));
+                    this.endpoints[j].push( new GTE.Endpoint(table_x[j%2][ind%2],this.height-this.margin,j,ind,ind));
                 }
                 else{
-                this.endpoints[j].push( new GTE.Endpoint(table_x[j%2][ind%2],this.height-this.margin,j,ind,Number(2*i+1)));
+                    this.endpoints[j].push( new GTE.Endpoint(table_x[j%2][ind%2],this.height-this.margin,j,ind,Number(2*i+1)));
                 }
             }
         }
-
+        
     };
     
     Diagram.prototype.assignLines = function() {
@@ -226,11 +226,11 @@ GTE = (function(parentModule) {
         document.getElementById('matrix-player-2').value = GTE.tree.matrix.getMatrixInStringFormat(1);
         GTE.tree.matrix.drawMatrix();
         /*for (var i=0;i<this.nb_strat[0]-1;i++){
-            for (var j=i+1; j<this.nb_strat[0];j++){
-                
-                this.compute_best_response_bis(i,j,0,1);
-            }
-        }*/
+         for (var j=i+1; j<this.nb_strat[0];j++){
+         
+         this.compute_best_response_bis(i,j,0,1);
+         }
+         }*/
         this.compute_best_response(0,1,0,1);
         this.draw_up();
         this.draw_down();
@@ -265,95 +265,109 @@ GTE = (function(parentModule) {
         var Y22; //right extremity of the second line
         //first diagram
         for (var i=0;i<2;i++){
-        for (var j=0; j< this.nb_strat[0]-1;j++){
-            for (var k=j+1 ; k<this.nb_strat[0];k++){
-                if (i==0){
-                Y11=this.payoffs[i][j][strat[i][0]];
-                Y12=this.payoffs[i][j][strat[i][1]];
-                Y21=this.payoffs[i][k][strat[i][0]];
-                Y22=this.payoffs[i][k][strat[i][1]];}
-                else{
-                    Y11=this.payoffs[i][strat[i][0]][j];
-                    Y12=this.payoffs[i][strat[i][1]][j];
-                    Y21=this.payoffs[i][strat[i][0]][k];
-                    Y22=this.payoffs[i][strat[i][1]][k];
-                    
-                }
-                var middle_x=(Y21-Number(Y11))/(Y21-Number(Y22)+Y12-Number(Y11));
-                var middle_y=(Y12-Number(Y11))*middle_x+Number(Y11);
-                this.envelopps[i].setPoint(1,i*(2*this.margin+this.width)+Number(this.margin)+middle_x*(this.width-2*Number(this.margin)), this.height-this.margin-(middle_y)*this.step);
-                if (Y11>Y21){
-                    this.envelopps[i].setPoint(0,i*(2*this.margin+this.width)+this.margin, this.endpoints[i][2*j].getPosy());
-                }
-                else{
-                    this.envelopps[i].setPoint(0,i*(2*this.margin+this.width)+this.margin, this.endpoints[i][2*k].getPosy());
-                }
-                if (Y12>Y22){
-                    this.envelopps[i].setPoint(2,i*(2*this.margin+this.width)+this.width-Number(this.margin), this.endpoints[i][2*j+1].getPosy());
-                }
-                else{
-                    this.envelopps[i].setPoint(2,i*(2*this.margin+this.width)+this.width-Number(this.margin), this.endpoints[i][2*k+1].getPosy());
-                }
-                if (Number(Y11)>Number(Y21) && Number(Y12)>Number(Y22)){
-                    var middle_x=0;
-                    var middle_y=-1; //there is no intersection point
-                    this.best_response[i][0]=0;
-                    this.best_response[i][1]=0;
-                    this.envelopps[i].setPoint(0,i*(2*this.margin+this.width)+this.margin, this.endpoints[i][2*j].getPosy());
-                    this.envelopps[i].setPoint(1,i*(2*this.margin+this.width)+this.margin, this.endpoints[i][2*j].getPosy());
-                    this.envelopps[i].setPoint(2,i*(2*this.margin+this.width)+this.width-Number(this.margin), this.endpoints[i][2*j+1].getPosy());
-                }
-                else{
-                    if (Y11<Y21 && Y12<Y22){
-                        var middle_x=1;
-                        var middle_y=-1; //there is no intersection point
-                        this.best_response[i][0]=1;
-                        this.best_response[i][1]=1;
+            for (var j=0; j< this.nb_strat[i]-1;j++){
+                for (var k=j+1 ; k<this.nb_strat[i];k++){
+                    if (i==0){
+                        Y11=this.payoffs[i][j][strat[i][0]];
+                        Y12=this.payoffs[i][j][strat[i][1]];
+                        Y21=this.payoffs[i][k][strat[i][0]];
+                        Y22=this.payoffs[i][k][strat[i][1]];}
+                    else{
+                        Y11=this.payoffs[i][strat[i][0]][j];
+                        Y12=this.payoffs[i][strat[i][1]][j];
+                        Y21=this.payoffs[i][strat[i][0]][k];
+                        Y22=this.payoffs[i][strat[i][1]][k];
+                        
+                    }
+                    var middle_x=(Y21-Number(Y11))/(Y21-Number(Y22)+Y12-Number(Y11));
+                    var middle_y=(Y12-Number(Y11))*middle_x+Number(Y11);
+                    this.envelopps[i].setPoint(1,i*(2*this.margin+this.width)+Number(this.margin)+middle_x*(this.width-2*Number(this.margin)), this.height-this.margin-(middle_y)*this.step);
+                    if (Y11>Y21){
+                        this.envelopps[i].setPoint(0,i*(2*this.margin+this.width)+this.margin, this.endpoints[i][2*j].getPosy());
+                    }
+                    else{
                         this.envelopps[i].setPoint(0,i*(2*this.margin+this.width)+this.margin, this.endpoints[i][2*k].getPosy());
-                        this.envelopps[i].setPoint(1,i*(2*this.margin+this.width)+this.width-Number(this.margin), this.endpoints[i][2*k+1].getPosy());
+                    }
+                    if (Y12>Y22){
+                        this.envelopps[i].setPoint(2,i*(2*this.margin+this.width)+this.width-Number(this.margin), this.endpoints[i][2*j+1].getPosy());
+                    }
+                    else{
                         this.envelopps[i].setPoint(2,i*(2*this.margin+this.width)+this.width-Number(this.margin), this.endpoints[i][2*k+1].getPosy());
                     }
-                    else {
-                        if (Y11==Y21){
-                            var middle_x=0;
-                            var middle_y=Y21; //there is no intersection point
-                            this.best_response[i][0]=-1;
+                    if (Number(Y11)>Number(Y21) && Number(Y12)>Number(Y22)){
+                        var middle_x=0;
+                        var middle_y=0; //there is no intersection point
+                        this.best_response[i][0]=0;
+                        this.best_response[i][1]=0;
+                        this.envelopps[i].setPoint(0,i*(2*this.margin+this.width)+this.margin, this.endpoints[i][2*j].getPosy());
+                        this.envelopps[i].setPoint(1,i*(2*this.margin+this.width)+this.margin, this.endpoints[i][2*j].getPosy());
+                        this.envelopps[i].setPoint(2,i*(2*this.margin+this.width)+this.width-Number(this.margin), this.endpoints[i][2*j+1].getPosy());
+                    }
+                    else{
+                        if (Y11<Y21 && Y12<Y22){
+                            var middle_x=1;
+                            var middle_y=0; //there is no intersection point
+                            this.best_response[i][0]=1;
+                            this.best_response[i][1]=1;
                             this.envelopps[i].setPoint(0,i*(2*this.margin+this.width)+this.margin, this.endpoints[i][2*k].getPosy());
-                            this.envelopps[i].setPoint(1,i*(2*this.margin+this.width)+this.margin, this.endpoints[i][2*k].getPosy());
-                            if (Y12>Y22){
-                                this.best_response[i][1]=1;
-                                this.envelopps[i].setPoint(2,i*(2*this.margin+this.width)+this.width-Number(this.margin), this.endpoints[i][2*j+1].getPosy());
-                            }
-                            else{
+                            this.envelopps[i].setPoint(1,i*(2*this.margin+this.width)+this.width-Number(this.margin), this.endpoints[i][2*k+1].getPosy());
+                            this.envelopps[i].setPoint(2,i*(2*this.margin+this.width)+this.width-Number(this.margin), this.endpoints[i][2*k+1].getPosy());
+                        }
+                        else {
+                            if (Y11==Y21){
+                                var middle_x=0;
+                                var middle_y=Y21; //there is no intersection point
+                                this.best_response[i][0]=-1;
+                                this.envelopps[i].setPoint(0,i*(2*this.margin+this.width)+this.margin, this.endpoints[i][2*k].getPosy());
+                                this.envelopps[i].setPoint(1,i*(2*this.margin+this.width)+this.margin, this.endpoints[i][2*k].getPosy());
+                                if (Y12>Y22){
+                                    this.best_response[i][1]=0;
+                                    this.envelopps[i].setPoint(2,i*(2*this.margin+this.width)+this.width-Number(this.margin), this.endpoints[i][2*j+1].getPosy());
+                                }
+                                else{
+                                    if (Y12==Y22){
+                                        this.best_response[i][1]=-1;
+                                        this.envelopps[i].setPoint(2,i*(2*this.margin+this.width)+this.width-Number(this.margin), this.endpoints[i][2*k+1].getPosy());
+                                    }
+                                    else {
+                                        this.best_response[i][1]=1;
+                                        this.envelopps[i].setPoint(2,i*(2*this.margin+this.width)+this.width-Number(this.margin), this.endpoints[i][2*k+1].getPosy());
+                                    }
+                                }
+                            }else{
                                 if (Y12==Y22){
+                                    var middle_x=1;
+                                    var middle_y=Y22; //there is no intersection point
                                     this.best_response[i][1]=-1;
+                                    this.envelopps[i].setPoint(1,i*(2*this.margin+this.width)+this.width-Number(this.margin), this.endpoints[i][2*k+1].getPosy());
                                     this.envelopps[i].setPoint(2,i*(2*this.margin+this.width)+this.width-Number(this.margin), this.endpoints[i][2*k+1].getPosy());
+                                    if (Y11>Y21){
+                                        this.envelopps[i].setPoint(0,i*(2*this.margin+this.width)+this.margin, this.endpoints[i][2*j].getPosy());
+                                        this.best_response[i][0]=0;}
+                                    else{
+                                        this.envelopps[i].setPoint(0,i*(2*this.margin+this.width)+this.margin, this.endpoints[i][2*k].getPosy());
+                                        this.best_response[i][0]=1;}
                                 }
                                 else {
-                                    this.best_response[i][1]=0;
-                                    this.envelopps[i].setPoint(2,i*(2*this.margin+this.width)+this.width-Number(this.margin), this.endpoints[i][2*k+1].getPosy());
+                                    if(Y11 > Y21){
+                                        this.best_response[i][0]=0;
+                                    }
+                                    else{
+                                        this.best_response[i][0]=1;
+                                    }
+                                    if(Y12 > Y22){
+                                        this.best_response[i][1]=0;
+                                    }
+                                    else{
+                                        this.best_response[i][1]=1;
+                                    }
                                 }
-                            }
-                        }else{
-                            if (Y12==Y22){
-                                var middle_x=1;
-                                var middle_y=Y22; //there is no intersection point
-                                this.best_response[i][1]=-1;
-                                this.envelopps[i].setPoint(1,i*(2*this.margin+this.width)+this.width-Number(this.margin), this.endpoints[i][2*k+1].getPosy());
-                                this.envelopps[i].setPoint(2,i*(2*this.margin+this.width)+this.width-Number(this.margin), this.endpoints[i][2*k+1].getPosy());
-                                if (Y11>Y21){
-                                    this.envelopps[i].setPoint(0,i*(2*this.margin+this.width)+this.margin, this.endpoints[i][2*j].getPosy());
-                                    this.best_response[i][0]=0;}
-                                else{
-                                    this.envelopps[i].setPoint(0,i*(2*this.margin+this.width)+this.margin, this.endpoints[i][2*k].getPosy());
-                                    this.best_response[i][0]=1;}
                             }
                         }
                     }
+                    this.intersect[i][j*this.nb_strat[i]-2*Number(j)+k-1].move(i*(2*this.margin+this.width)+this.margin+middle_x*(this.width-2*Number(this.margin)),this.height-Number(this.margin)-Number(this.step)*middle_y);
                 }
-                this.intersect[i][j*this.nb_strat[i]-2*Number(j)+k-1].move(i*(2*this.margin+this.width)+this.margin+middle_x*(this.width-2*Number(this.margin)),this.height-Number(this.margin)-Number(this.step)*middle_y);
             }
-        }
         }
         var envelop1=document.getElementById("envelop1");
         envelop1.setAttributeNS(null,"points", "50,50 "+this.envelopps[0].points[0][0]+","+this.envelopps[0].points[0][1]+" "+this.envelopps[0].points[1][0]+","+this.envelopps[0].points[1][1]+" "+this.envelopps[0].points[2][0]+","+this.envelopps[0].points[2][1]+" 250,50");
@@ -398,7 +412,7 @@ GTE = (function(parentModule) {
             temp[i].textContent=GTE.tree.matrix.strategies[1][0].moves[0].name;
         }
     }
-
+    
     
     
     
@@ -425,7 +439,7 @@ GTE = (function(parentModule) {
         }
         
         
-        if (this.best_response[0][0]==1 || this.best_response[0][1]==1 || (this.best_response[0][0]==0 && this.best_response[0][1]==0)){//Label strategy iff they are part of a best reponse
+        if (this.best_response[0][0]==0 || this.best_response[0][1]==0 || (this.best_response[0][0]==-1 && this.best_response[0][1]==-1)){//Label strategy iff they are part of a best reponse
             var labelline=GTE.svg.getElementById("text11");
             labelline.setAttributeNS(null, "y", Number(this.endpoints[0][0].getPosy())+(Number(this.endpoints[0][1].getPosy())-Number(this.endpoints[0][0].getPosy()))/200*30+Number(20));
             labelline.textContent=GTE.tree.matrix.strategies[1][0].moves[0].name;
@@ -434,7 +448,7 @@ GTE = (function(parentModule) {
             labelline=GTE.svg.getElementById("text11");
             labelline.textContent="";
         }
-        if(this.best_response[0][0]==2 || this.best_response[0][1]==2 || (this.best_response[0][0]==0 && this.best_response[0][1]==0)){//Label strategy iff they are part of a best reponse
+        if(this.best_response[0][0]==1 || this.best_response[0][1]==1 || (this.best_response[0][0]==-1 && this.best_response[0][1]==-1)){//Label strategy iff they are part of a best reponse
             labelline=GTE.svg.getElementById("text12");
             labelline.setAttributeNS(null, "y", Number(this.endpoints[0][3].getPosy())+(Number(this.endpoints[0][2].getPosy())-Number(this.endpoints[0][3].getPosy()))/200*30+Number(20));
             labelline.textContent=GTE.tree.matrix.strategies[1][1].moves[0].name;
@@ -444,7 +458,7 @@ GTE = (function(parentModule) {
             labelline.textContent="";
         }
         // Lines update svg2
-        if (this.best_response[1][0]==1 || this.best_response[1][1]==1 || (this.best_response[1][0]==0 && this.best_response[1][1]==0)){//Label strategy iff they are part of a best reponse
+        if (this.best_response[1][0]==0 || this.best_response[1][1]==0 || (this.best_response[1][0]==-1 && this.best_response[1][1]==-1)){//Label strategy iff they are part of a best reponse
             labelline=GTE.svg.getElementById("text21");
             labelline.setAttributeNS(null, "y", Number(this.endpoints[1][0].getPosy())+(Number(this.endpoints[1][2].getPosy())-Number(this.endpoints[1][0].getPosy()))/200*30+Number(20));
             labelline.textContent=GTE.tree.matrix.strategies[2][0].moves[0].name;
@@ -453,7 +467,7 @@ GTE = (function(parentModule) {
             labelline=GTE.svg.getElementById("text21");
             labelline.textContent="";
         }
-        if (this.best_response[1][0]==2 || this.best_response[1][1]==2 || (this.best_response[1][0]==0 && this.best_response[1][1]==0)){//Label strategy iff they are part of a best reponse
+        if (this.best_response[1][0]==1 || this.best_response[1][1]==1 || (this.best_response[1][0]==-1 && this.best_response[1][1]==-1)){//Label strategy iff they are part of a best reponse
             labelline=GTE.svg.getElementById("text22");
             labelline.setAttributeNS(null, "y", Number(this.endpoints[1][3].getPosy())+(Number(this.endpoints[1][1].getPosy()-Number(this.endpoints[1][3].getPosy()))/200*30)+Number(20));
             labelline.textContent=GTE.tree.matrix.strategies[2][1].moves[0].name;
@@ -1080,10 +1094,17 @@ GTE = (function(parentModule) {
         }
         if (this.envelopps[1].points[1][0]==450){
             GTE.svg.getElementsByClassName("arc player2")[0].setAttributeNS(null, "d","M450,460 A40,40 0 0,1 410,500");
+            GTE.svg.getElementsByClassName("stick player2")[0].setAttributeNS(null, "y1", 500);
+            GTE.svg.getElementsByClassName("stick player2")[0].setAttributeNS(null, "y2", 500);
         }
         if (this.envelopps[1].points[1][0]==650){
             GTE.svg.getElementsByClassName("arc player2")[0].setAttributeNS(null, "d","M650,460 A240,240 0 0,1 410,700");
+            GTE.svg.getElementsByClassName("stick player2")[0].setAttributeNS(null, "y1", 700);
+            GTE.svg.getElementsByClassName("stick player2")[0].setAttributeNS(null, "y2", 700);
         }
+        
+        GTE.svg.getElementsByClassName("stick player1")[0].setAttributeNS(null, "x1", Number(this.margin));
+        GTE.svg.getElementsByClassName("stick player1")[0].setAttributeNS(null, "x2", Number(this.margin));
         if (this.envelopps[0].points[1][0]>Number(this.margin) && this.envelopps[0].points[1][0]<Number(this.margin+this.side)){
             GTE.svg.getElementsByClassName("stick player1")[0].setAttributeNS(null, "x1", this.envelopps[0].points[1][0]);
             GTE.svg.getElementsByClassName("stick player1")[0].setAttributeNS(null, "x2", this.envelopps[0].points[1][0]);
@@ -1141,6 +1162,11 @@ GTE = (function(parentModule) {
             }
         }
         this.intersect=[];
+        var envelop1=document.getElementById("envelop1");
+        envelop1.setAttributeNS(null,"points", "50,50, 50,350, 250,350, 250,50");
+        var envelop2=document.getElementById("envelop2");
+        envelop2.setAttributeNS(null,"points", "450,50, 450,350, 650,350,  650,50");
+        this.envelopps= [];
     }
     
     
