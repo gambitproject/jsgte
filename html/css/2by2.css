@@ -78,7 +78,7 @@ box-sizing: border-box;
     stroke-width:2px;
 }
 
-/*upper envelopp */
+/*upper envelop */
 #drawing polygon{
     stroke-width:0px;
 }
@@ -114,11 +114,11 @@ box-sizing: border-box;
     stroke:blue;
 }
 
-#drawing #envelop1{
+#drawing #envelope1{
     fill:#ff6666;
 }
 
-#drawing #envelop2{
+#drawing #envelope2{
     fill:#6666ff;
 }
 
@@ -193,7 +193,7 @@ font-style: italic;
 }
 
 
-.strat{
+[class*="strat"]{
    font-style: italic;
    font-weight: bold;
    font-family:Roman;

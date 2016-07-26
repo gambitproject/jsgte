@@ -10,7 +10,7 @@ GTE = (function(parentModule) {
         this.lines = []; //two dimension array [player][strat_player] that contains lines.
         this.payoffs = []; //three dimension array [player][strat_p1][strat_p2] that contains payoffs
         this.best_response = []; // two dimensions array [player][strat_other_player] that contains the best respons of a player. -1 means the two strategies are equivalent.
-        this.envelopps= []; // two envelopp for each best response.
+        this.envelopes= []; // two envelope for each best response.
         this.nb_strat= [2,2];// Player's number of strategies.
         this.intersect= []; // 2 arrays containing the mixed equilibrium.
         this.moving_endpoint;
@@ -31,15 +31,15 @@ GTE = (function(parentModule) {
     Diagram.prototype.ini =function (){
         this.nb_strat=[GTE.tree.matrix.strategies[1].length,GTE.tree.matrix.strategies[2].length];
         this.assignEndpoints();
-        this.assignEnvelopps();
+        this.assignEnvelopes();
         this.assignLines();
         this.assignIntersections();
         this.ini_arrays();
     }
     
-    Diagram.prototype.assignEnvelopps = function () {
-        this.envelopps.push( new GTE.Envelopp(0) );
-        this.envelopps.push( new GTE.Envelopp(1) );
+    Diagram.prototype.assignEnvelopes = function () {
+        this.envelopes.push( new GTE.Envelope(0) );
+        this.envelopes.push( new GTE.Envelope(1) );
     };
     
     Diagram.prototype.assignEndpoints = function() {
@@ -263,7 +263,6 @@ GTE = (function(parentModule) {
         var Y12; //right extremity of the first line
         var Y21; //left extremity of the second line
         var Y22; //right extremity of the second line
-        //first diagram
         for (var i=0;i<2;i++){
             for (var j=0; j< this.nb_strat[i]-1;j++){
                 for (var k=j+1 ; k<this.nb_strat[i];k++){
@@ -281,27 +280,27 @@ GTE = (function(parentModule) {
                     }
                     var middle_x=(Y21-Number(Y11))/(Y21-Number(Y22)+Y12-Number(Y11));
                     var middle_y=(Y12-Number(Y11))*middle_x+Number(Y11);
-                    this.envelopps[i].setPoint(1,i*(2*this.margin+this.width)+Number(this.margin)+middle_x*(this.width-2*Number(this.margin)), this.height-this.margin-(middle_y)*this.step);
+                    this.envelopes[i].setPoint(1,i*(2*this.margin+this.width)+Number(this.margin)+middle_x*(this.width-2*Number(this.margin)), this.height-this.margin-(middle_y)*this.step);
                     if (Y11>Y21){
-                        this.envelopps[i].setPoint(0,i*(2*this.margin+this.width)+this.margin, this.endpoints[i][2*j].getPosy());
+                        this.envelopes[i].setPoint(0,i*(2*this.margin+this.width)+this.margin, this.endpoints[i][2*j].getPosy());
                     }
                     else{
-                        this.envelopps[i].setPoint(0,i*(2*this.margin+this.width)+this.margin, this.endpoints[i][2*k].getPosy());
+                        this.envelopes[i].setPoint(0,i*(2*this.margin+this.width)+this.margin, this.endpoints[i][2*k].getPosy());
                     }
                     if (Y12>Y22){
-                        this.envelopps[i].setPoint(2,i*(2*this.margin+this.width)+this.width-Number(this.margin), this.endpoints[i][2*j+1].getPosy());
+                        this.envelopes[i].setPoint(2,i*(2*this.margin+this.width)+this.width-Number(this.margin), this.endpoints[i][2*j+1].getPosy());
                     }
                     else{
-                        this.envelopps[i].setPoint(2,i*(2*this.margin+this.width)+this.width-Number(this.margin), this.endpoints[i][2*k+1].getPosy());
+                        this.envelopes[i].setPoint(2,i*(2*this.margin+this.width)+this.width-Number(this.margin), this.endpoints[i][2*k+1].getPosy());
                     }
                     if (Number(Y11)>Number(Y21) && Number(Y12)>Number(Y22)){
                         var middle_x=0;
                         var middle_y=0; //there is no intersection point
                         this.best_response[i][0]=0;
                         this.best_response[i][1]=0;
-                        this.envelopps[i].setPoint(0,i*(2*this.margin+this.width)+this.margin, this.endpoints[i][2*j].getPosy());
-                        this.envelopps[i].setPoint(1,i*(2*this.margin+this.width)+this.margin, this.endpoints[i][2*j].getPosy());
-                        this.envelopps[i].setPoint(2,i*(2*this.margin+this.width)+this.width-Number(this.margin), this.endpoints[i][2*j+1].getPosy());
+                        this.envelopes[i].setPoint(0,i*(2*this.margin+this.width)+this.margin, this.endpoints[i][2*j].getPosy());
+                        this.envelopes[i].setPoint(1,i*(2*this.margin+this.width)+this.margin, this.endpoints[i][2*j].getPosy());
+                        this.envelopes[i].setPoint(2,i*(2*this.margin+this.width)+this.width-Number(this.margin), this.endpoints[i][2*j+1].getPosy());
                     }
                     else{
                         if (Y11<Y21 && Y12<Y22){
@@ -309,29 +308,29 @@ GTE = (function(parentModule) {
                             var middle_y=0; //there is no intersection point
                             this.best_response[i][0]=1;
                             this.best_response[i][1]=1;
-                            this.envelopps[i].setPoint(0,i*(2*this.margin+this.width)+this.margin, this.endpoints[i][2*k].getPosy());
-                            this.envelopps[i].setPoint(1,i*(2*this.margin+this.width)+this.width-Number(this.margin), this.endpoints[i][2*k+1].getPosy());
-                            this.envelopps[i].setPoint(2,i*(2*this.margin+this.width)+this.width-Number(this.margin), this.endpoints[i][2*k+1].getPosy());
+                            this.envelopes[i].setPoint(0,i*(2*this.margin+this.width)+this.margin, this.endpoints[i][2*k].getPosy());
+                            this.envelopes[i].setPoint(1,i*(2*this.margin+this.width)+this.width-Number(this.margin), this.endpoints[i][2*k+1].getPosy());
+                            this.envelopes[i].setPoint(2,i*(2*this.margin+this.width)+this.width-Number(this.margin), this.endpoints[i][2*k+1].getPosy());
                         }
                         else {
                             if (Y11==Y21){
                                 var middle_x=0;
                                 var middle_y=Y21; //there is no intersection point
                                 this.best_response[i][0]=-1;
-                                this.envelopps[i].setPoint(0,i*(2*this.margin+this.width)+this.margin, this.endpoints[i][2*k].getPosy());
-                                this.envelopps[i].setPoint(1,i*(2*this.margin+this.width)+this.margin, this.endpoints[i][2*k].getPosy());
+                                this.envelopes[i].setPoint(0,i*(2*this.margin+this.width)+this.margin, this.endpoints[i][2*k].getPosy());
+                                this.envelopes[i].setPoint(1,i*(2*this.margin+this.width)+this.margin, this.endpoints[i][2*k].getPosy());
                                 if (Y12>Y22){
                                     this.best_response[i][1]=0;
-                                    this.envelopps[i].setPoint(2,i*(2*this.margin+this.width)+this.width-Number(this.margin), this.endpoints[i][2*j+1].getPosy());
+                                    this.envelopes[i].setPoint(2,i*(2*this.margin+this.width)+this.width-Number(this.margin), this.endpoints[i][2*j+1].getPosy());
                                 }
                                 else{
                                     if (Y12==Y22){
                                         this.best_response[i][1]=-1;
-                                        this.envelopps[i].setPoint(2,i*(2*this.margin+this.width)+this.width-Number(this.margin), this.endpoints[i][2*k+1].getPosy());
+                                        this.envelopes[i].setPoint(2,i*(2*this.margin+this.width)+this.width-Number(this.margin), this.endpoints[i][2*k+1].getPosy());
                                     }
                                     else {
                                         this.best_response[i][1]=1;
-                                        this.envelopps[i].setPoint(2,i*(2*this.margin+this.width)+this.width-Number(this.margin), this.endpoints[i][2*k+1].getPosy());
+                                        this.envelopes[i].setPoint(2,i*(2*this.margin+this.width)+this.width-Number(this.margin), this.endpoints[i][2*k+1].getPosy());
                                     }
                                 }
                             }else{
@@ -339,13 +338,13 @@ GTE = (function(parentModule) {
                                     var middle_x=1;
                                     var middle_y=Y22; //there is no intersection point
                                     this.best_response[i][1]=-1;
-                                    this.envelopps[i].setPoint(1,i*(2*this.margin+this.width)+this.width-Number(this.margin), this.endpoints[i][2*k+1].getPosy());
-                                    this.envelopps[i].setPoint(2,i*(2*this.margin+this.width)+this.width-Number(this.margin), this.endpoints[i][2*k+1].getPosy());
+                                    this.envelopes[i].setPoint(1,i*(2*this.margin+this.width)+this.width-Number(this.margin), this.endpoints[i][2*k+1].getPosy());
+                                    this.envelopes[i].setPoint(2,i*(2*this.margin+this.width)+this.width-Number(this.margin), this.endpoints[i][2*k+1].getPosy());
                                     if (Y11>Y21){
-                                        this.envelopps[i].setPoint(0,i*(2*this.margin+this.width)+this.margin, this.endpoints[i][2*j].getPosy());
+                                        this.envelopes[i].setPoint(0,i*(2*this.margin+this.width)+this.margin, this.endpoints[i][2*j].getPosy());
                                         this.best_response[i][0]=0;}
                                     else{
-                                        this.envelopps[i].setPoint(0,i*(2*this.margin+this.width)+this.margin, this.endpoints[i][2*k].getPosy());
+                                        this.envelopes[i].setPoint(0,i*(2*this.margin+this.width)+this.margin, this.endpoints[i][2*k].getPosy());
                                         this.best_response[i][0]=1;}
                                 }
                                 else {
@@ -369,10 +368,10 @@ GTE = (function(parentModule) {
                 }
             }
         }
-        var envelop1=document.getElementById("envelop1");
-        envelop1.setAttributeNS(null,"points", "50,50 "+this.envelopps[0].points[0][0]+","+this.envelopps[0].points[0][1]+" "+this.envelopps[0].points[1][0]+","+this.envelopps[0].points[1][1]+" "+this.envelopps[0].points[2][0]+","+this.envelopps[0].points[2][1]+" 250,50");
-        var envelop2=document.getElementById("envelop2");
-        envelop2.setAttributeNS(null,"points", "450,50 "+this.envelopps[1].points[0][0]+","+this.envelopps[1].points[0][1]+" "+this.envelopps[1].points[1][0]+","+this.envelopps[1].points[1][1]+" "+this.envelopps[1].points[2][0]+","+this.envelopps[1].points[2][1]+" 650,50");
+        var envelope1=document.getElementById("envelope1");
+        envelope1.setAttributeNS(null,"points", "50,50 "+this.envelopes[0].points[0][0]+","+this.envelopes[0].points[0][1]+" "+this.envelopes[0].points[1][0]+","+this.envelopes[0].points[1][1]+" "+this.envelopes[0].points[2][0]+","+this.envelopes[0].points[2][1]+" 250,50");
+        var envelope2=document.getElementById("envelope2");
+        envelope2.setAttributeNS(null,"points", "450,50 "+this.envelopes[1].points[0][0]+","+this.envelopes[1].points[0][1]+" "+this.envelopes[1].points[1][0]+","+this.envelopes[1].points[1][1]+" "+this.envelopes[1].points[2][0]+","+this.envelopes[1].points[2][1]+" 650,50");
         
         //upates player's names
         var name_player=GTE.svg.getElementsByClassName("player1_name");
@@ -477,46 +476,46 @@ GTE = (function(parentModule) {
             labelline.textContent="";
         }
         //envelop svg1
-        var envelop1=document.getElementById("envelop1");
-        envelop1.setAttributeNS(null,"points", "50,50 "+this.envelopps[0].points[0][0]+","+this.envelopps[0].points[0][1]+" "+this.envelopps[0].points[1][0]+","+this.envelopps[0].points[1][1]+" "+this.envelopps[0].points[2][0]+","+this.envelopps[0].points[2][1]+" 250,50");
+        var envelope1=document.getElementById("envelope1");
+        envelope1.setAttributeNS(null,"points", "50,50 "+this.envelopes[0].points[0][0]+","+this.envelopes[0].points[0][1]+" "+this.envelopes[0].points[1][0]+","+this.envelopes[0].points[1][1]+" "+this.envelopes[0].points[2][0]+","+this.envelopes[0].points[2][1]+" 250,50");
         var inter=GTE.svg.getElementById("inter1");
-        inter.setAttributeNS(null,"cx", this.envelopps[0].points[1][0]);
-        inter.setAttributeNS(null,"cy", this.envelopps[0].points[1][1]);
+        inter.setAttributeNS(null,"cx", this.envelopes[0].points[1][0]);
+        inter.setAttributeNS(null,"cy", this.envelopes[0].points[1][1]);
         var interlabel=GTE.svg.getElementById("interlabel1");
-        interlabel.setAttributeNS(null, "x",this.envelopps[0].points[1][0]);
-        interlabel.textContent=Math.round((Number(this.envelopps[0].points[1][0])-50)/2)/100;
+        interlabel.setAttributeNS(null, "x",this.envelopes[0].points[1][0]);
+        interlabel.textContent=Math.round((Number(this.envelopes[0].points[1][0])-50)/2)/100;
         var stick=GTE.svg.getElementsByClassName("interstick1");
         for (i=0;i<stick.length;i++){
-            stick[i].setAttributeNS(null, "x1",this.envelopps[0].points[1][0]);
-            stick[i].setAttributeNS(null, "x2",this.envelopps[0].points[1][0]);}
+            stick[i].setAttributeNS(null, "x1",this.envelopes[0].points[1][0]);
+            stick[i].setAttributeNS(null, "x2",this.envelopes[0].points[1][0]);}
         //envelop svg2
-        var envelop2=document.getElementById("envelop2");
-        envelop2.setAttributeNS(null,"points", "450,50 "+this.envelopps[1].points[0][0]+","+this.envelopps[1].points[0][1]+" "+this.envelopps[1].points[1][0]+","+this.envelopps[1].points[1][1]+" "+this.envelopps[1].points[2][0]+","+this.envelopps[1].points[2][1]+" 650,50");
+        var envelope2=document.getElementById("envelope2");
+        envelope2.setAttributeNS(null,"points", "450,50 "+this.envelopes[1].points[0][0]+","+this.envelopes[1].points[0][1]+" "+this.envelopes[1].points[1][0]+","+this.envelopes[1].points[1][1]+" "+this.envelopes[1].points[2][0]+","+this.envelopes[1].points[2][1]+" 650,50");
         inter=GTE.svg.getElementById("inter2");
-        inter.setAttributeNS(null,"cx", this.envelopps[1].points[1][0]);
-        inter.setAttributeNS(null,"cy", this.envelopps[1].points[1][1]);
+        inter.setAttributeNS(null,"cx", this.envelopes[1].points[1][0]);
+        inter.setAttributeNS(null,"cy", this.envelopes[1].points[1][1]);
         interlabel=GTE.svg.getElementById("interlabel2");
-        interlabel.setAttributeNS(null, "x",this.envelopps[1].points[1][0]);
-        interlabel.textContent=Math.round((Number(this.envelopps[1].points[1][0])-450)/2)/100;
+        interlabel.setAttributeNS(null, "x",this.envelopes[1].points[1][0]);
+        interlabel.textContent=Math.round((Number(this.envelopes[1].points[1][0])-450)/2)/100;
         var stick=GTE.svg.getElementsByClassName("interstick2");
         for (i=0;i<stick.length;i++){
-            stick[i].setAttributeNS(null, "x1",this.envelopps[1].points[1][0]);
-            stick[i].setAttributeNS(null, "x2",this.envelopps[1].points[1][0]);
+            stick[i].setAttributeNS(null, "x1",this.envelopes[1].points[1][0]);
+            stick[i].setAttributeNS(null, "x2",this.envelopes[1].points[1][0]);
         }
         
-        var temp= GTE.svg.getElementsByClassName("strat22");
+        var temp= GTE.svg.getElementsByClassName("strat11");
         for (i=0;i<temp.length;i++){
             temp[i].textContent=GTE.tree.matrix.strategies[2][1].moves[0].name;
         }
-        temp= GTE.svg.getElementsByClassName("strat21");
+        temp= GTE.svg.getElementsByClassName("strat10");
         for (i=0;i<temp.length;i++){
             temp[i].textContent=GTE.tree.matrix.strategies[2][0].moves[0].name;
         }
-        temp= GTE.svg.getElementsByClassName("strat12");
+        temp= GTE.svg.getElementsByClassName("strat01");
         for (i=0;i<temp.length;i++){
             temp[i].textContent=GTE.tree.matrix.strategies[1][1].moves[0].name;
         }
-        temp= GTE.svg.getElementsByClassName("strat11");
+        temp= GTE.svg.getElementsByClassName("strat00");
         for (i=0;i<temp.length;i++){
             temp[i].textContent=GTE.tree.matrix.strategies[1][0].moves[0].name;
         }
@@ -654,8 +653,8 @@ GTE = (function(parentModule) {
                         temp[4].setAttributeNS(null, "width", Number(this.side+2*this.rad));
                     }
                     else{
-                        path1=Number(this.margin)+","+Number(this.height+2*this.margin)+", "+this.envelopps[0].points[1][0]+","+Number(this.height+2*this.margin)+", "+this.envelopps[0].points[1][0]+","+Number(2*this.margin+this.height+this.side)+", "+ Number(this.margin+this.side)+","+Number(2*this.margin+this.height+this.side);
-                        temp[8].setAttributeNS(null, "x", this.envelopps[0].points[1][0]-5);
+                        path1=Number(this.margin)+","+Number(this.height+2*this.margin)+", "+this.envelopes[0].points[1][0]+","+Number(this.height+2*this.margin)+", "+this.envelopes[0].points[1][0]+","+Number(2*this.margin+this.height+this.side)+", "+ Number(this.margin+this.side)+","+Number(2*this.margin+this.height+this.side);
+                        temp[8].setAttributeNS(null, "x", this.envelopes[0].points[1][0]-5);
                         temp[8].setAttributeNS(null, "y", Number(2*this.margin+this.height-this.rad));
                         temp[8].setAttributeNS(null, "height", Number(this.side+2*this.rad));
                         temp[8].setAttributeNS(null, "width", Number(2*this.rad));
@@ -663,12 +662,12 @@ GTE = (function(parentModule) {
                         temp[4].setAttributeNS(null, "x", Number(this.margin-this.rad));
                         temp[4].setAttributeNS(null, "y", Number(2*this.margin+this.height-this.rad));
                         temp[4].setAttributeNS(null, "height", Number(2*this.rad));
-                        temp[4].setAttributeNS(null, "width", ~~(this.envelopps[0].points[1][0]-Number(this.margin))+Number(2*this.rad));
+                        temp[4].setAttributeNS(null, "width", ~~(this.envelopes[0].points[1][0]-Number(this.margin))+Number(2*this.rad));
                         
-                        temp[6].setAttributeNS(null, "x", this.envelopps[0].points[1][0]-5);
+                        temp[6].setAttributeNS(null, "x", this.envelopes[0].points[1][0]-5);
                         temp[6].setAttributeNS(null, "y", Number(this.height+2*this.margin+this.side-this.rad));
                         temp[6].setAttributeNS(null, "height", Number(2*this.rad));
-                        temp[6].setAttributeNS(null, "width", ~~(Number(this.margin+this.side)-this.envelopps[0].points[1][0])+Number(2*this.rad));
+                        temp[6].setAttributeNS(null, "width", ~~(Number(this.margin+this.side)-this.envelopes[0].points[1][0])+Number(2*this.rad));
                         
                         temp[1].setAttributeNS(null, "r", 0);
                         temp[3].setAttributeNS(null, "r", 0);
@@ -676,21 +675,21 @@ GTE = (function(parentModule) {
                 }
                 else{
                     if (this.best_response[0][1]==0){
-                        path1=Number(this.margin)+","+Number(2*this.margin+this.height+this.side)+", "+this.envelopps[0].points[1][0]+","+Number(2*this.margin+this.height+this.side)+", "+this.envelopps[0].points[1][0]+","+Number(this.height+2*this.margin)+", "+Number(this.margin+this.side)+","+Number(this.height+2*this.margin);
+                        path1=Number(this.margin)+","+Number(2*this.margin+this.height+this.side)+", "+this.envelopes[0].points[1][0]+","+Number(2*this.margin+this.height+this.side)+", "+this.envelopes[0].points[1][0]+","+Number(this.height+2*this.margin)+", "+Number(this.margin+this.side)+","+Number(this.height+2*this.margin);
                         temp[6].setAttributeNS(null, "x", Number(this.margin-this.rad));
                         temp[6].setAttributeNS(null, "y", Number(this.height+2*this.margin+this.side-this.rad));
                         temp[6].setAttributeNS(null, "height", Number(2*this.rad));
-                        temp[6].setAttributeNS(null, "width", ~~(this.envelopps[0].points[1][0]-Number(this.margin))+Number(2*this.rad));
+                        temp[6].setAttributeNS(null, "width", ~~(this.envelopes[0].points[1][0]-Number(this.margin))+Number(2*this.rad));
                         
-                        temp[8].setAttributeNS(null, "x", this.envelopps[0].points[1][0]-5);
+                        temp[8].setAttributeNS(null, "x", this.envelopes[0].points[1][0]-5);
                         temp[8].setAttributeNS(null, "y", Number(2*this.margin+this.height-this.rad));
                         temp[8].setAttributeNS(null, "height", Number(this.side+2*this.rad));
                         temp[8].setAttributeNS(null, "width", Number(2*this.rad));
                         
-                        temp[4].setAttributeNS(null, "x", this.envelopps[0].points[1][0]-5);
+                        temp[4].setAttributeNS(null, "x", this.envelopes[0].points[1][0]-5);
                         temp[4].setAttributeNS(null, "y", Number(2*this.margin+this.height-this.rad));
                         temp[4].setAttributeNS(null, "height", Number(2*this.rad));
-                        temp[4].setAttributeNS(null, "width", ~~(Number(this.margin+this.side)-this.envelopps[0].points[1][0])+Number(2*this.rad));
+                        temp[4].setAttributeNS(null, "width", ~~(Number(this.margin+this.side)-this.envelopes[0].points[1][0])+Number(2*this.rad));
                         
                         temp[0].setAttributeNS(null, "r", 0);
                         temp[2].setAttributeNS(null, "r", 0);
@@ -860,7 +859,7 @@ GTE = (function(parentModule) {
                         temp[2].setAttributeNS(null, "r", 0);//remove end point
                     }
                     else{
-                        path2=Number(this.margin)+","+Number(this.height+2*this.margin)+", "+Number(this.margin)+","+Number(this.envelopps[1].points[1][0]+Number(Number(this.margin)))+", "+Number(this.margin+this.side)+","+Number(this.envelopps[1].points[1][0]+Number(this.margin))+", "+Number(this.margin+this.side)+","+Number(2*this.margin+this.height+this.side);
+                        path2=Number(this.margin)+","+Number(this.height+2*this.margin)+", "+Number(this.margin)+","+Number(this.envelopes[1].points[1][0]+Number(Number(this.margin)))+", "+Number(this.margin+this.side)+","+Number(this.envelopes[1].points[1][0]+Number(this.margin))+", "+Number(this.margin+this.side)+","+Number(2*this.margin+this.height+this.side);
                         temp[1].setAttributeNS(null, "r", 0);
                         temp[3].setAttributeNS(null, "r", 0);
                         if (this.best_response[0][1]>-1 && this.best_response[0][0]>-1){
@@ -873,7 +872,7 @@ GTE = (function(parentModule) {
                             temp[5].setAttributeNS(null, "width", 0);
                             temp[6].setAttributeNS(null, "width", 0);
                             temp[7].setAttributeNS(null, "width", 0);
-                            temp[8].setAttributeNS(null, "y", Number(this.envelopps[1].points[1][0]+Number(Number(this.margin-this.rad))));
+                            temp[8].setAttributeNS(null, "y", Number(this.envelopes[1].points[1][0]+Number(Number(this.margin-this.rad))));
                             if (this.best_response[0][0] ==-1 || this.best_response[0][1] ==-1){
                                 temp[4].setAttributeNS(null, "height", Number(this.side+2*this.rad));
                                 temp[4].setAttributeNS(null, "width", Number(this.side+2*this.rad));
@@ -887,7 +886,7 @@ GTE = (function(parentModule) {
                             temp[4].setAttributeNS(null, "height", 0);
                             temp[5].setAttributeNS(null, "height", 0);
                             temp[6].setAttributeNS(null, "height", 0);
-                            temp[7].setAttributeNS(null, "height", Number(this.envelopps[1].points[1][0]-Number(Number(this.height+2*this.margin))+Number(60)));
+                            temp[7].setAttributeNS(null, "height", Number(this.envelopes[1].points[1][0]-Number(Number(this.height+2*this.margin))+Number(60)));
                             if (this.best_response[0][0] >-1 || this.best_response[0][1] >-1){
                                 temp[8].setAttributeNS(null, "height", 0);
                                 temp[8].setAttributeNS(null, "width", 0);
@@ -906,8 +905,8 @@ GTE = (function(parentModule) {
                                 temp[8].setAttributeNS(null, "width", 0);
                             }
                             temp[4].setAttributeNS(null, "width", 0);
-                            temp[5].setAttributeNS(null, "height",Number(Number(2*this.margin+this.height+this.side)-Number(this.envelopps[1].points[1][0])-Number(40)) );
-                            temp[5].setAttributeNS(null, "y", Number(this.envelopps[1].points[1][0]+Number(Number(this.margin-this.rad))));
+                            temp[5].setAttributeNS(null, "height",Number(Number(2*this.margin+this.height+this.side)-Number(this.envelopes[1].points[1][0])-Number(40)) );
+                            temp[5].setAttributeNS(null, "y", Number(this.envelopes[1].points[1][0]+Number(Number(this.margin-this.rad))));
                             temp[7].setAttributeNS(null, "width", 0);
                             temp[6].setAttributeNS(null, "width", 0);
                             temp[2].setAttributeNS(null, "r", 0);//remove end point
@@ -922,18 +921,18 @@ GTE = (function(parentModule) {
                             temp[0].setAttributeNS(null, "r", 0);//remove end point
                             temp[7].setAttributeNS(null, "x", Number(this.margin-this.rad));
                             temp[7].setAttributeNS(null, "y", Number(2*this.margin+this.height-this.rad));
-                            temp[7].setAttributeNS(null, "height", Number(this.envelopps[1].points[1][0]-Number(Number(this.height+2*this.margin))+Number(60)));
+                            temp[7].setAttributeNS(null, "height", Number(this.envelopes[1].points[1][0]-Number(Number(this.height+2*this.margin))+Number(60)));
                             temp[7].setAttributeNS(null, "width", Number(2*this.rad));
                             
                             temp[8].setAttributeNS(null, "x", Number(this.margin-this.rad));
-                            temp[8].setAttributeNS(null, "y", Number(this.envelopps[1].points[1][0]+Number(Number(this.margin-this.rad))));
+                            temp[8].setAttributeNS(null, "y", Number(this.envelopes[1].points[1][0]+Number(Number(this.margin-this.rad))));
                             temp[8].setAttributeNS(null, "height", Number(2*this.rad));
                             temp[8].setAttributeNS(null, "width", Number(this.side+2*this.rad));
                             
                             temp[2].setAttributeNS(null, "r", 0);//remove end point
                             temp[5].setAttributeNS(null, "x", Number(this.side+this.margin-this.rad));
-                            temp[5].setAttributeNS(null, "y", Number(this.envelopps[1].points[1][0]+Number(Number(this.margin-this.rad))));
-                            temp[5].setAttributeNS(null, "height",Number(Number(2*this.margin+this.height+this.side)-Number(this.envelopps[1].points[1][0])-Number(40)) );
+                            temp[5].setAttributeNS(null, "y", Number(this.envelopes[1].points[1][0]+Number(Number(this.margin-this.rad))));
+                            temp[5].setAttributeNS(null, "height",Number(Number(2*this.margin+this.height+this.side)-Number(this.envelopes[1].points[1][0])-Number(40)) );
                             temp[5].setAttributeNS(null, "width", Number(2*this.rad));
                             
                             if (this.best_response[0][0] ==-1 || this.best_response[0][1] ==-1){
@@ -949,7 +948,7 @@ GTE = (function(parentModule) {
                 }
                 else{
                     if (this.best_response[1][1]==0){
-                        path2=Number(this.margin)+","+Number(2*this.margin+this.height+this.side)+", "+Number(this.margin)+","+Number(this.envelopps[1].points[1][0]+Number(Number(this.margin)))+", "+Number(this.margin+this.side)+","+Number(this.envelopps[1].points[1][0]+Number(Number(this.margin)))+", "+Number(this.margin+this.side)+","+Number(this.height+2*this.margin);
+                        path2=Number(this.margin)+","+Number(2*this.margin+this.height+this.side)+", "+Number(this.margin)+","+Number(this.envelopes[1].points[1][0]+Number(Number(this.margin)))+", "+Number(this.margin+this.side)+","+Number(this.envelopes[1].points[1][0]+Number(Number(this.margin)))+", "+Number(this.margin+this.side)+","+Number(this.height+2*this.margin);
                         temp[0].setAttributeNS(null, "r", 0);
                         temp[2].setAttributeNS(null, "r", 0);
                         if (this.best_response[0][1]>-1 && this.best_response[0][0]>-1){
@@ -962,7 +961,7 @@ GTE = (function(parentModule) {
                             temp[5].setAttributeNS(null, "width", 0);
                             temp[6].setAttributeNS(null, "width", 0);
                             temp[7].setAttributeNS(null, "width", 0);
-                            temp[8].setAttributeNS(null, "y", Number(this.envelopps[1].points[1][0]+Number(Number(this.margin-this.rad))));
+                            temp[8].setAttributeNS(null, "y", Number(this.envelopes[1].points[1][0]+Number(Number(this.margin-this.rad))));
                             if (this.best_response[0][0] ==-1 || this.best_response[0][1] ==-1){
                                 temp[4].setAttributeNS(null, "height", Number(this.side+2*this.rad));
                                 temp[4].setAttributeNS(null, "width", Number(this.side+2*this.rad));
@@ -976,8 +975,8 @@ GTE = (function(parentModule) {
                             temp[4].setAttributeNS(null, "height", 0);
                             temp[5].setAttributeNS(null, "height", 0);
                             temp[6].setAttributeNS(null, "height", 0);
-                            temp[7].setAttributeNS(null, "height", Number(Number(2*this.margin+this.height+this.side)-Number(this.envelopps[1].points[1][0])-Number(40)));
-                            temp[7].setAttributeNS(null, "y", Number(this.envelopps[1].points[1][0]+Number(Number(this.margin-this.rad))));
+                            temp[7].setAttributeNS(null, "height", Number(Number(2*this.margin+this.height+this.side)-Number(this.envelopes[1].points[1][0])-Number(40)));
+                            temp[7].setAttributeNS(null, "y", Number(this.envelopes[1].points[1][0]+Number(Number(this.margin-this.rad))));
                             if (this.best_response[0][0] >-1 || this.best_response[0][1] >-1){
                                 temp[8].setAttributeNS(null, "height", 0);
                                 temp[8].setAttributeNS(null, "width", 0);
@@ -996,7 +995,7 @@ GTE = (function(parentModule) {
                                 temp[8].setAttributeNS(null, "width", 0);
                             }
                             temp[4].setAttributeNS(null, "width", 0);
-                            temp[5].setAttributeNS(null, "height", Number(this.envelopps[1].points[1][0]-Number(Number(this.height+2*this.margin))+Number(60) ));
+                            temp[5].setAttributeNS(null, "height", Number(this.envelopes[1].points[1][0]-Number(Number(this.height+2*this.margin))+Number(60) ));
                             temp[7].setAttributeNS(null, "width", 0);
                             temp[6].setAttributeNS(null, "width", 0);
                             temp[1].setAttributeNS(null, "r", 0);//remove end point
@@ -1010,19 +1009,19 @@ GTE = (function(parentModule) {
                             
                             temp[3].setAttributeNS(null, "r", 0);//remove end point
                             temp[7].setAttributeNS(null, "x", Number(this.margin-this.rad));
-                            temp[7].setAttributeNS(null, "y", Number(this.envelopps[1].points[1][0]+Number(Number(this.margin-this.rad))));
-                            temp[7].setAttributeNS(null, "height", Number(Number(2*this.margin+this.height+this.side)-Number(this.envelopps[1].points[1][0])-Number(40)));
+                            temp[7].setAttributeNS(null, "y", Number(this.envelopes[1].points[1][0]+Number(Number(this.margin-this.rad))));
+                            temp[7].setAttributeNS(null, "height", Number(Number(2*this.margin+this.height+this.side)-Number(this.envelopes[1].points[1][0])-Number(40)));
                             temp[7].setAttributeNS(null, "width", Number(2*this.rad));
                             
                             temp[8].setAttributeNS(null, "x", Number(this.margin-this.rad));
-                            temp[8].setAttributeNS(null, "y", Number(this.envelopps[1].points[1][0]+Number(Number(this.margin-this.rad))));
+                            temp[8].setAttributeNS(null, "y", Number(this.envelopes[1].points[1][0]+Number(Number(this.margin-this.rad))));
                             temp[8].setAttributeNS(null, "height", Number(2*this.rad));
                             temp[8].setAttributeNS(null, "width", Number(this.side+2*this.rad));
                             
                             temp[1].setAttributeNS(null, "r", 0);//remove end point
                             temp[5].setAttributeNS(null, "x", Number(this.side+this.margin-this.rad));
                             temp[5].setAttributeNS(null, "y", Number(2*this.margin+this.height-this.rad));
-                            temp[5].setAttributeNS(null, "height",Number(this.envelopps[1].points[1][0]-Number(Number(this.height+2*this.margin))+Number(60) ));
+                            temp[5].setAttributeNS(null, "height",Number(this.envelopes[1].points[1][0]-Number(Number(this.height+2*this.margin))+Number(60) ));
                             temp[5].setAttributeNS(null, "width", Number(2*this.rad));
                             
                             if (this.best_response[0][0] ==-1 || this.best_response[0][1] ==-1){
@@ -1064,40 +1063,40 @@ GTE = (function(parentModule) {
         
         var stick=GTE.svg.getElementsByClassName("middle21");
         for (i=0;i<stick.length;i++){
-            if(this.envelopps[1].points[1][0]==650){
+            if(this.envelopes[1].points[1][0]==650){
                 stick[i].textContent=""
             }
             if(this.best_response[1][1]==1)
-            var  pos=(this.envelopps[1].points[1][0]+Number(450))/2;
+            var  pos=(this.envelopes[1].points[1][0]+Number(450))/2;
             else
-            var  pos=(this.envelopps[1].points[1][0]+Number(650))/2;
+            var  pos=(this.envelopes[1].points[1][0]+Number(650))/2;
             
             stick[i].setAttributeNS(null, "x",pos);
         }
         var stick=GTE.svg.getElementsByClassName("middle22");
         for (i=0;i<stick.length;i++){
-            if(this.envelopps[1].points[1][0]==450){
+            if(this.envelopes[1].points[1][0]==450){
                 stick[i].textContent=""
             }
             if(this.best_response[1][0]==1)
-            pos=(this.envelopps[1].points[1][0]+Number(450))/2;
+            pos=(this.envelopes[1].points[1][0]+Number(450))/2;
             else
-            pos=(this.envelopps[1].points[1][0]+Number(650))/2;
+            pos=(this.envelopes[1].points[1][0]+Number(650))/2;
             stick[i].setAttributeNS(null, "x",pos);
         }
-        if (this.envelopps[1].points[1][0]>450 && this.envelopps[1].points[1][0] <650){
-            var t1=Number(this.envelopps[1].points[1][0])-Number(410);
-            var t2=460+Number(this.envelopps[1].points[1][0])-Number(410);
-            GTE.svg.getElementsByClassName("arc player2")[0].setAttributeNS(null, "d", "M"+this.envelopps[1].points[1][0]+",460 A"+t1+","+t1+" 0 0,1 410,"+t2);
+        if (this.envelopes[1].points[1][0]>450 && this.envelopes[1].points[1][0] <650){
+            var t1=Number(this.envelopes[1].points[1][0])-Number(410);
+            var t2=460+Number(this.envelopes[1].points[1][0])-Number(410);
+            GTE.svg.getElementsByClassName("arc player2")[0].setAttributeNS(null, "d", "M"+this.envelopes[1].points[1][0]+",460 A"+t1+","+t1+" 0 0,1 410,"+t2);
             GTE.svg.getElementsByClassName("stick player2")[0].setAttributeNS(null, "y1", t2);
             GTE.svg.getElementsByClassName("stick player2")[0].setAttributeNS(null, "y2", t2);
         }
-        if (this.envelopps[1].points[1][0]==450){
+        if (this.envelopes[1].points[1][0]==450){
             GTE.svg.getElementsByClassName("arc player2")[0].setAttributeNS(null, "d","M450,460 A40,40 0 0,1 410,500");
             GTE.svg.getElementsByClassName("stick player2")[0].setAttributeNS(null, "y1", 500);
             GTE.svg.getElementsByClassName("stick player2")[0].setAttributeNS(null, "y2", 500);
         }
-        if (this.envelopps[1].points[1][0]==650){
+        if (this.envelopes[1].points[1][0]==650){
             GTE.svg.getElementsByClassName("arc player2")[0].setAttributeNS(null, "d","M650,460 A240,240 0 0,1 410,700");
             GTE.svg.getElementsByClassName("stick player2")[0].setAttributeNS(null, "y1", 700);
             GTE.svg.getElementsByClassName("stick player2")[0].setAttributeNS(null, "y2", 700);
@@ -1105,30 +1104,30 @@ GTE = (function(parentModule) {
         
         GTE.svg.getElementsByClassName("stick player1")[0].setAttributeNS(null, "x1", Number(this.margin));
         GTE.svg.getElementsByClassName("stick player1")[0].setAttributeNS(null, "x2", Number(this.margin));
-        if (this.envelopps[0].points[1][0]>Number(this.margin) && this.envelopps[0].points[1][0]<Number(this.margin+this.side)){
-            GTE.svg.getElementsByClassName("stick player1")[0].setAttributeNS(null, "x1", this.envelopps[0].points[1][0]);
-            GTE.svg.getElementsByClassName("stick player1")[0].setAttributeNS(null, "x2", this.envelopps[0].points[1][0]);
+        if (this.envelopes[0].points[1][0]>Number(this.margin) && this.envelopes[0].points[1][0]<Number(this.margin+this.side)){
+            GTE.svg.getElementsByClassName("stick player1")[0].setAttributeNS(null, "x1", this.envelopes[0].points[1][0]);
+            GTE.svg.getElementsByClassName("stick player1")[0].setAttributeNS(null, "x2", this.envelopes[0].points[1][0]);
         }
         var stick=GTE.svg.getElementsByClassName("middle11");
         for (i=0;i<stick.length;i++){
-            if(this.envelopps[0].points[1][0]==Number(this.margin+this.side)){
+            if(this.envelopes[0].points[1][0]==Number(this.margin+this.side)){
                 stick[i].textContent=""
             }
             if(this.best_response[0][1]==1)
-            pos=(this.envelopps[0].points[1][0]+Number(Number(this.margin)))/2;
+            pos=(this.envelopes[0].points[1][0]+Number(Number(this.margin)))/2;
             else
-            pos=(this.envelopps[0].points[1][0]+Number(Number(this.margin+this.side)))/2;
+            pos=(this.envelopes[0].points[1][0]+Number(Number(this.margin+this.side)))/2;
             stick[i].setAttributeNS(null, "x",pos);
         }
         var stick=GTE.svg.getElementsByClassName("middle12");
         for (i=0;i<stick.length;i++){
-            if(this.envelopps[0].points[1][0]==Number(this.margin)){
+            if(this.envelopes[0].points[1][0]==Number(this.margin)){
                 stick[i].textContent=""
             }
             if(this.best_response[0][0]==1)
-            pos=(this.envelopps[0].points[1][0]+Number(this.margin))/2;
+            pos=(this.envelopes[0].points[1][0]+Number(this.margin))/2;
             else
-            pos=(this.envelopps[0].points[1][0]+Number(this.margin+this.side))/2;
+            pos=(this.envelopes[0].points[1][0]+Number(this.margin+this.side))/2;
             stick[i].setAttributeNS(null, "x",pos);
         }
         
@@ -1166,7 +1165,7 @@ GTE = (function(parentModule) {
         envelop1.setAttributeNS(null,"points", "50,50, 50,350, 250,350, 250,50");
         var envelop2=document.getElementById("envelop2");
         envelop2.setAttributeNS(null,"points", "450,50, 450,350, 650,350,  650,50");
-        this.envelopps= [];
+        this.envelopes= [];
     }
     
     

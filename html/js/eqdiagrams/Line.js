@@ -46,7 +46,7 @@ GTE = (function (parentModule) {
             txt.value=GTE.tree.matrix.strategies[1][this.strat].moves[0].name
             txt.setAttribute("x",GTE.diag.margin+this.strat*GTE.diag.step);
             txt.setAttribute("y","350");
-            txt.setAttribute("class","player1 strat");
+            txt.setAttribute("class","player1 strat"+this.player+this.strat);
             txt.setAttribute("id","text11");
             var env=document.getElementsByClassName("stick");
             GTE.svg.appendChild(l1);
@@ -77,7 +77,7 @@ GTE = (function (parentModule) {
             txt.value=GTE.tree.matrix.strategies[2][this.strat].moves[0].name
             txt.setAttribute("x",2*GTE.diag.margin+GTE.diag.width+GTE.diag.margin+this.strat*GTE.diag.step);
             txt.setAttribute("y","350");
-            txt.setAttribute("class","player2 strat");
+            txt.setAttribute("class","player2 strat"+this.player+this.strat);
             txt.setAttribute("id","text21");
             var env=document.getElementsByClassName("stick");
             GTE.svg.appendChild(txt);
