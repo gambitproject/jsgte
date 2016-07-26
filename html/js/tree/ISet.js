@@ -280,7 +280,7 @@ GTE.TREE = (function (parentModule) {
     ISet.prototype.onClick = function () {
         switch (GTE.MODE) {
             case GTE.MODES.ADD:
-                var changes = new GTE.TREE.Changes();
+                var changes = new GTE.TREE.Changes(GTE.MODES.ADD, null, this);
                 if (this.numberOfMoves() === 0) {
                     // If no children, add two, since one child only doesn't
                     // make sense
@@ -299,7 +299,7 @@ GTE.TREE = (function (parentModule) {
                 break;
             case GTE.MODES.DELETE:
                 var children = this.getChildrenNodes();
-                var changes = new GTE.TREE.Changes();
+                var changes = new GTE.TREE.Changes(GTE.MODES.DELETE, null, this);
                 if (children.length === 0) {
                     // Delete node
                     changes.assignSingletonIsetDeletion(this);
@@ -321,7 +321,7 @@ GTE.TREE = (function (parentModule) {
             case GTE.MODES.PLAYER_ASSIGNMENT:
                 // Change the player of every node in the iset
                 var nodes = this.getNodes();
-                var changes = new GTE.TREE.Changes();
+                var changes = new GTE.TREE.Changes(GTE.MODES.PLAYER_ASSIGNMENT, null, this);
                 for (var j = 0; j < nodes.length; j++) {
                     changes.addChange(GTE.MODES.PLAYER_ASSIGNMENT, nodes[j]);
                     GTE.tree.assignSelectedPlayerToNode(nodes[j]);
@@ -335,8 +335,8 @@ GTE.TREE = (function (parentModule) {
                 break;
             case GTE.MODES.MERGE:
                 if (this.getPlayer().id !== 0) {
-                    var changes = new GTE.TREE.Changes();
-                    changes.addChange(GTE.MODES.MERGE, null, this);
+                    var changes = new GTE.TREE.Changes(GTE.MODES.MERGE, null, this);
+                    changes.addChange();
                     if(GTE.tree.selected.length != 0) {
                         changes.select = true;
                         changes.iset = GTE.tree.selected[0];
@@ -346,7 +346,7 @@ GTE.TREE = (function (parentModule) {
                 }
                 break;
             case GTE.MODES.DISSOLVE:
-                var changes = new GTE.TREE.Changes();
+                var changes = new GTE.TREE.Changes(GTE.MODES.DISSOLVE, null, this);
                 if(changes.pushChangesBeforeDissolving(this))
                     changes.endSetOfChanges();
                 this.dissolve();

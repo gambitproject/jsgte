@@ -56,7 +56,7 @@ GTE.TREE = (function(parentModule) {
                 // for the nodes in the line
                 var smallestAndLargest = this.findSmallestAndLargest();
                 // If S < L, add children to those nodes so that ALL nodes have L children now.
-                var changes = new GTE.TREE.Changes();
+                var changes = new GTE.TREE.Changes(GTE.MODES.ADD, null, this);
                 if (smallestAndLargest.smallest < smallestAndLargest.largest) {
                     for (var i = 0; i < this.nodesInLine.length; i++) {
                         while (this.nodesInLine[i].children.length < smallestAndLargest.largest) {
@@ -85,7 +85,7 @@ GTE.TREE = (function(parentModule) {
                 // of the tree (i.e. even if some nodes are leaves already,
                 // do not delete them). otherwise (that is, ALL nodes in the
                 // multiaction line are leaves), delete all these leaves.
-                var changes = new GTE.TREE.Changes();
+                var changes = new GTE.TREE.Changes(GTE.MODES.DELETE, null, this);
                 var allLeaves = true;
                 for (var k = 0; k < this.nodesInLine.length; k++) {
                     if (this.nodesInLine[k].children.length > 0) {
@@ -110,7 +110,7 @@ GTE.TREE = (function(parentModule) {
             case GTE.MODES.PLAYER_ASSIGNMENT:
                 // set all nodes on the multiaction line to belong to the
                 // current player (which may be chance)
-                var changes = new GTE.TREE.Changes();
+                var changes = new GTE.TREE.Changes(GTE.MODES.PLAYER_ASSIGNMENT, null, this);
                 for (var l = 0; l < this.nodesInLine.length; l++) {
                     changes.addChange(GTE.MODES.PLAYER_ASSIGNMENT, this.nodesInLine[l]);
                     this.nodesInLine[l].onClick(false);
@@ -131,7 +131,7 @@ GTE.TREE = (function(parentModule) {
                 var playerInLoop = null;
                 var numberOfChildrenInLoop = -1;
                 var isetInLoop = null;
-                var changes = new GTE.TREE.Changes();
+                var changes = new GTE.TREE.Changes(GTE.MODES.MERGE, null, this);
                 for (var m = 0; m < this.nodesInLine.length; m++) {
                     if (playerInLoop === this.nodesInLine[m].player &&
                         numberOfChildrenInLoop === this.nodesInLine[m].children.length) {

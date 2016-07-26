@@ -173,7 +173,7 @@ GTE.TREE = (function (parentModule) {
                 break;
             case GTE.MODES.DELETE:
                 if (this.iset === null) {
-                    var changes = new GTE.TREE.Changes();
+                    var changes = new GTE.TREE.Changes(this, null, GTE.MODES.DELETE);
                     // If it is a leaf, delete itself, if not, delete all children
                     if (this.isLeaf()) {
                         if(undo)
@@ -219,7 +219,7 @@ GTE.TREE = (function (parentModule) {
                         this.iset.onClick();
                     } else {
                         if(undo) {
-                            var changes = new GTE.TREE.Changes();
+                            var changes = new GTE.TREE.Changes(GTE.MODES.PLAYER_ASSIGNMENT, null, this);
                             changes.addChange(GTE.MODES.PLAYER_ASSIGNMENT, this);
                             changes.endSetOfChanges();
                         }

@@ -10,6 +10,7 @@ GTE.TREE = (function (parentModule) {
         this.queue = [];
         this.select = select || null;
         this.toggleQueue = null;
+        this.event = new GTE.TREE.Event(unit, mode);
     }
 
     Changes.prototype.undo = function() {
