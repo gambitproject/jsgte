@@ -44,8 +44,8 @@ GTE = (function (parentModule) {
             this.html_element.push(l2);
             var txt=document.createElementNS("http://www.w3.org/2000/svg", "text");
             txt.value=GTE.tree.matrix.strategies[1][this.strat].moves[0].name
-            txt.setAttribute("x",GTE.diag.margin+this.strat*GTE.diag.step);
-            txt.setAttribute("y","350");
+            txt.setAttribute("x",GTE.diag.margin+(this.strat+1)*GTE.diag.step);
+            txt.setAttribute("y","370");
             txt.setAttribute("class","player1 strat"+this.player+this.strat);
             txt.setAttribute("id","text11");
             var env=document.getElementsByClassName("stick");
@@ -75,8 +75,8 @@ GTE = (function (parentModule) {
             this.html_element.push(l2);
             var txt=document.createElementNS("http://www.w3.org/2000/svg", "text");
             txt.value=GTE.tree.matrix.strategies[2][this.strat].moves[0].name
-            txt.setAttribute("x",2*GTE.diag.margin+GTE.diag.width+GTE.diag.margin+this.strat*GTE.diag.step);
-            txt.setAttribute("y","350");
+            txt.setAttribute("x",2*GTE.diag.margin+GTE.diag.width+GTE.diag.margin+(this.strat+1)*GTE.diag.step);
+            txt.setAttribute("y","370");
             txt.setAttribute("class","player2 strat"+this.player+this.strat);
             txt.setAttribute("id","text21");
             var env=document.getElementsByClassName("stick");

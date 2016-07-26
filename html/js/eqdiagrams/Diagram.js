@@ -266,6 +266,10 @@ GTE = (function(parentModule) {
         for (var i=0;i<2;i++){
             for (var j=0; j< this.nb_strat[i]-1;j++){
                 for (var k=j+1 ; k<this.nb_strat[i];k++){
+                    var temp= GTE.svg.getElementsByClassName("strat"+""+i+""+j);
+                    for ( var l=0;l<temp.length;l++){
+                        temp[l].textContent=GTE.tree.matrix.strategies[i+1][j].moves[0].name;
+                    }
                     if (i==0){
                         Y11=this.payoffs[i][j][strat[i][0]];
                         Y12=this.payoffs[i][j][strat[i][1]];
@@ -276,7 +280,6 @@ GTE = (function(parentModule) {
                         Y12=this.payoffs[i][strat[i][1]][j];
                         Y21=this.payoffs[i][strat[i][0]][k];
                         Y22=this.payoffs[i][strat[i][1]][k];
-                        
                     }
                     var middle_x=(Y21-Number(Y11))/(Y21-Number(Y22)+Y12-Number(Y11));
                     var middle_y=(Y12-Number(Y11))*middle_x+Number(Y11);
@@ -368,6 +371,9 @@ GTE = (function(parentModule) {
                 }
             }
         }
+        
+        
+        this.computeEnvelope(strat11, strat12, strat21, strat22);
         var envelope1=document.getElementById("envelope1");
         envelope1.setAttributeNS(null,"points", "50,50 "+this.envelopes[0].points[0][0]+","+this.envelopes[0].points[0][1]+" "+this.envelopes[0].points[1][0]+","+this.envelopes[0].points[1][1]+" "+this.envelopes[0].points[2][0]+","+this.envelopes[0].points[2][1]+" 250,50");
         var envelope2=document.getElementById("envelope2");
@@ -393,27 +399,64 @@ GTE = (function(parentModule) {
                 }
             }
         }
-        
-        var temp= GTE.svg.getElementsByClassName("strat22");
-        for (i=0;i<temp.length;i++){
-            temp[i].textContent=GTE.tree.matrix.strategies[2][1].moves[0].name;
-        }
-        temp= GTE.svg.getElementsByClassName("strat21");
-        for (i=0;i<temp.length;i++){
-            temp[i].textContent=GTE.tree.matrix.strategies[2][0].moves[0].name;
-        }
-        temp= GTE.svg.getElementsByClassName("strat12");
-        for (i=0;i<temp.length;i++){
-            temp[i].textContent=GTE.tree.matrix.strategies[1][1].moves[0].name;
-        }
-        temp= GTE.svg.getElementsByClassName("strat11");
-        for (i=0;i<temp.length;i++){
-            temp[i].textContent=GTE.tree.matrix.strategies[1][0].moves[0].name;
-        }
     }
     
     
-    
+    Diagram.prototype.computeEnvelope = function(strat11=0, strat12=1, strat21=0, strat22=1){
+        var strat=[[strat21,strat22],[strat11,strat12]];
+        
+        var y_max=350;
+        var strat_act;
+        var strat_new;
+        for (var i=0;i<2;i++){ //player
+            var point=[];
+            var x_new=Number(i*(this.width+2*Number(this.margin))+this.width-this.margin);
+            
+            var x_min=Number(i*(this.width+Number(2*this.margin))+Number(this.margin));
+            for (var j=0;j<this.nb_strat[i];j++){
+                if (i==0){
+                    if (Number(this.height-this.margin-this.step*Number(this.payoffs[i][j][strat[i][0]]))<= Number(y_max)){
+                        strat_act=j;
+                        y_max=this.height-this.margin-this.step*Number(this.payoffs[i][j][strat[i][0]]);
+                        point.push([i*(this.width+2*this.margin)+this.margin,y_max]);
+                        //console.log(strat_act);
+                    }
+                }
+                else{
+                    if (Number(this.height-this.margin-this.step*Number(this.payoffs[i][strat[i][0]][j]))<= Number(y_max)){
+                        strat_act=j;
+                        y_max=this.height-this.margin-this.step*Number(this.payoffs[i][strat[i][0]][j]);
+                        point.push([i*(this.width+2*this.margin)+this.margin, y_max]);
+                    }
+                }
+            }
+            while(Number(x_min)<Number(i*(this.width+2*this.margin)+this.width-this.margin)){
+                for (var l=0;l<this.intersect[i].length;l++){
+                    
+                    //console.log(x_min+" "+x_new+" "+this.intersect[i][l].getPosx()+" "+this.intersect[i][l].getStrat1()+" "+strat_act+" "+this.intersect[i][l].getStrat2());
+                    if ((this.intersect[i][l].getStrat1()==strat_act|| this.intersect[i][l].getStrat2()==strat_act)&&  Number(this.intersect[i][l].getPosx())>Number(x_min) && Number(this.intersect[i][l].getPosx())<=Number(x_new) ){
+                       // console.log(x_min+" "+x_new+" "+this.intersect[i][l].getPosx());
+                        x_new=this.intersect[i][l].getPosx();
+                        strat_new=l;
+                    }
+                }
+                
+                if (Number(x_new)<Number(i*(this.width+2*this.margin)+this.width-this.margin)){
+                    
+                    x_min=x_new;
+                    strat_act=strat_new;
+                    x_new=Number(i*(this.width+2*this.margin)+this.width-this.margin);
+                    point.push([this.intersect[i][strat_act].getPosx(),this.intersect[i][strat_act].getPosy()]);
+                }
+                else{
+                    point.push([Number(i*(this.width+2*this.margin)+this.width-this.margin),this.endpoints[i][this.lines[i][strat_act].getStrat2()].getPosy()]);
+                    x_min=Number(i*(this.width+2*this.margin)+this.width-this.margin);
+                }
+                //x_min=1000;
+            }
+            console.log(point);
+        }
+    }
     
     
     Diagram.prototype.draw_up = function(){
@@ -1161,10 +1204,10 @@ GTE = (function(parentModule) {
             }
         }
         this.intersect=[];
-        var envelop1=document.getElementById("envelop1");
-        envelop1.setAttributeNS(null,"points", "50,50, 50,350, 250,350, 250,50");
-        var envelop2=document.getElementById("envelop2");
-        envelop2.setAttributeNS(null,"points", "450,50, 450,350, 650,350,  650,50");
+        var envelope1=document.getElementById("envelope1");
+        envelope1.setAttributeNS(null,"points", "50,50, 50,350, 250,350, 250,50");
+        var envelope2=document.getElementById("envelope2");
+        envelope2.setAttributeNS(null,"points", "450,50, 450,350, 650,350,  650,50");
         this.envelopes= [];
     }
     
