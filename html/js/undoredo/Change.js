@@ -33,7 +33,7 @@ GTE.TREE = (function (parentModule) {
             case GTE.MODES.MERGE:
                 if(this.selected) {
                     if (this.node.shape !== null) {
-                        this.node.shape.toggleClass('selected');
+                    //    this.node.shape.toggleClass('selected');
                     }
                 } else {
                     this.node.changeISet(this.from);
@@ -86,47 +86,11 @@ GTE.TREE = (function (parentModule) {
                 break;
             case GTE.UNDO.ADDISET:
                 GTE.tree.deleteNode(this.node.firstNode);
-            break;
+                break;
             default:
                 break;
         }
     };
-
-    Change.prototype.convertChangeToRedo = function(changes) {
-        switch (this.mode) {
-            case GTE.MODES.ADD:
-                changes.addChange(GTE.MODES.DELETE, this.node);
-                break;
-            case GTE.MODES.DELETE:
-                changes.addChange(GTE.MODES.ADD, this.node);
-                break;
-            case GTE.MODES.PLAYER_ASSIGNMENT:
-                var change = new GTE.TREE.Change(this.node, GTE.MODES.PLAYER_ASSIGNMENT, this.to, this.from);
-                changes.queue.push(change);
-                break;
-            case GTE.MODES.MERGE:
-                if(this.selected) {
-                        var change =  new GTE.TREE.Change(this.node, GTE.MODES.MERGE);
-                        change.selected = true;
-                        changes.queue.push(change);
-                }
-                break;
-            case GTE.UNDO.POPSELECTEDQUEUE:
-                changes.queue.push(new GTE.TREE.Change(this.node, GTE.UNDO.PUSHSELECTEDQUEUE));
-                break;
-            case GTE.UNDO.PUSHSELECTEDQUEUE:
-                changes.queue.push(new GTE.TREE.Change(this.node, GTE.UNDO.POPSELECTEDQUEUE));
-                break;
-            case GTE.UNDO.INITIALIZEISETS:
-                var change = new GTE.TREE.Change(null, GTE.UNDO.DEINITIALIZEISETS);
-                changes.queue.push(change);
-                break;
-            case GTE.UNDO.DEINITIALIZEISETS:
-                var change = new GTE.TREE.Change(null, GTE.UNDO.INITIALIZEISETS);
-                changes.queue.push(change);
-                break;
-        }
-    }
 
     // Add class to parent module
     parentModule.Change = Change;

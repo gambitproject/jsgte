@@ -13,35 +13,6 @@ GTE.TREE = (function (parentModule) {
     }
 
     Changes.prototype.undo = function() {
-        var changes = new GTE.TREE.Changes();
-        for(var i = this.queue.length-1; i>=0; i--) {
-            this.queue[i].convertChangeToRedo(changes);
-        }
-        GTE.REDOQUEUE.push(changes);
-        for(var i = this.queue.length-1; i>=0; i--) {
-            this.queue[i].execute();
-        }
-        GTE.tree.draw();
-        if(this.select) {
-            this.iset.select();
-        } else if (GTE.tree.selected.length > 0) {
-            var iset = GTE.tree.selected[0];
-            if (iset.shape !== null) {
-                iset.shape.toggleClass('selected');
-            }
-            var nodes = iset.getNodes();
-            for (var i = 0; i < nodes.length; i++) {
-                nodes[i].select();
-            }
-        }
-    };
-
-    Changes.prototype.redo = function() {
-        var changes = new GTE.TREE.Changes();
-        for(var i = this.queue.length-1; i>=0; i--) {
-            this.queue[i].convertChangeToRedo(changes);
-        }
-        GTE.UNDOQUEUE.push(changes);
         for(var i = this.queue.length-1; i>=0; i--) {
             this.queue[i].execute();
         }
