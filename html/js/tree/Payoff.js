@@ -39,9 +39,8 @@ GTE.TREE = (function(parentModule) {
                     var text = this.getCleanedText();
                     if (text === "") {
                         window.alert("Payoff should not be empty.");
-                    } else {
-                        thisPayoff.changeText(text);
                     }
+                    thisPayoff.changeText(text);
                 });
     };
 
@@ -50,6 +49,8 @@ GTE.TREE = (function(parentModule) {
      * @param {String} text New payoff's text
      */
     Payoff.prototype.changeText = function(text) {
+      //Check if it's empty or not
+      if(text !== "") {
         // Remove leading 0
         var value = parseFloat(text, 10);
         // Check if it's a fraction
@@ -78,6 +79,10 @@ GTE.TREE = (function(parentModule) {
             // In order to get the previous text back, change text to current this.text
             this.changeText(this.text);
         }
+      } else {
+        //If it's empty, set its value to the last stored value
+        this.editable.setText(this.text);
+      }
         return this.value;
     };
 
