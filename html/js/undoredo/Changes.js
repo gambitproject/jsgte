@@ -6,11 +6,9 @@ GTE.TREE = (function (parentModule) {
     * @class
     * @param {type} Represents the type of the changes.
     */
-    function Changes(unit, select, mode) {
+    function Changes(unit, type, mode) {
         this.queue = [];
-        this.select = select || null;
-        this.toggleQueue = null;
-        this.event = new GTE.TREE.Event(unit, mode);
+        this.event = new GTE.TREE.Event(unit, mode, type);
     }
 
     Changes.prototype.undo = function() {

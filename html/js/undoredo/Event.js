@@ -5,9 +5,10 @@ GTE.TREE = (function (parentModule) {
     * Creates a new Event.
     * @class
     */
-    function Event(unit, mode) {
+    function Event(unit, mode, type) {
         this.unit = unit;
         this.mode = mode;
+        this.type = type;
     }
 
 

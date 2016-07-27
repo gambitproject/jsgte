@@ -106,6 +106,11 @@ var GTE = (function () {
       PUSHISET : 14
     };
 
+    GTE.REDO = {
+      NODE : 0,
+      ISET : 1,
+      MULTIACTIONLINE : 2
+    }
     GTE.UNDOQUEUE = [];
     GTE.REDOQUEUE = [];
     return GTE;
