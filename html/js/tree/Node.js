@@ -147,7 +147,7 @@ GTE.TREE = (function (parentModule) {
                 // if (this.iset.numberOfNodes > 1) {
                 //     this.createSingletonISetWithNode();
                 // }
-                changes = new GTE.TREE.Changes(this, GTE.REDO.NODE, GTE.MODES.ADD);
+                changes = new GTE.TREE.Changes(GTE.MODES.ADD, GTE.REDO.NODE, this);
                 var nodes = [];
                 if (this.iset === null) {
                     if (this.isLeaf()) {
@@ -173,7 +173,7 @@ GTE.TREE = (function (parentModule) {
                 break;
             case GTE.MODES.DELETE:
                 if (this.iset === null) {
-                    var changes = new GTE.TREE.Changes(this, GTE.REDO.NODE, GTE.MODES.DELETE);
+                    var changes = new GTE.TREE.Changes(GTE.MODES.DELETE, GTE.REDO.NODE, this);
                     // If it is a leaf, delete itself, if not, delete all children
                     if (this.isLeaf()) {
                         if(undo)
@@ -219,7 +219,7 @@ GTE.TREE = (function (parentModule) {
                         this.iset.onClick();
                     } else {
                         if(undo) {
-                            var changes = new GTE.TREE.Changes(GTE.GTE.REDO.NODE.PLAYER_ASSIGNMENT, null, this);
+                            var changes = new GTE.TREE.Changes(GTE.MODES.PLAYER_ASSIGNMENT, GTE.REDO.NODE, this);
                             changes.addChange(GTE.MODES.PLAYER_ASSIGNMENT, this);
                             changes.endSetOfChanges();
                         }

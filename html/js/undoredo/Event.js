@@ -9,6 +9,7 @@ GTE.TREE = (function (parentModule) {
         this.unit = unit;
         this.mode = mode;
         this.type = type;
+        this.coordinates = this.findCoordinates(unit);
     }
 
 
@@ -19,6 +20,14 @@ GTE.TREE = (function (parentModule) {
         GTE.MODE = curMode;
     };
 
+    Event.prototype.findCoordinates = function(node) {
+        var coordinates = [];
+        while(node.parent != null) {
+            coordinates.push(node.parent.children.indexOf(node));
+            node = node.parent;
+        }
+        return coordinates.reverse();
+    }
     // Add class to parent module
     parentModule.Event = Event;
 

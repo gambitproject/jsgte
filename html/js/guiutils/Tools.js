@@ -194,7 +194,9 @@ GTE.UI = (function (parentModule) {
 
     Tools.prototype.undo = function() {
         if(GTE.UNDOQUEUE.length > 0) {
-            GTE.UNDOQUEUE.pop().undo();
+            var evt = GTE.UNDOQUEUE.pop();
+            GTE.REDOQUEUE.push(evt.event);
+            evt.undo();
         }
     }
 

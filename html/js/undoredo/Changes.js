@@ -6,7 +6,7 @@ GTE.TREE = (function (parentModule) {
     * @class
     * @param {type} Represents the type of the changes.
     */
-    function Changes(unit, type, mode) {
+    function Changes(mode, type, unit) {
         this.queue = [];
         this.event = new GTE.TREE.Event(unit, mode, type);
     }
