@@ -13,10 +13,23 @@ GTE.TREE = (function (parentModule) {
     }
 
 
-    Event.prototype.execute = function() {
+    Event.prototype.redo = function() {
         var curMode = GTE.MODE;
         GTE.MODE  = this.mode;
-        this.unit.onClick();
+        var node = this.getNode();
+        switch (this.type) {
+            case GTE.REDO.NODE:
+                node.onClick();
+                break;
+            case GTE.REDO.ISET:
+                node.iset.onClick();
+                break;
+            case GTE.REDO.MULTIACTIONLINE:
+                this.getMultiactionLine(node).onClick();
+            break;
+        }
+
+
         GTE.MODE = curMode;
     };
 
@@ -27,6 +40,23 @@ GTE.TREE = (function (parentModule) {
             node = node.parent;
         }
         return coordinates.reverse();
+    }
+
+    Event.prototype.getNode = function() {
+        var node = GTE.tree.root;
+        for(var i = 0; i < this.coordinates.length; i++) {
+            node = node.children[this.coordinates[i]];
+        }
+        return node;
+    }
+
+    Event.prototype.getMultiactionLine = function(node) {
+        for(var i = 0; i<GTE.tree.multiActionLines.length; i++) {
+            if(GTE.tree.multiActionLines[i].nodesInLine.indexOf(node) != -1) {
+                return GTE.tree.multiActionLines[i];
+            }
+        }
+        throw "Exception : Multiaction line not found";
     }
     // Add class to parent module
     parentModule.Event = Event;
