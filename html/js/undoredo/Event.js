@@ -9,12 +9,22 @@ GTE.TREE = (function (parentModule) {
         this.unit = unit;
         this.mode = mode;
         this.type = type;
-        this.coordinates = this.findCoordinates(unit);
+        if(this.mode != GTE.UNDO.INITIALIZEISETS)
+            this.coordinates = this.findCoordinates(unit);
+        if(this.mode == GTE.MODES.PLAYER_ASSIGNMENT) {
+            this.player = GTE.tools.activePlayer;
+        }
     }
 
 
     Event.prototype.redo = function() {
+        if(this.mode == GTE.UNDO.INITIALIZEISETS) {
+            GTE.tools.switchMode(GTE.MODES.MERGE);
+            return;
+        }
         var curMode = GTE.MODE;
+        var pl = GTE.tools.activePlayer;
+        GTE.tools.activePlayer = this.player;
         GTE.MODE  = this.mode;
         var node = this.getNode();
         switch (this.type) {
@@ -28,9 +38,9 @@ GTE.TREE = (function (parentModule) {
                 this.getMultiactionLine(node).onClick();
             break;
         }
-
-
+        GTE.tools.activePlayer = pl;
         GTE.MODE = curMode;
+        GTE.tools.switchMode(GTE.MODE);
     };
 
     Event.prototype.findCoordinates = function(node) {
