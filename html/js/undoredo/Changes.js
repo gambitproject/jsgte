@@ -205,6 +205,7 @@ GTE.TREE = (function (parentModule) {
 
     Changes.prototype.endSetOfChanges = function() {
         this.pushToQueue();
+        GTE.REDOQUEUE = [];
     }
     // Add class to parent module
     parentModule.Changes = Changes;
