@@ -374,10 +374,10 @@ GTE = (function(parentModule) {
         
         
         this.computeEnvelope(strat11, strat12, strat21, strat22);
-        var envelope1=document.getElementById("envelope1");
+        /*var envelope1=document.getElementById("envelope1");
         envelope1.setAttributeNS(null,"points", "50,50 "+this.envelopes[0].points[0][0]+","+this.envelopes[0].points[0][1]+" "+this.envelopes[0].points[1][0]+","+this.envelopes[0].points[1][1]+" "+this.envelopes[0].points[2][0]+","+this.envelopes[0].points[2][1]+" 250,50");
         var envelope2=document.getElementById("envelope2");
-        envelope2.setAttributeNS(null,"points", "450,50 "+this.envelopes[1].points[0][0]+","+this.envelopes[1].points[0][1]+" "+this.envelopes[1].points[1][0]+","+this.envelopes[1].points[1][1]+" "+this.envelopes[1].points[2][0]+","+this.envelopes[1].points[2][1]+" 650,50");
+        envelope2.setAttributeNS(null,"points", "450,50 "+this.envelopes[1].points[0][0]+","+this.envelopes[1].points[0][1]+" "+this.envelopes[1].points[1][0]+","+this.envelopes[1].points[1][1]+" "+this.envelopes[1].points[2][0]+","+this.envelopes[1].points[2][1]+" 650,50");*/
         
         //upates player's names
         var name_player=GTE.svg.getElementsByClassName("player1_name");
@@ -405,20 +405,20 @@ GTE = (function(parentModule) {
     Diagram.prototype.computeEnvelope = function(strat11=0, strat12=1, strat21=0, strat22=1){
         var strat=[[strat21,strat22],[strat11,strat12]];
         
-        var y_max=350;
+       
         var strat_act;
         var strat_new;
+       var strat_mix;
         for (var i=0;i<2;i++){ //player
             var point=[];
+            var y_max=350;
             var x_new=Number(i*(this.width+2*Number(this.margin))+this.width-this.margin);
-            
             var x_min=Number(i*(this.width+Number(2*this.margin))+Number(this.margin));
             for (var j=0;j<this.nb_strat[i];j++){
                 if (i==0){
                     if (Number(this.height-this.margin-this.step*Number(this.payoffs[i][j][strat[i][0]]))<= Number(y_max)){
                         strat_act=j;
                         y_max=this.height-this.margin-this.step*Number(this.payoffs[i][j][strat[i][0]]);
-                        point.push([i*(this.width+2*this.margin)+this.margin,y_max]);
                         //console.log(strat_act);
                     }
                 }
@@ -426,27 +426,31 @@ GTE = (function(parentModule) {
                     if (Number(this.height-this.margin-this.step*Number(this.payoffs[i][strat[i][0]][j]))<= Number(y_max)){
                         strat_act=j;
                         y_max=this.height-this.margin-this.step*Number(this.payoffs[i][strat[i][0]][j]);
-                        point.push([i*(this.width+2*this.margin)+this.margin, y_max]);
                     }
                 }
             }
+            point.push([i*(this.width+2*this.margin)+this.margin,y_max]);
             while(Number(x_min)<Number(i*(this.width+2*this.margin)+this.width-this.margin)){
                 for (var l=0;l<this.intersect[i].length;l++){
-                    
-                    //console.log(x_min+" "+x_new+" "+this.intersect[i][l].getPosx()+" "+this.intersect[i][l].getStrat1()+" "+strat_act+" "+this.intersect[i][l].getStrat2());
+
                     if ((this.intersect[i][l].getStrat1()==strat_act|| this.intersect[i][l].getStrat2()==strat_act)&&  Number(this.intersect[i][l].getPosx())>Number(x_min) && Number(this.intersect[i][l].getPosx())<=Number(x_new) ){
-                       // console.log(x_min+" "+x_new+" "+this.intersect[i][l].getPosx());
+       
+       console.log("strat "+this.intersect[i][l].getStrat1()+" "+this.intersect[i][l].getStrat2());
                         x_new=this.intersect[i][l].getPosx();
-                        strat_new=l;
-                    }
+                         strat_mix=l;
+                        if (this.intersect[i][l].getStrat1()==strat_act){
+                           strat_new=this.intersect[i][l].getStrat2();}
+                       else{
+                           strat_new=this.intersect[i][l].getStrat1();}
+                       }
                 }
                 
                 if (Number(x_new)<Number(i*(this.width+2*this.margin)+this.width-this.margin)){
-                    
                     x_min=x_new;
+                    console.log("strat act "+strat_act+" "+strat_new);
                     strat_act=strat_new;
                     x_new=Number(i*(this.width+2*this.margin)+this.width-this.margin);
-                    point.push([this.intersect[i][strat_act].getPosx(),this.intersect[i][strat_act].getPosy()]);
+                    point.push([this.intersect[i][strat_mix].getPosx(),this.intersect[i][strat_mix].getPosy()]);
                 }
                 else{
                     point.push([Number(i*(this.width+2*this.margin)+this.width-this.margin),this.endpoints[i][this.lines[i][strat_act].getStrat2()].getPosy()]);
@@ -455,6 +459,17 @@ GTE = (function(parentModule) {
                 //x_min=1000;
             }
             console.log(point);
+            var s=Number(i*(this.width+2*this.margin)+this.margin)+",50 ,";
+       for (var k=0;k<point.length;k++){
+       s=s+point[k][0]+","+point[k][1]+" ,";
+       }
+       s=s+Number(i*(this.width+2*this.margin)+this.width-this.margin)+",50";
+       console.log(s);
+       if (i==0)
+       var envelope=document.getElementById("envelope1");
+       else
+       var envelope=document.getElementById("envelope2");
+       envelope.setAttributeNS(null,"points", s);
         }
     }
     
@@ -519,8 +534,8 @@ GTE = (function(parentModule) {
             labelline.textContent="";
         }
         //envelop svg1
-        var envelope1=document.getElementById("envelope1");
-        envelope1.setAttributeNS(null,"points", "50,50 "+this.envelopes[0].points[0][0]+","+this.envelopes[0].points[0][1]+" "+this.envelopes[0].points[1][0]+","+this.envelopes[0].points[1][1]+" "+this.envelopes[0].points[2][0]+","+this.envelopes[0].points[2][1]+" 250,50");
+        /*var envelope1=document.getElementById("envelope1");
+        envelope1.setAttributeNS(null,"points", "50,50 "+this.envelopes[0].points[0][0]+","+this.envelopes[0].points[0][1]+" "+this.envelopes[0].points[1][0]+","+this.envelopes[0].points[1][1]+" "+this.envelopes[0].points[2][0]+","+this.envelopes[0].points[2][1]+" 250,50");*/
         var inter=GTE.svg.getElementById("inter1");
         inter.setAttributeNS(null,"cx", this.envelopes[0].points[1][0]);
         inter.setAttributeNS(null,"cy", this.envelopes[0].points[1][1]);
@@ -532,8 +547,8 @@ GTE = (function(parentModule) {
             stick[i].setAttributeNS(null, "x1",this.envelopes[0].points[1][0]);
             stick[i].setAttributeNS(null, "x2",this.envelopes[0].points[1][0]);}
         //envelop svg2
-        var envelope2=document.getElementById("envelope2");
-        envelope2.setAttributeNS(null,"points", "450,50 "+this.envelopes[1].points[0][0]+","+this.envelopes[1].points[0][1]+" "+this.envelopes[1].points[1][0]+","+this.envelopes[1].points[1][1]+" "+this.envelopes[1].points[2][0]+","+this.envelopes[1].points[2][1]+" 650,50");
+        /*var envelope2=document.getElementById("envelope2");
+        envelope2.setAttributeNS(null,"points", "450,50 "+this.envelopes[1].points[0][0]+","+this.envelopes[1].points[0][1]+" "+this.envelopes[1].points[1][0]+","+this.envelopes[1].points[1][1]+" "+this.envelopes[1].points[2][0]+","+this.envelopes[1].points[2][1]+" 650,50");*/
         inter=GTE.svg.getElementById("inter2");
         inter.setAttributeNS(null,"cx", this.envelopes[1].points[1][0]);
         inter.setAttributeNS(null,"cy", this.envelopes[1].points[1][1]);
