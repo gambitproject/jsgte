@@ -36,15 +36,16 @@ GTE = (function (parentModule) {
             this.stick.setAttribute("y1",Number(GTE.diag.height)-Number(GTE.diag.margin));
             this.stick.setAttribute("x2",this.x);
             this.stick.setAttribute("y2",Number(GTE.diag.height)-Number(GTE.diag.margin)+Number(GTE.diag.rad));
-            this.stick.setAttribute("class","line2 interstick1");
+            this.stick.setAttribute("class","line2");
             GTE.svg.appendChild(this.stick);
             GTE.svg.insertBefore(this.stick,env[17]);
             GTE.svg.insertBefore(env[17],this.stick);
             this.label =document.createElementNS("http://www.w3.org/2000/svg", "text");
             this.label.setAttribute("x",this.x);
-            this.label.setAttribute("y",Number(GTE.diag.height)-Number(GTE.diag.margin)+Number(GTE.diag.rad)+17);
+            this.label.setAttribute("y",Number(GTE.diag.height-GTE.diag.margin+GTE.diag.rad+17));
             this.label.setAttribute("id","interlabel1");
             this.label.setAttribute("class","player2 legendh");
+            this.label.value="1";
             GTE.svg.appendChild(this.label);
             GTE.svg.insertBefore(this.label,env[17]);
             GTE.svg.insertBefore(env[17],this.label);
@@ -66,7 +67,7 @@ GTE = (function (parentModule) {
             this.stick.setAttribute("y1",Number(GTE.diag.height)-Number(GTE.diag.margin));
             this.stick.setAttribute("x2",this.x);
             this.stick.setAttribute("y2",Number(GTE.diag.height)-Number(GTE.diag.margin)+Number(GTE.diag.rad));
-            this.stick.setAttribute("class","line1 interstick2");
+            this.stick.setAttribute("class","line1");
             GTE.svg.appendChild(this.stick);
             GTE.svg.insertBefore(this.stick,env[35]);
             GTE.svg.insertBefore(env[35],this.stick);
@@ -138,16 +139,35 @@ GTE = (function (parentModule) {
     Intersection.prototype.move = function (new_x, new_y) {
         this.x = new_x;
         this.y = new_y;
+        var new_pos=Number((new_x-GTE.diag.margin+this.player*(-2*Number(GTE.diag.margin)+Number(GTE.diag.width)))/(GTE.diag.width-2*GTE.diag.margin));
         this.point.setAttributeNS(null, "cx", new_x);
         this.point.setAttributeNS(null, "cy", new_y);
-        this.label.setAttributeNS(null, "cx", new_x);
+        this.label.setAttributeNS(null, "x", new_x);
         if (this.player==0)
-        this.label.value=(Number(new_x)-Number(GTE.diag.margin))/(Number(GTE.width)-2*Number(GTE.margin));
+        this.label.textContent=(new_pos*GTE.diag.precision)/GTE.diag.precision;
         else
-        this.label.value=(Number(new_x)-4*Number(GTE.diag.margin)-Number(GTE.width))/(Number(GTE.width)-2*Number(GTE.margin));
+        this.label.textContent=Number((Number(new_x)-3*Number(GTE.diag.margin)-Number(GTE.diag.width))/(Number(GTE.diag.width)-2*Number(GTE.diag.margin))*GTE.diag.precision)/GTE.diag.precision;
         this.stick.setAttributeNS(null, "x1", new_x);
         this.stick.setAttributeNS(null, "x2", new_x);
     };
+       
+       /**
+        * hide
+        */
+       Intersection.prototype.hide = function () {
+       this.point.setAttributeNS(null, "visibility", "hidden");
+       this.label.setAttributeNS(null,  "visibility", "hidden");
+       this.stick.setAttributeNS(null, "visibility", "hidden");
+       };
+       
+       /**
+        * show
+        */
+       Intersection.prototype.show = function () {
+       this.point.setAttributeNS(null, "visibility", "visible");
+       this.label.setAttributeNS(null,  "visibility", "visible");
+       this.stick.setAttributeNS(null, "visibility", "visible");
+       };
     
     
     // Add class to parent module
