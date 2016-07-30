@@ -476,78 +476,79 @@ GTE = (function(parentModule) {
                 }
             }
             point.push([i*(this.width+2*this.margin)+this.margin,y_max]);
-            //console.log(strat_act);
-            y_max=350;
             while(Number(x_min)<Number(i*(this.width+2*this.margin)+this.width-this.margin)){
-                 var x_max=Number(i*(this.width+2*Number(this.margin))+this.width-this.margin);
+                var x_new=point[point.length-1][0];
+                var y_new=point[point.length-1][1];;
                 for (var x=0;x<strat_act.length;x++){
                     var S=strat_act[x];
                     for (var l=0;l<this.intersect[i].length;l++){
-                        if ((this.intersect[i][l].getStrat1()==S|| this.intersect[i][l].getStrat2()==S)&&  Number(this.intersect[i][l].getPosx())>Number(x_min) && Number(this.intersect[i][l].getPosx())<=Number(x_max) && Number(this.intersect[i][l].getPosy())<=Number(y_max)){
-                            if (Number(this.intersect[i][l].getPosy())<y_max){
-                                x_max=this.intersect[i][l].getPosx();
-                                y_max=Number(this.intersect[i][l].getPosy());
+                        if ((this.intersect[i][l].getStrat1()==S|| this.intersect[i][l].getStrat2()==S)&&  Number(this.intersect[i][l].getPosx())>Number(x_min)){
+                            if (x_new==point[point.length-1][0])
+                            {
+                                x_new=this.intersect[i][l].getPosx();
+                                y_new=Number(this.intersect[i][l].getPosy());
                                 strat_mix=[l];
-                                if (this.intersect[i][l].getStrat1()==strat_act){
-                                    strat_new=[this.intersect[i][l].getStrat2()];}
-                                else{
-                                    strat_new=[this.intersect[i][l].getStrat1()];}
+                                strat_new=[this.intersect[i][l].getStrat1(),this.intersect[i][l].getStrat2()];
                             }
-                            else {
-                                // if (Number(this.intersect[i][l].getPosy())==Number(y_max)){
-                                x_max=this.intersect[i][l].getPosx();
-                                y_max=Number(this.intersect[i][l].getPosy());
-                                strat_mix.push(l);
-                                if (this.intersect[i][l].getStrat1()==strat_act){
-                                    strat_new.push(this.intersect[i][l].getStrat2());}
+                            else{
+                                if( Math.round(Number((point[point.length-1][1]-y_new)/(x_new-point[point.length-1][0]))*1000)/1000 <Math.round(Number((point[point.length-1][1]-this.intersect[i][l].getPosy())/(this.intersect[i][l].getPosx()-point[point.length-1][0]))*1000)/1000  || (Math.round(Number((point[point.length-1][1]-y_new)/(x_new-point[point.length-1][0]))*1000)/1000 ==Math.round(Number((point[point.length-1][1]-this.intersect[i][l].getPosy())/(this.intersect[i][l].getPosx()-point[point.length-1][0]))*1000)/1000  && Number(this.intersect[i][l].getPosx())<Number(x_new))){
+                                    x_new=this.intersect[i][l].getPosx();
+                                    y_new=Number(this.intersect[i][l].getPosy());
+                                    strat_mix=[l];
+                                    strat_new=[this.intersect[i][l].getStrat1(),this.intersect[i][l].getStrat2()];
+                                }
                                 else{
-                                    strat_new.push(this.intersect[i][l].getStrat1());}
-                                //}
+                                    if (Number(x_new)==Number(this.intersect[i][l].getPosx())&&Number(y_new)==Number(this.intersect[i][l].getPosy())){
+                                        x_new=this.intersect[i][l].getPosx();
+                                        y_new=Number(this.intersect[i][l].getPosy());
+                                        strat_mix.push(l);
+                                        strat_new.push(this.intersect[i][l].getStrat1());
+                                        strat_new.push(this.intersect[i][l].getStrat2());
+                                    }
+                                }
+                            }
+                        }
+                        
+                    }
+                    var temp=this.endpoints[i][this.lines[i][S].getStrat2()];
+                    if (  Number(temp.getPosx())>Number(x_min)){
+                        if (x_new==point[point.length-1][0])
+                        {
+                            x_new=temp.getPosx();
+                            y_new=temp.getPosy();
+                            strat_mix=[l];
+                            strat_new=[S];
+                        }
+                        else{
+                            if( Math.round(Number((point[point.length-1][1]-y_new)/(x_new-point[point.length-1][0]))*1000)/1000 <Math.round(Number((point[point.length-1][1]-temp.getPosy())/(temp.getPosx()-point[point.length-1][0]))*1000)/1000  ||(Math.round(Number((point[point.length-1][1]-y_new)/(x_new-point[point.length-1][0]))*1000)/1000 ==Math.round(Number((point[point.length-1][1]-temp.getPosy())/(temp.getPosx()-point[point.length-1][0]))*1000)/1000  &&Number(temp.getPosx())<Number(x_new))){
+                                x_new=temp.getPosx();
+                                y_new=Number(temp.getPosy());
+                                strat_mix=[l];
+                                strat_new.push(S);}
+                            else{
+                                if (Number(x_new)==Number(temp.getPosx())&& Number(y_new)==Number(temp.getPosy())){
+                                    x_new=temp.getPosx();
+                                    y_new=Number(temp.getPosy());
+                                    strat_mix.push(l);
+                                    strat_new.push(S);}
                             }
                         }
                     }
                 }
                 
-                if (Number(x_max)<Number(i*(this.width+2*this.margin)+this.width-this.margin)){
-                    x_min=x_max;
+                if (Number(x_new)>x_min && Number(x_new)<Number(i*(this.width+2*this.margin)+this.width-this.margin)){
+                    x_min=x_new;
                     strat_act=strat_new;
-                    x_max=Number(i*(this.width+2*this.margin)+this.width-this.margin);
                     point.push([this.intersect[i][strat_mix[0]].getPosx(),this.intersect[i][strat_mix[0]].getPosy()]);
                     strat_mix=[];
                 }
                 else{
-                    point.push([Number(i*(this.width+2*this.margin)+this.width-this.margin),this.endpoints[i][this.lines[i][strat_act[0]].getStrat2()].getPosy()]);
-                    x_min=Number(i*(this.width+2*this.margin)+this.width-this.margin);
-                }
-                //x_min=1000;
-            }
-            y_max=350;
-            for (var j=0;j<this.nb_strat[i];j++){ //select all higher rigth endpoints
-                if (i==0){
-                    if (Number(this.height-this.margin-this.step*Number(this.payoffs[i][j][strat[i][1]]))< Number(y_max)){
-                        strat_act=[j];
-                        y_max=this.height-this.margin-this.step*Number(this.payoffs[i][j][strat[i][1]]);
-                    }
-                    else {
-                        if (Number(this.height-this.margin-this.step*Number(this.payoffs[i][j][strat[i][1]]))== Number(y_max)){
-                            strat_act.push(j);
-                        }
-                    }
-                }
-                else{
-                    if (Number(this.height-this.margin-this.step*Number(this.payoffs[i][strat[i][1]][j]))< Number(y_max)){
-                        strat_act=[j];
-                        y_max=this.height-this.margin-this.step*Number(this.payoffs[i][strat[i][1]][j]);
-                    }
-                    else {
-                        if (Number(this.height-this.margin-this.step*Number(this.payoffs[i][j][strat[i][1]]))== Number(y_max)){
-                            strat_act.push(j);
-                        }
-                    }
+                    point.push([x_new,y_new]);
+                    x_min=x_new;
+                    
                 }
             }
             
-            point[point.length-1]=[i*(this.width+2*this.margin)-this.margin+this.width,y_max];
             var s=Number(i*(this.width+2*this.margin)+this.margin)+",50 ,";
             for (var k=0;k<point.length;k++){
                 s=s+point[k][0]+","+point[k][1]+" ,";
