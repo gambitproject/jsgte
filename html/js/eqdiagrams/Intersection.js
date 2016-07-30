@@ -144,9 +144,9 @@ GTE = (function (parentModule) {
         this.point.setAttributeNS(null, "cy", new_y);
         this.label.setAttributeNS(null, "x", new_x);
         if (this.player==0)
-        this.label.textContent=(new_pos*GTE.diag.precision)/GTE.diag.precision;
+        this.label.textContent=Math.round(new_pos*100)/100;
         else
-        this.label.textContent=Number((Number(new_x)-3*Number(GTE.diag.margin)-Number(GTE.diag.width))/(Number(GTE.diag.width)-2*Number(GTE.diag.margin))*GTE.diag.precision)/GTE.diag.precision;
+       this.label.textContent=Math.round(Number((Number(new_x)-3*Number(GTE.diag.margin)-Number(GTE.diag.width))/(Number(GTE.diag.width)-2*Number(GTE.diag.margin))*100))/100;
         this.stick.setAttributeNS(null, "x1", new_x);
         this.stick.setAttributeNS(null, "x2", new_x);
     };

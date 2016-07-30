@@ -46,7 +46,7 @@ GTE = (function (parentModule) {
        txt.textContent=GTE.tree.matrix.strategies[1][this.strat].moves[0].name;
             txt.setAttribute("x",GTE.diag.margin+Number(this.strat+0.5)*Number((GTE.diag.width-2*GTE.diag.margin)/(GTE.diag.nb_strat[this.player])));
             txt.setAttribute("y","370");
-            txt.setAttribute("class","player1 strat"+this.player+this.strat);
+            txt.setAttribute("class","player1 text"+this.player+this.strat);
             txt.setAttribute("id","text11");
             txt.setAttribute("visibility","visible");
              this.txt=txt;
@@ -79,7 +79,7 @@ GTE = (function (parentModule) {
             txt.textContent=GTE.tree.matrix.strategies[2][this.strat].moves[0].name;
             txt.setAttribute("x",2*GTE.diag.margin+GTE.diag.width+GTE.diag.margin+Number(this.strat+0.5)*Number((GTE.diag.width-2*GTE.diag.margin)/(GTE.diag.nb_strat[this.player])));
             txt.setAttribute("y","370");
-            txt.setAttribute("class","player2 strat"+this.player+this.strat);
+            txt.setAttribute("class","player2 text"+this.player+this.strat);
             txt.setAttribute("id","text21");
             txt.setAttribute("visibility","visible");
             this.txt=txt;

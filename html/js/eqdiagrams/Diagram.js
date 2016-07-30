@@ -405,7 +405,7 @@ GTE = (function(parentModule) {
     
     Diagram.prototype.computeEnvelope = function(strat11=0, strat12=1, strat21=0, strat22=1){
         var strat=[[strat21,strat22],[strat11,strat12]];
-        if (this.best_response[0][0]==0 || this.best_response[0][1]==0 || (this.best_response[0][0]==-1 && this.best_response[0][1]==-1)){//Label strategy iff they are part of a best reponse
+        /*if (this.best_response[0][0]==0 || this.best_response[0][1]==0 || (this.best_response[0][0]==-1 && this.best_response[0][1]==-1)){//Label strategy iff they are part of a best reponse
             var labelline=GTE.svg.getElementById("text11");
             labelline.setAttributeNS(null, "y", Number(this.endpoints[0][0].getPosy())+(Number(this.endpoints[0][1].getPosy())-Number(this.endpoints[0][0].getPosy()))/200*30+Number(20));
             labelline.textContent=GTE.tree.matrix.strategies[1][0].moves[0].name;
@@ -442,11 +442,12 @@ GTE = (function(parentModule) {
             labelline=GTE.svg.getElementById("text22");
             labelline.textContent="";
         }
-        
+        */
         
         for (var i=0;i<2;i++){ //player
             var point=[];
-            var strat_act=[];
+            var strat_act=[];//line on wich point will be.
+            var strat_prev=[];//line on wich point was.
             var strat_new=[];
             var strat_mix=[];
             var y_max=350;
@@ -475,6 +476,7 @@ GTE = (function(parentModule) {
                     }
                 }
             }
+            strat_prev=strat_act;
             point.push([i*(this.width+2*this.margin)+this.margin,y_max]);
             while(Number(x_min)<Number(i*(this.width+2*this.margin)+this.width-this.margin)){
                 var x_new=point[point.length-1][0];
@@ -489,6 +491,7 @@ GTE = (function(parentModule) {
                                 y_new=Number(this.intersect[i][l].getPosy());
                                 strat_mix=[l];
                                 strat_new=[this.intersect[i][l].getStrat1(),this.intersect[i][l].getStrat2()];
+                                strat_prev=[S];
                             }
                             else{
                                 if( Math.round(Number((point[point.length-1][1]-y_new)/(x_new-point[point.length-1][0]))*1000)/1000 <Math.round(Number((point[point.length-1][1]-this.intersect[i][l].getPosy())/(this.intersect[i][l].getPosx()-point[point.length-1][0]))*1000)/1000  || (Math.round(Number((point[point.length-1][1]-y_new)/(x_new-point[point.length-1][0]))*1000)/1000 ==Math.round(Number((point[point.length-1][1]-this.intersect[i][l].getPosy())/(this.intersect[i][l].getPosx()-point[point.length-1][0]))*1000)/1000  && Number(this.intersect[i][l].getPosx())<Number(x_new))){
@@ -496,6 +499,7 @@ GTE = (function(parentModule) {
                                     y_new=Number(this.intersect[i][l].getPosy());
                                     strat_mix=[l];
                                     strat_new=[this.intersect[i][l].getStrat1(),this.intersect[i][l].getStrat2()];
+                                    strat_prev=[S];
                                 }
                                 else{
                                     if (Number(x_new)==Number(this.intersect[i][l].getPosx())&&Number(y_new)==Number(this.intersect[i][l].getPosy())){
@@ -504,6 +508,7 @@ GTE = (function(parentModule) {
                                         strat_mix.push(l);
                                         strat_new.push(this.intersect[i][l].getStrat1());
                                         strat_new.push(this.intersect[i][l].getStrat2());
+                                        strat_prev.push(S);
                                     }
                                 }
                             }
@@ -518,19 +523,22 @@ GTE = (function(parentModule) {
                             y_new=temp.getPosy();
                             strat_mix=[l];
                             strat_new=[S];
+                            strat_prev=[S];
                         }
                         else{
                             if( Math.round(Number((point[point.length-1][1]-y_new)/(x_new-point[point.length-1][0]))*1000)/1000 <Math.round(Number((point[point.length-1][1]-temp.getPosy())/(temp.getPosx()-point[point.length-1][0]))*1000)/1000  ||(Math.round(Number((point[point.length-1][1]-y_new)/(x_new-point[point.length-1][0]))*1000)/1000 ==Math.round(Number((point[point.length-1][1]-temp.getPosy())/(temp.getPosx()-point[point.length-1][0]))*1000)/1000  &&Number(temp.getPosx())<Number(x_new))){
                                 x_new=temp.getPosx();
                                 y_new=Number(temp.getPosy());
                                 strat_mix=[l];
-                                strat_new.push(S);}
+                                strat_new=[S];
+                                strat_prev=[S];}
                             else{
                                 if (Number(x_new)==Number(temp.getPosx())&& Number(y_new)==Number(temp.getPosy())){
                                     x_new=temp.getPosx();
                                     y_new=Number(temp.getPosy());
                                     strat_mix.push(l);
-                                    strat_new.push(S);}
+                                    strat_new.push(S);
+                                    strat_prev.push(S);}
                             }
                         }
                     }
@@ -546,6 +554,14 @@ GTE = (function(parentModule) {
                     point.push([x_new,y_new]);
                     x_min=x_new;
                     
+                }
+                for (var f=0;f<strat_prev.length;f++){
+                    var labelline=GTE.svg.getElementsByClassName("text"+i+strat_prev[f])[0];
+                    var pos_y=Number((point[point.length-1][1]+point[point.length-2][1])/2+this.step/2);
+                    var pos_x=Number((point[point.length-1][0]+point[point.length-2][0])/2-this.step+this.step*2*f);
+                    labelline.setAttributeNS(null, "y", pos_y);
+                    labelline.setAttributeNS(null, "x", pos_x);
+                    labelline.textContent=GTE.tree.matrix.strategies[Number(i+1)][strat_prev[f]].moves[0].name;
                 }
             }
             

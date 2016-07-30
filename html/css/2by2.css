@@ -193,7 +193,7 @@ font-style: italic;
 }
 
 
-[class*="strat"]{
+[class*="text"]{
    font-style: italic;
    font-weight: bold;
    font-family:Roman;
