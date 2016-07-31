@@ -46,31 +46,14 @@ GTE = (function(parentModule) {
         var table_x=[[50,250],[450,650]];
         for (var j=0; j<2;j++){
             this.endpoints.push([]);
-            /*for(var i=0;i<this.nb_strat[j];i++){
+            for (var i=0;i<2*this.nb_strat[j];i++){
                 if (j==0){
-                    this.endpoints[j].push( new GTE.Endpoint(table_x[j%2][i%2],this.height-this.margin,j,i,i));
+                    this.endpoints[j].push( new GTE.Endpoint(table_x[j%2][i%2],this.height-this.margin,j,i,this.nb_strat[1]*(~~(i/2))+i%2));
                 }
                 else{
-                    this.endpoints[j].push( new GTE.Endpoint(table_x[j%2][i%2],this.height-this.margin,j,i,2*i));
+                    this.endpoints[j].push( new GTE.Endpoint(table_x[j%2][i%2],this.height-this.margin,j,i,this.nb_strat[1]*(i%2)+(~~(i/2))));
                 }
             }
-            for(var i=0;i<this.nb_strat[j];i++){
-                var ind=this.nb_strat[j]+i;
-                if (j==0){
-                    this.endpoints[j].push( new GTE.Endpoint(table_x[j%2][ind%2],this.height-this.margin,j,ind,ind));
-                }
-                else{
-                    this.endpoints[j].push( new GTE.Endpoint(table_x[j%2][ind%2],this.height-this.margin,j,ind,Number(2*i+1)));
-                }
-            }*/
-            for (var i=0;i<2*this.nb_strat[j];i++){
-               if (j==0){
-                   this.endpoints[j].push( new GTE.Endpoint(table_x[j%2][i%2],this.height-this.margin,j,i,this.nb_strat[1]*(~~(i/2))+i%2));
-               }
-               else{
-                   this.endpoints[j].push( new GTE.Endpoint(table_x[j%2][i%2],this.height-this.margin,j,i,this.nb_strat[1]*(i%2)+(~~(i/2))));
-               }
-           }
         }
         
     };
@@ -130,7 +113,6 @@ GTE = (function(parentModule) {
     };
     
     Diagram.prototype.doMouseDownLine = function (event){
-        //console.log("mouse down line");
         event.preventDefault();
         GTE.diag.prev_pos=GTE.getMousePosition(event);
         var strat=event.currentTarget.getAttribute("asso_strat");
@@ -147,7 +129,6 @@ GTE = (function(parentModule) {
      Convert mouse's moves in endpoint's moves
      */
     Diagram.prototype.doMouseMoveEndpoint = function (event) {
-        //console.log(GTE.diag.moving_endpoint);
         var mousePosition = GTE.getMousePosition(event);
         var svgPosition = GTE.svg.getBoundingClientRect();
         var newPos=Math.round((2*GTE.diag.height/(svgPosition.bottom-svgPosition.top)*(-mousePosition.y+svgPosition.top)+GTE.diag.height-GTE.diag.margin)/GTE.diag.step*GTE.diag.precision)/GTE.diag.precision;
@@ -169,8 +150,8 @@ GTE = (function(parentModule) {
         var player=GTE.diag.moving_line.getPlayer();
         var strat1=GTE.diag.moving_line.getStrat1();
         var strat2=GTE.diag.moving_line.getStrat2();
-        var point1=GTE.tree.matrix.matrix[strat1].strategy.payoffs[player];
-        var point2=GTE.tree.matrix.matrix[strat2].strategy.payoffs[player];
+        var point1=GTE.tree.matrix.matrix[GTE.diag.endpoints[player][strat1].getStrat_mat()].strategy.payoffs[player];
+        var point2=GTE.tree.matrix.matrix[GTE.diag.endpoints[player][strat2].getStrat_mat()].strategy.payoffs[player];
         var diffPos=~~((2*GTE.diag.height/(svgPosition.bottom-svgPosition.top)*(diff))/GTE.diag.step*GTE.diag.precision)/GTE.diag.precision;
         var pos1=Math.round((point1.value-diffPos)*GTE.diag.precision)/GTE.diag.precision;
         var pos2=Math.round((point2.value-diffPos)*GTE.diag.precision)/GTE.diag.precision;
@@ -184,7 +165,6 @@ GTE = (function(parentModule) {
             point2.draw();
             GTE.diag.redraw();
         }
-        //console.log("Moving: X = " + mousePosition.x + ", Y = " + mousePosition.y);
     };
     
     Diagram.prototype.doMouseupLine = function(event) {
@@ -233,15 +213,8 @@ GTE = (function(parentModule) {
         document.getElementById('matrix-player-1').value = GTE.tree.matrix.getMatrixInStringFormat(0);
         document.getElementById('matrix-player-2').value = GTE.tree.matrix.getMatrixInStringFormat(1);
         GTE.tree.matrix.drawMatrix();
-        /*for (var i=0;i<this.nb_strat[0]-1;i++){
-         for (var j=i+1; j<this.nb_strat[0];j++){
-         
-         this.compute_best_response_bis(i,j,0,1);
-         }
-         }*/
         this.compute_best_response(0,1,0,1);
-        //this.draw_up();
-        //this.draw_down();
+        this.draw_down(0,1,0,1);
     };
     
     Diagram.prototype.compute_best_response = function(strat11=0, strat12=1, strat21=0, strat22=1) {
@@ -260,10 +233,14 @@ GTE = (function(parentModule) {
         for (var i=0;i<this.nb_strat[0];i++){
             this.endpoints[0][i*2].move(this.height-this.margin-this.payoffs[0][i][strat21]*this.step);
             this.endpoints[0][Number(i*2+1)].move(this.height-this.margin-this.payoffs[0][i][strat22]*this.step);
+            this.endpoints[0][i*2].strat_matrix=Number(i*this.nb_strat[1]+strat21);
+            this.endpoints[0][Number(i*2+1)].strat_matrix=Number(i*this.nb_strat[1]+strat22);
         }
         for (var i=0;i<this.nb_strat[1];i++){
             this.endpoints[1][i*2].move(this.height-this.margin-this.payoffs[1][strat11][i]*this.step);
             this.endpoints[1][Number(i*2+1)].move(this.height-this.margin-this.payoffs[1][strat12][i]*this.step);
+            this.endpoints[1][i*2].strat_matrix=Number(strat11*this.nb_strat[1]+i);
+            this.endpoints[1][Number(i*2+1)].strat_matrix=Number(strat12*this.nb_strat[1]+i);
         }
         // compute all intersect points
         var strat=[[strat21,strat22],[strat11,strat12]]
@@ -291,27 +268,11 @@ GTE = (function(parentModule) {
                     }
                     var middle_x=(Y21-Number(Y11))/(Y21-Number(Y22)+Y12-Number(Y11));
                     var middle_y=(Y12-Number(Y11))*middle_x+Number(Y11);
-                    //this.envelopes[i].setPoint(1,i*(2*this.margin+this.width)+Number(this.margin)+middle_x*(this.width-2*Number(this.margin)), this.height-this.margin-(middle_y)*this.step);
-                    if (Y11>Y21){
-                      //  this.envelopes[i].setPoint(0,i*(2*this.margin+this.width)+this.margin, this.endpoints[i][2*j].getPosy());
-                    }
-                    else{
-                        //this.envelopes[i].setPoint(0,i*(2*this.margin+this.width)+this.margin, this.endpoints[i][2*k].getPosy());
-                    }
-                    if (Y12>Y22){
-                        //this.envelopes[i].setPoint(2,i*(2*this.margin+this.width)+this.width-Number(this.margin), this.endpoints[i][2*j+1].getPosy());
-                    }
-                    else{
-                        //this.envelopes[i].setPoint(2,i*(2*this.margin+this.width)+this.width-Number(this.margin), this.endpoints[i][2*k+1].getPosy());
-                    }
                     if (Number(Y11)>Number(Y21) && Number(Y12)>Number(Y22)){
                         var middle_x=0;
                         var middle_y=0; //there is no intersection point
                         this.best_response[i][0]=0;
                         this.best_response[i][1]=0;
-                        //this.envelopes[i].setPoint(0,i*(2*this.margin+this.width)+this.margin, this.endpoints[i][2*j].getPosy());
-                        //this.envelopes[i].setPoint(1,i*(2*this.margin+this.width)+this.margin, this.endpoints[i][2*j].getPosy());
-                        //this.envelopes[i].setPoint(2,i*(2*this.margin+this.width)+this.width-Number(this.margin), this.endpoints[i][2*j+1].getPosy());
                     }
                     else{
                         if (Y11<Y21 && Y12<Y22){
@@ -319,29 +280,21 @@ GTE = (function(parentModule) {
                             var middle_y=0; //there is no intersection point
                             this.best_response[i][0]=1;
                             this.best_response[i][1]=1;
-                            //this.envelopes[i].setPoint(0,i*(2*this.margin+this.width)+this.margin, this.endpoints[i][2*k].getPosy());
-                            //this.envelopes[i].setPoint(1,i*(2*this.margin+this.width)+this.width-Number(this.margin), this.endpoints[i][2*k+1].getPosy());
-                            //this.envelopes[i].setPoint(2,i*(2*this.margin+this.width)+this.width-Number(this.margin), this.endpoints[i][2*k+1].getPosy());
                         }
                         else {
                             if (Y11==Y21){
                                 var middle_x=0;
                                 var middle_y=Y21; //there is no intersection point
                                 this.best_response[i][0]=-1;
-                                //this.envelopes[i].setPoint(0,i*(2*this.margin+this.width)+this.margin, this.endpoints[i][2*k].getPosy());
-                                //this.envelopes[i].setPoint(1,i*(2*this.margin+this.width)+this.margin, this.endpoints[i][2*k].getPosy());
                                 if (Y12>Y22){
                                     this.best_response[i][1]=0;
-                                    //this.envelopes[i].setPoint(2,i*(2*this.margin+this.width)+this.width-Number(this.margin), this.endpoints[i][2*j+1].getPosy());
                                 }
                                 else{
                                     if (Y12==Y22){
                                         this.best_response[i][1]=-1;
-                                        //this.envelopes[i].setPoint(2,i*(2*this.margin+this.width)+this.width-Number(this.margin), this.endpoints[i][2*k+1].getPosy());
                                     }
                                     else {
                                         this.best_response[i][1]=1;
-                                       // this.envelopes[i].setPoint(2,i*(2*this.margin+this.width)+this.width-Number(this.margin), this.endpoints[i][2*k+1].getPosy());
                                     }
                                 }
                             }else{
@@ -349,13 +302,9 @@ GTE = (function(parentModule) {
                                     var middle_x=1;
                                     var middle_y=Y22; //there is no intersection point
                                     this.best_response[i][1]=-1;
-                                    //this.envelopes[i].setPoint(1,i*(2*this.margin+this.width)+this.width-Number(this.margin), this.endpoints[i][2*k+1].getPosy());
-                                    //this.envelopes[i].setPoint(2,i*(2*this.margin+this.width)+this.width-Number(this.margin), this.endpoints[i][2*k+1].getPosy());
                                     if (Y11>Y21){
-                                      //  this.envelopes[i].setPoint(0,i*(2*this.margin+this.width)+this.margin, this.endpoints[i][2*j].getPosy());
                                         this.best_response[i][0]=0;}
                                     else{
-                                        //this.envelopes[i].setPoint(0,i*(2*this.margin+this.width)+this.margin, this.endpoints[i][2*k].getPosy());
                                         this.best_response[i][0]=1;}
                                 }
                                 else {
@@ -384,10 +333,73 @@ GTE = (function(parentModule) {
             }
         }
         
+        for (var i=0;i<2;i++){
+            if (i==0){
+                Y11=this.payoffs[i][strat21][strat[i][0]];
+                Y12=this.payoffs[i][strat21][strat[i][1]];
+                Y21=this.payoffs[i][strat22][strat[i][0]];
+                Y22=this.payoffs[i][strat22][strat[i][1]];}
+            else{
+                Y11=this.payoffs[i][strat[i][0]][strat11];
+                Y12=this.payoffs[i][strat[i][1]][strat11];
+                Y21=this.payoffs[i][strat[i][0]][strat12];
+                Y22=this.payoffs[i][strat[i][1]][strat12];
+            }
+            var middle_x=(Y21-Number(Y11))/(Y21-Number(Y22)+Y12-Number(Y11));
+            var middle_y=(Y12-Number(Y11))*middle_x+Number(Y11);
+            if (Number(Y11)>Number(Y21) && Number(Y12)>Number(Y22)){
+                this.best_response[i][0]=0;
+                this.best_response[i][1]=0;
+            }
+            else{
+                if (Y11<Y21 && Y12<Y22){
+                    this.best_response[i][0]=1;
+                    this.best_response[i][1]=1;
+                }
+                else {
+                    if (Y11==Y21){
+                        this.best_response[i][0]=-1;
+                        if (Y12>Y22){
+                            this.best_response[i][1]=0;
+                        }
+                        else{
+                            if (Y12==Y22){
+                                this.best_response[i][1]=-1;
+                            }
+                            else {
+                                this.best_response[i][1]=1;
+                            }
+                        }
+                    }else{
+                        if (Y12==Y22){
+                            this.best_response[i][1]=-1;
+                            if (Y11>Y21){
+                                this.best_response[i][0]=0;}
+                            else{
+                                this.best_response[i][0]=1;}
+                        }
+                        else {
+                            if(Y11 > Y21){
+                                this.best_response[i][0]=0;
+                            }
+                            else{
+                                this.best_response[i][0]=1;
+                            }
+                            if(Y12 > Y22){
+                                this.best_response[i][1]=0;
+                            }
+                            else{
+                                this.best_response[i][1]=1;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+        
         
         this.computeEnvelope(strat11, strat12, strat21, strat22);
-        
-        
         //upates player's names
         var name_player=GTE.svg.getElementsByClassName("player1_name");
         for (var i=0;i<2;i++)
@@ -413,49 +425,11 @@ GTE = (function(parentModule) {
     
     Diagram.prototype.computeEnvelope = function(strat11=0, strat12=1, strat21=0, strat22=1){
         var strat=[[strat21,strat22],[strat11,strat12]];
-        /*if (this.best_response[0][0]==0 || this.best_response[0][1]==0 || (this.best_response[0][0]==-1 && this.best_response[0][1]==-1)){//Label strategy iff they are part of a best reponse
-            var labelline=GTE.svg.getElementById("text11");
-            labelline.setAttributeNS(null, "y", Number(this.endpoints[0][0].getPosy())+(Number(this.endpoints[0][1].getPosy())-Number(this.endpoints[0][0].getPosy()))/200*30+Number(20));
-            labelline.textContent=GTE.tree.matrix.strategies[1][0].moves[0].name;
-        }
-        else {
-            labelline=GTE.svg.getElementById("text11");
-            labelline.textContent="";
-        }
-        if(this.best_response[0][0]==1 || this.best_response[0][1]==1 || (this.best_response[0][0]==-1 && this.best_response[0][1]==-1)){//Label strategy iff they are part of a best reponse
-            labelline=GTE.svg.getElementById("text12");
-            labelline.setAttributeNS(null, "y", Number(this.endpoints[0][3].getPosy())+(Number(this.endpoints[0][2].getPosy())-Number(this.endpoints[0][3].getPosy()))/200*30+Number(20));
-            labelline.textContent=GTE.tree.matrix.strategies[1][1].moves[0].name;
-        }
-        else {
-            labelline=GTE.svg.getElementById("text12");
-            labelline.textContent="";
-        }
-        // Lines update svg2
-        if (this.best_response[1][0]==0 || this.best_response[1][1]==0 || (this.best_response[1][0]==-1 && this.best_response[1][1]==-1)){//Label strategy iff they are part of a best reponse
-            labelline=GTE.svg.getElementById("text21");
-            labelline.setAttributeNS(null, "y", Number(this.endpoints[1][0].getPosy())+(Number(this.endpoints[1][2].getPosy())-Number(this.endpoints[1][0].getPosy()))/200*30+Number(20));
-            labelline.textContent=GTE.tree.matrix.strategies[2][0].moves[0].name;
-        }
-        else {
-            labelline=GTE.svg.getElementById("text21");
-            labelline.textContent="";
-        }
-        if (this.best_response[1][0]==1 || this.best_response[1][1]==1 || (this.best_response[1][0]==-1 && this.best_response[1][1]==-1)){//Label strategy iff they are part of a best reponse
-            labelline=GTE.svg.getElementById("text22");
-            labelline.setAttributeNS(null, "y", Number(this.endpoints[1][3].getPosy())+(Number(this.endpoints[1][1].getPosy()-Number(this.endpoints[1][3].getPosy()))/200*30)+Number(20));
-            labelline.textContent=GTE.tree.matrix.strategies[2][1].moves[0].name;
-        }
-        else {
-            labelline=GTE.svg.getElementById("text22");
-            labelline.textContent="";
-        }
-        */
         
         for (var i=0;i<2;i++){ //player
-       
+            
             for (var f=0;f<this.nb_strat[i];f++) //hide labelline
-               this.lines[i][f].hideName();
+            this.lines[i][f].hideName();
             var point=[];
             var strat_act=[];//line on wich point will be.
             var strat_prev=[];//line on wich point was.
@@ -573,9 +547,6 @@ GTE = (function(parentModule) {
                     var pos_y=Number(point[point.length-2][1]+(f+0.5)*y_step-this.step/2);
                     var pos_x=Number(point[point.length-2][0]+(f+0.5)*x_step);
                     line.moveLabel(pos_x,pos_y);
-                    //labelline.setAttributeNS(null, "y", pos_y);
-                    //labelline.setAttributeNS(null, "x", pos_x);
-                    //labelline.textContent=GTE.tree.matrix.strategies[Number(i+1)][strat_prev[f]].moves[0].name;
                 }
             }
             var s=Number(i*(this.width+2*this.margin)+this.margin)+",50 ,";
@@ -655,29 +626,29 @@ GTE = (function(parentModule) {
         /*var envelope1=document.getElementById("envelope1");
          envelope1.setAttributeNS(null,"points", "50,50 "+this.envelopes[0].points[0][0]+","+this.envelopes[0].points[0][1]+" "+this.envelopes[0].points[1][0]+","+this.envelopes[0].points[1][1]+" "+this.envelopes[0].points[2][0]+","+this.envelopes[0].points[2][1]+" 250,50");*/
         /*var inter=GTE.svg.getElementById("inter1");
-        inter.setAttributeNS(null,"cx", this.envelopes[0].points[1][0]);
-        inter.setAttributeNS(null,"cy", this.envelopes[0].points[1][1]);
-        var interlabel=GTE.svg.getElementById("interlabel1");
-        interlabel.setAttributeNS(null, "x",this.envelopes[0].points[1][0]);
-        interlabel.textContent=Math.round((Number(this.envelopes[0].points[1][0])-50)/2)/100;
-        var stick=GTE.svg.getElementsByClassName("interstick1");
-        for (i=0;i<stick.length;i++){
-            stick[i].setAttributeNS(null, "x1",this.envelopes[0].points[1][0]);
-            stick[i].setAttributeNS(null, "x2",this.envelopes[0].points[1][0]);}*/
+         inter.setAttributeNS(null,"cx", this.envelopes[0].points[1][0]);
+         inter.setAttributeNS(null,"cy", this.envelopes[0].points[1][1]);
+         var interlabel=GTE.svg.getElementById("interlabel1");
+         interlabel.setAttributeNS(null, "x",this.envelopes[0].points[1][0]);
+         interlabel.textContent=Math.round((Number(this.envelopes[0].points[1][0])-50)/2)/100;
+         var stick=GTE.svg.getElementsByClassName("interstick1");
+         for (i=0;i<stick.length;i++){
+         stick[i].setAttributeNS(null, "x1",this.envelopes[0].points[1][0]);
+         stick[i].setAttributeNS(null, "x2",this.envelopes[0].points[1][0]);}*/
         //envelop svg2
         /*var envelope2=document.getElementById("envelope2");
          envelope2.setAttributeNS(null,"points", "450,50 "+this.envelopes[1].points[0][0]+","+this.envelopes[1].points[0][1]+" "+this.envelopes[1].points[1][0]+","+this.envelopes[1].points[1][1]+" "+this.envelopes[1].points[2][0]+","+this.envelopes[1].points[2][1]+" 650,50");*/
         /*inter=GTE.svg.getElementById("inter2");
-        inter.setAttributeNS(null,"cx", this.envelopes[1].points[1][0]);
-        inter.setAttributeNS(null,"cy", this.envelopes[1].points[1][1]);
-        interlabel=GTE.svg.getElementById("interlabel2");
-        interlabel.setAttributeNS(null, "x",this.envelopes[1].points[1][0]);
-        interlabel.textContent=Math.round((Number(this.envelopes[1].points[1][0])-450)/2)/100;
-        var stick=GTE.svg.getElementsByClassName("interstick2");
-        for (i=0;i<stick.length;i++){
-            stick[i].setAttributeNS(null, "x1",this.envelopes[1].points[1][0]);
-            stick[i].setAttributeNS(null, "x2",this.envelopes[1].points[1][0]);
-        }*/
+         inter.setAttributeNS(null,"cx", this.envelopes[1].points[1][0]);
+         inter.setAttributeNS(null,"cy", this.envelopes[1].points[1][1]);
+         interlabel=GTE.svg.getElementById("interlabel2");
+         interlabel.setAttributeNS(null, "x",this.envelopes[1].points[1][0]);
+         interlabel.textContent=Math.round((Number(this.envelopes[1].points[1][0])-450)/2)/100;
+         var stick=GTE.svg.getElementsByClassName("interstick2");
+         for (i=0;i<stick.length;i++){
+         stick[i].setAttributeNS(null, "x1",this.envelopes[1].points[1][0]);
+         stick[i].setAttributeNS(null, "x2",this.envelopes[1].points[1][0]);
+         }*/
         
         var temp= GTE.svg.getElementsByClassName("strat11");
         for (i=0;i<temp.length;i++){
@@ -697,7 +668,19 @@ GTE = (function(parentModule) {
         }
     };
     
-    Diagram.prototype.draw_down = function(){
+    Diagram.prototype.draw_down = function(strat11=0, strat12=1, strat21=0, strat22=1){
+        var inter=[[0,0],[0,0]];
+        for (var i=0;i<this.intersect[0].length;i++){
+            if ((this.intersect[0][i].getStrat1()==strat11 &&this.intersect[0][i].getStrat2()==strat12) || (this.intersect[0][i].getStrat2()==strat11 &&this.intersect[0][i].getStrat1()==strat12)){
+                console.log(this.intersect[0][i].getStrat1()+" "+strat11+" "+this.intersect[0][i].getStrat2()+" "+strat12+" "+this.intersect[0][i].getPosx());
+                inter[0]=[this.intersect[0][i].getPosx(),this.intersect[0][i].getPosy()];
+            }
+        }
+        for (var i=0;i<this.intersect[1].length;i++){
+            if ((this.intersect[1][i].getStrat1()==strat21 &&this.intersect[1][i].getStrat2()==strat22) || (this.intersect[1][i].getStrat2()==strat21 &&this.intersect[1][i].getStrat1()==strat22)){
+                inter[1]=[this.intersect[1][i].getPosx(),this.intersect[1][i].getPosy()];
+            }
+        }
         var temp=[];
         var temp2= GTE.svg.getElementsByClassName("brline");
         var path1="";
@@ -829,8 +812,8 @@ GTE = (function(parentModule) {
                         temp[4].setAttributeNS(null, "width", Number(this.side+2*this.rad));
                     }
                     else{
-                        path1=Number(this.margin)+","+Number(this.height+2*this.margin)+", "+this.envelopes[0].points[1][0]+","+Number(this.height+2*this.margin)+", "+this.envelopes[0].points[1][0]+","+Number(2*this.margin+this.height+this.side)+", "+ Number(this.margin+this.side)+","+Number(2*this.margin+this.height+this.side);
-                        temp[8].setAttributeNS(null, "x", this.envelopes[0].points[1][0]-5);
+                        path1=Number(this.margin)+","+Number(this.height+2*this.margin)+", "+inter[0][0]+","+Number(this.height+2*this.margin)+", "+inter[0][0]+","+Number(2*this.margin+this.height+this.side)+", "+ Number(this.margin+this.side)+","+Number(2*this.margin+this.height+this.side);
+                        temp[8].setAttributeNS(null, "x", inter[0][0]-5);
                         temp[8].setAttributeNS(null, "y", Number(2*this.margin+this.height-this.rad));
                         temp[8].setAttributeNS(null, "height", Number(this.side+2*this.rad));
                         temp[8].setAttributeNS(null, "width", Number(2*this.rad));
@@ -838,12 +821,12 @@ GTE = (function(parentModule) {
                         temp[4].setAttributeNS(null, "x", Number(this.margin-this.rad));
                         temp[4].setAttributeNS(null, "y", Number(2*this.margin+this.height-this.rad));
                         temp[4].setAttributeNS(null, "height", Number(2*this.rad));
-                        temp[4].setAttributeNS(null, "width", ~~(this.envelopes[0].points[1][0]-Number(this.margin))+Number(2*this.rad));
+                        temp[4].setAttributeNS(null, "width", ~~(inter[0][0]-Number(this.margin))+Number(2*this.rad));
                         
-                        temp[6].setAttributeNS(null, "x", this.envelopes[0].points[1][0]-5);
+                        temp[6].setAttributeNS(null, "x", inter[0][0]-5);
                         temp[6].setAttributeNS(null, "y", Number(this.height+2*this.margin+this.side-this.rad));
                         temp[6].setAttributeNS(null, "height", Number(2*this.rad));
-                        temp[6].setAttributeNS(null, "width", ~~(Number(this.margin+this.side)-this.envelopes[0].points[1][0])+Number(2*this.rad));
+                        temp[6].setAttributeNS(null, "width", ~~(Number(this.margin+this.side)-inter[0][0])+Number(2*this.rad));
                         
                         temp[1].setAttributeNS(null, "r", 0);
                         temp[3].setAttributeNS(null, "r", 0);
@@ -851,21 +834,21 @@ GTE = (function(parentModule) {
                 }
                 else{
                     if (this.best_response[0][1]==0){
-                        path1=Number(this.margin)+","+Number(2*this.margin+this.height+this.side)+", "+this.envelopes[0].points[1][0]+","+Number(2*this.margin+this.height+this.side)+", "+this.envelopes[0].points[1][0]+","+Number(this.height+2*this.margin)+", "+Number(this.margin+this.side)+","+Number(this.height+2*this.margin);
+                        path1=Number(this.margin)+","+Number(2*this.margin+this.height+this.side)+", "+inter[0][0]+","+Number(2*this.margin+this.height+this.side)+", "+inter[0][0]+","+Number(this.height+2*this.margin)+", "+Number(this.margin+this.side)+","+Number(this.height+2*this.margin);
                         temp[6].setAttributeNS(null, "x", Number(this.margin-this.rad));
                         temp[6].setAttributeNS(null, "y", Number(this.height+2*this.margin+this.side-this.rad));
                         temp[6].setAttributeNS(null, "height", Number(2*this.rad));
-                        temp[6].setAttributeNS(null, "width", ~~(this.envelopes[0].points[1][0]-Number(this.margin))+Number(2*this.rad));
+                        temp[6].setAttributeNS(null, "width", ~~(inter[0][0]-Number(this.margin))+Number(2*this.rad));
                         
-                        temp[8].setAttributeNS(null, "x", this.envelopes[0].points[1][0]-5);
+                        temp[8].setAttributeNS(null, "x", inter[0][0]-5);
                         temp[8].setAttributeNS(null, "y", Number(2*this.margin+this.height-this.rad));
                         temp[8].setAttributeNS(null, "height", Number(this.side+2*this.rad));
                         temp[8].setAttributeNS(null, "width", Number(2*this.rad));
                         
-                        temp[4].setAttributeNS(null, "x", this.envelopes[0].points[1][0]-5);
+                        temp[4].setAttributeNS(null, "x", inter[0][0]-5);
                         temp[4].setAttributeNS(null, "y", Number(2*this.margin+this.height-this.rad));
                         temp[4].setAttributeNS(null, "height", Number(2*this.rad));
-                        temp[4].setAttributeNS(null, "width", ~~(Number(this.margin+this.side)-this.envelopes[0].points[1][0])+Number(2*this.rad));
+                        temp[4].setAttributeNS(null, "width", ~~(Number(this.margin+this.side)-inter[0][0])+Number(2*this.rad));
                         
                         temp[0].setAttributeNS(null, "r", 0);
                         temp[2].setAttributeNS(null, "r", 0);
@@ -1035,7 +1018,7 @@ GTE = (function(parentModule) {
                         temp[2].setAttributeNS(null, "r", 0);//remove end point
                     }
                     else{
-                        path2=Number(this.margin)+","+Number(this.height+2*this.margin)+", "+Number(this.margin)+","+Number(this.envelopes[1].points[1][0]+Number(Number(this.margin)))+", "+Number(this.margin+this.side)+","+Number(this.envelopes[1].points[1][0]+Number(this.margin))+", "+Number(this.margin+this.side)+","+Number(2*this.margin+this.height+this.side);
+                        path2=Number(this.margin)+","+Number(this.height+2*this.margin)+", "+Number(this.margin)+","+Number(inter[1][0]+this.margin)+", "+Number(this.margin+this.side)+","+Number(inter[1][0]+Number(this.margin))+", "+Number(this.margin+this.side)+","+Number(2*this.margin+this.height+this.side);
                         temp[1].setAttributeNS(null, "r", 0);
                         temp[3].setAttributeNS(null, "r", 0);
                         if (this.best_response[0][1]>-1 && this.best_response[0][0]>-1){
@@ -1048,7 +1031,7 @@ GTE = (function(parentModule) {
                             temp[5].setAttributeNS(null, "width", 0);
                             temp[6].setAttributeNS(null, "width", 0);
                             temp[7].setAttributeNS(null, "width", 0);
-                            temp[8].setAttributeNS(null, "y", Number(this.envelopes[1].points[1][0]+Number(Number(this.margin-this.rad))));
+                            temp[8].setAttributeNS(null, "y", Number(inter[1][0]+Number(Number(this.margin-this.rad))));
                             if (this.best_response[0][0] ==-1 || this.best_response[0][1] ==-1){
                                 temp[4].setAttributeNS(null, "height", Number(this.side+2*this.rad));
                                 temp[4].setAttributeNS(null, "width", Number(this.side+2*this.rad));
@@ -1062,7 +1045,7 @@ GTE = (function(parentModule) {
                             temp[4].setAttributeNS(null, "height", 0);
                             temp[5].setAttributeNS(null, "height", 0);
                             temp[6].setAttributeNS(null, "height", 0);
-                            temp[7].setAttributeNS(null, "height", Number(this.envelopes[1].points[1][0]-Number(Number(this.height+2*this.margin))+Number(60)));
+                            temp[7].setAttributeNS(null, "height", Number(inter[1][0]-Number(Number(this.height+2*this.margin))+Number(60)));
                             if (this.best_response[0][0] >-1 || this.best_response[0][1] >-1){
                                 temp[8].setAttributeNS(null, "height", 0);
                                 temp[8].setAttributeNS(null, "width", 0);
@@ -1081,8 +1064,8 @@ GTE = (function(parentModule) {
                                 temp[8].setAttributeNS(null, "width", 0);
                             }
                             temp[4].setAttributeNS(null, "width", 0);
-                            temp[5].setAttributeNS(null, "height",Number(Number(2*this.margin+this.height+this.side)-Number(this.envelopes[1].points[1][0])-Number(40)) );
-                            temp[5].setAttributeNS(null, "y", Number(this.envelopes[1].points[1][0]+Number(Number(this.margin-this.rad))));
+                            temp[5].setAttributeNS(null, "height",Number(Number(2*this.margin+this.height+this.side)-Number(inter[1][0])-Number(40)) );
+                            temp[5].setAttributeNS(null, "y", Number(inter[1][0]+Number(Number(this.margin-this.rad))));
                             temp[7].setAttributeNS(null, "width", 0);
                             temp[6].setAttributeNS(null, "width", 0);
                             temp[2].setAttributeNS(null, "r", 0);//remove end point
@@ -1097,18 +1080,18 @@ GTE = (function(parentModule) {
                             temp[0].setAttributeNS(null, "r", 0);//remove end point
                             temp[7].setAttributeNS(null, "x", Number(this.margin-this.rad));
                             temp[7].setAttributeNS(null, "y", Number(2*this.margin+this.height-this.rad));
-                            temp[7].setAttributeNS(null, "height", Number(this.envelopes[1].points[1][0]-Number(Number(this.height+2*this.margin))+Number(60)));
+                            temp[7].setAttributeNS(null, "height", Number(inter[1][0]-Number(Number(this.height+2*this.margin))+Number(60)));
                             temp[7].setAttributeNS(null, "width", Number(2*this.rad));
                             
                             temp[8].setAttributeNS(null, "x", Number(this.margin-this.rad));
-                            temp[8].setAttributeNS(null, "y", Number(this.envelopes[1].points[1][0]+Number(Number(this.margin-this.rad))));
+                            temp[8].setAttributeNS(null, "y", Number(inter[1][0]+Number(Number(this.margin-this.rad))));
                             temp[8].setAttributeNS(null, "height", Number(2*this.rad));
                             temp[8].setAttributeNS(null, "width", Number(this.side+2*this.rad));
                             
                             temp[2].setAttributeNS(null, "r", 0);//remove end point
                             temp[5].setAttributeNS(null, "x", Number(this.side+this.margin-this.rad));
-                            temp[5].setAttributeNS(null, "y", Number(this.envelopes[1].points[1][0]+Number(Number(this.margin-this.rad))));
-                            temp[5].setAttributeNS(null, "height",Number(Number(2*this.margin+this.height+this.side)-Number(this.envelopes[1].points[1][0])-Number(40)) );
+                            temp[5].setAttributeNS(null, "y", Number(inter[1][0]+Number(Number(this.margin-this.rad))));
+                            temp[5].setAttributeNS(null, "height",Number(Number(2*this.margin+this.height+this.side)-Number(inter[1][0])-Number(40)) );
                             temp[5].setAttributeNS(null, "width", Number(2*this.rad));
                             
                             if (this.best_response[0][0] ==-1 || this.best_response[0][1] ==-1){
@@ -1124,7 +1107,7 @@ GTE = (function(parentModule) {
                 }
                 else{
                     if (this.best_response[1][1]==0){
-                        path2=Number(this.margin)+","+Number(2*this.margin+this.height+this.side)+", "+Number(this.margin)+","+Number(this.envelopes[1].points[1][0]+Number(Number(this.margin)))+", "+Number(this.margin+this.side)+","+Number(this.envelopes[1].points[1][0]+Number(Number(this.margin)))+", "+Number(this.margin+this.side)+","+Number(this.height+2*this.margin);
+                        path2=Number(this.margin)+","+Number(2*this.margin+this.height+this.side)+", "+Number(this.margin)+","+Number(inter[1][0]+this.margin)+", "+Number(this.margin+this.side)+","+Number(inter[1][0]+Number(Number(this.margin)))+", "+Number(this.margin+this.side)+","+Number(this.height+2*this.margin);
                         temp[0].setAttributeNS(null, "r", 0);
                         temp[2].setAttributeNS(null, "r", 0);
                         if (this.best_response[0][1]>-1 && this.best_response[0][0]>-1){
@@ -1137,7 +1120,7 @@ GTE = (function(parentModule) {
                             temp[5].setAttributeNS(null, "width", 0);
                             temp[6].setAttributeNS(null, "width", 0);
                             temp[7].setAttributeNS(null, "width", 0);
-                            temp[8].setAttributeNS(null, "y", Number(this.envelopes[1].points[1][0]+Number(Number(this.margin-this.rad))));
+                            temp[8].setAttributeNS(null, "y", Number(inter[1][0]+Number(Number(this.margin-this.rad))));
                             if (this.best_response[0][0] ==-1 || this.best_response[0][1] ==-1){
                                 temp[4].setAttributeNS(null, "height", Number(this.side+2*this.rad));
                                 temp[4].setAttributeNS(null, "width", Number(this.side+2*this.rad));
@@ -1151,8 +1134,8 @@ GTE = (function(parentModule) {
                             temp[4].setAttributeNS(null, "height", 0);
                             temp[5].setAttributeNS(null, "height", 0);
                             temp[6].setAttributeNS(null, "height", 0);
-                            temp[7].setAttributeNS(null, "height", Number(Number(2*this.margin+this.height+this.side)-Number(this.envelopes[1].points[1][0])-Number(40)));
-                            temp[7].setAttributeNS(null, "y", Number(this.envelopes[1].points[1][0]+Number(Number(this.margin-this.rad))));
+                            temp[7].setAttributeNS(null, "height", Number(Number(2*this.margin+this.height+this.side)-Number(inter[1][0])-Number(40)));
+                            temp[7].setAttributeNS(null, "y", Number(inter[1][0]+Number(Number(this.margin-this.rad))));
                             if (this.best_response[0][0] >-1 || this.best_response[0][1] >-1){
                                 temp[8].setAttributeNS(null, "height", 0);
                                 temp[8].setAttributeNS(null, "width", 0);
@@ -1171,7 +1154,7 @@ GTE = (function(parentModule) {
                                 temp[8].setAttributeNS(null, "width", 0);
                             }
                             temp[4].setAttributeNS(null, "width", 0);
-                            temp[5].setAttributeNS(null, "height", Number(this.envelopes[1].points[1][0]-Number(Number(this.height+2*this.margin))+Number(60) ));
+                            temp[5].setAttributeNS(null, "height", Number(inter[1][0]-Number(Number(this.height+2*this.margin))+Number(60) ));
                             temp[7].setAttributeNS(null, "width", 0);
                             temp[6].setAttributeNS(null, "width", 0);
                             temp[1].setAttributeNS(null, "r", 0);//remove end point
@@ -1185,19 +1168,19 @@ GTE = (function(parentModule) {
                             
                             temp[3].setAttributeNS(null, "r", 0);//remove end point
                             temp[7].setAttributeNS(null, "x", Number(this.margin-this.rad));
-                            temp[7].setAttributeNS(null, "y", Number(this.envelopes[1].points[1][0]+Number(Number(this.margin-this.rad))));
-                            temp[7].setAttributeNS(null, "height", Number(Number(2*this.margin+this.height+this.side)-Number(this.envelopes[1].points[1][0])-Number(40)));
+                            temp[7].setAttributeNS(null, "y", Number(inter[1][0]+Number(Number(this.margin-this.rad))));
+                            temp[7].setAttributeNS(null, "height", Number(Number(2*this.margin+this.height+this.side)-Number(inter[1][0])-Number(40)));
                             temp[7].setAttributeNS(null, "width", Number(2*this.rad));
                             
                             temp[8].setAttributeNS(null, "x", Number(this.margin-this.rad));
-                            temp[8].setAttributeNS(null, "y", Number(this.envelopes[1].points[1][0]+Number(Number(this.margin-this.rad))));
+                            temp[8].setAttributeNS(null, "y", Number(inter[1][0]+Number(Number(this.margin-this.rad))));
                             temp[8].setAttributeNS(null, "height", Number(2*this.rad));
                             temp[8].setAttributeNS(null, "width", Number(this.side+2*this.rad));
                             
                             temp[1].setAttributeNS(null, "r", 0);//remove end point
                             temp[5].setAttributeNS(null, "x", Number(this.side+this.margin-this.rad));
                             temp[5].setAttributeNS(null, "y", Number(2*this.margin+this.height-this.rad));
-                            temp[5].setAttributeNS(null, "height",Number(this.envelopes[1].points[1][0]-Number(Number(this.height+2*this.margin))+Number(60) ));
+                            temp[5].setAttributeNS(null, "height",Number(inter[1][0]-Number(Number(this.height+2*this.margin))+Number(60) ));
                             temp[5].setAttributeNS(null, "width", Number(2*this.rad));
                             
                             if (this.best_response[0][0] ==-1 || this.best_response[0][1] ==-1){
@@ -1239,40 +1222,40 @@ GTE = (function(parentModule) {
         
         var stick=GTE.svg.getElementsByClassName("middle21");
         for (i=0;i<stick.length;i++){
-            if(this.envelopes[1].points[1][0]==650){
+            if(inter[1][0]==650){
                 stick[i].textContent=""
             }
             if(this.best_response[1][1]==1)
-            var  pos=(this.envelopes[1].points[1][0]+Number(450))/2;
+            var  pos=(inter[1][0]+Number(450))/2;
             else
-            var  pos=(this.envelopes[1].points[1][0]+Number(650))/2;
+            var  pos=(inter[1][0]+Number(650))/2;
             
             stick[i].setAttributeNS(null, "x",pos);
         }
         var stick=GTE.svg.getElementsByClassName("middle22");
         for (i=0;i<stick.length;i++){
-            if(this.envelopes[1].points[1][0]==450){
+            if(inter[1][0]==450){
                 stick[i].textContent=""
             }
             if(this.best_response[1][0]==1)
-            pos=(this.envelopes[1].points[1][0]+Number(450))/2;
+            pos=(inter[1][0]+Number(450))/2;
             else
-            pos=(this.envelopes[1].points[1][0]+Number(650))/2;
+            pos=(inter[1][0]+Number(650))/2;
             stick[i].setAttributeNS(null, "x",pos);
         }
-        if (this.envelopes[1].points[1][0]>450 && this.envelopes[1].points[1][0] <650){
-            var t1=Number(this.envelopes[1].points[1][0])-Number(410);
-            var t2=460+Number(this.envelopes[1].points[1][0])-Number(410);
-            GTE.svg.getElementsByClassName("arc player2")[0].setAttributeNS(null, "d", "M"+this.envelopes[1].points[1][0]+",460 A"+t1+","+t1+" 0 0,1 410,"+t2);
+        if (inter[1][0]>450 && inter[1][0] <650){
+            var t1=Number(inter[1][0])-Number(410);
+            var t2=460+Number(inter[1][0])-Number(410);
+            GTE.svg.getElementsByClassName("arc player2")[0].setAttributeNS(null, "d", "M"+inter[1][0]+",460 A"+t1+","+t1+" 0 0,1 410,"+t2);
             GTE.svg.getElementsByClassName("stick player2")[0].setAttributeNS(null, "y1", t2);
             GTE.svg.getElementsByClassName("stick player2")[0].setAttributeNS(null, "y2", t2);
         }
-        if (this.envelopes[1].points[1][0]==450){
+        if (inter[1][0]==450){
             GTE.svg.getElementsByClassName("arc player2")[0].setAttributeNS(null, "d","M450,460 A40,40 0 0,1 410,500");
             GTE.svg.getElementsByClassName("stick player2")[0].setAttributeNS(null, "y1", 500);
             GTE.svg.getElementsByClassName("stick player2")[0].setAttributeNS(null, "y2", 500);
         }
-        if (this.envelopes[1].points[1][0]==650){
+        if (inter[1][0]==650){
             GTE.svg.getElementsByClassName("arc player2")[0].setAttributeNS(null, "d","M650,460 A240,240 0 0,1 410,700");
             GTE.svg.getElementsByClassName("stick player2")[0].setAttributeNS(null, "y1", 700);
             GTE.svg.getElementsByClassName("stick player2")[0].setAttributeNS(null, "y2", 700);
@@ -1280,35 +1263,32 @@ GTE = (function(parentModule) {
         
         GTE.svg.getElementsByClassName("stick player1")[0].setAttributeNS(null, "x1", Number(this.margin));
         GTE.svg.getElementsByClassName("stick player1")[0].setAttributeNS(null, "x2", Number(this.margin));
-        if (this.envelopes[0].points[1][0]>Number(this.margin) && this.envelopes[0].points[1][0]<Number(this.margin+this.side)){
-            GTE.svg.getElementsByClassName("stick player1")[0].setAttributeNS(null, "x1", this.envelopes[0].points[1][0]);
-            GTE.svg.getElementsByClassName("stick player1")[0].setAttributeNS(null, "x2", this.envelopes[0].points[1][0]);
+        if (inter[0][0]>Number(this.margin) && inter[0][0]<Number(this.margin+this.side)){
+            GTE.svg.getElementsByClassName("stick player1")[0].setAttributeNS(null, "x1", inter[1][0]);
+            GTE.svg.getElementsByClassName("stick player1")[0].setAttributeNS(null, "x2", inter[1][0]);
         }
         var stick=GTE.svg.getElementsByClassName("middle11");
         for (i=0;i<stick.length;i++){
-            if(this.envelopes[0].points[1][0]==Number(this.margin+this.side)){
+            if(inter[0][0]==Number(this.margin+this.side)){
                 stick[i].textContent=""
             }
             if(this.best_response[0][1]==1)
-            pos=(this.envelopes[0].points[1][0]+Number(Number(this.margin)))/2;
+            pos=(inter[0][0]+Number(Number(this.margin)))/2;
             else
-            pos=(this.envelopes[0].points[1][0]+Number(Number(this.margin+this.side)))/2;
+            pos=(inter[0][0]+Number(Number(this.margin+this.side)))/2;
             stick[i].setAttributeNS(null, "x",pos);
         }
         var stick=GTE.svg.getElementsByClassName("middle12");
         for (i=0;i<stick.length;i++){
-            if(this.envelopes[0].points[1][0]==Number(this.margin)){
+            if(inter[0][0]==Number(this.margin)){
                 stick[i].textContent=""
             }
             if(this.best_response[0][0]==1)
-            pos=(this.envelopes[0].points[1][0]+Number(this.margin))/2;
+            pos=(inter[0][0]+Number(this.margin))/2;
             else
-            pos=(this.envelopes[0].points[1][0]+Number(this.margin+this.side))/2;
+            pos=(inter[0][0]+Number(this.margin+this.side))/2;
             stick[i].setAttributeNS(null, "x",pos);
         }
-        
-        
-        
         
     };
     
