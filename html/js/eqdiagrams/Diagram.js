@@ -35,7 +35,7 @@ GTE = (function(parentModule) {
         this.assignIntersections();
         this.ini_arrays();
     }
-
+    
     
     Diagram.prototype.assignEndpoints = function() {
         var table_x=[[50,250],[450,650]];
@@ -226,13 +226,13 @@ GTE = (function(parentModule) {
                                 this.text=GTE.diag.strat[this.index][1];
                             }
                             else{
-                            GTE.diag.strat[this.index][1]=j;
+                                GTE.diag.strat[this.index][1]=j;
                             }
                             test=1;
                         }
                     }
                     if (test==0){
-                     window.alert("Strategy name should correspond to a strategy.");
+                        window.alert("Strategy name should correspond to a strategy.");
                         this.text=GTE.diag.strat[this.index][1];
                     }
                 }
@@ -396,15 +396,15 @@ GTE = (function(parentModule) {
         
         for (var i=0;i<2;i++){
             if (i==0){
-                Y11=this.payoffs[i][strat21][strat[i][0]];
-                Y12=this.payoffs[i][strat21][strat[i][1]];
-                Y21=this.payoffs[i][strat22][strat[i][0]];
-                Y22=this.payoffs[i][strat22][strat[i][1]];}
+                Y11=this.payoffs[i][strat11][strat21];
+                Y12=this.payoffs[i][strat11][strat22];
+                Y21=this.payoffs[i][strat12][strat21];
+                Y22=this.payoffs[i][strat12][strat22];}
             else{
-                Y11=this.payoffs[i][strat[i][0]][strat11];
-                Y12=this.payoffs[i][strat[i][1]][strat11];
-                Y21=this.payoffs[i][strat[i][0]][strat12];
-                Y22=this.payoffs[i][strat[i][1]][strat12];
+                Y11=this.payoffs[i][strat11][strat21];
+                Y12=this.payoffs[i][strat12][strat21];
+                Y21=this.payoffs[i][strat11][strat22];
+                Y22=this.payoffs[i][strat12][strat22];
             }
             var middle_x=(Y21-Number(Y11))/(Y21-Number(Y22)+Y12-Number(Y11));
             var middle_y=(Y12-Number(Y11))*middle_x+Number(Y11);
@@ -641,7 +641,7 @@ GTE = (function(parentModule) {
             for (var j=0;j<2;j++){
                 var temp=GTE.svg.getElementsByClassName("strat"+i+""+j+" change");
                 for (var k=0;k<temp.length;k++)
-                    temp[k].textContent=GTE.tree.matrix.strategies[Number(i+1)][strat[i][j]].moves[0].name;
+                temp[k].textContent=GTE.tree.matrix.strategies[Number(i+1)][strat[i][j]].moves[0].name;
             }
         }
         
@@ -1186,7 +1186,114 @@ GTE = (function(parentModule) {
         temp2[0].setAttributeNS(null, "points", path1);
         temp2[1].setAttributeNS(null, "points", path2);
         
-        var stick=GTE.svg.getElementsByClassName("middle22");
+        var stick=GTE.svg.getElementsByClassName("interstick1");
+        for (i=0;i<stick.length;i++){
+            stick[i].setAttributeNS(null, "x1",inter[0][0]);
+            stick[i].setAttributeNS(null, "x2",inter[0][0]);
+        }
+        var stick=GTE.svg.getElementsByClassName("interstick2");
+        for (i=0;i<stick.length;i++){
+            stick[i].setAttributeNS(null, "x1",Number(inter[1][0]));
+            stick[i].setAttributeNS(null, "x2",Number(inter[1][0]));
+        }
+        var pos1=Number((inter[0][0]+Number(Number(this.margin)))/2);
+        var pos2=Number((inter[0][0]+Number(Number(this.margin+this.side)))/2);
+        var middle=Number(this.margin+(this.width-2*this.margin)/2);
+        if (this.best_response[0][0]==0){
+            GTE.svg.getElementsByClassName("middle11")[0].setAttributeNS(null, "x", pos1);
+            GTE.svg.getElementsByClassName("middle12")[0].setAttributeNS(null, "x", pos2);
+            if (this.best_response[0][1]!=1)
+            GTE.svg.getElementsByClassName("middle12")[0].textContent="";
+            if (this.best_response[0][1]==0)
+            GTE.svg.getElementsByClassName("middle11")[0].setAttributeNS(null, "x", middle);
+        }
+        else {
+            if (this.best_response[0][0]==1){
+                GTE.svg.getElementsByClassName("middle11")[0].setAttributeNS(null, "x", pos2);
+                GTE.svg.getElementsByClassName("middle12")[0].setAttributeNS(null, "x", pos1);
+                if (this.best_response[0][1]!=0)
+                GTE.svg.getElementsByClassName("middle11")[0].textContent="";
+                if (this.best_response[0][1]==1)
+                GTE.svg.getElementsByClassName("middle11")[0].setAttributeNS(null, "x", middle);
+            }
+            else {
+                if (this.best_response[0][1]==0){
+                   GTE.svg.getElementsByClassName("middle11")[0].setAttributeNS(null, "x", middle);
+                    GTE.svg.getElementsByClassName("middle12")[0].textContent="";
+                }
+                if (this.best_response[0][1]==1){
+                    GTE.svg.getElementsByClassName("middle12")[0].setAttributeNS(null, "x", middle);
+                    GTE.svg.getElementsByClassName("middle11")[0].textContent="";
+                }
+                if (this.best_response[0][1]==-1){
+                    GTE.svg.getElementsByClassName("middle12")[0].setAttributeNS(null, "x", Number(this.margin+(this.width-2*this.margin)/3));
+                    GTE.svg.getElementsByClassName("middle11")[0].setAttributeNS(null, "x", Number(this.margin+2*(this.width-2*this.margin)/3));
+                }
+
+            }
+        }
+        
+        pos1=Number((inter[1][0]+3*this.margin+this.width)/2);
+        pos2=Number((inter[1][0]+this.margin+2*this.width)/2);
+        middle=Number(3*this.margin+this.width+(this.width-2*this.margin)/2);
+        if (this.best_response[1][0]==0){
+            GTE.svg.getElementsByClassName("middle21")[0].setAttributeNS(null, "x", pos1);
+            GTE.svg.getElementsByClassName("middle22")[0].setAttributeNS(null, "x", pos2);
+            if (this.best_response[1][1]!=1)
+            GTE.svg.getElementsByClassName("middle22")[0].textContent="";
+            if (this.best_response[1][1]==0)
+            GTE.svg.getElementsByClassName("middle21")[0].setAttributeNS(null, "x", middle);
+        }
+        else {
+            if (this.best_response[1][0]==1){
+                GTE.svg.getElementsByClassName("middle21")[0].setAttributeNS(null, "x", pos2);
+                GTE.svg.getElementsByClassName("middle22")[0].setAttributeNS(null, "x", pos1);
+                if (this.best_response[1][1]!=0)
+                GTE.svg.getElementsByClassName("middle21")[0].textContent="";
+                if (this.best_response[1][1]==1)
+                GTE.svg.getElementsByClassName("middle21")[0].setAttributeNS(null, "x", middle);
+            }
+            else {
+                if (this.best_response[1][1]==0){
+                    GTE.svg.getElementsByClassName("middle21")[0].setAttributeNS(null, "x", middle);
+                    GTE.svg.getElementsByClassName("middle22")[0].textContent="";
+                }
+                if (this.best_response[1][1]==1){
+                    GTE.svg.getElementsByClassName("middle22")[0].setAttributeNS(null, "x", middle);
+                    GTE.svg.getElementsByClassName("middle21")[0].textContent="";
+                }
+                if (this.best_response[1][1]==-1){
+                    GTE.svg.getElementsByClassName("middle22")[0].setAttributeNS(null, "x", Number(this.width+3*this.margin+(this.width-2*this.margin)/3));
+                    GTE.svg.getElementsByClassName("middle21")[0].setAttributeNS(null, "x", Number(this.width+3*this.margin+2*(this.width-2*this.margin)/3));
+                }
+                
+            }
+        }
+        
+        /*var stick=GTE.svg.getElementsByClassName("middle11");
+        for (i=0;i<stick.length;i++){
+            if(inter[0][0]==Number(this.margin+this.side)){
+                stick[i].textContent=""
+            }
+            if(this.best_response[0][1]==1)
+            pos=(inter[0][0]+Number(Number(this.margin)))/2;
+            else
+            pos=(inter[0][0]+Number(Number(this.margin+this.side)))/2;
+            stick[i].setAttributeNS(null, "x",pos);
+        }
+        var stick=GTE.svg.getElementsByClassName("middle12");
+        for (i=0;i<stick.length;i++){
+            if(inter[0][0]==Number(this.margin)){
+                stick[i].textContent=""
+            }
+            if(this.best_response[0][0]==1)
+            pos=(inter[0][0]+Number(this.margin))/2;
+            else
+            pos=(inter[0][0]+Number(this.margin+this.side))/2;
+            stick[i].setAttributeNS(null, "x",pos);
+        }
+        
+        var stick=GTE.svg.getElementsByClassName("middle21");
         for (i=0;i<stick.length;i++){
             if(inter[1][0]==650){
                 stick[i].textContent=""
@@ -1198,17 +1305,7 @@ GTE = (function(parentModule) {
             
             stick[i].setAttributeNS(null, "x",pos);
         }
-        var stick=GTE.svg.getElementsByClassName("interstick1");
-        for (i=0;i<stick.length;i++){
-            stick[i].setAttributeNS(null, "x1",inter[0][0]);
-            stick[i].setAttributeNS(null, "x2",inter[0][0]);
-        }
-        var stick=GTE.svg.getElementsByClassName("interstick2");
-        for (i=0;i<stick.length;i++){
-            stick[i].setAttributeNS(null, "x1",Number(inter[1][0]));
-            stick[i].setAttributeNS(null, "x2",Number(inter[1][0]));
-        }
-        var stick=GTE.svg.getElementsByClassName("middle21");
+        var stick=GTE.svg.getElementsByClassName("middle22");
         for (i=0;i<stick.length;i++){
             if(inter[1][0]==450){
                 stick[i].textContent=""
@@ -1218,7 +1315,9 @@ GTE = (function(parentModule) {
             else
             pos=(inter[1][0]+Number(650))/2;
             stick[i].setAttributeNS(null, "x",pos);
-        }
+        }*/
+        
+        
         if (inter[1][0]>450 && inter[1][0] <650){
             var t1=Number(inter[1][0])-Number(410);
             var t2=460+Number(inter[1][0])-Number(410);
@@ -1243,28 +1342,7 @@ GTE = (function(parentModule) {
             GTE.svg.getElementsByClassName("stick player1")[0].setAttributeNS(null, "x1", inter[0][0]);
             GTE.svg.getElementsByClassName("stick player1")[0].setAttributeNS(null, "x2", inter[0][0]);
         }
-        var stick=GTE.svg.getElementsByClassName("middle12");
-        for (i=0;i<stick.length;i++){
-            if(inter[0][0]==Number(this.margin+this.side)){
-                stick[i].textContent=""
-            }
-            if(this.best_response[0][1]==1)
-            pos=(inter[0][0]+Number(Number(this.margin)))/2;
-            else
-            pos=(inter[0][0]+Number(Number(this.margin+this.side)))/2;
-            stick[i].setAttributeNS(null, "x",pos);
-        }
-        var stick=GTE.svg.getElementsByClassName("middle11");
-        for (i=0;i<stick.length;i++){
-            if(inter[0][0]==Number(this.margin)){
-                stick[i].textContent=""
-            }
-            if(this.best_response[0][0]==1)
-            pos=(inter[0][0]+Number(this.margin))/2;
-            else
-            pos=(inter[0][0]+Number(this.margin+this.side))/2;
-            stick[i].setAttributeNS(null, "x",pos);
-        }
+        
         
     };
     
@@ -1300,9 +1378,9 @@ GTE = (function(parentModule) {
         var envelope2=document.getElementById("envelope2");
         envelope2.setAttributeNS(null,"points", "450,50, 450,350, 650,350,  650,50");
         this.cleanForeign();
-
+        
     }
-   
+    
     Diagram.prototype.cleanForeign = function (){
         
         var temp=GTE.svg.getElementsByTagName("foreignObject");
