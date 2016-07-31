@@ -10,7 +10,6 @@ GTE = (function(parentModule) {
         this.lines = []; //two dimension array [player][strat_player] that contains lines.
         this.payoffs = []; //three dimension array [player][strat_p1][strat_p2] that contains payoffs
         this.best_response = []; // two dimensions array [player][strat_other_player] that contains the best respons of a player. -1 means the two strategies are equivalent.
-        this.envelopes= []; // two envelope for each best response.
         this.nb_strat= [2,2];// Player's number of strategies.
         this.intersect= []; // 2 arrays containing the mixed equilibrium.
         this.moving_endpoint;
@@ -24,6 +23,7 @@ GTE = (function(parentModule) {
         this.margin=50;
         this.max=10;
         this.min=0;
+        this.strat=[[0,1],[0,1]]
         this.step= (this.height-Number(2*this.margin))/(this.max-Number(this.min));
         
     };
@@ -31,16 +31,11 @@ GTE = (function(parentModule) {
     Diagram.prototype.ini =function (){
         this.nb_strat=[GTE.tree.matrix.strategies[1].length,GTE.tree.matrix.strategies[2].length];
         this.assignEndpoints();
-        //this.assignEnvelopes();
         this.assignLines();
         this.assignIntersections();
         this.ini_arrays();
     }
-    
-    Diagram.prototype.assignEnvelopes = function () {
-        this.envelopes.push( new GTE.Envelope(0) );
-        this.envelopes.push( new GTE.Envelope(1) );
-    };
+
     
     Diagram.prototype.assignEndpoints = function() {
         var table_x=[[50,250],[450,650]];
@@ -140,6 +135,7 @@ GTE = (function(parentModule) {
             GTE.tree.matrix.matrix[strat].strategy.payoffs[player].value=newPos;
             GTE.tree.matrix.matrix[strat].strategy.payoffs[player].text=newPos;
             GTE.diag.redraw();
+            console.log(GTE.tree.matrix.matrix[strat].strategy.payoffs[player].value);
         }
     };
     
@@ -213,11 +209,81 @@ GTE = (function(parentModule) {
         document.getElementById('matrix-player-1').value = GTE.tree.matrix.getMatrixInStringFormat(0);
         document.getElementById('matrix-player-2').value = GTE.tree.matrix.getMatrixInStringFormat(1);
         GTE.tree.matrix.drawMatrix();
-        this.compute_best_response(0,1,0,1);
-        this.draw_down(0,1,0,1);
+        var x=[160,225,560,625];
+        var p=[2,1];
+        for (var i=0;i<2;i++){
+            var strat11= new GTE.UI.Widgets.ContentEditable(x[Number(2*i)],375,GTE.CONSTANTS.CONTENT_EDITABLE_GROW_TO_RIGHT, GTE.tree.matrix.strategies[p[i]][GTE.diag.strat[p[i]-1][1]].moves[0].name, "player"+Number(p[i])+" strat",1)
+            .index(p[i]-1)
+            .onSave(function () {
+                var text = this.getCleanedText();
+                if (text === "") {
+                    window.alert("Strategy name should not be empty.");
+                } else {
+                    var test=0;
+                    for (var j=0;j<GTE.diag.nb_strat[this.index];j++){
+                        if (text==GTE.tree.matrix.strategies[Number(this.index+1)][j].moves[0].name){
+                            if (j==GTE.diag.strat[this.index][0]){
+                                window.alert("The two strategies have to be different.");
+                                this.text=GTE.diag.strat[this.index][1];
+                            }
+                            else{
+                            GTE.diag.strat[this.index][1]=j;
+                            }
+                            test=1;
+                        }
+                    }
+                    if (test==0){
+                     window.alert("Strategy name should correspond to a strategy.");
+                        this.text=GTE.diag.strat[this.index][1];
+                    }
+                }
+                // Redraw all content editables that represent this Player
+                // across the tree
+                GTE.diag.cleanForeign();
+                GTE.diag.redraw();    });
+            
+            var strat12= new GTE.UI.Widgets.ContentEditable(x[Number(2*i+1)],375,GTE.CONSTANTS.CONTENT_EDITABLE_GROW_TO_RIGHT, GTE.tree.matrix.strategies[p[i]][GTE.diag.strat[p[i]-1][0]].moves[0].name, "player"+Number(p[i])+" strat",1)
+            .index(p[i]-1)
+            .onSave(function () {
+                var text = this.getCleanedText();
+                if (text === "") {
+                    window.alert("Strategy name should not be empty.");
+                } else {
+                    var test=0;
+                    for (var j=0;j<GTE.diag.nb_strat[this.index];j++){
+                        if (text==GTE.tree.matrix.strategies[Number(this.index+1)][j].moves[0].name){
+                            if (j==GTE.diag.strat[this.index][1]){
+                                window.alert("The two strategies have to be different.");
+                                this.text=GTE.diag.strat[this.index][0];}
+                            else{
+                                GTE.diag.strat[this.index][0]=j;
+                            }
+                            test=1;
+                        }
+                    }
+                    if (test==0){
+                        window.alert("Strategy name should correspond to a strategy.");
+                        this.text=GTE.diag.strat[this.index][0];
+                    }
+                }
+                // Redraw all content editables that represent this Player
+                // across the tree
+                GTE.diag.cleanForeign();
+                GTE.diag.redraw();    });
+        }
+        this.compute_best_response(this.strat[0][0],this.strat[0][1],this.strat[1][0],this.strat[1][1]);
+        this.draw_down(this.strat[0][0],this.strat[0][1],this.strat[1][0],this.strat[1][1]);
     };
     
     Diagram.prototype.compute_best_response = function(strat11=0, strat12=1, strat21=0, strat22=1) {
+        for (var i=0;i<this.nb_strat[0];i++){
+            this.endpoints[0][i*2].strat_matrix=Number(i*this.nb_strat[1]+strat21);
+            this.endpoints[0][Number(i*2+1)].strat_matrix=Number(i*this.nb_strat[1]+strat22);
+        }
+        for (var i=0;i<this.nb_strat[1];i++){
+            this.endpoints[1][i*2].strat_matrix=Number(strat11*this.nb_strat[1]+i);
+            this.endpoints[1][Number(i*2+1)].strat_matrix=Number(strat12*this.nb_strat[1]+i);
+        }
         for (var i=0;i<this.nb_strat[0];i++){
             this.payoffs[0][i][strat21]=(Math.round(GTE.tree.matrix.matrix[Number(i*this.nb_strat[1]+strat21)].strategy.payoffs[0].value*GTE.diag.precision)/GTE.diag.precision);
             GTE.tree.matrix.matrix[Number(i*this.nb_strat[1]+strat21)].strategy.payoffs[0].value=this.payoffs[0][i][strat21];
@@ -233,14 +299,10 @@ GTE = (function(parentModule) {
         for (var i=0;i<this.nb_strat[0];i++){
             this.endpoints[0][i*2].move(this.height-this.margin-this.payoffs[0][i][strat21]*this.step);
             this.endpoints[0][Number(i*2+1)].move(this.height-this.margin-this.payoffs[0][i][strat22]*this.step);
-            this.endpoints[0][i*2].strat_matrix=Number(i*this.nb_strat[1]+strat21);
-            this.endpoints[0][Number(i*2+1)].strat_matrix=Number(i*this.nb_strat[1]+strat22);
         }
         for (var i=0;i<this.nb_strat[1];i++){
             this.endpoints[1][i*2].move(this.height-this.margin-this.payoffs[1][strat11][i]*this.step);
             this.endpoints[1][Number(i*2+1)].move(this.height-this.margin-this.payoffs[1][strat12][i]*this.step);
-            this.endpoints[1][i*2].strat_matrix=Number(strat11*this.nb_strat[1]+i);
-            this.endpoints[1][Number(i*2+1)].strat_matrix=Number(strat12*this.nb_strat[1]+i);
         }
         // compute all intersect points
         var strat=[[strat21,strat22],[strat11,strat12]]
@@ -563,116 +625,11 @@ GTE = (function(parentModule) {
     }
     
     
-    Diagram.prototype.draw_up = function(){
-        //upates player's names
-        var name_player=GTE.svg.getElementsByClassName("player1_name");
-        for (var i=0;i<2;i++)
-        name_player[i].textContent=GTE.tree.matrix.players[1].name;
-        
-        name_player=GTE.svg.getElementsByClassName("player2_name");
-        for (var i=0;i<2;i++)
-        name_player[i].textContent=GTE.tree.matrix.players[2].name;
-        // Lines update
-        for (var i=0 ; i< this.lines.length ; i++){
-            for (var j=0 ; j< this.lines[i].length ; j++){
-                var temp=this.lines[i][j];
-                for (var h=0; h<2; h++){
-                    temp.html_element[h].setAttributeNS(null, "y1", this.endpoints[temp.getPlayer()][temp.getStrat1()].getPosy());
-                    
-                    temp.html_element[h].setAttributeNS(null, "y2", this.endpoints[temp.getPlayer()][temp.getStrat2()].getPosy());
-                }
-            }
-        }
-        
-        
-        if (this.best_response[0][0]==0 || this.best_response[0][1]==0 || (this.best_response[0][0]==-1 && this.best_response[0][1]==-1)){//Label strategy iff they are part of a best reponse
-            var labelline=GTE.svg.getElementById("text11");
-            labelline.setAttributeNS(null, "y", Number(this.endpoints[0][0].getPosy())+(Number(this.endpoints[0][1].getPosy())-Number(this.endpoints[0][0].getPosy()))/200*30+Number(20));
-            labelline.textContent=GTE.tree.matrix.strategies[1][0].moves[0].name;
-        }
-        else {
-            labelline=GTE.svg.getElementById("text11");
-            labelline.textContent="";
-        }
-        if(this.best_response[0][0]==1 || this.best_response[0][1]==1 || (this.best_response[0][0]==-1 && this.best_response[0][1]==-1)){//Label strategy iff they are part of a best reponse
-            labelline=GTE.svg.getElementById("text12");
-            labelline.setAttributeNS(null, "y", Number(this.endpoints[0][3].getPosy())+(Number(this.endpoints[0][2].getPosy())-Number(this.endpoints[0][3].getPosy()))/200*30+Number(20));
-            labelline.textContent=GTE.tree.matrix.strategies[1][1].moves[0].name;
-        }
-        else {
-            labelline=GTE.svg.getElementById("text12");
-            labelline.textContent="";
-        }
-        // Lines update svg2
-        if (this.best_response[1][0]==0 || this.best_response[1][1]==0 || (this.best_response[1][0]==-1 && this.best_response[1][1]==-1)){//Label strategy iff they are part of a best reponse
-            labelline=GTE.svg.getElementById("text21");
-            labelline.setAttributeNS(null, "y", Number(this.endpoints[1][0].getPosy())+(Number(this.endpoints[1][2].getPosy())-Number(this.endpoints[1][0].getPosy()))/200*30+Number(20));
-            labelline.textContent=GTE.tree.matrix.strategies[2][0].moves[0].name;
-        }
-        else {
-            labelline=GTE.svg.getElementById("text21");
-            labelline.textContent="";
-        }
-        if (this.best_response[1][0]==1 || this.best_response[1][1]==1 || (this.best_response[1][0]==-1 && this.best_response[1][1]==-1)){//Label strategy iff they are part of a best reponse
-            labelline=GTE.svg.getElementById("text22");
-            labelline.setAttributeNS(null, "y", Number(this.endpoints[1][3].getPosy())+(Number(this.endpoints[1][1].getPosy()-Number(this.endpoints[1][3].getPosy()))/200*30)+Number(20));
-            labelline.textContent=GTE.tree.matrix.strategies[2][1].moves[0].name;
-        }
-        else {
-            labelline=GTE.svg.getElementById("text22");
-            labelline.textContent="";
-        }
-        //envelop svg1
-        /*var envelope1=document.getElementById("envelope1");
-         envelope1.setAttributeNS(null,"points", "50,50 "+this.envelopes[0].points[0][0]+","+this.envelopes[0].points[0][1]+" "+this.envelopes[0].points[1][0]+","+this.envelopes[0].points[1][1]+" "+this.envelopes[0].points[2][0]+","+this.envelopes[0].points[2][1]+" 250,50");*/
-        /*var inter=GTE.svg.getElementById("inter1");
-         inter.setAttributeNS(null,"cx", this.envelopes[0].points[1][0]);
-         inter.setAttributeNS(null,"cy", this.envelopes[0].points[1][1]);
-         var interlabel=GTE.svg.getElementById("interlabel1");
-         interlabel.setAttributeNS(null, "x",this.envelopes[0].points[1][0]);
-         interlabel.textContent=Math.round((Number(this.envelopes[0].points[1][0])-50)/2)/100;
-         var stick=GTE.svg.getElementsByClassName("interstick1");
-         for (i=0;i<stick.length;i++){
-         stick[i].setAttributeNS(null, "x1",this.envelopes[0].points[1][0]);
-         stick[i].setAttributeNS(null, "x2",this.envelopes[0].points[1][0]);}*/
-        //envelop svg2
-        /*var envelope2=document.getElementById("envelope2");
-         envelope2.setAttributeNS(null,"points", "450,50 "+this.envelopes[1].points[0][0]+","+this.envelopes[1].points[0][1]+" "+this.envelopes[1].points[1][0]+","+this.envelopes[1].points[1][1]+" "+this.envelopes[1].points[2][0]+","+this.envelopes[1].points[2][1]+" 650,50");*/
-        /*inter=GTE.svg.getElementById("inter2");
-         inter.setAttributeNS(null,"cx", this.envelopes[1].points[1][0]);
-         inter.setAttributeNS(null,"cy", this.envelopes[1].points[1][1]);
-         interlabel=GTE.svg.getElementById("interlabel2");
-         interlabel.setAttributeNS(null, "x",this.envelopes[1].points[1][0]);
-         interlabel.textContent=Math.round((Number(this.envelopes[1].points[1][0])-450)/2)/100;
-         var stick=GTE.svg.getElementsByClassName("interstick2");
-         for (i=0;i<stick.length;i++){
-         stick[i].setAttributeNS(null, "x1",this.envelopes[1].points[1][0]);
-         stick[i].setAttributeNS(null, "x2",this.envelopes[1].points[1][0]);
-         }*/
-        
-        var temp= GTE.svg.getElementsByClassName("strat11");
-        for (i=0;i<temp.length;i++){
-            temp[i].textContent=GTE.tree.matrix.strategies[2][1].moves[0].name;
-        }
-        temp= GTE.svg.getElementsByClassName("strat10");
-        for (i=0;i<temp.length;i++){
-            temp[i].textContent=GTE.tree.matrix.strategies[2][0].moves[0].name;
-        }
-        temp= GTE.svg.getElementsByClassName("strat01");
-        for (i=0;i<temp.length;i++){
-            temp[i].textContent=GTE.tree.matrix.strategies[1][1].moves[0].name;
-        }
-        temp= GTE.svg.getElementsByClassName("strat00");
-        for (i=0;i<temp.length;i++){
-            temp[i].textContent=GTE.tree.matrix.strategies[1][0].moves[0].name;
-        }
-    };
-    
     Diagram.prototype.draw_down = function(strat11=0, strat12=1, strat21=0, strat22=1){
+        var strat=[[strat11,strat12],[strat21,strat22]];
         var inter=[[0,0],[0,0]];
         for (var i=0;i<this.intersect[0].length;i++){
             if ((this.intersect[0][i].getStrat1()==strat11 &&this.intersect[0][i].getStrat2()==strat12) || (this.intersect[0][i].getStrat2()==strat11 &&this.intersect[0][i].getStrat1()==strat12)){
-                console.log(this.intersect[0][i].getStrat1()+" "+strat11+" "+this.intersect[0][i].getStrat2()+" "+strat12+" "+this.intersect[0][i].getPosx());
                 inter[0]=[this.intersect[0][i].getPosx(),this.intersect[0][i].getPosy()];
             }
         }
@@ -681,6 +638,16 @@ GTE = (function(parentModule) {
                 inter[1]=[this.intersect[1][i].getPosx(),this.intersect[1][i].getPosy()];
             }
         }
+        for (var i=0;i<2;i++){
+            for (var j=0;j<2;j++){
+                var temp=GTE.svg.getElementsByClassName("strat"+i+""+j+" change");
+                for (var k=0;k<temp.length;k++)
+                    temp[k].textContent=GTE.tree.matrix.strategies[Number(i+1)][strat[i][j]].moves[0].name;
+            }
+        }
+        
+        
+        
         var temp=[];
         var temp2= GTE.svg.getElementsByClassName("brline");
         var path1="";
@@ -1232,6 +1199,16 @@ GTE = (function(parentModule) {
             
             stick[i].setAttributeNS(null, "x",pos);
         }
+        var stick=GTE.svg.getElementsByClassName("interstick1");
+        for (i=0;i<stick.length;i++){
+            stick[i].setAttributeNS(null, "x1",inter[0][0]);
+            stick[i].setAttributeNS(null, "x2",inter[0][0]);
+        }
+        var stick=GTE.svg.getElementsByClassName("interstick2");
+        for (i=0;i<stick.length;i++){
+            stick[i].setAttributeNS(null, "x1",Number(inter[1][0]+this.margin));
+            stick[i].setAttributeNS(null, "x2",Number(inter[1][0]+this.margin));
+        }
         var stick=GTE.svg.getElementsByClassName("middle22");
         for (i=0;i<stick.length;i++){
             if(inter[1][0]==450){
@@ -1264,8 +1241,8 @@ GTE = (function(parentModule) {
         GTE.svg.getElementsByClassName("stick player1")[0].setAttributeNS(null, "x1", Number(this.margin));
         GTE.svg.getElementsByClassName("stick player1")[0].setAttributeNS(null, "x2", Number(this.margin));
         if (inter[0][0]>Number(this.margin) && inter[0][0]<Number(this.margin+this.side)){
-            GTE.svg.getElementsByClassName("stick player1")[0].setAttributeNS(null, "x1", inter[1][0]);
-            GTE.svg.getElementsByClassName("stick player1")[0].setAttributeNS(null, "x2", inter[1][0]);
+            GTE.svg.getElementsByClassName("stick player1")[0].setAttributeNS(null, "x1", inter[0][0]);
+            GTE.svg.getElementsByClassName("stick player1")[0].setAttributeNS(null, "x2", inter[0][0]);
         }
         var stick=GTE.svg.getElementsByClassName("middle11");
         for (i=0;i<stick.length;i++){
@@ -1323,9 +1300,16 @@ GTE = (function(parentModule) {
         envelope1.setAttributeNS(null,"points", "50,50, 50,350, 250,350, 250,50");
         var envelope2=document.getElementById("envelope2");
         envelope2.setAttributeNS(null,"points", "450,50, 450,350, 650,350,  650,50");
-        this.envelopes= [];
+        this.cleanForeign();
+
     }
-    
+   
+    Diagram.prototype.cleanForeign = function (){
+        
+        var temp=GTE.svg.getElementsByTagName("foreignObject");
+        for (var t=0;t<temp.length;t++){
+            GTE.svg.removeChild(temp[t]);}
+    }
     
     // Add class to parent module
     parentModule.Diagram = Diagram;

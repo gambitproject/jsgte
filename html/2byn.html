@@ -13,13 +13,13 @@
         <link rel="stylesheet" href="css/2by2.css">
     </head>
 </script>
-
 <body>
         <!--[if lt IE 8]>
             <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
 
  <!-- Table for user to update payoff and strategies' names.-->
+ 
  <div id="toolbar" class="full-width darker">
      <div>
          <img src="images/horiz8_small.png" class="left ml-10 vertical-centered">
@@ -69,6 +69,7 @@
      <input class="precision" type="text" id="precision" onchange="GTE.diag.redraw()" value="1"/>
      
  </div>
+
  <div id="matrixPopup">
      <div id="matrix_bar">
          Matrix
@@ -83,7 +84,7 @@
  </div>
 
  <div>
-        <svg id="drawing" version="1.1" currentScale="1" viewBox="0 0 700 750"> <!-- viewBox="0 0 700 750" --><!-- height="750" width="700"-->
+        <svg id="drawing" version="1.1" currentScale="1" viewBox="0 0 700 750" xmlns="http://www.w3.org/2000/svg"> <!-- viewBox="0 0 700 750" --><!-- height="750" width="700"-->
             <marker id="triangle_left"
                 viewBox="0 0 10 10" refX="0" refY="0"
                 markerUnits="strokeWidth"
@@ -98,12 +99,15 @@
                 orient="auto">
                 <path d="M 0 0 L 10 4 L 0 8 z" />
             </marker>
-
             <!-- Drawing the contour-->
             <polyline class="contour" points="50,50 50,350 250,350, 250,50"/>
             <!-- Legend, strategy names will be updated after-->
             <text class="player1 title" x="150" y="40">Payoff to </text><text class="player1_name player1 title" x="230" y="40">I</text>
-            <text class="player2_name player2 legendh" x="90" y="390">II</text><text class="player2 legendh" x="150" y="390">'s probability of</text><text class="player2 strat_left strat11" x="205" y="390">S2 </text>
+            <text class="player2_name player2 legendh" x="55" y="390">II</text><text class="player2 legendh" x="115" y="390">'s probability of</text>
+            <text class="player2 legendh" x="207" y="390">against</text>
+            <!--
+            <text class="player2 strat_left strat11 change" x="205" y="390">S2 </text>
+             -->
             <!--
             <text class="player2 legendv" id="y11" x="20" y="200" transform="rotate(270 20,200)">S1</text>
             <text class="player2 legendv" id="y12" x="280" y="200" transform="rotate(90 280,200)">S2</text>
@@ -154,7 +158,9 @@
             <polyline class="contour" points="450,50 450,350 650,350, 650,50" draggable="false"/>
             <!-- Legend, strategy names will be updated after-->
             <text class="player2 title" x="550" y="40">Payoff to</text><text class="player2_name player2 title" x="630" y="40"> II</text>
-            <text class="player1_name player1 legendh" x="490" y="390">I</text><text class="player1 legendh" x="550" y="390">'s probability of </text><text class="player1 strat_left strat01" x="605" y="390">S2 </text>
+            <text class="player1_name player1 legendh" x="455" y="390">I</text><text class="player1 legendh" x="510" y="390">'s probability of </text>
+            <!--<text class="player1 strat_left strat01 change" x="605" y="390">S2 </text>-->
+            <text class="player1 legendh" x="607" y="390">against</text>
             <text class="player1 legendh" x="450" y="372">0</text>
             <text class="player1 legendh" x="650" y="372">1</text>
             <!--
@@ -225,24 +231,24 @@
             <line class="stick" x1="50" y1="445" x2="50" y2="455"/>
             <line class="stick" x1="250" y1="445" x2="250" y2="455"/>
             <line class="line2 interstick1" x1="50" y1="445" x2="50" y2="455"/>
-            <text class="player2 strat_right strat11" x="25" y="455">S2 </text><text class="player2" x="35" y="455">=0</text>
-            <text class="player2 strat_left strat10" x="255" y="455">S1 </text><text class="player2" x="272" y="455">=0</text>
-            <text class="player1 strat_right strat01" x="35" y="505">S2 </text>
-            <text class="player1 strat_right strat00" x="35" y="705">S1 </text>
-            <text class="player2 strat strat11" x="50" y="720">S2 </text>
-            <text class="player2 strat strat10" x="250" y="720">S1 </text>
+            <text class="player2 strat_right strat11 change" x="25" y="455">S2 </text><text class="player2" x="35" y="455">=0</text>
+            <text class="player2 strat_left strat10 change" x="255" y="455">S1 </text><text class="player2" x="272" y="455">=0</text>
+            <text class="player1 strat_right strat01 change" x="35" y="505">S2 </text>
+            <text class="player1 strat_right strat00 change" x="35" y="705">S1 </text>
+            <text class="player2 strat strat11 change" x="50" y="720">S2 </text>
+            <text class="player2 strat strat10 change" x="250" y="720">S1 </text>
             
-            <text class="player2 strat strat11 middle21" x="35" y="430">S2 </text>
-            <text class="player2 strat strat10 middle22" x="265" y="430">S1 </text>
-            <text class="player1 strat strat01 middle11" x="435" y="430">S2 </text>
-            <text class="player1 strat strat00 middle12" x="665" y="430">S1 </text>
+            <text class="player2 strat strat11 change middle21" x="35" y="430">S2 </text>
+            <text class="player2 strat strat10 change middle22" x="265" y="430">S1 </text>
+            <text class="player1 strat strat01 change middle11" x="435" y="430">S2 </text>
+            <text class="player1 strat strat00 change middle12" x="665" y="430">S1 </text>
             
             <line class="line1" x1="450" y1="450" x2="650" y2="450"/>
             <line class="stick" x1="450" y1="445" x2="450" y2="455"/>
             <line class="stick" x1="650" y1="445" x2="650" y2="455"/>
             <line class="line1 interstick2" x1="450" y1="445" x2="450" y2="455"/>
-            <text class="player1 strat_right strat01" x="425" y="455">S2 </text><text class="player1" x="435" y="455">=0</text>
-            <text class="player1 strat_left strat00" x="655" y="455">S1 </text><text class="player1" x="675" y="455">=0</text>
+            <text class="player1 strat_right strat01 change" x="425" y="455">S2 </text><text class="player1" x="435" y="455">=0</text>
+            <text class="player1 strat_left strat00 change" x="655" y="455">S1 </text><text class="player1" x="675" y="455">=0</text>
             
             <line class="stick" x1="50" y1="460" x2="50" y2="480" marker-end="url(#triangle_down)"/>
             <line class="stick" x1="250" y1="460" x2="250" y2="480" marker-end="url(#triangle_down)"/>
@@ -257,6 +263,7 @@
         </svg>
 
         </div>
+ 
         <script src="js/thirdparty/svg.min.js"></script>
         <script src="js/thirdparty/jquery.min.js"></script>
         <script src="js/structure.js"></script>

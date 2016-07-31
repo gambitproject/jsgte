@@ -88,6 +88,9 @@ box-sizing: border-box;
 #drawing .player1{
     fill:red;
 }
+#drawing .player1{
+    color:red;
+}
 
 #drawing .line1{
     stroke:red;
@@ -95,6 +98,10 @@ box-sizing: border-box;
 
 #drawing .player2{
     fill:blue;
+}
+
+#drawing .player2{
+    color:blue;
 }
 
 #drawing .strat_left{
