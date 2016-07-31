@@ -135,7 +135,6 @@ GTE = (function(parentModule) {
             GTE.tree.matrix.matrix[strat].strategy.payoffs[player].value=newPos;
             GTE.tree.matrix.matrix[strat].strategy.payoffs[player].text=newPos;
             GTE.diag.redraw();
-            console.log(GTE.tree.matrix.matrix[strat].strategy.payoffs[player].value);
         }
     };
     
@@ -1187,7 +1186,7 @@ GTE = (function(parentModule) {
         temp2[0].setAttributeNS(null, "points", path1);
         temp2[1].setAttributeNS(null, "points", path2);
         
-        var stick=GTE.svg.getElementsByClassName("middle21");
+        var stick=GTE.svg.getElementsByClassName("middle22");
         for (i=0;i<stick.length;i++){
             if(inter[1][0]==650){
                 stick[i].textContent=""
@@ -1206,10 +1205,10 @@ GTE = (function(parentModule) {
         }
         var stick=GTE.svg.getElementsByClassName("interstick2");
         for (i=0;i<stick.length;i++){
-            stick[i].setAttributeNS(null, "x1",Number(inter[1][0]+this.margin));
-            stick[i].setAttributeNS(null, "x2",Number(inter[1][0]+this.margin));
+            stick[i].setAttributeNS(null, "x1",Number(inter[1][0]));
+            stick[i].setAttributeNS(null, "x2",Number(inter[1][0]));
         }
-        var stick=GTE.svg.getElementsByClassName("middle22");
+        var stick=GTE.svg.getElementsByClassName("middle21");
         for (i=0;i<stick.length;i++){
             if(inter[1][0]==450){
                 stick[i].textContent=""
@@ -1244,7 +1243,7 @@ GTE = (function(parentModule) {
             GTE.svg.getElementsByClassName("stick player1")[0].setAttributeNS(null, "x1", inter[0][0]);
             GTE.svg.getElementsByClassName("stick player1")[0].setAttributeNS(null, "x2", inter[0][0]);
         }
-        var stick=GTE.svg.getElementsByClassName("middle11");
+        var stick=GTE.svg.getElementsByClassName("middle12");
         for (i=0;i<stick.length;i++){
             if(inter[0][0]==Number(this.margin+this.side)){
                 stick[i].textContent=""
@@ -1255,7 +1254,7 @@ GTE = (function(parentModule) {
             pos=(inter[0][0]+Number(Number(this.margin+this.side)))/2;
             stick[i].setAttributeNS(null, "x",pos);
         }
-        var stick=GTE.svg.getElementsByClassName("middle12");
+        var stick=GTE.svg.getElementsByClassName("middle11");
         for (i=0;i<stick.length;i++){
             if(inter[0][0]==Number(this.margin)){
                 stick[i].textContent=""
