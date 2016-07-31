@@ -49,6 +49,7 @@
         var x=2;
         var y=2;
         x = prompt("Enter the number of moves for the first player", "2");
+        y = prompt("Enter the number of moves for the second player", "2");
         GTE.STRATEGICFORMMODE = GTE.STRATEGICFORMMODES.GENERAL;
         GTE.tools.createIndependentStrategicForm(x, y);
         GTE.diag.clear();
@@ -61,6 +62,7 @@
         var x=2;
         var y=2;
         x = prompt("Enter the number of moves for the first player", "2");
+        y = prompt("Enter the number of moves for the second player", "2");
         GTE.STRATEGICFORMMODE = GTE.STRATEGICFORMMODES.ZEROSUM;
         GTE.tools.createIndependentStrategicForm(x, y);
         GTE.diag.clear();
@@ -72,7 +74,7 @@
     document.getElementById("button-independent-strategic-symmetric").addEventListener("click", function(){
         var x=2;
         if ( GTE.PAGE_NAME!="eqdiagrams.html"){
-            var x = prompt("Enter the number of moves for the game", "2");
+            x = prompt("Enter the number of moves for the first player", "2");
         }
         GTE.STRATEGICFORMMODE = GTE.STRATEGICFORMMODES.SYMMETRIC;
         GTE.tools.createIndependentStrategicForm(x, x);

@@ -82,7 +82,7 @@
      <button id="button-matrix-reset" name="reset">Reset</button>
  </div>
 
-        
+ <div>
         <svg id="drawing" version="1.1" currentScale="1" viewBox="0 0 700 750"> <!-- viewBox="0 0 700 750" --><!-- height="750" width="700"-->
             <marker id="triangle_left"
                 viewBox="0 0 10 10" refX="0" refY="0"
@@ -112,10 +112,6 @@
             <text class="player2 legendh" x="250" y="372">1</text>
             <!-- Upper envelope, coordinates will be updated-->
             <polygon id="envelope1" points="50,50 50,350 250,350 250,50"/>
-            <!-- First strategy payoff-->
-            <text id="text11" class="player1 strat" x="80" y="350">S1</text>
-            <!-- Second strategy payoff-->
-            <text id="text12" class="player1 strat" x="220" y="350">S2</text>
             <!-- Sticks-->
             <line class="stick" x1="50" y1="80" x2="45" y2="80"/>
             <text class="sticklabel" x="35" y="85">9</text>
@@ -167,10 +163,6 @@
              -->
             <!-- Upper envelope, coordinates will be updated-->
             <polygon id="envelope2" points="450,50 450,350 450,350 450,50"/>
-            <!-- First strategy payoff-->
-            <text id="text21" class="player2 legendv" x="480" y="350">S1</text>
-            <!-- Second strategy payoff-->
-            <text id="text22" class="player2 legendv" x="620" y="350">S2</text>
             <!-- Sticks-->
             <line class="stick" x1="450" y1="80" x2="445" y2="80"/>
             <text class="sticklabel" x="435" y="85">9</text>
@@ -264,7 +256,7 @@
             
         </svg>
 
-        
+        </div>
         <script src="js/thirdparty/svg.min.js"></script>
         <script src="js/thirdparty/jquery.min.js"></script>
         <script src="js/structure.js"></script>

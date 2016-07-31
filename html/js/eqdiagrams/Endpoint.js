@@ -6,6 +6,7 @@ GTE = (function (parentModule) {
      * @class
      */
     function Endpoint(x,y,p,strat, strat_matrix) {
+       console.log(p+" "+strat+" "+strat_matrix);
         this.x=x;
         this.y=y;
         this.player=p; //player that recieves the payoff.

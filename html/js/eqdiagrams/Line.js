@@ -43,10 +43,10 @@ GTE = (function (parentModule) {
             l2.setAttribute("asso_strat",this.strat);
             this.html_element.push(l2);
             var txt=document.createElementNS("http://www.w3.org/2000/svg", "text");
-       txt.textContent=GTE.tree.matrix.strategies[1][this.strat].moves[0].name;
+            txt.textContent=GTE.tree.matrix.strategies[1][this.strat].moves[0].name;
             txt.setAttribute("x",GTE.diag.margin+Number(this.strat+0.5)*Number((GTE.diag.width-2*GTE.diag.margin)/(GTE.diag.nb_strat[this.player])));
             txt.setAttribute("y","370");
-            txt.setAttribute("class","player1 text"+this.player+this.strat);
+            txt.setAttribute("class","player1 strat"+this.player+this.strat);
             txt.setAttribute("id","text11");
             txt.setAttribute("visibility","visible");
              this.txt=txt;
@@ -79,7 +79,7 @@ GTE = (function (parentModule) {
             txt.textContent=GTE.tree.matrix.strategies[2][this.strat].moves[0].name;
             txt.setAttribute("x",2*GTE.diag.margin+GTE.diag.width+GTE.diag.margin+Number(this.strat+0.5)*Number((GTE.diag.width-2*GTE.diag.margin)/(GTE.diag.nb_strat[this.player])));
             txt.setAttribute("y","370");
-            txt.setAttribute("class","player2 text"+this.player+this.strat);
+            txt.setAttribute("class","player2 strat"+this.player+this.strat);
             txt.setAttribute("id","text21");
             txt.setAttribute("visibility","visible");
             this.txt=txt;
@@ -109,6 +109,21 @@ GTE = (function (parentModule) {
     
     Line.prototype.getStrat2 = function(){
         return this.strat2;
+    };
+    
+    Line.prototype.hideName = function(){
+       this.txt.setAttribute("visibility","hidden");
+    };
+       
+    Line.prototype.showName = function(){
+       this.txt.setAttribute("visibility","visible");
+    };
+       
+    Line.prototype.moveLabel = function(x,y){
+       this.txt.setAttribute("visibility","visible");
+       this.txt.setAttribute("x",x);
+       this.txt.setAttribute("y",y);
+       this.txt.textContent=GTE.tree.matrix.strategies[this.player+1][this.strat].moves[0].name;
     };
     
     // Add class to parent module

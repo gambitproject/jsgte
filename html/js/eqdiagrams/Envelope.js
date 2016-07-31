@@ -7,10 +7,10 @@ GTE = (function (P) {
      */
     function Envelope(p) {
         this.player = p;
-        this.points = []; // left, middle and right points.
+        /*this.points = []; // left, middle and right points.
         this.points.push([0,0]);
         this.points.push([0,0]);
-        this.points.push([0,0]);
+        this.points.push([0,0]);*/
     };
     
     /*
