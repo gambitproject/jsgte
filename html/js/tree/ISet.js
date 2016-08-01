@@ -277,7 +277,7 @@ GTE.TREE = (function (parentModule) {
     /**
     * On click function for the information set
     */
-    ISet.prototype.onClick = function () {
+    ISet.prototype.onClick = function (undo) {
         switch (GTE.MODE) {
             case GTE.MODES.ADD:
                 var changes = new GTE.TREE.Changes(GTE.MODES.ADD, GTE.REDO.ISET, this.firstNode);
@@ -293,7 +293,8 @@ GTE.TREE = (function (parentModule) {
                     var isets = GTE.tree.addChildNodeToISet(this);
                     changes.pushChangesAfterAddingIsetsToArray(isets);
                 }
-                changes.endSetOfChanges();
+                if(undo)
+                    changes.endSetOfChanges();
                 // Tell the tree to redraw itself
                 GTE.tree.draw();
                 break;

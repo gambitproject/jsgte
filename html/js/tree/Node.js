@@ -167,7 +167,7 @@ GTE.TREE = (function (parentModule) {
                     if(undo)
                         changes.endSetOfChanges();
                 } else {
-                    this.iset.onClick();
+                    this.iset.onClick(undo);
                 }
                 return nodes;
                 break;
@@ -192,7 +192,7 @@ GTE.TREE = (function (parentModule) {
                     // Tell the tree to redraw itself
                     GTE.tree.draw();
                 } else {
-                    this.iset.onClick();
+                    this.iset.onClick(undo);
                 }
                 break;
             case GTE.MODES.MERGE:
