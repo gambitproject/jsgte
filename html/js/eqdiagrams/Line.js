@@ -8,14 +8,8 @@ GTE = (function (parentModule) {
     function Line(p,strat) {
         this.player=p;
         this.strat=strat; // strategy of the player
-        //if (p==0){
-            this.strat1=strat*2; // couple of strategies of the left endpoint.
-            this.strat2=strat*2+1; // couple of strategies of the right endpoint.
-        /*}
-        else{
-            this.strat1=strat;
-            this.strat2=strat+2;
-        }*/
+        this.strat1=strat*2; // couple of strategies of the left endpoint.
+        this.strat2=strat*2+1; // couple of strategies of the right endpoint.
         this.html_element=[];
         this.draw();
         
@@ -50,7 +44,7 @@ GTE = (function (parentModule) {
             txt.setAttribute("id","text11");
             txt.setAttribute("visibility","visible");
              this.txt=txt;
-            var env=document.getElementsByClassName("stick");
+            var env=document.getElementsByClassName("sticklabel");
             GTE.svg.appendChild(l1);
             GTE.svg.appendChild(l2);
             GTE.svg.appendChild(txt);
@@ -83,7 +77,7 @@ GTE = (function (parentModule) {
             txt.setAttribute("id","text21");
             txt.setAttribute("visibility","visible");
             this.txt=txt;
-            var env=document.getElementsByClassName("stick");
+            var env=document.getElementsByClassName("sticklabel");
             GTE.svg.appendChild(txt);
             GTE.svg.appendChild(l1);
             GTE.svg.appendChild(l2);

@@ -29,19 +29,140 @@ GTE = (function(parentModule) {
     };
     
     Diagram.prototype.ini =function (){
-        
         this.strat=[[0,1],[0,1]];
         this.nb_strat=[GTE.tree.matrix.strategies[1].length,GTE.tree.matrix.strategies[2].length];
-        this.assignEndpoints();
-        this.assignLines();
-        this.assignIntersections();
-        this.ini_arrays();
+        if (this.nb_strat[0]==2 && this.nb_strat[1]==2){
+           this.ini_html(2);
+           this.assignEndpoints(2);
+           this.assignLines(2);
+           this.assignIntersections(2);
+           this.ini_arrays(2);
+       }
+       else {
+           this.ini_html(1);
+           this.assignEndpoints(1);
+           this.assignLines(1);
+           this.assignIntersections(1);
+           this.ini_arrays(1);
+       }
+    }
+    
+    Diagram.prototype.ini_html = function (max){
+        var x_shift = Number(2*this.margin+this.width);
+        var temp= GTE.svg.getElementsByClassName("up").length;
+        while(temp>0){
+            GTE.svg.removeChild(GTE.svg.getElementsByClassName("up")[0]);
+            temp= GTE.svg.getElementsByClassName("up").length;
+        }
+        for (var i=0;i<max;i++){
+            temp = document.createElementNS("http://www.w3.org/2000/svg", "polyline");
+            temp.setAttribute("class","contour up");
+            temp.setAttribute("points", Number(this.margin+i*x_shift)+", "+this.margin+" "+Number(this.margin+i*x_shift)+", "+Number(this.height-this.margin)+" "+Number(this.width-this.margin+i*x_shift)+","+Number(this.height-this.margin)+" "+Number(this.width-this.margin+i*x_shift)+","+this.margin);
+            
+            GTE.svg.appendChild(temp);
+            temp = document.createElementNS("http://www.w3.org/2000/svg", "text");
+            temp.textContent="Payoff to";
+            temp.setAttribute("class", "player"+Number(i+1)+" title up");
+            temp.setAttribute("x",Number(i*x_shift+150));
+            temp.setAttribute("y",40);
+            GTE.svg.appendChild(temp);
+            
+            temp = document.createElementNS("http://www.w3.org/2000/svg", "text");
+            if (i==0){
+                temp.textContent="I";
+            }else{
+                temp.textContent="II";
+            }
+            temp.setAttribute("class", "player"+Number(i+1)+"_name player"+Number(i+1)+" title up");
+            temp.setAttribute("x",Number(i*x_shift+230));
+            temp.setAttribute("y",40);
+            GTE.svg.appendChild(temp);
+            
+            temp = document.createElementNS("http://www.w3.org/2000/svg", "text");
+            if (i==0){
+                var j=2;
+                temp.textContent="II";
+            }
+            else{
+                var j=1;
+                temp.textContent="I";}
+            temp.setAttribute("class", "player"+j+"_name player"+j+" legendh up");
+            temp.setAttribute("x",Number(i*x_shift+55));
+            temp.setAttribute("y",390);
+            GTE.svg.appendChild(temp);
+            
+            temp = document.createElementNS("http://www.w3.org/2000/svg", "text");
+            temp.textContent="'s probability of";
+            temp.setAttribute("class", "player"+j+" legendh up");
+            temp.setAttribute("x",Number(i*x_shift+115));
+            temp.setAttribute("y",390);
+            GTE.svg.appendChild(temp);
+            
+            temp = document.createElementNS("http://www.w3.org/2000/svg", "text");
+            temp.textContent="against";
+            temp.setAttribute("class", "player"+j+" legendh up");
+            temp.setAttribute("x",Number(i*x_shift+207));
+            temp.setAttribute("y",390);
+            GTE.svg.appendChild(temp);
+            
+            temp = document.createElementNS("http://www.w3.org/2000/svg", "text");
+            temp.textContent="0";
+            temp.setAttribute("class", "player"+j+" legendh up");
+            temp.setAttribute("x",Number(i*x_shift+50));
+            temp.setAttribute("y",372);
+            GTE.svg.appendChild(temp);
+            
+            temp = document.createElementNS("http://www.w3.org/2000/svg", "text");
+            temp.textContent="1";
+            temp.setAttribute("class", "player"+j+" legendh up");
+            temp.setAttribute("x",Number(i*x_shift+250));
+            temp.setAttribute("y",372);
+            GTE.svg.appendChild(temp);
+            
+            temp = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+            temp.setAttribute("class", "up");
+            temp.setAttribute("id", "envelope"+Number(i+1));
+            temp.setAttribute("points",Number(this.margin+i*x_shift)+", "+this.margin+" "+Number(this.margin+i*x_shift)+", "+Number(this.height-this.margin)+" "+Number(this.width-this.margin+i*x_shift)+","+Number(this.height-this.margin)+" "+Number(this.width-this.margin+i*x_shift)+","+this.margin);
+            GTE.svg.appendChild(temp);
+            
+            for (var k=0;k<9;k++){
+                for (var h=0;h<2;h++){
+                temp = document.createElementNS("http://www.w3.org/2000/svg", "line");
+                temp.setAttribute("class", "stick up");
+                temp.setAttribute("x1",Number(i*x_shift+50+h*200));
+                temp.setAttribute("x2",Number(i*x_shift+45+h*210));
+                temp.setAttribute("y1",Number(80+k*this.step));
+                temp.setAttribute("y2",Number(80+k*this.step));
+                GTE.svg.appendChild(temp);
+                temp = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                temp.setAttribute("class", "sticklabel up");
+                temp.setAttribute("x",Number(i*x_shift+35+h*230));
+                temp.setAttribute("y",Number(85+k*this.step));
+                temp.textContent=Number(9-k);
+                GTE.svg.appendChild(temp);
+                }
+            }
+            
+        }
+        if (max <2){
+            temp= GTE.svg.getElementsByClassName("bottom");
+            for (var k=0;k<temp.length;k++){
+                temp[k].setAttribute("visibility","hidden");
+            }
+        }
+        if (max==2){
+            temp= GTE.svg.getElementsByClassName("bottom");
+            for (var k=0;k<temp.length;k++){
+                temp[k].setAttribute("visibility","visible");
+            }
+        }
+        
     }
     
     
-    Diagram.prototype.assignEndpoints = function() {
+    Diagram.prototype.assignEndpoints = function(max) {
         var table_x=[[50,250],[450,650]];
-        for (var j=0; j<2;j++){
+        for (var j=0; j<max;j++){
             this.endpoints.push([]);
             for (var i=0;i<2*this.nb_strat[j];i++){
                 if (j==0){
@@ -55,8 +176,8 @@ GTE = (function(parentModule) {
         
     };
     
-    Diagram.prototype.assignLines = function() {
-        for (var j=0; j<2;j++){
+    Diagram.prototype.assignLines = function(max) {
+        for (var j=0; j<max;j++){
             this.lines.push([]);
             for(var i=0;i<this.nb_strat[j];i++){
                 this.lines[j].push( new GTE.Line(j,i));
@@ -64,8 +185,8 @@ GTE = (function(parentModule) {
         }
     };
     
-    Diagram.prototype.assignIntersections = function(){
-        for (var i=0; i<2 ; i++){
+    Diagram.prototype.assignIntersections = function(max){
+        for (var i=0; i<max ; i++){
             this.intersect.push([]);
             for (var j=0 ; j< this.nb_strat[i]-1 ; j++){
                 for (var k=j+1; k<this.nb_strat[i]; k++){
@@ -79,8 +200,8 @@ GTE = (function(parentModule) {
         }
     };
     
-    Diagram.prototype.ini_arrays = function() {
-        for (var i=0; i<2; i++){
+    Diagram.prototype.ini_arrays = function(max) {
+        for (var i=0; i<max; i++){
             this.payoffs.push([]);
             this.best_response.push([]);
             for (var j=0; j<this.nb_strat[0]; j++){
@@ -179,23 +300,7 @@ GTE = (function(parentModule) {
         GTE.diag.moving.addEventListener("mousedown", GTE.diag.doMouseDownEndpoint);
         GTE.diag.moving=null;
     };
-    
-    /* Return the strategy couple of player i knowing the strategy of the other player
-     */
-    Diagram.prototype.couple_strat = function (i,j) {
-        if (i==0){
-            if (j==0)
-            return [0,2]; // meaning 11 and 21 (player 1 plays 1 and 2 while player 2 plays 1)
-            else
-            return [1,3]; // meaning 12 and 22 (player 1 plays 1 and 2 while player 2 plays 2)
-        }
-        else {
-            if (j==0)
-            return [0,1]; // meaning 11 and 12
-            else
-            return [2,3]; // meaning 21 and 22
-        }
-    };
+
     
     Diagram.prototype.redraw = function (){
         if (Number(document.getElementById("precision").value) >0){
@@ -212,7 +317,12 @@ GTE = (function(parentModule) {
         GTE.tree.matrix.drawMatrix();
         var x=[160,225,560,625];
         var p=[2,1];
-        for (var i=0;i<2;i++){
+        if (this.nb_strat[0]==2 && this.nb_strat[1]==2){
+            var max=2;
+       }
+       else {
+           var max=1;}
+        for (var i=0;i<max;i++){
             var strat11= new GTE.UI.Widgets.ContentEditable(x[Number(2*i)],375,GTE.CONSTANTS.CONTENT_EDITABLE_GROW_TO_RIGHT, GTE.tree.matrix.strategies[p[i]][GTE.diag.strat[p[i]-1][1]].moves[0].name, "player"+Number(p[i])+" strat",1)
             .index(p[i]-1)
             .onSave(function () {
@@ -238,8 +348,6 @@ GTE = (function(parentModule) {
                         this.text=GTE.diag.strat[this.index][1];
                     }
                 }
-                // Redraw all content editables that represent this Player
-                // across the tree
                 GTE.diag.cleanForeign();
                 GTE.diag.redraw();    });
             
@@ -267,21 +375,22 @@ GTE = (function(parentModule) {
                         this.text=GTE.diag.strat[this.index][0];
                     }
                 }
-                // Redraw all content editables that represent this Player
-                // across the tree
                 GTE.diag.cleanForeign();
                 GTE.diag.redraw();    });
         }
-        this.compute_best_response(this.strat[0][0],this.strat[0][1],this.strat[1][0],this.strat[1][1]);
+        this.compute_best_response(this.strat[0][0],this.strat[0][1],this.strat[1][0],this.strat[1][1],max);
+       if (max >1){
         this.draw_down(this.strat[0][0],this.strat[0][1],this.strat[1][0],this.strat[1][1]);
+       }
     };
     
-    Diagram.prototype.compute_best_response = function(strat11=0, strat12=1, strat21=0, strat22=1) {
+    Diagram.prototype.compute_best_response = function(strat11=0, strat12=1, strat21=0, strat22=1, max) {
         for (var i=0;i<this.nb_strat[0];i++){
             this.endpoints[0][i*2].strat_matrix=Number(i*this.nb_strat[1]+strat21);
             this.endpoints[0][Number(i*2+1)].strat_matrix=Number(i*this.nb_strat[1]+strat22);
         }
-        for (var i=0;i<this.nb_strat[1];i++){
+        if (max>1)
+        for (var i=0;i<this.nb_strat[0];i++){
             this.endpoints[1][i*2].strat_matrix=Number(strat11*this.nb_strat[1]+i);
             this.endpoints[1][Number(i*2+1)].strat_matrix=Number(strat12*this.nb_strat[1]+i);
         }
@@ -291,27 +400,32 @@ GTE = (function(parentModule) {
             this.payoffs[0][i][strat22]=(Math.round(GTE.tree.matrix.matrix[Number(i*this.nb_strat[1]+strat22)].strategy.payoffs[0].value*GTE.diag.precision)/GTE.diag.precision);
             GTE.tree.matrix.matrix[Number(i*this.nb_strat[1]+strat22)].strategy.payoffs[0].value=this.payoffs[0][i][strat22];
         }
+       if (max >1){
         for (var j=0;j<this.nb_strat[1];j++){
             this.payoffs[1][strat11][j]=(Math.round(GTE.tree.matrix.matrix[Number(strat11*this.nb_strat[1]+j)].strategy.payoffs[1].value*GTE.diag.precision)/GTE.diag.precision);
             GTE.tree.matrix.matrix[Number(strat11*this.nb_strat[1]+j)].strategy.payoffs[1].value=this.payoffs[1][strat11][j];
             this.payoffs[1][strat12][j]=(Math.round(GTE.tree.matrix.matrix[Number(strat12*this.nb_strat[1]+j)].strategy.payoffs[1].value*GTE.diag.precision)/GTE.diag.precision);
             GTE.tree.matrix.matrix[Number(strat12*this.nb_strat[1]+j)].strategy.payoffs[1].value=this.payoffs[1][strat12][j];
         }
+       }
+       
         for (var i=0;i<this.nb_strat[0];i++){
             this.endpoints[0][i*2].move(this.height-this.margin-this.payoffs[0][i][strat21]*this.step);
             this.endpoints[0][Number(i*2+1)].move(this.height-this.margin-this.payoffs[0][i][strat22]*this.step);
         }
+       if (max>1){
         for (var i=0;i<this.nb_strat[1];i++){
             this.endpoints[1][i*2].move(this.height-this.margin-this.payoffs[1][strat11][i]*this.step);
             this.endpoints[1][Number(i*2+1)].move(this.height-this.margin-this.payoffs[1][strat12][i]*this.step);
         }
+       }
         // compute all intersect points
         var strat=[[strat21,strat22],[strat11,strat12]]
         var Y11; //left extremity of the first line
         var Y12; //right extremity of the first line
         var Y21; //left extremity of the second line
         var Y22; //right extremity of the second line
-        for (var i=0;i<2;i++){
+        for (var i=0;i<max;i++){
             for (var j=0; j< this.nb_strat[i]-1;j++){
                 for (var k=j+1 ; k<this.nb_strat[i];k++){
                     var temp= GTE.svg.getElementsByClassName("strat"+""+i+""+j);
@@ -395,8 +509,8 @@ GTE = (function(parentModule) {
                 }
             }
         }
-        
-        for (var i=0;i<2;i++){
+        //To make sure that best_response are set for the right strategies.
+        for (var i=0;i<max;i++){
             if (i==0){
                 Y11=this.payoffs[i][strat11][strat21];
                 Y12=this.payoffs[i][strat11][strat22];
@@ -459,22 +573,23 @@ GTE = (function(parentModule) {
                 }
             }
         }
-        
-        for (var f=0;f<2;f++){
+        for (var f=0;f<max;f++){
             for (var g=0;g<this.intersect[f].length;g++){
                 this.intersect[f][g].hide();
             }
         }
         
-        this.computeEnvelope(strat11, strat12, strat21, strat22);
+        this.computeEnvelope(strat11, strat12, strat21, strat22,max);
         //upates player's names
         var name_player=GTE.svg.getElementsByClassName("player1_name");
-        for (var i=0;i<2;i++)
+        for (var i=0;i<max;i++)
         name_player[i].textContent=GTE.tree.matrix.players[1].name;
         
+        if (max >1){
         name_player=GTE.svg.getElementsByClassName("player2_name");
-        for (var i=0;i<2;i++)
+        for (var i=0;i<max;i++)
         name_player[i].textContent=GTE.tree.matrix.players[2].name;
+        }
         
         // Lines update
         for (var i=0 ; i< this.lines.length ; i++){
@@ -482,7 +597,6 @@ GTE = (function(parentModule) {
                 var temp=this.lines[i][j];
                 for (var h=0; h<2; h++){
                     temp.html_element[h].setAttributeNS(null, "y1", this.endpoints[temp.getPlayer()][temp.getStrat1()].getPosy());
-                    
                     temp.html_element[h].setAttributeNS(null, "y2", this.endpoints[temp.getPlayer()][temp.getStrat2()].getPosy());
                 }
             }
@@ -490,13 +604,13 @@ GTE = (function(parentModule) {
     }
     
     
-    Diagram.prototype.computeEnvelope = function(strat11=0, strat12=1, strat21=0, strat22=1){
+    Diagram.prototype.computeEnvelope = function(strat11=0, strat12=1, strat21=0, strat22=1, max){
         var strat=[[strat21,strat22],[strat11,strat12]];
         
-        for (var i=0;i<2;i++){ //player
+        for (var i=0;i<max;i++){ //player
             
             for (var f=0;f<this.nb_strat[i];f++) //hide labelline
-            this.lines[i][f].hideName();
+                this.lines[i][f].hideName();
             var point=[];
             var strat_act=[];//line on wich point will be.
             var strat_prev=[];//line on wich point was.
@@ -523,7 +637,7 @@ GTE = (function(parentModule) {
                         y_max=this.height-this.margin-this.step*Number(this.payoffs[i][strat[i][0]][j]);
                     }
                     else {
-                        if (Number(this.height-this.margin-this.step*Number(this.payoffs[i][j][strat[i][0]]))== Number(y_max)){
+                        if (Number(this.height-this.margin-this.step*Number(this.payoffs[i][strat[i][0]][j]))== Number(y_max)){
                             strat_act.push(j);
                         }
                     }
@@ -1298,54 +1412,7 @@ GTE = (function(parentModule) {
             }
         }
         
-        /*var stick=GTE.svg.getElementsByClassName("middle11");
-         for (i=0;i<stick.length;i++){
-         if(inter[0][0]==Number(this.margin+this.side)){
-         stick[i].textContent=""
-         }
-         if(this.best_response[0][1]==1)
-         pos=(inter[0][0]+Number(Number(this.margin)))/2;
-         else
-         pos=(inter[0][0]+Number(Number(this.margin+this.side)))/2;
-         stick[i].setAttributeNS(null, "x",pos);
-         }
-         var stick=GTE.svg.getElementsByClassName("middle12");
-         for (i=0;i<stick.length;i++){
-         if(inter[0][0]==Number(this.margin)){
-         stick[i].textContent=""
-         }
-         if(this.best_response[0][0]==1)
-         pos=(inter[0][0]+Number(this.margin))/2;
-         else
-         pos=(inter[0][0]+Number(this.margin+this.side))/2;
-         stick[i].setAttributeNS(null, "x",pos);
-         }
-         
-         var stick=GTE.svg.getElementsByClassName("middle21");
-         for (i=0;i<stick.length;i++){
-         if(inter[1][0]==650){
-         stick[i].textContent=""
-         }
-         if(this.best_response[1][1]==1)
-         var  pos=(inter[1][0]+Number(450))/2;
-         else
-         var  pos=(inter[1][0]+Number(650))/2;
-         
-         stick[i].setAttributeNS(null, "x",pos);
-         }
-         var stick=GTE.svg.getElementsByClassName("middle22");
-         for (i=0;i<stick.length;i++){
-         if(inter[1][0]==450){
-         stick[i].textContent=""
-         }
-         if(this.best_response[1][0]==1)
-         pos=(inter[1][0]+Number(450))/2;
-         else
-         pos=(inter[1][0]+Number(650))/2;
-         stick[i].setAttributeNS(null, "x",pos);
-         }*/
-        
-        
+       
         if (inter[1][0]>450 && inter[1][0] <650){
             var t1=Number(inter[1][0])-Number(410);
             var t2=460+Number(inter[1][0])-Number(410);
@@ -1403,17 +1470,20 @@ GTE = (function(parentModule) {
         this.intersect=[];
         var envelope1=document.getElementById("envelope1");
         envelope1.setAttributeNS(null,"points", "50,50, 50,350, 250,350, 250,50");
+       if (this.nb_strat[0]==2 && this.nb_strat[1]==2 ){
         var envelope2=document.getElementById("envelope2");
-        envelope2.setAttributeNS(null,"points", "450,50, 450,350, 650,350,  650,50");
+       envelope2.setAttributeNS(null,"points", "450,50, 450,350, 650,350,  650,50");}
         this.cleanForeign();
         
     }
     
     Diagram.prototype.cleanForeign = function (){
         
-        var temp=GTE.svg.getElementsByTagName("foreignObject");
-        for (var t=0;t<temp.length;t++){
-            GTE.svg.removeChild(temp[t]);}
+        var temp=GTE.svg.getElementsByTagName("foreignObject").length;
+        while(temp>0){
+            GTE.svg.removeChild(GTE.svg.getElementsByTagName("foreignObject")[0]);
+            temp=GTE.svg.getElementsByTagName("foreignObject").length;
+        }
     }
     
     // Add class to parent module
