@@ -23,12 +23,14 @@ GTE = (function(parentModule) {
         this.margin=50;
         this.max=10;
         this.min=0;
-        this.strat=[[0,1],[0,1]]
+        this.strat=[[0,1],[0,1]];
         this.step= (this.height-Number(2*this.margin))/(this.max-Number(this.min));
         
     };
     
     Diagram.prototype.ini =function (){
+        
+        this.strat=[[0,1],[0,1]];
         this.nb_strat=[GTE.tree.matrix.strategies[1].length,GTE.tree.matrix.strategies[2].length];
         this.assignEndpoints();
         this.assignLines();
@@ -387,9 +389,9 @@ GTE = (function(parentModule) {
                     }
                     
                     this.intersect[i][Number((this.nb_strat[i]*(this.nb_strat[i]-1))/2-((this.nb_strat[i]-j)*(this.nb_strat[i]-j-1))/2+(k-j)-1)].move(i*(2*this.margin+this.width)+this.margin+middle_x*(this.width-2*Number(this.margin)),this.height-Number(this.margin)-Number(this.step)*middle_y);
-                    this.intersect[i][Number((this.nb_strat[i]*(this.nb_strat[i]-1))/2-((this.nb_strat[i]-j)*(this.nb_strat[i]-j-1))/2+(k-j)-1)].show();
-                    if (middle_x==0 || middle_x==1)
-                    this.intersect[i][Number((this.nb_strat[i]*(this.nb_strat[i]-1))/2-((this.nb_strat[i]-j)*(this.nb_strat[i]-j-1))/2+(k-j)-1)].hide();
+                    /*this.intersect[i][Number((this.nb_strat[i]*(this.nb_strat[i]-1))/2-((this.nb_strat[i]-j)*(this.nb_strat[i]-j-1))/2+(k-j)-1)].show();
+                     if (middle_x==0 || middle_x==1)
+                     this.intersect[i][Number((this.nb_strat[i]*(this.nb_strat[i]-1))/2-((this.nb_strat[i]-j)*(this.nb_strat[i]-j-1))/2+(k-j)-1)].hide();*/
                 }
             }
         }
@@ -458,7 +460,11 @@ GTE = (function(parentModule) {
             }
         }
         
-        
+        for (var f=0;f<2;f++){
+            for (var g=0;g<this.intersect[f].length;g++){
+                this.intersect[f][g].hide();
+            }
+        }
         
         this.computeEnvelope(strat11, strat12, strat21, strat22);
         //upates player's names
@@ -498,6 +504,7 @@ GTE = (function(parentModule) {
             var strat_mix=[];
             var y_max=350;
             var x_min=Number(i*(this.width+Number(2*this.margin))+Number(this.margin));
+            var inter;
             for (var j=0;j<this.nb_strat[i];j++){ //select all higher left endpoints
                 if (i==0){
                     if (Number(this.height-this.margin-this.step*Number(this.payoffs[i][j][strat[i][0]]))< Number(y_max)){
@@ -525,6 +532,7 @@ GTE = (function(parentModule) {
             strat_prev=strat_act;
             point.push([i*(this.width+2*this.margin)+this.margin,y_max]);
             while(Number(x_min)<Number(i*(this.width+2*this.margin)+this.width-this.margin)){
+                inter=[];
                 var x_new=point[point.length-1][0];
                 var y_new=point[point.length-1][1];;
                 for (var x=0;x<strat_act.length;x++){
@@ -536,6 +544,8 @@ GTE = (function(parentModule) {
                                 x_new=this.intersect[i][l].getPosx();
                                 y_new=Number(this.intersect[i][l].getPosy());
                                 strat_mix=[l];
+                                inter=[true];
+                                this.intersect[i][l].show();
                                 strat_new=[this.intersect[i][l].getStrat1(),this.intersect[i][l].getStrat2()];
                                 strat_prev=[S];
                             }
@@ -543,7 +553,15 @@ GTE = (function(parentModule) {
                                 if( Math.round(Number((point[point.length-1][1]-y_new)/(x_new-point[point.length-1][0]))*1000)/1000 <Math.round(Number((point[point.length-1][1]-this.intersect[i][l].getPosy())/(this.intersect[i][l].getPosx()-point[point.length-1][0]))*1000)/1000  || (Math.round(Number((point[point.length-1][1]-y_new)/(x_new-point[point.length-1][0]))*1000)/1000 ==Math.round(Number((point[point.length-1][1]-this.intersect[i][l].getPosy())/(this.intersect[i][l].getPosx()-point[point.length-1][0]))*1000)/1000  && Number(this.intersect[i][l].getPosx())<Number(x_new))){
                                     x_new=this.intersect[i][l].getPosx();
                                     y_new=Number(this.intersect[i][l].getPosy());
+                                    
+                                    for (f=0;f<strat_mix.length;f++){
+                                        if (inter[f]==true){
+                                            this.intersect[i][strat_mix[f]].hide();
+                                        }
+                                    }
                                     strat_mix=[l];
+                                    inter=[true];
+                                    this.intersect[i][l].show();
                                     strat_new=[this.intersect[i][l].getStrat1(),this.intersect[i][l].getStrat2()];
                                     strat_prev=[S];
                                 }
@@ -552,6 +570,8 @@ GTE = (function(parentModule) {
                                         x_new=this.intersect[i][l].getPosx();
                                         y_new=Number(this.intersect[i][l].getPosy());
                                         strat_mix.push(l);
+                                        this.intersect[i][l].show();
+                                        inter.push(true);
                                         strat_new.push(this.intersect[i][l].getStrat1());
                                         strat_new.push(this.intersect[i][l].getStrat2());
                                         strat_prev.push(S);
@@ -568,6 +588,7 @@ GTE = (function(parentModule) {
                             x_new=temp.getPosx();
                             y_new=temp.getPosy();
                             strat_mix=[l];
+                            inter=[false];
                             strat_new=[S];
                             strat_prev=[S];
                         }
@@ -575,7 +596,13 @@ GTE = (function(parentModule) {
                             if( Math.round(Number((point[point.length-1][1]-y_new)/(x_new-point[point.length-1][0]))*1000)/1000 <Math.round(Number((point[point.length-1][1]-temp.getPosy())/(temp.getPosx()-point[point.length-1][0]))*1000)/1000  ||(Math.round(Number((point[point.length-1][1]-y_new)/(x_new-point[point.length-1][0]))*1000)/1000 ==Math.round(Number((point[point.length-1][1]-temp.getPosy())/(temp.getPosx()-point[point.length-1][0]))*1000)/1000  &&Number(temp.getPosx())<Number(x_new))){
                                 x_new=temp.getPosx();
                                 y_new=Number(temp.getPosy());
+                                for (f=0;f<strat_mix.length;f++){
+                                    if (inter[f]==true){
+                                        this.intersect[i][strat_mix[f]].hide();
+                                    }
+                                }
                                 strat_mix=[l];
+                                inter=[false];
                                 strat_new=[S];
                                 strat_prev=[S];}
                             else{
@@ -583,6 +610,7 @@ GTE = (function(parentModule) {
                                     x_new=temp.getPosx();
                                     y_new=Number(temp.getPosy());
                                     strat_mix.push(l);
+                                    inter.push(false);
                                     strat_new.push(S);
                                     strat_prev.push(S);}
                             }
@@ -1218,7 +1246,7 @@ GTE = (function(parentModule) {
             }
             else {
                 if (this.best_response[0][1]==0){
-                   GTE.svg.getElementsByClassName("middle11")[0].setAttributeNS(null, "x", middle);
+                    GTE.svg.getElementsByClassName("middle11")[0].setAttributeNS(null, "x", middle);
                     GTE.svg.getElementsByClassName("middle12")[0].textContent="";
                 }
                 if (this.best_response[0][1]==1){
@@ -1229,7 +1257,7 @@ GTE = (function(parentModule) {
                     GTE.svg.getElementsByClassName("middle12")[0].setAttributeNS(null, "x", Number(this.margin+(this.width-2*this.margin)/3));
                     GTE.svg.getElementsByClassName("middle11")[0].setAttributeNS(null, "x", Number(this.margin+2*(this.width-2*this.margin)/3));
                 }
-
+                
             }
         }
         
@@ -1271,51 +1299,51 @@ GTE = (function(parentModule) {
         }
         
         /*var stick=GTE.svg.getElementsByClassName("middle11");
-        for (i=0;i<stick.length;i++){
-            if(inter[0][0]==Number(this.margin+this.side)){
-                stick[i].textContent=""
-            }
-            if(this.best_response[0][1]==1)
-            pos=(inter[0][0]+Number(Number(this.margin)))/2;
-            else
-            pos=(inter[0][0]+Number(Number(this.margin+this.side)))/2;
-            stick[i].setAttributeNS(null, "x",pos);
-        }
-        var stick=GTE.svg.getElementsByClassName("middle12");
-        for (i=0;i<stick.length;i++){
-            if(inter[0][0]==Number(this.margin)){
-                stick[i].textContent=""
-            }
-            if(this.best_response[0][0]==1)
-            pos=(inter[0][0]+Number(this.margin))/2;
-            else
-            pos=(inter[0][0]+Number(this.margin+this.side))/2;
-            stick[i].setAttributeNS(null, "x",pos);
-        }
-        
-        var stick=GTE.svg.getElementsByClassName("middle21");
-        for (i=0;i<stick.length;i++){
-            if(inter[1][0]==650){
-                stick[i].textContent=""
-            }
-            if(this.best_response[1][1]==1)
-            var  pos=(inter[1][0]+Number(450))/2;
-            else
-            var  pos=(inter[1][0]+Number(650))/2;
-            
-            stick[i].setAttributeNS(null, "x",pos);
-        }
-        var stick=GTE.svg.getElementsByClassName("middle22");
-        for (i=0;i<stick.length;i++){
-            if(inter[1][0]==450){
-                stick[i].textContent=""
-            }
-            if(this.best_response[1][0]==1)
-            pos=(inter[1][0]+Number(450))/2;
-            else
-            pos=(inter[1][0]+Number(650))/2;
-            stick[i].setAttributeNS(null, "x",pos);
-        }*/
+         for (i=0;i<stick.length;i++){
+         if(inter[0][0]==Number(this.margin+this.side)){
+         stick[i].textContent=""
+         }
+         if(this.best_response[0][1]==1)
+         pos=(inter[0][0]+Number(Number(this.margin)))/2;
+         else
+         pos=(inter[0][0]+Number(Number(this.margin+this.side)))/2;
+         stick[i].setAttributeNS(null, "x",pos);
+         }
+         var stick=GTE.svg.getElementsByClassName("middle12");
+         for (i=0;i<stick.length;i++){
+         if(inter[0][0]==Number(this.margin)){
+         stick[i].textContent=""
+         }
+         if(this.best_response[0][0]==1)
+         pos=(inter[0][0]+Number(this.margin))/2;
+         else
+         pos=(inter[0][0]+Number(this.margin+this.side))/2;
+         stick[i].setAttributeNS(null, "x",pos);
+         }
+         
+         var stick=GTE.svg.getElementsByClassName("middle21");
+         for (i=0;i<stick.length;i++){
+         if(inter[1][0]==650){
+         stick[i].textContent=""
+         }
+         if(this.best_response[1][1]==1)
+         var  pos=(inter[1][0]+Number(450))/2;
+         else
+         var  pos=(inter[1][0]+Number(650))/2;
+         
+         stick[i].setAttributeNS(null, "x",pos);
+         }
+         var stick=GTE.svg.getElementsByClassName("middle22");
+         for (i=0;i<stick.length;i++){
+         if(inter[1][0]==450){
+         stick[i].textContent=""
+         }
+         if(this.best_response[1][0]==1)
+         pos=(inter[1][0]+Number(450))/2;
+         else
+         pos=(inter[1][0]+Number(650))/2;
+         stick[i].setAttributeNS(null, "x",pos);
+         }*/
         
         
         if (inter[1][0]>450 && inter[1][0] <650){
