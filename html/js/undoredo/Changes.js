@@ -11,6 +11,10 @@ GTE.TREE = (function (parentModule) {
         this.event = new GTE.TREE.Event(unit, mode, type);
     }
 
+    /**
+    * Function that undos all the Change objects
+    * present in the queue.
+    */
     Changes.prototype.undo = function() {
         for(var i = this.queue.length-1; i>=0; i--) {
             this.queue[i].execute();
@@ -30,6 +34,10 @@ GTE.TREE = (function (parentModule) {
         }
     };
 
+    /**
+    * Function that adds a change to the queue according to the
+    * mode specified
+    */
     Changes.prototype.addChange = function(mode, node, iset) {
         switch (mode) {
             case GTE.MODES.ADD:
@@ -89,6 +97,9 @@ GTE.TREE = (function (parentModule) {
         }
     };
 
+    /**
+    * Function that pushes all the deleted children of a particular node
+    */
     Changes.prototype.pushChildrenDeleted = function(node) {
         for(var i = 0; i<node.children.length; i++) {
             this.addChange(GTE.MODES.DELETE, node.children[i]);
@@ -96,10 +107,18 @@ GTE.TREE = (function (parentModule) {
         }
     };
 
+    /**
+    * Function that pushes a single change to the queue of the
+    * object
+    */
     Changes.prototype.pushSingletonChange = function(mode, node, from) {
         this.queue.push(new GTE.TREE.Change(node, mode, from));
     };
 
+    /**
+    * Function that pushes change objects when
+    * two multiaction lines merge
+    */
     Changes.prototype.pushMultiactionMerge = function(iset, mergedIset) {
         var selectedIset = iset;
         var nodesInA = selectedIset.getNodes();
