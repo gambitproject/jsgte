@@ -9,7 +9,7 @@ GTE.TREE = (function (parentModule) {
         this.unit = unit;
         this.mode = mode;
         this.type = type;
-        if(this.mode != GTE.UNDO.INITIALIZEISETS)
+        if(this.mode != GTE.UNDO.INITIALIZEISETS && this.mode != GTE.UNDO.BUTTONSWITCH)
             this.coordinates = this.findCoordinates(unit);
         if(this.mode == GTE.MODES.PLAYER_ASSIGNMENT) {
             this.player = GTE.tools.activePlayer;
@@ -37,6 +37,8 @@ GTE.TREE = (function (parentModule) {
             case GTE.REDO.MULTIACTIONLINE:
                 this.getMultiactionLine(node).onClick();
             break;
+            case GTE.UNDO.BUTTONSWITCH:
+                this.unit.click();
         }
         GTE.tools.activePlayer = pl;
         GTE.MODE = curMode;

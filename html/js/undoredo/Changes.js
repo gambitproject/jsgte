@@ -225,6 +225,13 @@ GTE.TREE = (function (parentModule) {
     Changes.prototype.endSetOfChanges = function() {
         this.pushToQueue();
     }
+
+    Changes.prototype.pushButtonSwitchChange = function(mode) {
+        if(GTE.MODE != mode) {
+            this.queue.push(new GTE.TREE.Change(null, GTE.UNDO.BUTTONSWITCH, GTE.MODE));
+            GTE.UNDOQUEUE.push(this);
+        }
+    }
     // Add class to parent module
     parentModule.Changes = Changes;
 

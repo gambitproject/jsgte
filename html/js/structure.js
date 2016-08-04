@@ -103,7 +103,8 @@ var GTE = (function () {
       ADDISET : 11,
       DEINITIALIZEISETS : 12,
       PUSHSELECTEDQUEUE : 13,
-      PUSHISET : 14
+      PUSHISET : 14,
+      BUTTONSWITCH : 15
     };
 
     GTE.REDO = {

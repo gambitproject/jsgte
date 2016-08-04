@@ -9,8 +9,8 @@ GTE.TREE = (function (parentModule) {
     function Change(node, mode, from, to) {
         this.node = node;
         this.mode = mode;
-        this.from = from || null;
-        this.to = to || null;
+        this.from = from;
+        this.to = to;
     }
 
     Change.prototype.execute = function() {
@@ -87,11 +87,30 @@ GTE.TREE = (function (parentModule) {
             case GTE.UNDO.ADDISET:
                 GTE.tree.deleteNode(this.node.firstNode);
                 break;
+            case GTE.UNDO.BUTTONSWITCH:
+                GTE.tools.switchMode(this.from);
+                break;
             default:
                 break;
         }
     };
 
+    Change.prototype.getButtonFromMode = function(mode) {
+        switch (mode) {
+            case GTE.MODES.ADD:
+                 return document.getElementById("button-add");
+                 break;
+            case GTE.MODES.DELETE:
+                return document.getElementById("button-remove");
+                break;
+            case GTE.MODES.MERGE:
+                return document.getElementById("button-merge");
+                break;
+            case GTE.MODES.DISSOLVE:
+                return document.getElementById("button-dissolve");
+                break;
+        }
+    }
     // Add class to parent module
     parentModule.Change = Change;
 

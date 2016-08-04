@@ -80,21 +80,29 @@
     });
 
     document.getElementById("button-add").addEventListener("click", function(){
+        var changes = new GTE.TREE.Changes(GTE.UNDO.BUTTONSWITCH, null, document.getElementById("button-add"));
+        changes.pushButtonSwitchChange(GTE.MODES.ADD);
         GTE.tools.switchMode(GTE.MODES.ADD);
         return false;
     });
 
     document.getElementById("button-remove").addEventListener("click", function(){
+        var changes = new GTE.TREE.Changes(GTE.UNDO.BUTTONSWITCH, null, document.getElementById("button-remove"));
+        changes.pushButtonSwitchChange(GTE.MODES.DELETE);
         GTE.tools.switchMode(GTE.MODES.DELETE);
         return false;
     });
 
     document.getElementById("button-merge").addEventListener("click", function(){
+        var changes = new GTE.TREE.Changes(GTE.UNDO.BUTTONSWITCH, null, document.getElementById("button-merge"));
+        changes.pushButtonSwitchChange(GTE.MODES.MERGE);
         GTE.tools.switchMode(GTE.MODES.MERGE);
         return false;
     });
 
     document.getElementById("button-dissolve").addEventListener("click", function(){
+        var changes = new GTE.TREE.Changes(GTE.UNDO.BUTTONSWITCH, null, document.getElementById("button-dissolve"));
+        changes.pushButtonSwitchChange(GTE.MODES.DISSOLVE);
         GTE.tools.switchMode(GTE.MODES.DISSOLVE);
         return false;
     });
