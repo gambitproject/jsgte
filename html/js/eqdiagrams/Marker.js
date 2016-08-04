@@ -79,7 +79,6 @@ GTE = (function (parentModule) {
     
     
     Marker.prototype.clear = function (){
-        console.log(this.id);
         GTE.svg.removeChild(this.html);
     };
     

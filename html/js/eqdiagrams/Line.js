@@ -5,12 +5,13 @@ GTE = (function (parentModule) {
      * Creates a new end point.
      * @class
      */
-    function Line(p,strat) {
+    function Line(p,strat,max) {
         this.player=p;
         this.strat=strat; // strategy of the player
         this.strat1=strat*2; // couple of strategies of the left endpoint.
         this.strat2=strat*2+1; // couple of strategies of the right endpoint.
         this.html_element=[];
+        if(p==0 || max >1)
         this.draw();
         
     };

@@ -5,14 +5,14 @@ GTE = (function (parentModule) {
      * Creates a new end point.
      * @class
      */
-    function Endpoint(x,y,p,strat, strat_matrix) {
+    function Endpoint(x,y,p,strat, strat_matrix,max) {
         this.x=x;
         this.y=y;
         this.player=p; //player that recieves the payoff.
         this.strat=strat;
         this.strat_matrix=strat_matrix;
         this.html_element=null;
-        if (strat>-1){
+        if (strat>-1 && (p==0 || max>1)){
             this.draw();}
         
         /*

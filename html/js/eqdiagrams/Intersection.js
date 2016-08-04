@@ -5,7 +5,7 @@ GTE = (function (parentModule) {
      * Creates a new end point.
      * @class
      */
-    function Intersection(i,j,k) {
+    function Intersection(i,j,k,max) {
         this.x = 250;
         this.y = 350;
         this.player = i;
@@ -15,6 +15,7 @@ GTE = (function (parentModule) {
         this.label = null; // label on the x axis.
         this.point = null; // html circle.
         this.stick = null; // stick on the x axis.
+       if (i==0 || max>1)
         this.draw();
     };
     
