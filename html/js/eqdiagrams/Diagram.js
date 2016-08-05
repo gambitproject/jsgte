@@ -888,13 +888,13 @@ GTE = (function(parentModule) {
                 if (max==2){
                     if (x2==Number(2*this.margin+this.width+this.margin)){
                        this.equilibrium[1][cmp]=new GTE.Marker(cmp,x2,Number(this.height+this.margin),"#00ff00");
-                       if ((this.payoffs[0][this.strat[0][0]][this.strat[1][0]]== this.payoffs[0][this.strat[0][1]][this.strat[1][0]] && this.best_response[1][0]==0) ||( this.payoffs[0][this.strat[0][0]][this.strat[1][1]]== this.payoffs[0][this.strat[0][1]][this.strat[1][1]] && this.best_response[1][0]==1)){
+                       if ((this.payoffs[0][this.strat[0][0]][this.strat[1][0]]== this.payoffs[0][this.strat[0][1]][this.strat[1][0]] && (this.best_response[1][0]==0||this.best_response[1][0]==-1)) ||( this.payoffs[0][this.strat[0][0]][this.strat[1][1]]== this.payoffs[0][this.strat[0][1]][this.strat[1][1]] && (this.best_response[1][0]==1||this.best_response[1][0]==-1))){
                            this.equilibrium[1][cmp].degenerated(this.intersect[1][0].getPosx());
                        }
                     }
                     else{
                         
-                       if (x2==Number(2*this.width+this.margin) &&((this.payoffs[0][this.strat[0][0]][this.strat[1][0]]== this.payoffs[0][this.strat[0][1]][this.strat[1][0]] && this.best_response[1][1]==0) ||(this.payoffs[0][this.strat[0][0]][this.strat[1][1]]== this.payoffs[0][this.strat[0][1]][this.strat[1][1]] && this.best_response[1][1]==1))){
+                       if (x2==Number(2*this.width+this.margin) &&((this.payoffs[0][this.strat[0][0]][this.strat[1][0]]== this.payoffs[0][this.strat[0][1]][this.strat[1][0]] && (this.best_response[1][1]==0||this.best_response[1][1]==-1)) ||(this.payoffs[0][this.strat[0][0]][this.strat[1][1]]== this.payoffs[0][this.strat[0][1]][this.strat[1][1]] && (this.best_response[1][1]==1||this.best_response[1][1]==-11)))){
                            this.equilibrium[1][cmp]=new GTE.Marker(cmp,this.intersect[1][0].getPosx(),Number(this.height+this.margin),"#00ff00");
                            this.equilibrium[1][cmp].degenerated(Number(2*this.width+this.margin));
                        }
