@@ -24,6 +24,7 @@ GTE.TREE = (function (parentModule) {
         }
         if(this.mode == GTE.UNDO.BUTTONSWITCH) {
             this.unit.click();
+            return;
         }
         var curMode = GTE.MODE;
         var pl = GTE.tools.activePlayer;
