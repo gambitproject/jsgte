@@ -573,18 +573,6 @@ GTE = (function(parentModule) {
             }
         }
         
-        this.computeEnvelope(strat11, strat12, strat21, strat22,max);
-        //upates player's names
-        var name_player=GTE.svg.getElementsByClassName("player1_name");
-        for (var i=0;i<max;i++)
-        name_player[i].textContent=GTE.tree.matrix.players[1].name;
-        
-        if (max >1){
-            name_player=GTE.svg.getElementsByClassName("player2_name");
-            for (var i=0;i<max;i++)
-            name_player[i].textContent=GTE.tree.matrix.players[2].name;
-        }
-        
         // Lines update
         for (var i=0 ; i< this.lines.length ; i++){
             if (i==0 || max >1){
@@ -597,6 +585,20 @@ GTE = (function(parentModule) {
                 }
             }
         }
+        
+        this.computeEnvelope(strat11, strat12, strat21, strat22,max);
+        //upates player's names
+        var name_player=GTE.svg.getElementsByClassName("player1_name");
+        for (var i=0;i<max;i++)
+        name_player[i].textContent=GTE.tree.matrix.players[1].name;
+        
+        if (max >1){
+            name_player=GTE.svg.getElementsByClassName("player2_name");
+            for (var i=0;i<max;i++)
+            name_player[i].textContent=GTE.tree.matrix.players[2].name;
+        }
+        
+
     }
     
     
@@ -608,8 +610,9 @@ GTE = (function(parentModule) {
         var point=[[],[]];
         for (var i=0;i<2;i++){ //player
             for (var f=0;f<this.nb_strat[i];f++){ //hide labelline
-                if (i==0 || max>1)
-                this.lines[i][f].hideName();
+                if (i==0 || max>1){
+                this.lines[i][f].moveUnder();
+                }
             }
             var strat_act=[];//line on wich point will be.
             var strat_prev=[];//line on wich point was.
@@ -894,7 +897,7 @@ GTE = (function(parentModule) {
                     }
                     else{
                         
-                       if (x2==Number(2*this.width+this.margin) &&((this.payoffs[0][this.strat[0][0]][this.strat[1][0]]== this.payoffs[0][this.strat[0][1]][this.strat[1][0]] && (this.best_response[1][1]==0||this.best_response[1][1]==-1)) ||(this.payoffs[0][this.strat[0][0]][this.strat[1][1]]== this.payoffs[0][this.strat[0][1]][this.strat[1][1]] && (this.best_response[1][1]==1||this.best_response[1][1]==-11)))){
+                       if (x2==Number(2*this.width+this.margin) &&((this.payoffs[0][this.strat[0][0]][this.strat[1][0]]== this.payoffs[0][this.strat[0][1]][this.strat[1][0]] && (this.best_response[1][1]==0||this.best_response[1][1]==-1)) ||(this.payoffs[0][this.strat[0][0]][this.strat[1][1]]== this.payoffs[0][this.strat[0][1]][this.strat[1][1]] && (this.best_response[1][1]==1||this.best_response[1][1]==-1)))){
                            this.equilibrium[1][cmp]=new GTE.Marker(cmp,this.intersect[1][0].getPosx(),Number(this.height+this.margin),"#00ff00");
                            this.equilibrium[1][cmp].degenerated(Number(2*this.width+this.margin));
                        }
@@ -1511,8 +1514,8 @@ GTE = (function(parentModule) {
                     GTE.svg.getElementsByClassName("middle11")[0].textContent="";
                 }
                 if (this.best_response[0][1]==-1){
-                    GTE.svg.getElementsByClassName("middle12")[0].setAttributeNS(null, "x", Number(this.margin+(this.width-2*this.margin)/3));
-                    GTE.svg.getElementsByClassName("middle11")[0].setAttributeNS(null, "x", Number(this.margin+2*(this.width-2*this.margin)/3));
+                    GTE.svg.getElementsByClassName("middle11")[0].setAttributeNS(null, "x", Number(this.margin+(this.width-2*this.margin)/3));
+                    GTE.svg.getElementsByClassName("middle12")[0].setAttributeNS(null, "x", Number(this.margin+2*(this.width-2*this.margin)/3));
                 }
                 
             }
@@ -1548,8 +1551,8 @@ GTE = (function(parentModule) {
                     GTE.svg.getElementsByClassName("middle21")[0].textContent="";
                 }
                 if (this.best_response[1][1]==-1){
-                    GTE.svg.getElementsByClassName("middle22")[0].setAttributeNS(null, "x", Number(this.width+3*this.margin+(this.width-2*this.margin)/3));
-                    GTE.svg.getElementsByClassName("middle21")[0].setAttributeNS(null, "x", Number(this.width+3*this.margin+2*(this.width-2*this.margin)/3));
+                    GTE.svg.getElementsByClassName("middle21")[0].setAttributeNS(null, "x", Number(this.width+3*this.margin+(this.width-2*this.margin)/3));
+                    GTE.svg.getElementsByClassName("middle22")[0].setAttributeNS(null, "x", Number(this.width+3*this.margin+2*(this.width-2*this.margin)/3));
                 }
                 
             }

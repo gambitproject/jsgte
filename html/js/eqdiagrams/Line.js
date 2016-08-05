@@ -120,6 +120,17 @@ GTE = (function (parentModule) {
        this.txt.setAttribute("y",y);
        this.txt.textContent=GTE.tree.matrix.strategies[this.player+1][this.strat].moves[0].name;
     };
+       
+    Line.prototype.moveUnder = function(x,y){
+       this.txt.setAttribute("visibility","visible");
+       var x_step=Number(GTE.diag.width-2*GTE.diag.margin)/GTE.diag.nb_strat[this.player];
+       var y_step=(Number(this.html_element[1].getAttribute("y2"))-Number(this.html_element[1].getAttribute("y1")))/GTE.diag.nb_strat[this.player];
+       this.txt.setAttribute("x",Number(Number(this.html_element[1].getAttribute("x1"))+Number(x_step*Number(this.strat+0.5))));
+       this.txt.setAttribute("y",Number(Number(this.html_element[1].getAttribute("y1"))+Number(y_step*Number(this.strat+0.5))+Number(15)));
+       this.txt.textContent=GTE.tree.matrix.strategies[this.player+1][this.strat].moves[0].name;
+       
+       console.log(this.strat+" "+Number(Number(this.html_element[1].getAttribute("y1"))+Number(y_step*Number(this.strat+0.5))+Number(15))+" "+Number(this.html_element[1].getAttribute("y1"))+" "+Number(y_step)*Number(this.strat+0.5));
+    };
     
     // Add class to parent module
     parentModule.Line = Line;
