@@ -114,11 +114,17 @@
     }
 
     document.getElementById("button-player-more").addEventListener("click", function(){
+        var changes = new GTE.TREE.Changes(GTE.UNDO.BUTTONSWITCH, null, document.getElementById("button-player-more"));
+        changes.queue.push(new GTE.TREE.Change(null, GTE.UNDO.ADDPLAYER));
+        changes.endSetOfChanges();
         GTE.tools.addPlayer();
         return false;
     });
 
     document.getElementById("button-player-less").addEventListener("click", function(){
+        var changes = new GTE.TREE.Changes(GTE.UNDO.BUTTONSWITCH, null, document.getElementById("button-player-less"));
+        changes.queue.push(new GTE.TREE.Change(null, GTE.UNDO.REMOVEPLAYER));
+        changes.endSetOfChanges();
         GTE.tools.removeLastPlayer();
         return false;
     });

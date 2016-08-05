@@ -1,5 +1,5 @@
 GTE.TREE = (function (parentModule) {
-    "use strict";
+"use strict";
 
     /**
     * Creates a new Changes Object.

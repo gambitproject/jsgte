@@ -104,7 +104,9 @@ var GTE = (function () {
       DEINITIALIZEISETS : 12,
       PUSHSELECTEDQUEUE : 13,
       PUSHISET : 14,
-      BUTTONSWITCH : 15
+      BUTTONSWITCH : 15,
+      ADDPLAYER : 16,
+      REMOVEPLAYER : 17
     };
 
     GTE.REDO = {

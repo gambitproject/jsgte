@@ -90,6 +90,11 @@ GTE.TREE = (function (parentModule) {
             case GTE.UNDO.BUTTONSWITCH:
                 GTE.tools.switchMode(this.from);
                 break;
+            case GTE.UNDO.ADDPLAYER:
+                GTE.tools.removeLastPlayer();
+                break;
+            case GTE.UNDO.REMOVEPLAYER:
+                GTE.tools.addPlayer();
             default:
                 break;
         }
