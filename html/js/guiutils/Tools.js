@@ -113,8 +113,13 @@ GTE.UI = (function (parentModule) {
     * Handles player buttons onclicks
     * @param {Number|String} playerId Player to be selected
     */
-    Tools.prototype.buttonPlayerHandler = function(playerId) {
+    Tools.prototype.buttonPlayerHandler = function(playerIndex) {
         return function () {
+            var player = document.getElementsByClassName("button-player")[playerIndex];
+            var changes = new GTE.TREE.Changes(GTE.UNDO.BUTTONSWITCH, null, player);
+            var playerId = player.getAttribute("player");
+            if(GTE.tools.activePlayer != playerId)
+                changes.pushButtonSwitchChange();
             GTE.tools.selectPlayer(parseInt(playerId));
         };
     };

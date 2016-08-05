@@ -88,7 +88,11 @@ GTE.TREE = (function (parentModule) {
                 GTE.tree.deleteNode(this.node.firstNode);
                 break;
             case GTE.UNDO.BUTTONSWITCH:
-                GTE.tools.switchMode(this.from);
+                if(this.node) {
+                    GTE.tools.selectPlayer(this.from);
+                } else {
+                    GTE.tools.switchMode(this.from);
+                }
                 break;
             case GTE.UNDO.ADDPLAYER:
                 GTE.tools.removeLastPlayer();

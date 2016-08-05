@@ -228,7 +228,11 @@ GTE.TREE = (function (parentModule) {
 
     Changes.prototype.pushButtonSwitchChange = function(mode) {
         if(GTE.MODE != mode) {
-            this.queue.push(new GTE.TREE.Change(null, GTE.UNDO.BUTTONSWITCH, GTE.MODE));
+            if(GTE.tools.activePlayer != -1) {
+                this.queue.push(new GTE.TREE.Change(true, GTE.UNDO.BUTTONSWITCH, GTE.tools.activePlayer));
+            } else {
+                this.queue.push(new GTE.TREE.Change(null, GTE.UNDO.BUTTONSWITCH, GTE.MODE));
+            }
             GTE.UNDOQUEUE.push(this);
         }
     }
