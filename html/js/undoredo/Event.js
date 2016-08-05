@@ -22,6 +22,9 @@ GTE.TREE = (function (parentModule) {
             GTE.tools.switchMode(GTE.MODES.MERGE);
             return;
         }
+        if(this.mode == GTE.UNDO.BUTTONSWITCH) {
+            this.unit.click();
+        }
         var curMode = GTE.MODE;
         var pl = GTE.tools.activePlayer;
         GTE.tools.activePlayer = this.player;
@@ -37,8 +40,6 @@ GTE.TREE = (function (parentModule) {
             case GTE.REDO.MULTIACTIONLINE:
                 this.getMultiactionLine(node).onClick();
             break;
-            case GTE.UNDO.BUTTONSWITCH:
-                this.unit.click();
         }
         GTE.tools.activePlayer = pl;
         GTE.MODE = curMode;
