@@ -206,6 +206,7 @@ GTE.TREE = (function (parentModule) {
         }
         this.assignMovesOnDeletingIset(iset);
         this.pushRemovedIset(iset);
+        return true;
     }
 
     Changes.prototype.pushChangesAfterAddingIsets = function(iset) {
