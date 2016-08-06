@@ -381,6 +381,12 @@ GTE = (function(parentModule) {
         if (max >1){
             this.draw_square_down(this.strat[0][0],this.strat[0][1],this.strat[1][0],this.strat[1][1]);
         }
+       else {
+       if (GTE.svg.getElementsByTagName("svg").length >0){
+       GTE.svg.removeChild(GTE.svg.getElementsByTagName("svg")[0]);}
+       init();
+       animate();
+       }
     };
     
     Diagram.prototype.compute_best_response = function(strat11=0, strat12=1, strat21=0, strat22=1, max) {
@@ -393,7 +399,7 @@ GTE = (function(parentModule) {
             this.endpoints[1][i*2].strat_matrix=Number(strat11*this.nb_strat[1]+i);
             this.endpoints[1][Number(i*2+1)].strat_matrix=Number(strat12*this.nb_strat[1]+i);
         }
-        for (var i=0;i<this.nb_strat[0];i++){
+       /* for (var i=0;i<this.nb_strat[0];i++){
             this.payoffs[0][i][strat21]=(Math.round(GTE.tree.matrix.matrix[Number(i*this.nb_strat[1]+strat21)].strategy.payoffs[0].value*GTE.diag.precision)/GTE.diag.precision);
             GTE.tree.matrix.matrix[Number(i*this.nb_strat[1]+strat21)].strategy.payoffs[0].value=this.payoffs[0][i][strat21];
             this.payoffs[0][i][strat22]=(Math.round(GTE.tree.matrix.matrix[Number(i*this.nb_strat[1]+strat22)].strategy.payoffs[0].value*GTE.diag.precision)/GTE.diag.precision);
@@ -404,7 +410,16 @@ GTE = (function(parentModule) {
             GTE.tree.matrix.matrix[Number(strat11*this.nb_strat[1]+j)].strategy.payoffs[1].value=this.payoffs[1][strat11][j];
             this.payoffs[1][strat12][j]=(Math.round(GTE.tree.matrix.matrix[Number(strat12*this.nb_strat[1]+j)].strategy.payoffs[1].value*GTE.diag.precision)/GTE.diag.precision);
             GTE.tree.matrix.matrix[Number(strat12*this.nb_strat[1]+j)].strategy.payoffs[1].value=this.payoffs[1][strat12][j];
-        }
+        }*/
+       for( var i=0;i<this.nb_strat[0];i++){
+       for (var j=0;j<this.nb_strat[1];j++){
+        this.payoffs[0][i][j]=(Math.round(GTE.tree.matrix.matrix[Number(i*this.nb_strat[1]+j)].strategy.payoffs[0].value*GTE.diag.precision)/GTE.diag.precision);
+       GTE.tree.matrix.matrix[Number(i*this.nb_strat[1]+j)].strategy.payoffs[0].value=this.payoffs[0][i][j];;
+       this.payoffs[1][i][j]=(Math.round(GTE.tree.matrix.matrix[Number(i*this.nb_strat[1]+j)].strategy.payoffs[1].value*GTE.diag.precision)/GTE.diag.precision);
+       GTE.tree.matrix.matrix[Number(i*this.nb_strat[1]+j)].strategy.payoffs[1].value=this.payoffs[1][i][j];
+       
+       }
+       }
         
         for (var i=0;i<this.nb_strat[0];i++){
             this.endpoints[0][i*2].move(this.height-this.margin-this.payoffs[0][i][strat21]*this.step);
@@ -422,7 +437,7 @@ GTE = (function(parentModule) {
         var Y12; //right extremity of the first line
         var Y21; //left extremity of the second line
         var Y22; //right extremity of the second line
-        for (var i=0;i<max;i++){
+        for (var i=0;i<2;i++){
             for (var j=0; j< this.nb_strat[i]-1;j++){
                 for (var k=j+1 ; k<this.nb_strat[i];k++){
                     var temp= GTE.svg.getElementsByClassName("strat"+""+i+""+j);
@@ -504,7 +519,7 @@ GTE = (function(parentModule) {
             }
         }
         //To make sure that best_response are set for the right strategies.
-        for (var i=0;i<max;i++){
+        for (var i=0;i<2;i++){
             if (i==0){
                 Y11=this.payoffs[i][strat11][strat21];
                 Y12=this.payoffs[i][strat11][strat22];
@@ -886,7 +901,6 @@ GTE = (function(parentModule) {
             }
             
             if (test){
-                console.log(x2);
                 this.equilibrium[0][cmp]=new GTE.Marker(cmp,x1,Number(this.height+this.margin),"#00ff00");
                 if (max==2){
                     if (x2==Number(2*this.margin+this.width+this.margin)){

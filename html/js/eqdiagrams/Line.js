@@ -128,8 +128,6 @@ GTE = (function (parentModule) {
        this.txt.setAttribute("x",Number(Number(this.html_element[1].getAttribute("x1"))+Number(x_step*Number(this.strat+0.5))));
        this.txt.setAttribute("y",Number(Number(this.html_element[1].getAttribute("y1"))+Number(y_step*Number(this.strat+0.5))+Number(15)));
        this.txt.textContent=GTE.tree.matrix.strategies[this.player+1][this.strat].moves[0].name;
-       
-       console.log(this.strat+" "+Number(Number(this.html_element[1].getAttribute("y1"))+Number(y_step*Number(this.strat+0.5))+Number(15))+" "+Number(this.html_element[1].getAttribute("y1"))+" "+Number(y_step)*Number(this.strat+0.5));
     };
     
     // Add class to parent module
