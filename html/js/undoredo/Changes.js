@@ -132,18 +132,30 @@ GTE.TREE = (function (parentModule) {
         }
     }
 
+    /**
+    * Function that pushes singular node whose iset has been
+    * removed to the queue.
+    */
     Changes.prototype.pushSingleNodeWithRemovedIset = function(node) {
         var change = new GTE.TREE.Change(node, GTE.MODES.MERGE, node.iset);
         change.from = node.iset;
         this.queue.push(change);
     }
 
+    /**
+    * Function that pushes a new change which represents the
+    * removal of an iset from GTE.tree.isets
+    */
     Changes.prototype.pushRemovedIset = function(iset) {
         var change = new GTE.TREE.Change(iset, GTE.UNDO.POPISET);
         change.index = GTE.tree.isets.indexOf(iset);
         this.queue.push(change);
     }
 
+    /**
+    * Function that assigns all changes after an iset has
+    * been deleted to the queue.
+    */
     Changes.prototype.assignChangesOnDeletingIset = function(iset) {
         var children = iset.getChildrenNodes();
         for(var i = 0; i<children.length; i++) {
@@ -162,6 +174,10 @@ GTE.TREE = (function (parentModule) {
         }
     }
 
+    /**
+    * Function that adds node related changes to queue on
+    * deletion of an iset.
+    */
     Changes.prototype.assignChangesOnDeletingIsetToNode = function(node) {
         for(var i = 0; i<node.children.length; i++) {
             this.assignChangesOnDeletingIsetToNode(node.children[i]);
@@ -169,6 +185,10 @@ GTE.TREE = (function (parentModule) {
         this.addChange(GTE.MODES.DELETE, node);
     }
 
+    /**
+    * Function that adds iset related changes to queue on
+    * deletion of an iset.
+    */
     Changes.prototype.assignIsetOnDeletingIsetToNode = function(node) {
         for(var i = 0; i<node.children.length; i++) {
             this.assignIsetOnDeletingIsetToNode(node.children[i]);
