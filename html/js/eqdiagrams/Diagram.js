@@ -60,22 +60,16 @@ GTE = (function(parentModule) {
             
             GTE.svg.appendChild(temp);
             temp = document.createElementNS("http://www.w3.org/2000/svg", "text");
-            temp.textContent="Payoff to";
-            temp.setAttribute("class", "player"+Number(i+1)+" title up");
+            if (i==0){
+                temp.textContent="Payoff to I";
+            }else{
+                temp.textContent="Payoff to II";
+            }
+            temp.setAttribute("class", "player"+Number(i+1)+" player"+Number(i+1)+"_title title up");
             temp.setAttribute("x",Number(i*x_shift+150));
             temp.setAttribute("y",40);
             GTE.svg.appendChild(temp);
-            
-            temp = document.createElementNS("http://www.w3.org/2000/svg", "text");
-            if (i==0){
-                temp.textContent="I";
-            }else{
-                temp.textContent="II";
-            }
-            temp.setAttribute("class", "player"+Number(i+1)+"_name player"+Number(i+1)+" title up");
-            temp.setAttribute("x",Number(i*x_shift+230));
-            temp.setAttribute("y",40);
-            GTE.svg.appendChild(temp);
+
             
             temp = document.createElementNS("http://www.w3.org/2000/svg", "text");
             if (i==0){
@@ -85,24 +79,31 @@ GTE = (function(parentModule) {
             else{
                 var j=1;
                 temp.textContent="I";}
-            temp.setAttribute("class", "player"+j+"_name player"+j+" legendh up");
-            temp.setAttribute("x",Number(i*x_shift+55));
+            temp.setAttribute("class", "player"+j+"_name player"+j+" align_right legendh up");
+            temp.setAttribute("x",Number(i*x_shift+95));
             temp.setAttribute("y",390);
             GTE.svg.appendChild(temp);
             
             temp = document.createElementNS("http://www.w3.org/2000/svg", "text");
             temp.textContent="'s probability of";
             temp.setAttribute("class", "player"+j+" legendh up");
-            temp.setAttribute("x",Number(i*x_shift+115));
+            temp.setAttribute("x",Number(i*x_shift+150));
             temp.setAttribute("y",390);
             GTE.svg.appendChild(temp);
             
             temp = document.createElementNS("http://www.w3.org/2000/svg", "text");
+            temp.textContent="d";
+            temp.setAttribute("class", "player"+j+" strat"+Number(j-1)+"1 legendh up");
+            temp.setAttribute("x",Number(i*x_shift+215));
+            temp.setAttribute("y",390);
+            GTE.svg.appendChild(temp);
+            
+           /* temp = document.createElementNS("http://www.w3.org/2000/svg", "text");
             temp.textContent="against";
             temp.setAttribute("class", "player"+j+" legendh up");
             temp.setAttribute("x",Number(i*x_shift+207));
             temp.setAttribute("y",390);
-            GTE.svg.appendChild(temp);
+            GTE.svg.appendChild(temp);*/
             
             temp = document.createElementNS("http://www.w3.org/2000/svg", "text");
             temp.textContent="0";
@@ -314,17 +315,17 @@ GTE = (function(parentModule) {
         document.getElementById('matrix-player-1').value = GTE.tree.matrix.getMatrixInStringFormat(0);
         document.getElementById('matrix-player-2').value = GTE.tree.matrix.getMatrixInStringFormat(1);
         GTE.tree.matrix.drawMatrix();
-        var x=[160,225,560,625];
+        var x=[196,225,596,625];
         var p=[2,1];
         if (this.nb_strat[0]==2 && this.nb_strat[1]==2){
             var max=2;
         }
         else {
             var max=1;}
-        for (var i=0;i<max;i++){
-            var strat11= new GTE.UI.Widgets.ContentEditable(x[Number(2*i)],375,GTE.CONSTANTS.CONTENT_EDITABLE_GROW_TO_RIGHT, GTE.tree.matrix.strategies[p[i]][GTE.diag.strat[p[i]-1][1]].moves[0].name, "player"+Number(p[i])+" strat",1)
+       /* for (var i=0;i<max;i++){
+            var strat11= new GTE.UI.Widgets.ContentEditable(x[Number(2*i)],390,GTE.CONSTANTS.CONTENT_EDITABLE_GROW_TO_RIGHT, GTE.tree.matrix.strategies[p[i]][GTE.diag.strat[p[i]-1][1]].moves[0].name, "player"+Number(p[i])+" legendh align_left",1)
             .index(p[i]-1)
-            .onSave(function () {
+           .onSave(function () {
                 var text = this.getCleanedText();
                 if (text === "") {
                     window.alert("Strategy name should not be empty.");
@@ -376,7 +377,7 @@ GTE = (function(parentModule) {
                 }
                 GTE.diag.cleanForeign();
                 GTE.diag.redraw();    });
-        }
+        }*/
         this.compute_best_response(this.strat[0][0],this.strat[0][1],this.strat[1][0],this.strat[1][1],max);
         if (max >1){
             this.draw_square_down(this.strat[0][0],this.strat[0][1],this.strat[1][0],this.strat[1][1]);
@@ -438,12 +439,17 @@ GTE = (function(parentModule) {
         var Y21; //left extremity of the second line
         var Y22; //right extremity of the second line
         for (var i=0;i<2;i++){
+            for (var j=0;j<this.nb_strat[i];j++){
+                var temp= GTE.svg.getElementsByClassName("strat"+""+i+""+j);
+                for ( var l=0;l<temp.length;l++){
+                    temp[l].textContent=GTE.tree.matrix.strategies[i+1][j].moves[0].name;
+                }
+        }
+        }
+        for (var i=0;i<2;i++){
             for (var j=0; j< this.nb_strat[i]-1;j++){
                 for (var k=j+1 ; k<this.nb_strat[i];k++){
-                    var temp= GTE.svg.getElementsByClassName("strat"+""+i+""+j);
-                    for ( var l=0;l<temp.length;l++){
-                        temp[l].textContent=GTE.tree.matrix.strategies[i+1][j].moves[0].name;
-                    }
+                    
                     if (i==0){
                         Y11=this.payoffs[i][j][strat[i][0]];
                         Y12=this.payoffs[i][j][strat[i][1]];
@@ -604,13 +610,21 @@ GTE = (function(parentModule) {
         this.computeEnvelope(strat11, strat12, strat21, strat22,max);
         //upates player's names
         var name_player=GTE.svg.getElementsByClassName("player1_name");
-        for (var i=0;i<max;i++)
-        name_player[i].textContent=GTE.tree.matrix.players[1].name;
+        for (var i=0;i<name_player.length;i++){
+            name_player[i].textContent=GTE.tree.matrix.players[1].name;
+        }
+        var name_player=GTE.svg.getElementsByClassName("player1_title");
+        for (var i=0;i<name_player.length;i++){
+            name_player[i].textContent="Payoff to "+GTE.tree.matrix.players[1].name;
+        }
         
         if (max >1){
             name_player=GTE.svg.getElementsByClassName("player2_name");
-            for (var i=0;i<max;i++)
+            for (var i=0;i<name_player.length;i++)
             name_player[i].textContent=GTE.tree.matrix.players[2].name;
+            name_player=GTE.svg.getElementsByClassName("player2_title");
+            for (var i=0;i<name_player.length;i++)
+            name_player[i].textContent="Payoff to "+GTE.tree.matrix.players[2].name;
         }
         
 

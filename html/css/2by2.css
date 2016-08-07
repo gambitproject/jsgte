@@ -110,6 +110,16 @@ box-sizing: border-box;
    font-weight: bold;
    font-family:Roman;
 }
+
+#drawing .algin_left{
+   text-align: center;
+    text-anchor:start;
+}
+
+#drawing .align_right{
+   text-align: center;
+    text-anchor:end;
+}
 #drawing .strat_right{
     text-anchor:end;
     font-style: italic;
