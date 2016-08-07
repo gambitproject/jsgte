@@ -196,6 +196,10 @@ GTE.TREE = (function (parentModule) {
         this.queue.push(new GTE.TREE.Change(node, GTE.UNDO.ASSIGNISET, node.iset));
     }
 
+    /**
+    * Function that adds iset and node related changes to queue on
+    * deletion of an iset recursively.
+    */
     Changes.prototype.assignMovesOnDeletingIset = function(iset) {
         var children = iset.getChildrenNodes();
         for(var i = 0; i<children.length; i++) {
@@ -239,10 +243,18 @@ GTE.TREE = (function (parentModule) {
         }
     }
 
+    /**
+    * Function that pushes this change to the global
+    * undo queue.
+    */
     Changes.prototype.pushToQueue = function() {
         GTE.UNDOQUEUE.push(this);
     }
 
+    /**
+    * Function wraps up this particular set of chages
+    * and pushes them to the queue.
+    */
     Changes.prototype.endSetOfChanges = function() {
         this.pushToQueue();
     }
