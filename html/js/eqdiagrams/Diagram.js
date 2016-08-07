@@ -385,8 +385,8 @@ GTE = (function(parentModule) {
        else {
        if (GTE.svg.getElementsByTagName("svg").length >0){
        GTE.svg.removeChild(GTE.svg.getElementsByTagName("svg")[0]);}
-       init();
-       animate();
+       //init();
+       //animate();
        }
     };
     
@@ -824,13 +824,13 @@ GTE = (function(parentModule) {
         for (var i=0;i<temp;i++){
             GTE.svg.removeChild(document.getElementsByClassName("line_down")[0]);
         }
-        for (i=0;i<this.equilibrium[0].length;i++){
-            this.equilibrium[0][i].clear();
+        for (var j=0;j<this.equilibrium.length;j++){
+        for (var i=0;i<this.equilibrium[j].length;i++){
+            console.log(this.equilibrium[j][i]);
+            this.equilibrium[j][i].clear();
         }
-        for (i=0;i<this.equilibrium[1].length;i++){
-            this.equilibrium[1][i].clear();
         }
-        this.equilibrium=[[],[]];
+        this.equilibrium=[[],[],[]];
         
         var temp = document.createElementNS("http://www.w3.org/2000/svg", "line");
         temp.setAttribute("class", "line2 line_down");
@@ -839,24 +839,56 @@ GTE = (function(parentModule) {
         temp.setAttribute("y1",Number(this.height+this.margin));
         temp.setAttribute("y2",Number(this.height+this.margin));
         GTE.svg.appendChild(temp);
+        temp = document.createElementNS("http://www.w3.org/2000/svg", "line");
+        temp.setAttribute("class", "stick line_down");
+        temp.setAttribute("x1",this.margin);
+        temp.setAttribute("x2",this.margin);
+        temp.setAttribute("y1",445);
+        temp.setAttribute("y2",455);
+        GTE.svg.appendChild(temp);
+        temp = document.createElementNS("http://www.w3.org/2000/svg", "line");
+        temp.setAttribute("class", "stick line_down");
+        temp.setAttribute("x1",this.width-this.margin);
+        temp.setAttribute("x2",this.width-this.margin);
+        temp.setAttribute("y1",445);
+        temp.setAttribute("y2",455);
+        GTE.svg.appendChild(temp);
         var cmp=0;
         var x1;
         var x2;
         //degenerated equilibrium
         for (var i=0;i<strat_point[0].length-1;i++){
             var dege=[];
+            var dege2=[];
+            console.log(strat_point[0][i]);
             for (var j=0;j<strat_point[0][i].length;j++){
                 if (this.payoffs[1][strat_point[0][i][j]][this.strat[1][0]]== this.payoffs[1][strat_point[0][i][j]][this.strat[1][1]]){
+                    var in_test=false;
                     for (var k=0;k<strat_point[0][i+1].length;k++){
                         if (strat_point[0][i][j]==strat_point[0][i+1][k]){
-                            var in_test=false;
+                            in_test=false;
                             for (var l=0;l<dege.length;l++){
                                 if (dege[l]==strat_point[0][i][j])
                                 in_test=true;
                             }
-                            if (in_test==false)
+                            if (in_test==false){
                             dege.push(strat_point[0][i][j]);
+                                in_test=true;}
                         }
+                    }
+                    console.log(in_test+" "+strat_point[0][i][j]);
+                    if (in_test==false && ( (this.payoffs[0][this.strat[0][0]][this.strat[1][0]]== this.payoffs[0][this.strat[0][1]][this.strat[1][0]]) ||( this.payoffs[0][this.strat[0][0]][this.strat[1][1]]== this.payoffs[0][this.strat[0][1]][this.strat[1][1]]  ) ) ){
+                        for (var l=0;l<dege2.length;l++){
+                            if (dege2[l]==strat_point[0][i][j])
+                            in_test=true;
+                        }
+                        for (var l=0;l<dege.length;l++){
+                            if (dege[l]==strat_point[0][i][j])
+                            in_test=true;
+                        }
+                        if (in_test==false){
+                            dege2.push(strat_point[0][i][j]);
+                            in_test=true;}
                     }
                 }
             }
@@ -866,15 +898,25 @@ GTE = (function(parentModule) {
                 if (max>1){
                     if (dege.length==1 && dege[0]==this.strat[0][0]){
                      this.equilibrium[1][cmp]=new GTE.Marker(cmp,Number(2*this.margin+this.width+this.margin),Number(this.height+this.margin),"#00ff00");
+                        this.equilibrium[2][cmp]=new GTE.Marker(cmp,Number(point[0][i][0]/2+point[0][i+1][0]/2),Number(this.height+2*this.margin),"#00ff00");
                     }
                     if (dege.length==1 && dege[0]==this.strat[0][1]){
-                        this.equilibrium[1][cmp]=new GTE.Marker(cmp,Number(2*this.width+this.margin),Number(this.height+this.margin),"#00ff00");}
+                        this.equilibrium[1][cmp]=new GTE.Marker(cmp,Number(2*this.width+this.margin),Number(this.height+this.margin),"#00ff00");
+                        this.equilibrium[2][cmp]=new GTE.Marker(cmp,Number(point[0][i][0]/2+point[0][i+1][0]/2),Number(2*this.height-2*this.margin),"#00ff00");}
                     if (dege.length==2){
                         this.equilibrium[1][cmp]=new GTE.Marker(cmp,Number(2*this.margin+this.width+this.margin),Number(this.height+this.margin),"#00ff00");
                         this.equilibrium[1][cmp].degenerated(Number(2*this.width+this.margin));
+                        this.equilibrium[2][cmp]=new GTE.Marker(cmp,Number(point[0][i][0]/2+point[0][i+1][0]/2),Number(3*this.height/2),"#00ff00");
                     }
                 }
                 
+                cmp=cmp+1;
+            }
+            if(dege2.length>0){
+                this.equilibrium[0][cmp]=new GTE.Marker(cmp,point[0][i][0],Number(this.height+this.margin),"#00ff00");
+                this.equilibrium[1][cmp]=new GTE.Marker(cmp,Number(2*this.margin+this.width+this.margin),Number(this.height+this.margin),"#00ff00");
+                this.equilibrium[1][cmp].degenerated(Number(2*this.width+this.margin));
+                this.equilibrium[2][cmp]=new GTE.Marker(cmp,Number(point[0][i][0]),Number(3*this.height/2),"#00ff00");
                 cmp=cmp+1;
             }
         }
@@ -921,6 +963,7 @@ GTE = (function(parentModule) {
                        this.equilibrium[1][cmp]=new GTE.Marker(cmp,x2,Number(this.height+this.margin),"#00ff00");
                        if ((this.payoffs[0][this.strat[0][0]][this.strat[1][0]]== this.payoffs[0][this.strat[0][1]][this.strat[1][0]] && (this.best_response[1][0]==0||this.best_response[1][0]==-1)) ||( this.payoffs[0][this.strat[0][0]][this.strat[1][1]]== this.payoffs[0][this.strat[0][1]][this.strat[1][1]] && (this.best_response[1][0]==1||this.best_response[1][0]==-1))){
                            this.equilibrium[1][cmp].degenerated(this.intersect[1][0].getPosx());
+                           this.equilibrium[2][cmp]=new GTE.Marker(cmp,x1,Number(x2/2+this.intersect[1][0].getPosx()/2+this.margin),"#00ff00");
                        }
                     }
                     else{
@@ -928,9 +971,11 @@ GTE = (function(parentModule) {
                        if (x2==Number(2*this.width+this.margin) &&((this.payoffs[0][this.strat[0][0]][this.strat[1][0]]== this.payoffs[0][this.strat[0][1]][this.strat[1][0]] && (this.best_response[1][1]==0||this.best_response[1][1]==-1)) ||(this.payoffs[0][this.strat[0][0]][this.strat[1][1]]== this.payoffs[0][this.strat[0][1]][this.strat[1][1]] && (this.best_response[1][1]==1||this.best_response[1][1]==-1)))){
                            this.equilibrium[1][cmp]=new GTE.Marker(cmp,this.intersect[1][0].getPosx(),Number(this.height+this.margin),"#00ff00");
                            this.equilibrium[1][cmp].degenerated(Number(2*this.width+this.margin));
+                           this.equilibrium[2][cmp]=new GTE.Marker(cmp,x1,Number(this.intersect[1][0].getPosx()/2+this.margin/2+this.width+this.margin),"#00ff00");
                        }
                         else {
                             this.equilibrium[1][cmp]=new GTE.Marker(cmp,x2,Number(this.height+this.margin),"#00ff00");
+                            this.equilibrium[2][cmp]=new GTE.Marker(cmp,x1,Number(x2+this.margin),"#00ff00");
                         }
                     }
                 }
@@ -981,9 +1026,9 @@ GTE = (function(parentModule) {
         temp.push(GTE.svg.getElementsByClassName("m3")[0]);
         temp.push(GTE.svg.getElementsByClassName("m4")[0]);
         temp.push(GTE.svg.getElementsByClassName("m5")[0]);
-        for (var i=0;i<4;i++){ //Initializing pure equilibria
+        /*for (var i=0;i<4;i++){ //Initializing pure equilibria
             temp[i].setAttributeNS(null, "r", 2*this.rad);
-        }
+        }*/
         for (var i=4;i<9;i++){ //Initializing mixed equilibria
             temp[i].setAttributeNS(null, "fill", "green");
             temp[i].setAttributeNS(null, "height", 0);
@@ -1023,16 +1068,16 @@ GTE = (function(parentModule) {
                 temp[7].setAttributeNS(null, "height", Number(this.side+2*this.rad));
                 temp[7].setAttributeNS(null, "width", Number(2*this.rad));
                 //remove all pure equilibria
-                temp[0].setAttributeNS(null, "r", 0);
+                /*temp[0].setAttributeNS(null, "r", 0);
                 temp[1].setAttributeNS(null, "r", 0);
                 temp[2].setAttributeNS(null, "r", 0);
-                temp[3].setAttributeNS(null, "r", 0);
+                temp[3].setAttributeNS(null, "r", 0);*/
             }
             else{
                 if (this.best_response[0][1]==0){
                     path1=Number(this.margin)+","+Number(this.height+2*this.margin)+","+ Number(this.margin+this.side)+","+Number(this.height+2*this.margin);
-                    temp[2].setAttributeNS(null, "r", 0);
-                    temp[3].setAttributeNS(null, "r", 0);
+                    //temp[2].setAttributeNS(null, "r", 0);
+                    //temp[3].setAttributeNS(null, "r", 0);
                     
                     temp[4].setAttributeNS(null, "x", Number(this.margin-this.rad));
                     temp[4].setAttributeNS(null, "y", Number(2*this.margin+this.height-this.rad));
@@ -1041,8 +1086,8 @@ GTE = (function(parentModule) {
                 }
                 else {
                     path1=Number(this.margin)+","+Number(2*this.margin+this.height+this.side)+","+ Number(this.margin+this.side)+","+Number(2*this.margin+this.height+this.side);
-                    temp[0].setAttributeNS(null, "r", 0);
-                    temp[1].setAttributeNS(null, "r", 0);
+                    //temp[0].setAttributeNS(null, "r", 0);
+                    //temp[1].setAttributeNS(null, "r", 0);
                     
                     temp[6].setAttributeNS(null, "x", Number(this.margin-this.rad));
                     temp[6].setAttributeNS(null, "y", Number(this.height+2*this.margin+this.side-this.rad));
@@ -1060,7 +1105,7 @@ GTE = (function(parentModule) {
                 temp[7].setAttributeNS(null, "width", Number(2*this.rad));
                 if (this.best_response[0][1]==0){
                     path1=Number(this.margin)+","+Number(2*this.margin+this.height+this.side)+", "+ Number(this.margin)+","+Number(this.height+2*this.margin)+", "+ Number(this.margin+this.side)+","+Number(this.height+2*this.margin);
-                    temp[2].setAttributeNS(null, "r", 0);
+                    //temp[2].setAttributeNS(null, "r", 0);
                     
                     temp[4].setAttributeNS(null, "x", Number(this.margin-this.rad));
                     temp[4].setAttributeNS(null, "y", Number(2*this.margin+this.height-this.rad));
@@ -1069,7 +1114,7 @@ GTE = (function(parentModule) {
                 }
                 else{
                     path1=Number(this.margin)+","+Number(this.height+2*this.margin)+", "+ Number(this.margin)+","+Number(2*this.margin+this.height+this.side)+", "+ Number(this.margin+this.side)+","+Number(2*this.margin+this.height+this.side);
-                    temp[1].setAttributeNS(null, "r", 0);
+                    //temp[1].setAttributeNS(null, "r", 0);
                     
                     temp[6].setAttributeNS(null, "x", Number(this.margin-this.rad));
                     temp[6].setAttributeNS(null, "y", Number(this.height+2*this.margin+this.side-this.rad));
@@ -1081,7 +1126,7 @@ GTE = (function(parentModule) {
                 if (this.best_response[0][0]==0){
                     if (this.best_response[0][1]==-1){
                         path1=Number(this.margin)+","+Number(this.height+2*this.margin)+", "+ Number(this.margin+this.side)+","+Number(this.height+2*this.margin)+", "+ Number(this.margin+this.side)+","+Number(2*this.margin+this.height+this.side);
-                        temp[3].setAttributeNS(null, "r", 0);
+                       // temp[3].setAttributeNS(null, "r", 0);
                         
                         temp[5].setAttributeNS(null, "x", Number(this.side+this.margin-this.rad));
                         temp[5].setAttributeNS(null, "y", Number(2*this.margin+this.height-this.rad));
@@ -1110,8 +1155,8 @@ GTE = (function(parentModule) {
                         temp[6].setAttributeNS(null, "height", Number(2*this.rad));
                         temp[6].setAttributeNS(null, "width", ~~(Number(this.margin+this.side)-inter[0][0])+Number(2*this.rad));
                         
-                        temp[1].setAttributeNS(null, "r", 0);
-                        temp[3].setAttributeNS(null, "r", 0);
+                        //temp[1].setAttributeNS(null, "r", 0);
+                        //temp[3].setAttributeNS(null, "r", 0);
                     }
                 }
                 else{
@@ -1132,12 +1177,12 @@ GTE = (function(parentModule) {
                         temp[4].setAttributeNS(null, "height", Number(2*this.rad));
                         temp[4].setAttributeNS(null, "width", ~~(Number(this.margin+this.side)-inter[0][0])+Number(2*this.rad));
                         
-                        temp[0].setAttributeNS(null, "r", 0);
-                        temp[2].setAttributeNS(null, "r", 0);
+                        //temp[0].setAttributeNS(null, "r", 0);
+                        //temp[2].setAttributeNS(null, "r", 0);
                     }
                     else{
                         path1=Number(this.margin)+","+Number(2*this.margin+this.height+this.side)+", "+Number(this.margin+this.side)+","+Number(2*this.margin+this.height+this.side)+", "+Number(this.margin+this.side)+","+Number(this.height+2*this.margin);
-                        temp[0].setAttributeNS(null, "r", 0);
+                        //temp[0].setAttributeNS(null, "r", 0);
                         
                         temp[5].setAttributeNS(null, "x", Number(this.side+this.margin-this.rad));
                         temp[5].setAttributeNS(null, "y", Number(2*this.margin+this.height-this.rad));
@@ -1159,10 +1204,10 @@ GTE = (function(parentModule) {
             if (this.best_response[1][1]==-1){
                 path2=Number(this.margin)+","+Number(this.height+2*this.margin)+", "+Number(this.margin+this.side)+","+Number(this.height+2*this.margin)+", "+Number(this.margin+this.side)+","+Number(2*this.margin+this.height+this.side)+", "+Number(this.margin)+","+Number(2*this.margin+this.height+this.side)+", "+Number(this.margin)+","+Number(this.height+2*this.margin);
                 //remove all pure equilibria
-                temp[0].setAttributeNS(null, "r", 0);
+                /*temp[0].setAttributeNS(null, "r", 0);
                 temp[1].setAttributeNS(null, "r", 0);
                 temp[2].setAttributeNS(null, "r", 0);
-                temp[3].setAttributeNS(null, "r", 0);
+                temp[3].setAttributeNS(null, "r", 0);*/
                 if (this.best_response[0][0]==-1 && this.best_response[0][1]==-1)
                 temp[8].setAttributeNS(null, "fill", "green");
                 else {
@@ -1196,8 +1241,8 @@ GTE = (function(parentModule) {
             else{
                 if (this.best_response[1][1]==0){
                     path2=Number(this.margin)+","+Number(this.height+2*this.margin)+", "+Number(this.margin)+","+Number(2*this.margin+this.height+this.side);
-                    temp[1].setAttributeNS(null, "r", 0);
-                    temp[2].setAttributeNS(null, "r", 0);
+                    //temp[1].setAttributeNS(null, "r", 0);
+                    //temp[2].setAttributeNS(null, "r", 0);
                     temp[4].setAttributeNS(null, "height", 0);
                     temp[5].setAttributeNS(null, "height", 0);
                     temp[6].setAttributeNS(null, "height", 0);
@@ -1207,15 +1252,15 @@ GTE = (function(parentModule) {
                     temp[4].setAttributeNS(null, "width", 0);
                     temp[5].setAttributeNS(null, "width", 0);
                     temp[6].setAttributeNS(null, "width", 0);
-                    if (temp[7].getAttribute("y")==Number(2*this.margin+this.height-this.rad) && temp[7].getAttribute("width")>0)
-                    temp[0].setAttributeNS(null, "r", 0);//remove end point
-                    if (Number(temp[7].getAttribute("y"))+Number(temp[7].getAttribute("height"))==705)
-                    temp[3].setAttributeNS(null, "r", 0);//remove end point
+                    //if (temp[7].getAttribute("y")==Number(2*this.margin+this.height-this.rad) && temp[7].getAttribute("width")>0)
+                    //temp[0].setAttributeNS(null, "r", 0);//remove end point
+                    //if (Number(temp[7].getAttribute("y"))+Number(temp[7].getAttribute("height"))==705)
+                    //temp[3].setAttributeNS(null, "r", 0);//remove end point
                 }
                 else {
                     path2=Number(this.margin+this.side)+","+Number(this.height+2*this.margin)+", "+Number(this.margin+this.side)+","+Number(2*this.margin+this.height+this.side);
-                    temp[0].setAttributeNS(null, "r", 0);
-                    temp[3].setAttributeNS(null, "r", 0);
+                   // temp[0].setAttributeNS(null, "r", 0);
+                   // temp[3].setAttributeNS(null, "r", 0);
                     temp[4].setAttributeNS(null, "height", 0);
                     temp[6].setAttributeNS(null, "height", 0);
                     temp[7].setAttributeNS(null, "height", 0);
@@ -1226,10 +1271,10 @@ GTE = (function(parentModule) {
                     temp[4].setAttributeNS(null, "width", 0);
                     temp[6].setAttributeNS(null, "width", 0);
                     temp[7].setAttributeNS(null, "width", 0);
-                    if (temp[5].getAttribute("y")==Number(2*this.margin+this.height-this.rad) && temp[5].getAttribute("width")>0)
-                    temp[1].setAttributeNS(null, "r", 0);//remove end point
-                    if (Number(temp[5].getAttribute("y"))+Number(temp[5].getAttribute("height"))==705)
-                    temp[2].setAttributeNS(null, "r", 0);//remove end point
+                    //if (temp[5].getAttribute("y")==Number(2*this.margin+this.height-this.rad) && temp[5].getAttribute("width")>0)
+                    //temp[1].setAttributeNS(null, "r", 0);//remove end point
+                    //if (Number(temp[5].getAttribute("y"))+Number(temp[5].getAttribute("height"))==705)
+                    //temp[2].setAttributeNS(null, "r", 0);//remove end point
                 }
             }
             
@@ -1238,7 +1283,7 @@ GTE = (function(parentModule) {
             if (this.best_response[1][0]==-1){
                 if (this.best_response[1][1]==0){
                     path2=Number(this.margin)+","+Number(2*this.margin+this.height+this.side)+", "+Number(this.margin)+","+Number(this.height+2*this.margin)+", "+Number(this.margin+this.side)+","+Number(this.height+2*this.margin);
-                    temp[2].setAttributeNS(null, "r", 0);
+                    //temp[2].setAttributeNS(null, "r", 0);
                     temp[5].setAttributeNS(null, "height", 0);
                     temp[6].setAttributeNS(null, "height", 0);
                     if (this.best_response[0][0] >-1 || this.best_response[0][1] >0){
@@ -1247,18 +1292,18 @@ GTE = (function(parentModule) {
                     }
                     temp[5].setAttributeNS(null, "width", 0);
                     temp[6].setAttributeNS(null, "width", 0);
-                    if (temp[7].getAttribute("y")==Number(2*this.margin+this.height-this.rad) && temp[7].getAttribute("width")>0)
-                    temp[0].setAttributeNS(null, "r", 0);//remove end point
-                    if (Number(temp[7].getAttribute("y"))+Number(temp[7].getAttribute("height"))==705)
-                    temp[3].setAttributeNS(null, "r", 0);//remove end point
-                    if (temp[4].getAttribute("x")==Number(this.margin-this.rad) && temp[4].getAttribute("width")>0)
-                    temp[0].setAttributeNS(null, "r", 0);//remove end point
-                    if (Number(temp[4].getAttribute("x"))+Number(temp[4].getAttribute("width"))==255)
-                    temp[1].setAttributeNS(null, "r", 0);//remove end point
+                    //if (temp[7].getAttribute("y")==Number(2*this.margin+this.height-this.rad) && temp[7].getAttribute("width")>0)
+                   // temp[0].setAttributeNS(null, "r", 0);//remove end point
+                    //if (Number(temp[7].getAttribute("y"))+Number(temp[7].getAttribute("height"))==705)
+                    //temp[3].setAttributeNS(null, "r", 0);//remove end point
+                    //if (temp[4].getAttribute("x")==Number(this.margin-this.rad) && temp[4].getAttribute("width")>0)
+                    //temp[0].setAttributeNS(null, "r", 0);//remove end point
+                    //if (Number(temp[4].getAttribute("x"))+Number(temp[4].getAttribute("width"))==255)
+                    //temp[1].setAttributeNS(null, "r", 0);//remove end point
                 }
                 else{
                     path2=Number(this.margin)+","+Number(this.height+2*this.margin)+", "+Number(this.margin+this.side)+","+Number(this.height+2*this.margin)+", "+Number(this.margin+this.side)+","+Number(2*this.margin+this.height+this.side);
-                    temp[3].setAttributeNS(null, "r", 0);
+                    //temp[3].setAttributeNS(null, "r", 0);
                     temp[6].setAttributeNS(null, "height", 0);
                     temp[7].setAttributeNS(null, "height", 0);
                     if (this.best_response[0][0] >-1 || this.best_response[0][1] >-1){
@@ -1267,21 +1312,21 @@ GTE = (function(parentModule) {
                     }
                     temp[6].setAttributeNS(null, "width", 0);
                     temp[7].setAttributeNS(null, "width", 0);
-                    if (temp[5].getAttribute("y")==Number(2*this.margin+this.height-this.rad) && temp[5].getAttribute("width")>0 )
-                    temp[1].setAttributeNS(null, "r", 0);//remove end point
-                    if (Number(temp[5].getAttribute("y"))+Number(temp[5].getAttribute("height"))==705)
-                    temp[2].setAttributeNS(null, "r", 0);//remove end point
-                    if (temp[4].getAttribute("x")==Number(this.margin-this.rad) && temp[4].getAttribute("width")>0)
-                    temp[0].setAttributeNS(null, "r", 0);//remove end point
-                    if (Number(temp[4].getAttribute("x"))+Number(temp[4].getAttribute("width"))==255)
-                    temp[1].setAttributeNS(null, "r", 0);//remove end point
+                    //if (temp[5].getAttribute("y")==Number(2*this.margin+this.height-this.rad) && temp[5].getAttribute("width")>0 )
+                    //temp[1].setAttributeNS(null, "r", 0);//remove end point
+                   // if (Number(temp[5].getAttribute("y"))+Number(temp[5].getAttribute("height"))==705)
+                   // temp[2].setAttributeNS(null, "r", 0);//remove end point
+                   // if (temp[4].getAttribute("x")==Number(this.margin-this.rad) && temp[4].getAttribute("width")>0)
+                   // temp[0].setAttributeNS(null, "r", 0);//remove end point
+                   // if (Number(temp[4].getAttribute("x"))+Number(temp[4].getAttribute("width"))==255)
+                   // temp[1].setAttributeNS(null, "r", 0);//remove end point
                 }
             }
             else{
                 if (this.best_response[1][0]==0){
                     if (this.best_response[1][1]==-1){
                         path2=Number(this.margin)+","+Number(this.height+2*this.margin)+", "+Number(this.margin)+","+Number(2*this.margin+this.height+this.side)+", "+Number(this.margin+this.side)+","+Number(2*this.margin+this.height+this.side);
-                        temp[1].setAttributeNS(null, "r", 0);
+                       // temp[1].setAttributeNS(null, "r", 0);
                         temp[4].setAttributeNS(null, "height", 0);
                         temp[5].setAttributeNS(null, "height", 0);
                         if (this.best_response[0][0] >-1 || this.best_response[0][1] >-1){
@@ -1290,19 +1335,19 @@ GTE = (function(parentModule) {
                         }
                         temp[4].setAttributeNS(null, "width", 0);
                         temp[5].setAttributeNS(null, "width", 0);
-                        if (temp[7].getAttribute("y")==Number(2*this.margin+this.height-this.rad) && temp[7].getAttribute("width")>0)
-                        temp[0].setAttributeNS(null, "r", 0);//remove end point
-                        if (Number(temp[7].getAttribute("y"))+Number(temp[7].getAttribute("height"))==705)
-                        temp[3].setAttributeNS(null, "r", 0);//remove end point
-                        if (temp[6].getAttribute("x")==Number(this.margin-this.rad) && temp[6].getAttribute("width")>0)
-                        temp[3].setAttributeNS(null, "r", 0);//remove end point
-                        if (Number(temp[6].getAttribute("x"))+Number(temp[6].getAttribute("width"))==255)
-                        temp[2].setAttributeNS(null, "r", 0);//remove end point
+                        //if (temp[7].getAttribute("y")==Number(2*this.margin+this.height-this.rad) && temp[7].getAttribute("width")>0)
+                        //temp[0].setAttributeNS(null, "r", 0);//remove end point
+                        //if (Number(temp[7].getAttribute("y"))+Number(temp[7].getAttribute("height"))==705)
+                        //temp[3].setAttributeNS(null, "r", 0);//remove end point
+                        //if (temp[6].getAttribute("x")==Number(this.margin-this.rad) && temp[6].getAttribute("width")>0)
+                        //temp[3].setAttributeNS(null, "r", 0);//remove end point
+                        //if (Number(temp[6].getAttribute("x"))+Number(temp[6].getAttribute("width"))==255)
+                        //temp[2].setAttributeNS(null, "r", 0);//remove end point
                     }
                     else{
                         path2=Number(this.margin)+","+Number(this.height+2*this.margin)+", "+Number(this.margin)+","+Number(inter[1][0]+this.margin)+", "+Number(this.margin+this.side)+","+Number(inter[1][0]+Number(this.margin))+", "+Number(this.margin+this.side)+","+Number(2*this.margin+this.height+this.side);
-                        temp[1].setAttributeNS(null, "r", 0);
-                        temp[3].setAttributeNS(null, "r", 0);
+                        //temp[1].setAttributeNS(null, "r", 0);
+                        //temp[3].setAttributeNS(null, "r", 0);
                         if (this.best_response[0][1]>-1 && this.best_response[0][0]>-1){
                             temp[4].setAttributeNS(null, "height", 0);
                             temp[5].setAttributeNS(null, "height", 0);
@@ -1335,7 +1380,7 @@ GTE = (function(parentModule) {
                             temp[4].setAttributeNS(null, "width", 0);
                             temp[5].setAttributeNS(null, "width", 0);
                             temp[6].setAttributeNS(null, "width", 0);
-                            temp[0].setAttributeNS(null, "r", 0);//remove end point
+                            //temp[0].setAttributeNS(null, "r", 0);//remove end point
                         }
                         if (this.best_response[0][1]==-1 && this.best_response[0][0]>-1){
                             temp[4].setAttributeNS(null, "height", 0);
@@ -1350,7 +1395,7 @@ GTE = (function(parentModule) {
                             temp[5].setAttributeNS(null, "y", Number(inter[1][0]+Number(Number(this.margin-this.rad))));
                             temp[7].setAttributeNS(null, "width", 0);
                             temp[6].setAttributeNS(null, "width", 0);
-                            temp[2].setAttributeNS(null, "r", 0);//remove end point
+                            //temp[2].setAttributeNS(null, "r", 0);//remove end point
                         }
                         if (this.best_response[0][1]==-1 && this.best_response[0][0]==-1){
                             
@@ -1359,7 +1404,7 @@ GTE = (function(parentModule) {
                             temp[4].setAttributeNS(null, "width", 0);
                             temp[6].setAttributeNS(null, "width", 0);
                             
-                            temp[0].setAttributeNS(null, "r", 0);//remove end point
+                            //temp[0].setAttributeNS(null, "r", 0);//remove end point
                             temp[7].setAttributeNS(null, "x", Number(this.margin-this.rad));
                             temp[7].setAttributeNS(null, "y", Number(2*this.margin+this.height-this.rad));
                             temp[7].setAttributeNS(null, "height", Number(inter[1][0]-Number(Number(this.height+2*this.margin))+Number(60)));
@@ -1370,7 +1415,7 @@ GTE = (function(parentModule) {
                             temp[8].setAttributeNS(null, "height", Number(2*this.rad));
                             temp[8].setAttributeNS(null, "width", Number(this.side+2*this.rad));
                             
-                            temp[2].setAttributeNS(null, "r", 0);//remove end point
+                            //temp[2].setAttributeNS(null, "r", 0);//remove end point
                             temp[5].setAttributeNS(null, "x", Number(this.side+this.margin-this.rad));
                             temp[5].setAttributeNS(null, "y", Number(inter[1][0]+Number(Number(this.margin-this.rad))));
                             temp[5].setAttributeNS(null, "height",Number(Number(2*this.margin+this.height+this.side)-Number(inter[1][0])-Number(40)) );
@@ -1390,8 +1435,8 @@ GTE = (function(parentModule) {
                 else{
                     if (this.best_response[1][1]==0){
                         path2=Number(this.margin)+","+Number(2*this.margin+this.height+this.side)+", "+Number(this.margin)+","+Number(inter[1][0]+this.margin)+", "+Number(this.margin+this.side)+","+Number(inter[1][0]+Number(Number(this.margin)))+", "+Number(this.margin+this.side)+","+Number(this.height+2*this.margin);
-                        temp[0].setAttributeNS(null, "r", 0);
-                        temp[2].setAttributeNS(null, "r", 0);
+                        //temp[0].setAttributeNS(null, "r", 0);
+                        //temp[2].setAttributeNS(null, "r", 0);
                         if (this.best_response[0][1]>-1 && this.best_response[0][0]>-1){
                             temp[4].setAttributeNS(null, "height", 0);
                             temp[5].setAttributeNS(null, "height", 0);
@@ -1425,7 +1470,7 @@ GTE = (function(parentModule) {
                             temp[4].setAttributeNS(null, "width", 0);
                             temp[5].setAttributeNS(null, "width", 0);
                             temp[6].setAttributeNS(null, "width", 0);
-                            temp[3].setAttributeNS(null, "r", 0);//remove end point
+                            //temp[3].setAttributeNS(null, "r", 0);//remove end point
                         }
                         if (this.best_response[0][1]==-1 && this.best_response[0][0]>-1){
                             temp[4].setAttributeNS(null, "height", 0);
@@ -1439,7 +1484,7 @@ GTE = (function(parentModule) {
                             temp[5].setAttributeNS(null, "height", Number(inter[1][0]-Number(Number(this.height+2*this.margin))+Number(60) ));
                             temp[7].setAttributeNS(null, "width", 0);
                             temp[6].setAttributeNS(null, "width", 0);
-                            temp[1].setAttributeNS(null, "r", 0);//remove end point
+                            //temp[1].setAttributeNS(null, "r", 0);//remove end point
                         }
                         if (this.best_response[0][1]==-1 && this.best_response[0][0]==-1){
                             
@@ -1448,7 +1493,7 @@ GTE = (function(parentModule) {
                             temp[4].setAttributeNS(null, "width", 0);
                             temp[6].setAttributeNS(null, "width", 0);
                             
-                            temp[3].setAttributeNS(null, "r", 0);//remove end point
+                           // temp[3].setAttributeNS(null, "r", 0);//remove end point
                             temp[7].setAttributeNS(null, "x", Number(this.margin-this.rad));
                             temp[7].setAttributeNS(null, "y", Number(inter[1][0]+Number(Number(this.margin-this.rad))));
                             temp[7].setAttributeNS(null, "height", Number(Number(2*this.margin+this.height+this.side)-Number(inter[1][0])-Number(40)));
@@ -1459,7 +1504,7 @@ GTE = (function(parentModule) {
                             temp[8].setAttributeNS(null, "height", Number(2*this.rad));
                             temp[8].setAttributeNS(null, "width", Number(this.side+2*this.rad));
                             
-                            temp[1].setAttributeNS(null, "r", 0);//remove end point
+                           // temp[1].setAttributeNS(null, "r", 0);//remove end point
                             temp[5].setAttributeNS(null, "x", Number(this.side+this.margin-this.rad));
                             temp[5].setAttributeNS(null, "y", Number(2*this.margin+this.height-this.rad));
                             temp[5].setAttributeNS(null, "height",Number(inter[1][0]-Number(Number(this.height+2*this.margin))+Number(60) ));
@@ -1477,7 +1522,7 @@ GTE = (function(parentModule) {
                     }
                     else{
                         path2=Number(this.margin)+","+Number(2*this.margin+this.height+this.side)+", "+Number(this.margin+this.side)+","+Number(2*this.margin+this.height+this.side)+", "+Number(this.margin+this.side)+","+Number(this.height+2*this.margin);
-                        temp[0].setAttributeNS(null, "r", 0);
+                       // temp[0].setAttributeNS(null, "r", 0);
                         temp[4].setAttributeNS(null, "height", 0);
                         temp[7].setAttributeNS(null, "height", 0);
                         if (this.best_response[0][0] >-1 || this.best_response[0][1] >-1){
@@ -1486,14 +1531,14 @@ GTE = (function(parentModule) {
                         }
                         temp[4].setAttributeNS(null, "width", 0);
                         temp[7].setAttributeNS(null, "width", 0);
-                        if (temp[5].getAttribute("y")==Number(2*this.margin+this.height-this.rad) && temp[5].getAttribute("width")>0)
-                        temp[1].setAttributeNS(null, "r", 0);//remove end point
-                        if (Number(temp[5].getAttribute("y"))+Number(temp[5].getAttribute("height"))==705)
-                        temp[2].setAttributeNS(null, "r", 0);//remove end point
-                        if (Number(temp[6].getAttribute("x"))==Number(this.margin-this.rad) && temp[6].getAttribute("width")>0)
-                        temp[3].setAttributeNS(null, "r", 0);//remove end point
-                        if (Number(temp[6].getAttribute("x"))+Number(temp[6].getAttribute("width"))==255)
-                        temp[2].setAttributeNS(null, "r", 0);//remove end point
+                        //if (temp[5].getAttribute("y")==Number(2*this.margin+this.height-this.rad) && temp[5].getAttribute("width")>0)
+                        //temp[1].setAttributeNS(null, "r", 0);//remove end point
+                        //if (Number(temp[5].getAttribute("y"))+Number(temp[5].getAttribute("height"))==705)
+                        //temp[2].setAttributeNS(null, "r", 0);//remove end point
+                        //if (Number(temp[6].getAttribute("x"))==Number(this.margin-this.rad) && temp[6].getAttribute("width")>0)
+                        //temp[3].setAttributeNS(null, "r", 0);//remove end point
+                        //if (Number(temp[6].getAttribute("x"))+Number(temp[6].getAttribute("width"))==255)
+                        //temp[2].setAttributeNS(null, "r", 0);//remove end point
                     }
                 }
             }

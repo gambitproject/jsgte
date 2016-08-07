@@ -103,7 +103,7 @@
             
             
             <!--mixed equilibrium--->
-            <rect class="br m5 bottom" x="40" y="490" width="20" height="20" fill="green"/>
+           <rect class="br m5 bottom" x="40" y="490" width="20" height="20" fill="green"/>
             <rect class="br m1 bottom" x="40" y="490" width="20" height="20" fill="green" />
             <rect class="br m2 bottom" x="40" y="490" width="20" height="20" fill="green"/>
             <rect class="br m3 bottom" x="40" y="490" width="20" height="20" fill="green"/>
@@ -115,10 +115,10 @@
             <!-- Best player2 --->
             <polyline class="brline line2 bottom" points="50,500 50,700 250,700, 250,500"/>
             <!--pure equilibrium--->
-            <circle class="br p1 bottom" cx="50" cy="500" r="10"  draggable="false" fill="green" />
+            <!--<circle class="br p1 bottom" cx="50" cy="500" r="10"  draggable="false" fill="green" />
             <circle class="br p2 bottom" cx="250" cy="500" r="10" draggable="false" fill="green"/>
             <circle class="br p3 bottom" cx="250" cy="700" r="10"  draggable="false" fill="green"/>
-            <circle class="br p4 bottom" cx="50" cy="700" r="10" draggable="false" fill="green"/>
+            <circle class="br p4 bottom" cx="50" cy="700" r="10" draggable="false" fill="green"/>-->
             
             <!--legend -->
             <line class="line2 bottom" x1="50" y1="450" x2="250" y2="450"/>
@@ -157,6 +157,12 @@
         </svg>
 
         </div>
+ 
+ <div id="canvas">
+     <label>Test : </label>
+     <input class="test" type="text" id="test" onchange="GTE.diag.redraw()" value="1"/>
+     
+ </div>
  
         <script src="js/thirdparty/svg.min.js"></script>
         <script src="js/thirdparty/jquery.min.js"></script>
