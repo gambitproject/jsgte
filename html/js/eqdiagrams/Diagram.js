@@ -69,7 +69,7 @@ GTE = (function(parentModule) {
             temp.setAttribute("x",Number(i*x_shift+150));
             temp.setAttribute("y",40);
             GTE.svg.appendChild(temp);
-
+            
             
             temp = document.createElementNS("http://www.w3.org/2000/svg", "text");
             if (i==0){
@@ -98,12 +98,12 @@ GTE = (function(parentModule) {
             temp.setAttribute("y",390);
             GTE.svg.appendChild(temp);
             
-           /* temp = document.createElementNS("http://www.w3.org/2000/svg", "text");
-            temp.textContent="against";
-            temp.setAttribute("class", "player"+j+" legendh up");
-            temp.setAttribute("x",Number(i*x_shift+207));
-            temp.setAttribute("y",390);
-            GTE.svg.appendChild(temp);*/
+            /* temp = document.createElementNS("http://www.w3.org/2000/svg", "text");
+             temp.textContent="against";
+             temp.setAttribute("class", "player"+j+" legendh up");
+             temp.setAttribute("x",Number(i*x_shift+207));
+             temp.setAttribute("y",390);
+             GTE.svg.appendChild(temp);*/
             
             temp = document.createElementNS("http://www.w3.org/2000/svg", "text");
             temp.textContent="0";
@@ -322,72 +322,72 @@ GTE = (function(parentModule) {
         }
         else {
             var max=1;}
-       /* for (var i=0;i<max;i++){
-            var strat11= new GTE.UI.Widgets.ContentEditable(x[Number(2*i)],390,GTE.CONSTANTS.CONTENT_EDITABLE_GROW_TO_RIGHT, GTE.tree.matrix.strategies[p[i]][GTE.diag.strat[p[i]-1][1]].moves[0].name, "player"+Number(p[i])+" legendh align_left",1)
-            .index(p[i]-1)
-           .onSave(function () {
-                var text = this.getCleanedText();
-                if (text === "") {
-                    window.alert("Strategy name should not be empty.");
-                } else {
-                    var test=0;
-                    for (var j=0;j<GTE.diag.nb_strat[this.index];j++){
-                        if (text==GTE.tree.matrix.strategies[Number(this.index+1)][j].moves[0].name){
-                            if (j==GTE.diag.strat[this.index][0]){
-                                window.alert("The two strategies have to be different.");
-                                this.text=GTE.diag.strat[this.index][1];
-                            }
-                            else{
-                                GTE.diag.strat[this.index][1]=j;
-                            }
-                            test=1;
-                        }
-                    }
-                    if (test==0){
-                        window.alert("Strategy name should correspond to a strategy.");
-                        this.text=GTE.diag.strat[this.index][1];
-                    }
-                }
-                GTE.diag.cleanForeign();
-                GTE.diag.redraw();    });
-            
-            var strat12= new GTE.UI.Widgets.ContentEditable(x[Number(2*i+1)],375,GTE.CONSTANTS.CONTENT_EDITABLE_GROW_TO_RIGHT, GTE.tree.matrix.strategies[p[i]][GTE.diag.strat[p[i]-1][0]].moves[0].name, "player"+Number(p[i])+" strat",1)
-            .index(p[i]-1)
-            .onSave(function () {
-                var text = this.getCleanedText();
-                if (text === "") {
-                    window.alert("Strategy name should not be empty.");
-                } else {
-                    var test=0;
-                    for (var j=0;j<GTE.diag.nb_strat[this.index];j++){
-                        if (text==GTE.tree.matrix.strategies[Number(this.index+1)][j].moves[0].name){
-                            if (j==GTE.diag.strat[this.index][1]){
-                                window.alert("The two strategies have to be different.");
-                                this.text=GTE.diag.strat[this.index][0];}
-                            else{
-                                GTE.diag.strat[this.index][0]=j;
-                            }
-                            test=1;
-                        }
-                    }
-                    if (test==0){
-                        window.alert("Strategy name should correspond to a strategy.");
-                        this.text=GTE.diag.strat[this.index][0];
-                    }
-                }
-                GTE.diag.cleanForeign();
-                GTE.diag.redraw();    });
-        }*/
+        /* for (var i=0;i<max;i++){
+         var strat11= new GTE.UI.Widgets.ContentEditable(x[Number(2*i)],390,GTE.CONSTANTS.CONTENT_EDITABLE_GROW_TO_RIGHT, GTE.tree.matrix.strategies[p[i]][GTE.diag.strat[p[i]-1][1]].moves[0].name, "player"+Number(p[i])+" legendh align_left",1)
+         .index(p[i]-1)
+         .onSave(function () {
+         var text = this.getCleanedText();
+         if (text === "") {
+         window.alert("Strategy name should not be empty.");
+         } else {
+         var test=0;
+         for (var j=0;j<GTE.diag.nb_strat[this.index];j++){
+         if (text==GTE.tree.matrix.strategies[Number(this.index+1)][j].moves[0].name){
+         if (j==GTE.diag.strat[this.index][0]){
+         window.alert("The two strategies have to be different.");
+         this.text=GTE.diag.strat[this.index][1];
+         }
+         else{
+         GTE.diag.strat[this.index][1]=j;
+         }
+         test=1;
+         }
+         }
+         if (test==0){
+         window.alert("Strategy name should correspond to a strategy.");
+         this.text=GTE.diag.strat[this.index][1];
+         }
+         }
+         GTE.diag.cleanForeign();
+         GTE.diag.redraw();    });
+         
+         var strat12= new GTE.UI.Widgets.ContentEditable(x[Number(2*i+1)],375,GTE.CONSTANTS.CONTENT_EDITABLE_GROW_TO_RIGHT, GTE.tree.matrix.strategies[p[i]][GTE.diag.strat[p[i]-1][0]].moves[0].name, "player"+Number(p[i])+" strat",1)
+         .index(p[i]-1)
+         .onSave(function () {
+         var text = this.getCleanedText();
+         if (text === "") {
+         window.alert("Strategy name should not be empty.");
+         } else {
+         var test=0;
+         for (var j=0;j<GTE.diag.nb_strat[this.index];j++){
+         if (text==GTE.tree.matrix.strategies[Number(this.index+1)][j].moves[0].name){
+         if (j==GTE.diag.strat[this.index][1]){
+         window.alert("The two strategies have to be different.");
+         this.text=GTE.diag.strat[this.index][0];}
+         else{
+         GTE.diag.strat[this.index][0]=j;
+         }
+         test=1;
+         }
+         }
+         if (test==0){
+         window.alert("Strategy name should correspond to a strategy.");
+         this.text=GTE.diag.strat[this.index][0];
+         }
+         }
+         GTE.diag.cleanForeign();
+         GTE.diag.redraw();    });
+         }*/
         this.compute_best_response(this.strat[0][0],this.strat[0][1],this.strat[1][0],this.strat[1][1],max);
         if (max >1){
             this.draw_square_down(this.strat[0][0],this.strat[0][1],this.strat[1][0],this.strat[1][1]);
         }
-       else {
-       if (GTE.svg.getElementsByTagName("svg").length >0){
-       GTE.svg.removeChild(GTE.svg.getElementsByTagName("svg")[0]);}
-       //init();
-       //animate();
-       }
+        else {
+            if (GTE.svg.getElementsByTagName("svg").length >0){
+                GTE.svg.removeChild(GTE.svg.getElementsByTagName("svg")[0]);}
+            //init();
+            //animate();
+        }
     };
     
     Diagram.prototype.compute_best_response = function(strat11=0, strat12=1, strat21=0, strat22=1, max) {
@@ -400,27 +400,27 @@ GTE = (function(parentModule) {
             this.endpoints[1][i*2].strat_matrix=Number(strat11*this.nb_strat[1]+i);
             this.endpoints[1][Number(i*2+1)].strat_matrix=Number(strat12*this.nb_strat[1]+i);
         }
-       /* for (var i=0;i<this.nb_strat[0];i++){
-            this.payoffs[0][i][strat21]=(Math.round(GTE.tree.matrix.matrix[Number(i*this.nb_strat[1]+strat21)].strategy.payoffs[0].value*GTE.diag.precision)/GTE.diag.precision);
-            GTE.tree.matrix.matrix[Number(i*this.nb_strat[1]+strat21)].strategy.payoffs[0].value=this.payoffs[0][i][strat21];
-            this.payoffs[0][i][strat22]=(Math.round(GTE.tree.matrix.matrix[Number(i*this.nb_strat[1]+strat22)].strategy.payoffs[0].value*GTE.diag.precision)/GTE.diag.precision);
-            GTE.tree.matrix.matrix[Number(i*this.nb_strat[1]+strat22)].strategy.payoffs[0].value=this.payoffs[0][i][strat22];
+        /* for (var i=0;i<this.nb_strat[0];i++){
+         this.payoffs[0][i][strat21]=(Math.round(GTE.tree.matrix.matrix[Number(i*this.nb_strat[1]+strat21)].strategy.payoffs[0].value*GTE.diag.precision)/GTE.diag.precision);
+         GTE.tree.matrix.matrix[Number(i*this.nb_strat[1]+strat21)].strategy.payoffs[0].value=this.payoffs[0][i][strat21];
+         this.payoffs[0][i][strat22]=(Math.round(GTE.tree.matrix.matrix[Number(i*this.nb_strat[1]+strat22)].strategy.payoffs[0].value*GTE.diag.precision)/GTE.diag.precision);
+         GTE.tree.matrix.matrix[Number(i*this.nb_strat[1]+strat22)].strategy.payoffs[0].value=this.payoffs[0][i][strat22];
+         }
+         for (var j=0;j<this.nb_strat[1];j++){
+         this.payoffs[1][strat11][j]=(Math.round(GTE.tree.matrix.matrix[Number(strat11*this.nb_strat[1]+j)].strategy.payoffs[1].value*GTE.diag.precision)/GTE.diag.precision);
+         GTE.tree.matrix.matrix[Number(strat11*this.nb_strat[1]+j)].strategy.payoffs[1].value=this.payoffs[1][strat11][j];
+         this.payoffs[1][strat12][j]=(Math.round(GTE.tree.matrix.matrix[Number(strat12*this.nb_strat[1]+j)].strategy.payoffs[1].value*GTE.diag.precision)/GTE.diag.precision);
+         GTE.tree.matrix.matrix[Number(strat12*this.nb_strat[1]+j)].strategy.payoffs[1].value=this.payoffs[1][strat12][j];
+         }*/
+        for( var i=0;i<this.nb_strat[0];i++){
+            for (var j=0;j<this.nb_strat[1];j++){
+                this.payoffs[0][i][j]=(Math.round(GTE.tree.matrix.matrix[Number(i*this.nb_strat[1]+j)].strategy.payoffs[0].value*GTE.diag.precision)/GTE.diag.precision);
+                GTE.tree.matrix.matrix[Number(i*this.nb_strat[1]+j)].strategy.payoffs[0].value=this.payoffs[0][i][j];;
+                this.payoffs[1][i][j]=(Math.round(GTE.tree.matrix.matrix[Number(i*this.nb_strat[1]+j)].strategy.payoffs[1].value*GTE.diag.precision)/GTE.diag.precision);
+                GTE.tree.matrix.matrix[Number(i*this.nb_strat[1]+j)].strategy.payoffs[1].value=this.payoffs[1][i][j];
+                
+            }
         }
-        for (var j=0;j<this.nb_strat[1];j++){
-            this.payoffs[1][strat11][j]=(Math.round(GTE.tree.matrix.matrix[Number(strat11*this.nb_strat[1]+j)].strategy.payoffs[1].value*GTE.diag.precision)/GTE.diag.precision);
-            GTE.tree.matrix.matrix[Number(strat11*this.nb_strat[1]+j)].strategy.payoffs[1].value=this.payoffs[1][strat11][j];
-            this.payoffs[1][strat12][j]=(Math.round(GTE.tree.matrix.matrix[Number(strat12*this.nb_strat[1]+j)].strategy.payoffs[1].value*GTE.diag.precision)/GTE.diag.precision);
-            GTE.tree.matrix.matrix[Number(strat12*this.nb_strat[1]+j)].strategy.payoffs[1].value=this.payoffs[1][strat12][j];
-        }*/
-       for( var i=0;i<this.nb_strat[0];i++){
-       for (var j=0;j<this.nb_strat[1];j++){
-        this.payoffs[0][i][j]=(Math.round(GTE.tree.matrix.matrix[Number(i*this.nb_strat[1]+j)].strategy.payoffs[0].value*GTE.diag.precision)/GTE.diag.precision);
-       GTE.tree.matrix.matrix[Number(i*this.nb_strat[1]+j)].strategy.payoffs[0].value=this.payoffs[0][i][j];;
-       this.payoffs[1][i][j]=(Math.round(GTE.tree.matrix.matrix[Number(i*this.nb_strat[1]+j)].strategy.payoffs[1].value*GTE.diag.precision)/GTE.diag.precision);
-       GTE.tree.matrix.matrix[Number(i*this.nb_strat[1]+j)].strategy.payoffs[1].value=this.payoffs[1][i][j];
-       
-       }
-       }
         
         for (var i=0;i<this.nb_strat[0];i++){
             this.endpoints[0][i*2].move(this.height-this.margin-this.payoffs[0][i][strat21]*this.step);
@@ -444,7 +444,7 @@ GTE = (function(parentModule) {
                 for ( var l=0;l<temp.length;l++){
                     temp[l].textContent=GTE.tree.matrix.strategies[i+1][j].moves[0].name;
                 }
-        }
+            }
         }
         for (var i=0;i<2;i++){
             for (var j=0; j< this.nb_strat[i]-1;j++){
@@ -627,7 +627,7 @@ GTE = (function(parentModule) {
             name_player[i].textContent="Payoff to "+GTE.tree.matrix.players[2].name;
         }
         
-
+        
     }
     
     
@@ -640,7 +640,7 @@ GTE = (function(parentModule) {
         for (var i=0;i<2;i++){ //player
             for (var f=0;f<this.nb_strat[i];f++){ //hide labelline
                 if (i==0 || max>1){
-                this.lines[i][f].moveUnder();
+                    this.lines[i][f].moveUnder();
                 }
             }
             var strat_act=[];//line on wich point will be.
@@ -819,19 +819,57 @@ GTE = (function(parentModule) {
     };
     
     
+    Diagram.prototype.pos_to_prob = function(i,pos){
+        var temp= pos - i* (2*this.margin+this.width)- this.margin;
+        return Math.round(temp/(this.width-2*this.margin)*100)/100;
+    }
+    
+    Diagram.prototype.add_eq_text = function(s1,s2){
+        var div= document.getElementById("eq_list");
+        var h=document.createElement("h3");
+        var temp = document.createTextNode("Equilibrium");
+        var temp2 = document.createElement("img");
+        temp2.setAttribute("src", "images/eq1.png");
+        h.appendChild(temp);
+        div.appendChild(h);
+        var h = document.createElement("p");
+        var font1 = document.createElement("font");
+        var temp = document.createTextNode(GTE.tree.matrix.players[1].name);
+        font1.style.cssText ='color:red;';
+        var temp2 = document.createTextNode(" plays "+s1);
+        font1.appendChild(temp);
+        font1.appendChild(temp2);
+        h.appendChild(font1);
+        div.appendChild(h);
+        var h = document.createElement("p");
+        var font2 = document.createElement("font");
+        font2.style.cssText ='color:blue;';
+        var temp = document.createTextNode(GTE.tree.matrix.players[2].name);
+        var temp2 = document.createTextNode(" plays "+s2);
+        font2.appendChild(temp);
+        font2.appendChild(temp2);
+        h.appendChild(font2);
+        div.appendChild(h);
+        
+    }
+    
+    
     Diagram.prototype.draw_line_down = function(strat_point,point, max){
         var temp= document.getElementsByClassName("line_down").length;
         for (var i=0;i<temp;i++){
             GTE.svg.removeChild(document.getElementsByClassName("line_down")[0]);
         }
         for (var j=0;j<this.equilibrium.length;j++){
-        for (var i=0;i<this.equilibrium[j].length;i++){
-            console.log(this.equilibrium[j][i]);
-            this.equilibrium[j][i].clear();
-        }
+            for (var i=0;i<this.equilibrium[j].length;i++){
+                this.equilibrium[j][i].clear();
+            }
         }
         this.equilibrium=[[],[],[]];
-        
+        var div=document.getElementById("eq_list");
+        temp= div.children.length;
+        for (var i=0;i<temp;i++){
+            div.removeChild(div.children[0]);}
+
         var temp = document.createElementNS("http://www.w3.org/2000/svg", "line");
         temp.setAttribute("class", "line2 line_down");
         temp.setAttribute("x1",this.margin);
@@ -860,7 +898,6 @@ GTE = (function(parentModule) {
         for (var i=0;i<strat_point[0].length-1;i++){
             var dege=[];
             var dege2=[];
-            console.log(strat_point[0][i]);
             for (var j=0;j<strat_point[0][i].length;j++){
                 if (this.payoffs[1][strat_point[0][i][j]][this.strat[1][0]]== this.payoffs[1][strat_point[0][i][j]][this.strat[1][1]]){
                     var in_test=false;
@@ -872,11 +909,10 @@ GTE = (function(parentModule) {
                                 in_test=true;
                             }
                             if (in_test==false){
-                            dege.push(strat_point[0][i][j]);
+                                dege.push(strat_point[0][i][j]);
                                 in_test=true;}
                         }
                     }
-                    console.log(in_test+" "+strat_point[0][i][j]);
                     if (in_test==false && ( (this.payoffs[0][this.strat[0][0]][this.strat[1][0]]== this.payoffs[0][this.strat[0][1]][this.strat[1][0]]) ||( this.payoffs[0][this.strat[0][0]][this.strat[1][1]]== this.payoffs[0][this.strat[0][1]][this.strat[1][1]]  ) ) ){
                         for (var l=0;l<dege2.length;l++){
                             if (dege2[l]==strat_point[0][i][j])
@@ -897,16 +933,26 @@ GTE = (function(parentModule) {
                 this.equilibrium[0][cmp].degenerated(point[0][i+1][0]);
                 if (max>1){
                     if (dege.length==1 && dege[0]==this.strat[0][0]){
-                     this.equilibrium[1][cmp]=new GTE.Marker(cmp,Number(2*this.margin+this.width+this.margin),Number(this.height+this.margin),"#00ff00");
+                        this.equilibrium[1][cmp]=new GTE.Marker(cmp,Number(2*this.margin+this.width+this.margin),Number(this.height+this.margin),"#00ff00");
                         this.equilibrium[2][cmp]=new GTE.Marker(cmp,Number(point[0][i][0]/2+point[0][i+1][0]/2),Number(this.height+2*this.margin),"#00ff00");
+                        var s2=GTE.tree.matrix.strategies[2][this.strat[1][1]].moves[0].name+" between "+this.pos_to_prob(0,point[0][i][0])+" and "+this.pos_to_prob(0,point[0][i+1][0]);
+                        var s1=GTE.tree.matrix.strategies[1][dege[0]].moves[0].name;
+                        this.add_eq_text(s1,s2);
                     }
                     if (dege.length==1 && dege[0]==this.strat[0][1]){
                         this.equilibrium[1][cmp]=new GTE.Marker(cmp,Number(2*this.width+this.margin),Number(this.height+this.margin),"#00ff00");
-                        this.equilibrium[2][cmp]=new GTE.Marker(cmp,Number(point[0][i][0]/2+point[0][i+1][0]/2),Number(2*this.height-2*this.margin),"#00ff00");}
+                        this.equilibrium[2][cmp]=new GTE.Marker(cmp,Number(point[0][i][0]/2+point[0][i+1][0]/2),Number(2*this.height-2*this.margin),"#00ff00");
+                        var s2=GTE.tree.matrix.strategies[2][this.strat[1][1]].moves[0].name+" between "+this.pos_to_prob(0,point[0][i][0])+" and "+this.pos_to_prob(0,point[0][i+1][0]);
+                        var s1=GTE.tree.matrix.strategies[1][dege[0]].moves[0].name;
+                        this.add_eq_text(s1,s2);
+                    }
                     if (dege.length==2){
                         this.equilibrium[1][cmp]=new GTE.Marker(cmp,Number(2*this.margin+this.width+this.margin),Number(this.height+this.margin),"#00ff00");
                         this.equilibrium[1][cmp].degenerated(Number(2*this.width+this.margin));
                         this.equilibrium[2][cmp]=new GTE.Marker(cmp,Number(point[0][i][0]/2+point[0][i+1][0]/2),Number(3*this.height/2),"#00ff00");
+                        var s2=GTE.tree.matrix.strategies[2][this.strat[1][1]].moves[0].name+" between "+this.pos_to_prob(0,point[0][i][0])+" and "+this.pos_to_prob(0,point[0][i+1][0]);
+                        var s1=GTE.tree.matrix.strategies[1][dege[0]].moves[0].name+" between 0 and 1";
+                        this.add_eq_text(s1,s2);
                     }
                 }
                 
@@ -917,12 +963,50 @@ GTE = (function(parentModule) {
                 this.equilibrium[1][cmp]=new GTE.Marker(cmp,Number(2*this.margin+this.width+this.margin),Number(this.height+this.margin),"#00ff00");
                 this.equilibrium[1][cmp].degenerated(Number(2*this.width+this.margin));
                 this.equilibrium[2][cmp]=new GTE.Marker(cmp,Number(point[0][i][0]),Number(3*this.height/2),"#00ff00");
+                var s2=GTE.tree.matrix.strategies[2][this.strat[1][1]].moves[0].name+" with probability "+this.pos_to_prob(0,point[0][i][0]);
+                var s1=GTE.tree.matrix.strategies[1][dege2[0]].moves[0].name+" between 0 and 1";
+                this.add_eq_text(s1,s2);
                 cmp=cmp+1;
+                
             }
+        }
+        
+        //degenrated equilibrium of the 2nd player.
+        var i= strat_point[0].length-1;
+        var dege2=[];
+        for (var j=0;j<strat_point[0][i].length;j++){
+            if (this.payoffs[1][strat_point[0][i][j]][this.strat[1][0]]== this.payoffs[1][strat_point[0][i][j]][this.strat[1][1]]){
+                var in_test=false;
+                if  ( (this.payoffs[0][this.strat[0][0]][this.strat[1][0]]== this.payoffs[0][this.strat[0][1]][this.strat[1][0]]) ||( this.payoffs[0][this.strat[0][0]][this.strat[1][1]]== this.payoffs[0][this.strat[0][1]][this.strat[1][1]]  ) ){
+                    for (var l=0;l<dege2.length;l++){
+                        if (dege2[l]==strat_point[0][i][j])
+                        in_test=true;
+                    }
+                    for (var l=0;l<dege.length;l++){
+                        if (dege[l]==strat_point[0][i][j])
+                        in_test=true;
+                    }
+                    if (in_test==false){
+                        dege2.push(strat_point[0][i][j]);
+                        in_test=true;}
+                }
+            }
+        }
+        if(dege2.length>0){
+            this.equilibrium[0][cmp]=new GTE.Marker(cmp,point[0][i][0],Number(this.height+this.margin),"#00ff00");
+            this.equilibrium[1][cmp]=new GTE.Marker(cmp,Number(2*this.margin+this.width+this.margin),Number(this.height+this.margin),"#00ff00");
+            this.equilibrium[1][cmp].degenerated(Number(2*this.width+this.margin));
+            this.equilibrium[2][cmp]=new GTE.Marker(cmp,Number(point[0][i][0]),Number(3*this.height/2),"#00ff00");
+            var s2=GTE.tree.matrix.strategies[2][this.strat[1][1]].moves[0].name+" with probability "+this.pos_to_prob(0,point[0][i][0]);
+            var s1=GTE.tree.matrix.strategies[1][dege2[0]].moves[0].name+" between 0 and 1";
+            this.add_eq_text(s1,s2);
+            cmp=cmp+1;
+            
         }
         
         
         
+        //Non degenerated equilibrium for the first player.
         for (var i=0;i<strat_point[0].length;i++){
             var test=false;
             var dege=false;
@@ -934,6 +1018,7 @@ GTE = (function(parentModule) {
                         x2=Number(2*this.width+this.margin);
                     }else{
                         x2=Number(2*this.margin+this.width+this.margin);
+                        
                     }
                 }
                 if (i>0 && i<strat_point[0].length-1 && this.payoffs[1][strat_point[0][i][j]][this.strat[1][0]] > this.payoffs[1][strat_point[0][i][j]][this.strat[1][1]]){
@@ -960,22 +1045,43 @@ GTE = (function(parentModule) {
                 this.equilibrium[0][cmp]=new GTE.Marker(cmp,x1,Number(this.height+this.margin),"#00ff00");
                 if (max==2){
                     if (x2==Number(2*this.margin+this.width+this.margin)){
-                       this.equilibrium[1][cmp]=new GTE.Marker(cmp,x2,Number(this.height+this.margin),"#00ff00");
-                       if ((this.payoffs[0][this.strat[0][0]][this.strat[1][0]]== this.payoffs[0][this.strat[0][1]][this.strat[1][0]] && (this.best_response[1][0]==0||this.best_response[1][0]==-1)) ||( this.payoffs[0][this.strat[0][0]][this.strat[1][1]]== this.payoffs[0][this.strat[0][1]][this.strat[1][1]] && (this.best_response[1][0]==1||this.best_response[1][0]==-1))){
-                           this.equilibrium[1][cmp].degenerated(this.intersect[1][0].getPosx());
-                           this.equilibrium[2][cmp]=new GTE.Marker(cmp,x1,Number(x2/2+this.intersect[1][0].getPosx()/2+this.margin),"#00ff00");
-                       }
+                        this.equilibrium[1][cmp]=new GTE.Marker(cmp,x2,Number(this.height+this.margin),"#00ff00");
+                        if ((this.payoffs[0][this.strat[0][0]][this.strat[1][0]]== this.payoffs[0][this.strat[0][1]][this.strat[1][0]] && (this.best_response[1][0]==0||this.best_response[1][0]==-1)) ||( this.payoffs[0][this.strat[0][0]][this.strat[1][1]]== this.payoffs[0][this.strat[0][1]][this.strat[1][1]] && (this.best_response[1][0]==1||this.best_response[1][0]==-1))){
+                            this.equilibrium[1][cmp].degenerated(this.intersect[1][0].getPosx());
+                            this.equilibrium[2][cmp]=new GTE.Marker(cmp,x1,Number(x2/2+this.intersect[1][0].getPosx()/2+this.margin),"#00ff00");
+                            var s2=GTE.tree.matrix.strategies[2][this.strat[1][1]].moves[0].name+" with probability "+this.pos_to_prob(0,x1);
+                            var s1=GTE.tree.matrix.strategies[1][this.strat[0][1]].moves[0].name+" between 0 and "+this.pos_to_prob(1,this.intersect[1][0].getPosx());
+                            this.add_eq_text(s1,s2);
+                        }
+                        else {
+                            this.equilibrium[2][cmp]=new GTE.Marker(cmp,x1,Number(x2+this.margin),"#00ff00");
+                            var s2=GTE.tree.matrix.strategies[2][this.strat[1][1]].moves[0].name+" with probability "+this.pos_to_prob(0,x1);
+                            var s1=GTE.tree.matrix.strategies[1][this.strat[0][1]].moves[0].name+" with probability "+this.pos_to_prob(1,x2);
+                            this.add_eq_text(s1,s2);
+                        }
                     }
                     else{
                         
-                       if (x2==Number(2*this.width+this.margin) &&((this.payoffs[0][this.strat[0][0]][this.strat[1][0]]== this.payoffs[0][this.strat[0][1]][this.strat[1][0]] && (this.best_response[1][1]==0||this.best_response[1][1]==-1)) ||(this.payoffs[0][this.strat[0][0]][this.strat[1][1]]== this.payoffs[0][this.strat[0][1]][this.strat[1][1]] && (this.best_response[1][1]==1||this.best_response[1][1]==-1)))){
-                           this.equilibrium[1][cmp]=new GTE.Marker(cmp,this.intersect[1][0].getPosx(),Number(this.height+this.margin),"#00ff00");
-                           this.equilibrium[1][cmp].degenerated(Number(2*this.width+this.margin));
-                           this.equilibrium[2][cmp]=new GTE.Marker(cmp,x1,Number(this.intersect[1][0].getPosx()/2+this.margin/2+this.width+this.margin),"#00ff00");
-                       }
-                        else {
+                        if (x2==Number(2*this.width+this.margin)){
+                            this.equilibrium[1][cmp]=new GTE.Marker(cmp,x2,Number(this.height+this.margin),"#00ff00");
+                            if ((this.payoffs[0][this.strat[0][0]][this.strat[1][0]]== this.payoffs[0][this.strat[0][1]][this.strat[1][0]] && (this.best_response[1][1]==0||this.best_response[1][1]==-1)) ||(this.payoffs[0][this.strat[0][0]][this.strat[1][1]]== this.payoffs[0][this.strat[0][1]][this.strat[1][1]] && (this.best_response[1][1]==1||this.best_response[1][1]==-1))){
+                                this.equilibrium[1][cmp].degenerated(Number(2*this.width+this.margin));
+                                this.equilibrium[2][cmp]=new GTE.Marker(cmp,x1,Number(this.intersect[1][0].getPosx()/2+this.margin/2+this.width+this.margin),"#00ff00");
+                                var s2=GTE.tree.matrix.strategies[2][this.strat[1][1]].moves[0].name+" with probability "+this.pos_to_prob(0,x1);
+                                var s1=GTE.tree.matrix.strategies[1][this.strat[0][1]].moves[0].name+" between 0 and "+this.pos_to_prob(1,this.intersect[1][0].getPosx());
+                                this.add_eq_text(s1,s2);
+                            }else{
+                                this.equilibrium[2][cmp]=new GTE.Marker(cmp,x1,Number(x2+this.margin),"#00ff00");
+                                var s2=GTE.tree.matrix.strategies[2][this.strat[1][1]].moves[0].name+" with probability "+this.pos_to_prob(0,x1);
+                                var s1=GTE.tree.matrix.strategies[1][this.strat[0][1]].moves[0].name+" with probability "+this.pos_to_prob(1,x2);
+                                this.add_eq_text(s1,s2);
+                            }
+                        }else {
                             this.equilibrium[1][cmp]=new GTE.Marker(cmp,x2,Number(this.height+this.margin),"#00ff00");
                             this.equilibrium[2][cmp]=new GTE.Marker(cmp,x1,Number(x2+this.margin),"#00ff00");
+                            var s2=GTE.tree.matrix.strategies[2][this.strat[1][1]].moves[0].name+" with probability "+this.pos_to_prob(0,x1);
+                            var s1=GTE.tree.matrix.strategies[1][this.strat[0][1]].moves[0].name+" with probability "+this.pos_to_prob(1,x2);
+                            this.add_eq_text(s1,s2);
                         }
                     }
                 }
@@ -1027,8 +1133,8 @@ GTE = (function(parentModule) {
         temp.push(GTE.svg.getElementsByClassName("m4")[0]);
         temp.push(GTE.svg.getElementsByClassName("m5")[0]);
         /*for (var i=0;i<4;i++){ //Initializing pure equilibria
-            temp[i].setAttributeNS(null, "r", 2*this.rad);
-        }*/
+         temp[i].setAttributeNS(null, "r", 2*this.rad);
+         }*/
         for (var i=4;i<9;i++){ //Initializing mixed equilibria
             temp[i].setAttributeNS(null, "fill", "green");
             temp[i].setAttributeNS(null, "height", 0);
@@ -1069,9 +1175,9 @@ GTE = (function(parentModule) {
                 temp[7].setAttributeNS(null, "width", Number(2*this.rad));
                 //remove all pure equilibria
                 /*temp[0].setAttributeNS(null, "r", 0);
-                temp[1].setAttributeNS(null, "r", 0);
-                temp[2].setAttributeNS(null, "r", 0);
-                temp[3].setAttributeNS(null, "r", 0);*/
+                 temp[1].setAttributeNS(null, "r", 0);
+                 temp[2].setAttributeNS(null, "r", 0);
+                 temp[3].setAttributeNS(null, "r", 0);*/
             }
             else{
                 if (this.best_response[0][1]==0){
@@ -1126,7 +1232,7 @@ GTE = (function(parentModule) {
                 if (this.best_response[0][0]==0){
                     if (this.best_response[0][1]==-1){
                         path1=Number(this.margin)+","+Number(this.height+2*this.margin)+", "+ Number(this.margin+this.side)+","+Number(this.height+2*this.margin)+", "+ Number(this.margin+this.side)+","+Number(2*this.margin+this.height+this.side);
-                       // temp[3].setAttributeNS(null, "r", 0);
+                        // temp[3].setAttributeNS(null, "r", 0);
                         
                         temp[5].setAttributeNS(null, "x", Number(this.side+this.margin-this.rad));
                         temp[5].setAttributeNS(null, "y", Number(2*this.margin+this.height-this.rad));
@@ -1205,9 +1311,9 @@ GTE = (function(parentModule) {
                 path2=Number(this.margin)+","+Number(this.height+2*this.margin)+", "+Number(this.margin+this.side)+","+Number(this.height+2*this.margin)+", "+Number(this.margin+this.side)+","+Number(2*this.margin+this.height+this.side)+", "+Number(this.margin)+","+Number(2*this.margin+this.height+this.side)+", "+Number(this.margin)+","+Number(this.height+2*this.margin);
                 //remove all pure equilibria
                 /*temp[0].setAttributeNS(null, "r", 0);
-                temp[1].setAttributeNS(null, "r", 0);
-                temp[2].setAttributeNS(null, "r", 0);
-                temp[3].setAttributeNS(null, "r", 0);*/
+                 temp[1].setAttributeNS(null, "r", 0);
+                 temp[2].setAttributeNS(null, "r", 0);
+                 temp[3].setAttributeNS(null, "r", 0);*/
                 if (this.best_response[0][0]==-1 && this.best_response[0][1]==-1)
                 temp[8].setAttributeNS(null, "fill", "green");
                 else {
@@ -1259,8 +1365,8 @@ GTE = (function(parentModule) {
                 }
                 else {
                     path2=Number(this.margin+this.side)+","+Number(this.height+2*this.margin)+", "+Number(this.margin+this.side)+","+Number(2*this.margin+this.height+this.side);
-                   // temp[0].setAttributeNS(null, "r", 0);
-                   // temp[3].setAttributeNS(null, "r", 0);
+                    // temp[0].setAttributeNS(null, "r", 0);
+                    // temp[3].setAttributeNS(null, "r", 0);
                     temp[4].setAttributeNS(null, "height", 0);
                     temp[6].setAttributeNS(null, "height", 0);
                     temp[7].setAttributeNS(null, "height", 0);
@@ -1293,7 +1399,7 @@ GTE = (function(parentModule) {
                     temp[5].setAttributeNS(null, "width", 0);
                     temp[6].setAttributeNS(null, "width", 0);
                     //if (temp[7].getAttribute("y")==Number(2*this.margin+this.height-this.rad) && temp[7].getAttribute("width")>0)
-                   // temp[0].setAttributeNS(null, "r", 0);//remove end point
+                    // temp[0].setAttributeNS(null, "r", 0);//remove end point
                     //if (Number(temp[7].getAttribute("y"))+Number(temp[7].getAttribute("height"))==705)
                     //temp[3].setAttributeNS(null, "r", 0);//remove end point
                     //if (temp[4].getAttribute("x")==Number(this.margin-this.rad) && temp[4].getAttribute("width")>0)
@@ -1314,19 +1420,19 @@ GTE = (function(parentModule) {
                     temp[7].setAttributeNS(null, "width", 0);
                     //if (temp[5].getAttribute("y")==Number(2*this.margin+this.height-this.rad) && temp[5].getAttribute("width")>0 )
                     //temp[1].setAttributeNS(null, "r", 0);//remove end point
-                   // if (Number(temp[5].getAttribute("y"))+Number(temp[5].getAttribute("height"))==705)
-                   // temp[2].setAttributeNS(null, "r", 0);//remove end point
-                   // if (temp[4].getAttribute("x")==Number(this.margin-this.rad) && temp[4].getAttribute("width")>0)
-                   // temp[0].setAttributeNS(null, "r", 0);//remove end point
-                   // if (Number(temp[4].getAttribute("x"))+Number(temp[4].getAttribute("width"))==255)
-                   // temp[1].setAttributeNS(null, "r", 0);//remove end point
+                    // if (Number(temp[5].getAttribute("y"))+Number(temp[5].getAttribute("height"))==705)
+                    // temp[2].setAttributeNS(null, "r", 0);//remove end point
+                    // if (temp[4].getAttribute("x")==Number(this.margin-this.rad) && temp[4].getAttribute("width")>0)
+                    // temp[0].setAttributeNS(null, "r", 0);//remove end point
+                    // if (Number(temp[4].getAttribute("x"))+Number(temp[4].getAttribute("width"))==255)
+                    // temp[1].setAttributeNS(null, "r", 0);//remove end point
                 }
             }
             else{
                 if (this.best_response[1][0]==0){
                     if (this.best_response[1][1]==-1){
                         path2=Number(this.margin)+","+Number(this.height+2*this.margin)+", "+Number(this.margin)+","+Number(2*this.margin+this.height+this.side)+", "+Number(this.margin+this.side)+","+Number(2*this.margin+this.height+this.side);
-                       // temp[1].setAttributeNS(null, "r", 0);
+                        // temp[1].setAttributeNS(null, "r", 0);
                         temp[4].setAttributeNS(null, "height", 0);
                         temp[5].setAttributeNS(null, "height", 0);
                         if (this.best_response[0][0] >-1 || this.best_response[0][1] >-1){
@@ -1493,7 +1599,7 @@ GTE = (function(parentModule) {
                             temp[4].setAttributeNS(null, "width", 0);
                             temp[6].setAttributeNS(null, "width", 0);
                             
-                           // temp[3].setAttributeNS(null, "r", 0);//remove end point
+                            // temp[3].setAttributeNS(null, "r", 0);//remove end point
                             temp[7].setAttributeNS(null, "x", Number(this.margin-this.rad));
                             temp[7].setAttributeNS(null, "y", Number(inter[1][0]+Number(Number(this.margin-this.rad))));
                             temp[7].setAttributeNS(null, "height", Number(Number(2*this.margin+this.height+this.side)-Number(inter[1][0])-Number(40)));
@@ -1504,7 +1610,7 @@ GTE = (function(parentModule) {
                             temp[8].setAttributeNS(null, "height", Number(2*this.rad));
                             temp[8].setAttributeNS(null, "width", Number(this.side+2*this.rad));
                             
-                           // temp[1].setAttributeNS(null, "r", 0);//remove end point
+                            // temp[1].setAttributeNS(null, "r", 0);//remove end point
                             temp[5].setAttributeNS(null, "x", Number(this.side+this.margin-this.rad));
                             temp[5].setAttributeNS(null, "y", Number(2*this.margin+this.height-this.rad));
                             temp[5].setAttributeNS(null, "height",Number(inter[1][0]-Number(Number(this.height+2*this.margin))+Number(60) ));
@@ -1522,7 +1628,7 @@ GTE = (function(parentModule) {
                     }
                     else{
                         path2=Number(this.margin)+","+Number(2*this.margin+this.height+this.side)+", "+Number(this.margin+this.side)+","+Number(2*this.margin+this.height+this.side)+", "+Number(this.margin+this.side)+","+Number(this.height+2*this.margin);
-                       // temp[0].setAttributeNS(null, "r", 0);
+                        // temp[0].setAttributeNS(null, "r", 0);
                         temp[4].setAttributeNS(null, "height", 0);
                         temp[7].setAttributeNS(null, "height", 0);
                         if (this.best_response[0][0] >-1 || this.best_response[0][1] >-1){
