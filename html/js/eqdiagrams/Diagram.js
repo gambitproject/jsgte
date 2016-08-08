@@ -385,8 +385,8 @@ GTE = (function(parentModule) {
         else {
             if (GTE.svg.getElementsByTagName("svg").length >0){
                 GTE.svg.removeChild(GTE.svg.getElementsByTagName("svg")[0]);}
-            init();
-            animate();
+            //init();
+            //animate();
         }
     };
     
@@ -400,18 +400,7 @@ GTE = (function(parentModule) {
             this.endpoints[1][i*2].strat_matrix=Number(strat11*this.nb_strat[1]+i);
             this.endpoints[1][Number(i*2+1)].strat_matrix=Number(strat12*this.nb_strat[1]+i);
         }
-        /* for (var i=0;i<this.nb_strat[0];i++){
-         this.payoffs[0][i][strat21]=(Math.round(GTE.tree.matrix.matrix[Number(i*this.nb_strat[1]+strat21)].strategy.payoffs[0].value*GTE.diag.precision)/GTE.diag.precision);
-         GTE.tree.matrix.matrix[Number(i*this.nb_strat[1]+strat21)].strategy.payoffs[0].value=this.payoffs[0][i][strat21];
-         this.payoffs[0][i][strat22]=(Math.round(GTE.tree.matrix.matrix[Number(i*this.nb_strat[1]+strat22)].strategy.payoffs[0].value*GTE.diag.precision)/GTE.diag.precision);
-         GTE.tree.matrix.matrix[Number(i*this.nb_strat[1]+strat22)].strategy.payoffs[0].value=this.payoffs[0][i][strat22];
-         }
-         for (var j=0;j<this.nb_strat[1];j++){
-         this.payoffs[1][strat11][j]=(Math.round(GTE.tree.matrix.matrix[Number(strat11*this.nb_strat[1]+j)].strategy.payoffs[1].value*GTE.diag.precision)/GTE.diag.precision);
-         GTE.tree.matrix.matrix[Number(strat11*this.nb_strat[1]+j)].strategy.payoffs[1].value=this.payoffs[1][strat11][j];
-         this.payoffs[1][strat12][j]=(Math.round(GTE.tree.matrix.matrix[Number(strat12*this.nb_strat[1]+j)].strategy.payoffs[1].value*GTE.diag.precision)/GTE.diag.precision);
-         GTE.tree.matrix.matrix[Number(strat12*this.nb_strat[1]+j)].strategy.payoffs[1].value=this.payoffs[1][strat12][j];
-         }*/
+
         for( var i=0;i<this.nb_strat[0];i++){
             for (var j=0;j<this.nb_strat[1];j++){
                 this.payoffs[0][i][j]=(Math.round(GTE.tree.matrix.matrix[Number(i*this.nb_strat[1]+j)].strategy.payoffs[0].value*GTE.diag.precision)/GTE.diag.precision);
@@ -617,15 +606,12 @@ GTE = (function(parentModule) {
         for (var i=0;i<name_player.length;i++){
             name_player[i].textContent="Payoff to "+GTE.tree.matrix.players[1].name;
         }
-        
-        if (max >1){
             name_player=GTE.svg.getElementsByClassName("player2_name");
             for (var i=0;i<name_player.length;i++)
             name_player[i].textContent=GTE.tree.matrix.players[2].name;
             name_player=GTE.svg.getElementsByClassName("player2_title");
             for (var i=0;i<name_player.length;i++)
             name_player[i].textContent="Payoff to "+GTE.tree.matrix.players[2].name;
-        }
         
         
     }
