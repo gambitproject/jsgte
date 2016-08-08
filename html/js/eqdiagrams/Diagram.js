@@ -93,8 +93,8 @@ GTE = (function(parentModule) {
             
             temp = document.createElementNS("http://www.w3.org/2000/svg", "text");
             temp.textContent="d";
-            temp.setAttribute("class", "player"+j+" strat"+Number(j-1)+"1 legendh up");
-            temp.setAttribute("x",Number(i*x_shift+215));
+            temp.setAttribute("class", "player"+j+" strat"+Number(j-1)+"1 align_left legendh up");
+            temp.setAttribute("x",Number(i*x_shift+210));
             temp.setAttribute("y",390);
             GTE.svg.appendChild(temp);
             
@@ -1123,10 +1123,17 @@ GTE = (function(parentModule) {
                 for (var k=0;k<temp.length;k++)
                 temp[k].textContent=GTE.tree.matrix.strategies[Number(i+1)][strat[i][j]].moves[0].name;
             }
-        }
-        
-        
-        
+       }
+       for (var i=0;i<2;i++){
+          for (var j=0;j<2;j++){
+              var temp=GTE.svg.getElementsByClassName("strat"+i+""+j+"_0 change");
+             for (var k=0;k<temp.length;k++)
+             temp[k].textContent=GTE.tree.matrix.strategies[Number(i+1)][strat[i][j]].moves[0].name+"=0";
+             }
+       }
+       
+       
+       
         var temp=[];
         var temp2= GTE.svg.getElementsByClassName("brline");
         var path1="";

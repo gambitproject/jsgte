@@ -111,7 +111,7 @@ box-sizing: border-box;
    font-family:Roman;
 }
 
-#drawing .algin_left{
+#drawing .align_left{
    text-align: center;
     text-anchor:start;
 }
@@ -132,11 +132,11 @@ box-sizing: border-box;
 }
 
 #drawing #envelope1{
-    fill:#ff6666;
+    fill:#ff8888;
 }
 
 #drawing #envelope2{
-    fill:#6666ff;
+    fill:#8888ff;
 }
 
 /* lines*/
