@@ -827,10 +827,10 @@ GTE = (function(parentModule) {
     Diagram.prototype.add_eq_text = function(s1,s2, id){
         var div= document.getElementById("eq_list");
         var h=document.createElement("h3");
-        var temp = document.createTextNode("Equilibrium     ");
+        var temp = document.createTextNode("equilibrium     ");
         var temp2 = document.createElement("img");
         temp2.setAttribute("src", "images/eq"+id+".png");
-        temp2.setAttribute("width", 10);
+        temp2.setAttribute("width", 11);
         h.appendChild(temp);
         h.appendChild(temp2);
         div.appendChild(h);
