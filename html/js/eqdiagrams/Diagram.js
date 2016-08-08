@@ -385,8 +385,8 @@ GTE = (function(parentModule) {
         else {
             if (GTE.svg.getElementsByTagName("svg").length >0){
                 GTE.svg.removeChild(GTE.svg.getElementsByTagName("svg")[0]);}
-            //init();
-            //animate();
+            init();
+            animate();
         }
     };
     

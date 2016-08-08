@@ -18,7 +18,8 @@ function init() {
     
     camera = new THREE.PerspectiveCamera( 60, Width / Height, 1, 1000 );
     camera.position.z = 500;
-    camera.position.y = 120;
+    camera.position.y = 150;
+    camera.position.x = 100;
     
     controls = new THREE.TrackballControls( camera );
     
@@ -33,6 +34,8 @@ function init() {
     controls.dynamicDampingFactor = 0.3;
     
     controls.keys = [];
+    
+    //camera.lookAt=(new THREE.Vector3(100,150,1000));
     
     
 
