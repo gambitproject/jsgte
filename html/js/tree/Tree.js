@@ -514,6 +514,17 @@ GTE.TREE = (function (parentModule) {
     };
 
     /**
+    * Function that deletes payoffs assigned to all players
+    */
+    Tree.prototype.deletePayoffs = function () {
+        for (var i = 1; i < this.players.length; i++) {
+                this.players[i].payoffs = [];
+        }
+    };
+
+
+
+    /**
     * Function that removes a node from the tree
     * @param {Node} node Node that will be deleted
     */
@@ -603,6 +614,7 @@ GTE.TREE = (function (parentModule) {
         }
         parentISet.addChildISet(newISet);
         this.positionsUpdated = false;
+        return newISet;
     };
 
     /**
@@ -618,10 +630,13 @@ GTE.TREE = (function (parentModule) {
         var nodesInParentISet = parentISet.getNodes();
         // Iterate over the nodes in the parent and create a child node
         // for each of them. This new node will be connected by the new move
+        var isets = [];
         for (var i = 0; i < nodesInParentISet.length; i++) {
-            this.addNewISet().addNewNode(nodesInParentISet[i], null, newMove);
+            var node = this.addNewISet().addNewNode(nodesInParentISet[i], null, newMove);
+            isets.push(node.iset);
         }
         this.positionsUpdated = false;
+        return isets;
     };
 
     /**
@@ -645,11 +660,11 @@ GTE.TREE = (function (parentModule) {
     */
     Tree.prototype.recursiveDeleteChildren = function (node) {
         if (!node.isLeaf()) {
-            for (var i=0; i < node.children.length; i++) {
-                this.recursiveDeleteChildren(node.children[i]);
+            while(node.children.length !== 0) {
+                this.recursiveDeleteChildren(node.children[0]);
             }
         }
-        node.delete();
+    node.delete();
     };
 
     /**
@@ -1019,6 +1034,23 @@ GTE.TREE = (function (parentModule) {
         this.draw();
         // Clean memory
         this.cleanMemoryAfterISetInitialization();
+    };
+
+    /**
+    * Undo things done by initializeISets
+    */
+    Tree.prototype.deinitializeISets = function () {
+        // Get nodes breadth first
+        var nodes = this.getAllNodes(true);
+        for(var i = 0; i<nodes.length; i++) {
+            nodes[i].iset = null;
+            nodes[i].reachedBy = null;
+        }
+        this.deletePayoffs();
+        GTE.tree.isets = [];
+        GTE.tools.isetToolsRan = false;
+        GTE.tools.switchMode(GTE.MODES.ADD);
+        this.draw();
     };
 
     /**

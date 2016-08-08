@@ -132,7 +132,9 @@ GTE.TREE = (function (parentModule) {
     /**
     * Function that defines the behaviour of the node on click
     */
-    Node.prototype.onClick = function () {
+    Node.prototype.onClick = function (undo) {
+        if(undo !== false)
+            undo = undo || true;
         switch (GTE.MODE) {
             case GTE.MODES.ADD:
                 // As talked in email "the phases of creating a game tree"
@@ -145,32 +147,52 @@ GTE.TREE = (function (parentModule) {
                 // if (this.iset.numberOfNodes > 1) {
                 //     this.createSingletonISetWithNode();
                 // }
+                changes = new GTE.TREE.Changes(GTE.MODES.ADD, GTE.REDO.NODE, this);
+                var nodes = [];
                 if (this.iset === null) {
                     if (this.isLeaf()) {
                         // If no children, add two, since one child only doesn't
                         // make sense
-                        GTE.tree.addChildNodeTo(this);
+                        var nodeCur = GTE.tree.addChildNodeTo(this);
+                        nodes.push(nodeCur);
+                        if(undo)
+                            changes.addChange(GTE.MODES.ADD, nodeCur);
                     }
-                    GTE.tree.addChildNodeTo(this);
+                    var nodeCur = GTE.tree.addChildNodeTo(this);
+                    nodes.push(nodeCur);
+                    if(undo)
+                        changes.addChange(GTE.MODES.ADD, nodeCur);
                     // Tell the tree to redraw itself
                     GTE.tree.draw();
+                    if(undo)
+                        changes.endSetOfChanges();
                 } else {
-                    this.iset.onClick();
+                    this.iset.onClick(undo);
                 }
+                return nodes;
                 break;
             case GTE.MODES.DELETE:
                 if (this.iset === null) {
+                    var changes = new GTE.TREE.Changes(GTE.MODES.DELETE, GTE.REDO.NODE, this);
                     // If it is a leaf, delete itself, if not, delete all children
                     if (this.isLeaf()) {
+                        if(undo)
+                            changes.addChange(GTE.MODES.DELETE, this);
                         this.delete();
                     } else {
+                        if(undo) {
+                            changes.addChange(GTE.MODES.PLAYER_ASSIGNMENT, this);
+                            changes.pushChildrenDeleted(this);
+                        }
                         GTE.tree.deleteChildrenOf(this);
                         this.deassignPlayer();
                     }
+                    if(undo)
+                        changes.endSetOfChanges();
                     // Tell the tree to redraw itself
                     GTE.tree.draw();
                 } else {
-                    this.iset.onClick();
+                    this.iset.onClick(undo);
                 }
                 break;
             case GTE.MODES.MERGE:
@@ -196,7 +218,11 @@ GTE.TREE = (function (parentModule) {
                     if (this.iset !== null) {
                         this.iset.onClick();
                     } else {
-
+                        if(undo) {
+                            var changes = new GTE.TREE.Changes(GTE.MODES.PLAYER_ASSIGNMENT, GTE.REDO.NODE, this);
+                            changes.addChange(GTE.MODES.PLAYER_ASSIGNMENT, this);
+                            changes.endSetOfChanges();
+                        }
                         GTE.tree.assignSelectedPlayerToNode(this);
                         GTE.tree.draw();
                     }
@@ -420,6 +446,21 @@ GTE.TREE = (function (parentModule) {
         return GTE.tree.getPathToRoot(this);
     };
 
+    Node.prototype.getRecursiveNodesBelowThis = function(node) {
+        var listOfNodes = [];
+        for(var i = 0; i<node.children.length; i++) {
+            listOfNodes = listOfNodes.concat(this.getRecursiveNodesBelowThis(node.children[i]));
+        }
+        listOfNodes.push(node);
+        return listOfNodes;
+    }
+    Node.prototype.getNodesBelowThis = function() {
+        var listOfNodes = [];
+        for(var i = 0; i<this.children.length; i++) {
+            listOfNodes = listOfNodes.concat(this.getRecursiveNodesBelowThis(this.children[i]));
+        }
+        return listOfNodes;
+    }
     // Add class to parent module
     parentModule.Node = Node;
 

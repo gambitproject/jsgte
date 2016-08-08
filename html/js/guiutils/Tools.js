@@ -62,6 +62,9 @@ GTE.UI = (function (parentModule) {
                     // If iset tools have never been chosen
                     if (!this.isetToolsRan) {
                         // Assign singleton isets to each node with no iset
+                        var changes = new GTE.TREE.Changes(GTE.UNDO.INITIALIZEISETS);
+                        changes.pushSingletonChange(GTE.UNDO.INITIALIZEISETS);
+                        changes.endSetOfChanges();
                         GTE.tree.initializeISets();
                         this.isetToolsRan = true;
                     }
@@ -110,8 +113,13 @@ GTE.UI = (function (parentModule) {
     * Handles player buttons onclicks
     * @param {Number|String} playerId Player to be selected
     */
-    Tools.prototype.buttonPlayerHandler = function(playerId) {
+    Tools.prototype.buttonPlayerHandler = function(playerIndex) {
         return function () {
+            var player = document.getElementsByClassName("button-player")[playerIndex];
+            var changes = new GTE.TREE.Changes(GTE.UNDO.BUTTONSWITCH, null, player);
+            var playerId = player.getAttribute("player");
+            if(GTE.tools.activePlayer != playerId)
+                changes.pushButtonSwitchChange();
             GTE.tools.selectPlayer(parseInt(playerId));
         };
     };
@@ -188,6 +196,20 @@ GTE.UI = (function (parentModule) {
             this.removePlayerButton(lastPlayer);
         }
     };
+
+    Tools.prototype.undo = function() {
+        if(GTE.UNDOQUEUE.length > 0) {
+            var evt = GTE.UNDOQUEUE.pop();
+            GTE.REDOQUEUE.push(evt.event);
+            evt.undo();
+        }
+    }
+
+    Tools.prototype.redo = function() {
+        if(GTE.REDOQUEUE.length > 0) {
+            GTE.REDOQUEUE.pop().redo();
+        }
+    }
 
     /**
     * Returns the colour correspondent to a given index. It is used to get the

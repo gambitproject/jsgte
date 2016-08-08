@@ -59,3 +59,9 @@
 .icon-cog:before {
 	content: "\e900";
 }
+.icon-undo:before {
+	content: "\f0e2";
+ }
+ .icon-redo:before {
+	content: "\f064";
+ }

@@ -80,21 +80,29 @@
     });
 
     document.getElementById("button-add").addEventListener("click", function(){
+        var changes = new GTE.TREE.Changes(GTE.UNDO.BUTTONSWITCH, null, document.getElementById("button-add"));
+        changes.pushButtonSwitchChange(GTE.MODES.ADD);
         GTE.tools.switchMode(GTE.MODES.ADD);
         return false;
     });
 
     document.getElementById("button-remove").addEventListener("click", function(){
+        var changes = new GTE.TREE.Changes(GTE.UNDO.BUTTONSWITCH, null, document.getElementById("button-remove"));
+        changes.pushButtonSwitchChange(GTE.MODES.DELETE);
         GTE.tools.switchMode(GTE.MODES.DELETE);
         return false;
     });
 
     document.getElementById("button-merge").addEventListener("click", function(){
+        var changes = new GTE.TREE.Changes(GTE.UNDO.BUTTONSWITCH, null, document.getElementById("button-merge"));
+        changes.pushButtonSwitchChange(GTE.MODES.MERGE);
         GTE.tools.switchMode(GTE.MODES.MERGE);
         return false;
     });
 
     document.getElementById("button-dissolve").addEventListener("click", function(){
+        var changes = new GTE.TREE.Changes(GTE.UNDO.BUTTONSWITCH, null, document.getElementById("button-dissolve"));
+        changes.pushButtonSwitchChange(GTE.MODES.DISSOLVE);
         GTE.tools.switchMode(GTE.MODES.DISSOLVE);
         return false;
     });
@@ -102,17 +110,33 @@
     var playerButtons = document.getElementsByClassName("button-player");
     for (var i = 0; i < playerButtons.length; i++) {
         playerButtons[i].addEventListener("click",
-            GTE.tools.buttonPlayerHandler(playerButtons[i].getAttribute("player")));
+            GTE.tools.buttonPlayerHandler(i));
     }
 
     document.getElementById("button-player-more").addEventListener("click", function(){
+        var changes = new GTE.TREE.Changes(GTE.UNDO.BUTTONSWITCH, null, document.getElementById("button-player-more"));
+        changes.queue.push(new GTE.TREE.Change(null, GTE.UNDO.ADDPLAYER));
+        changes.endSetOfChanges();
         GTE.tools.addPlayer();
         return false;
     });
 
     document.getElementById("button-player-less").addEventListener("click", function(){
+        var changes = new GTE.TREE.Changes(GTE.UNDO.BUTTONSWITCH, null, document.getElementById("button-player-less"));
+        changes.queue.push(new GTE.TREE.Change(null, GTE.UNDO.REMOVEPLAYER));
+        changes.endSetOfChanges();
         GTE.tools.removeLastPlayer();
         return false;
+    });
+
+    document.getElementById("button-undo").addEventListener("click", function(){
+         GTE.tools.undo();
+         return false;
+    });
+
+    document.getElementById("button-redo").addEventListener("click", function(){
+         GTE.tools.redo();
+         return false;
     });
 
     document.getElementById("button-settings").addEventListener("click", function(){
@@ -199,5 +223,17 @@
         settings.style.top = top + 'px';
         settings.style.left = left + 'px';
     }
+
+    function KeyPress(e) {
+      var evtobj = window.event? event : e
+      if (evtobj.keyCode == 90 && evtobj.ctrlKey) {
+        GTE.tools.undo();
+      }
+      if (evtobj.keyCode == 89 && evtobj.ctrlKey) {
+        GTE.tools.redo();
+      }
+    }
+
+    document.onkeydown = KeyPress;
 
 }());

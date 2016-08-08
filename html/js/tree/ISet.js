@@ -277,26 +277,37 @@ GTE.TREE = (function (parentModule) {
     /**
     * On click function for the information set
     */
-    ISet.prototype.onClick = function () {
+    ISet.prototype.onClick = function (undo) {
         switch (GTE.MODE) {
             case GTE.MODES.ADD:
+                var changes = new GTE.TREE.Changes(GTE.MODES.ADD, GTE.REDO.ISET, this.firstNode);
                 if (this.numberOfMoves() === 0) {
                     // If no children, add two, since one child only doesn't
                     // make sense
-                    GTE.tree.addChildISetTo(this);
-                    GTE.tree.addChildISetTo(this);
+                    var iset = GTE.tree.addChildISetTo(this);
+                    changes.pushChangesAfterAddingIsets(iset);
+                    var iset = GTE.tree.addChildISetTo(this);
+                    changes.pushChangesAfterAddingIsets(iset);
                 } else {
-                    GTE.tree.addChildNodeToISet(this);
-                }// Tell the tree to redraw itself
+                    changes.pushChangesBeforeDissolving(this);
+                    var isets = GTE.tree.addChildNodeToISet(this);
+                    changes.pushChangesAfterAddingIsetsToArray(isets);
+                }
+                if(undo)
+                    changes.endSetOfChanges();
+                // Tell the tree to redraw itself
                 GTE.tree.draw();
                 break;
             case GTE.MODES.DELETE:
                 var children = this.getChildrenNodes();
+                var changes = new GTE.TREE.Changes(GTE.MODES.DELETE, GTE.REDO.ISET, this.firstNode);
                 if (children.length === 0) {
                     // Delete node
+                    changes.assignSingletonIsetDeletion(this);
                     GTE.tree.deleteNode(this.firstNode);
                 } else {
                     // Delete all children
+                    changes.assignChangesOnDeletingIset(this);
                     for (var i = 0; i < children.length; i++) {
                         // deleteNode() will delete everything below as well
                         GTE.tree.deleteNode(children[i]);
@@ -304,15 +315,20 @@ GTE.TREE = (function (parentModule) {
                     // Dissolve current iset
                     this.dissolve();
                 }
+                changes.endSetOfChanges();
                 // Tell the tree to redraw itself
                 GTE.tree.draw();
                 break;
             case GTE.MODES.PLAYER_ASSIGNMENT:
                 // Change the player of every node in the iset
                 var nodes = this.getNodes();
+                var changes = new GTE.TREE.Changes(GTE.MODES.PLAYER_ASSIGNMENT, GTE.REDO.ISET, this.firstNode);
                 for (var j = 0; j < nodes.length; j++) {
+                    changes.addChange(GTE.MODES.PLAYER_ASSIGNMENT, nodes[j]);
                     GTE.tree.assignSelectedPlayerToNode(nodes[j]);
                 }
+                changes.pushSingletonChange(GTE.UNDO.ASSIGNMOVES, this);
+                changes.endSetOfChanges();
                 // Reassign moves (create new moves and assign them to the
                 // children nodes as reachedBy)
                 this.reassignMoves();
@@ -320,17 +336,26 @@ GTE.TREE = (function (parentModule) {
                 break;
             case GTE.MODES.MERGE:
                 if (this.getPlayer().id !== 0) {
+                    var changes = new GTE.TREE.Changes(GTE.MODES.MERGE, GTE.REDO.ISET, this.firstNode);
+                    changes.addChange(GTE.MODES.MERGE, null, this);
+                    if(GTE.tree.selected.length != 0) {
+                        changes.select = true;
+                        changes.iset = GTE.tree.selected[0];
+                    }
+                    changes.endSetOfChanges();
                     this.select();
                 }
                 break;
             case GTE.MODES.DISSOLVE:
+                var changes = new GTE.TREE.Changes(GTE.MODES.DISSOLVE, GTE.REDO.ISET, this.firstNode);
+                if(changes.pushChangesBeforeDissolving(this))
+                    changes.endSetOfChanges();
                 this.dissolve();
                 GTE.tree.draw();
                 break;
             default:
                 break;
         }
-
     };
 
     /**
@@ -362,7 +387,6 @@ GTE.TREE = (function (parentModule) {
                 this.removeNode(nodes[i]);
             }
         } else { // If there are no nodes
-            this.moves = []; //remove references to moves
             GTE.tree.deleteISetFromList(this);
         }
     };

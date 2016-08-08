@@ -93,5 +93,28 @@ var GTE = (function () {
         DEFAULT_CHANCE_NAME: "chance"
     };
 
+    GTE.UNDO = {
+      POPSELECTEDQUEUE : 5,
+      INITIALIZEISETS : 6,
+      POPISET : 7,
+      ASSIGNMOVES : 8,
+      POPMOVES : 9,
+      ASSIGNISET : 10,
+      ADDISET : 11,
+      DEINITIALIZEISETS : 12,
+      PUSHSELECTEDQUEUE : 13,
+      PUSHISET : 14,
+      BUTTONSWITCH : 15,
+      ADDPLAYER : 16,
+      REMOVEPLAYER : 17
+    };
+
+    GTE.REDO = {
+      NODE : 0,
+      ISET : 1,
+      MULTIACTIONLINE : 2
+    }
+    GTE.UNDOQUEUE = [];
+    GTE.REDOQUEUE = [];
     return GTE;
 }());
