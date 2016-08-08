@@ -824,13 +824,15 @@ GTE = (function(parentModule) {
         return Math.round(temp/(this.width-2*this.margin)*100)/100;
     }
     
-    Diagram.prototype.add_eq_text = function(s1,s2){
+    Diagram.prototype.add_eq_text = function(s1,s2, id){
         var div= document.getElementById("eq_list");
         var h=document.createElement("h3");
-        var temp = document.createTextNode("Equilibrium");
+        var temp = document.createTextNode("Equilibrium     ");
         var temp2 = document.createElement("img");
-        temp2.setAttribute("src", "images/eq1.png");
+        temp2.setAttribute("src", "images/eq"+id+".png");
+        temp2.setAttribute("width", 10);
         h.appendChild(temp);
+        h.appendChild(temp2);
         div.appendChild(h);
         var h = document.createElement("p");
         var font1 = document.createElement("font");
@@ -937,14 +939,14 @@ GTE = (function(parentModule) {
                         this.equilibrium[2][cmp]=new GTE.Marker(cmp,Number(point[0][i][0]/2+point[0][i+1][0]/2),Number(this.height+2*this.margin),"#00ff00");
                         var s2=GTE.tree.matrix.strategies[2][this.strat[1][1]].moves[0].name+" between "+this.pos_to_prob(0,point[0][i][0])+" and "+this.pos_to_prob(0,point[0][i+1][0]);
                         var s1=GTE.tree.matrix.strategies[1][dege[0]].moves[0].name;
-                        this.add_eq_text(s1,s2);
+                        this.add_eq_text(s1,s2,cmp);
                     }
                     if (dege.length==1 && dege[0]==this.strat[0][1]){
                         this.equilibrium[1][cmp]=new GTE.Marker(cmp,Number(2*this.width+this.margin),Number(this.height+this.margin),"#00ff00");
                         this.equilibrium[2][cmp]=new GTE.Marker(cmp,Number(point[0][i][0]/2+point[0][i+1][0]/2),Number(2*this.height-2*this.margin),"#00ff00");
                         var s2=GTE.tree.matrix.strategies[2][this.strat[1][1]].moves[0].name+" between "+this.pos_to_prob(0,point[0][i][0])+" and "+this.pos_to_prob(0,point[0][i+1][0]);
                         var s1=GTE.tree.matrix.strategies[1][dege[0]].moves[0].name;
-                        this.add_eq_text(s1,s2);
+                        this.add_eq_text(s1,s2,cmp);
                     }
                     if (dege.length==2){
                         this.equilibrium[1][cmp]=new GTE.Marker(cmp,Number(2*this.margin+this.width+this.margin),Number(this.height+this.margin),"#00ff00");
@@ -952,7 +954,7 @@ GTE = (function(parentModule) {
                         this.equilibrium[2][cmp]=new GTE.Marker(cmp,Number(point[0][i][0]/2+point[0][i+1][0]/2),Number(3*this.height/2),"#00ff00");
                         var s2=GTE.tree.matrix.strategies[2][this.strat[1][1]].moves[0].name+" between "+this.pos_to_prob(0,point[0][i][0])+" and "+this.pos_to_prob(0,point[0][i+1][0]);
                         var s1=GTE.tree.matrix.strategies[1][dege[0]].moves[0].name+" between 0 and 1";
-                        this.add_eq_text(s1,s2);
+                        this.add_eq_text(s1,s2,cmp);
                     }
                 }
                 
@@ -965,7 +967,7 @@ GTE = (function(parentModule) {
                 this.equilibrium[2][cmp]=new GTE.Marker(cmp,Number(point[0][i][0]),Number(3*this.height/2),"#00ff00");
                 var s2=GTE.tree.matrix.strategies[2][this.strat[1][1]].moves[0].name+" with probability "+this.pos_to_prob(0,point[0][i][0]);
                 var s1=GTE.tree.matrix.strategies[1][dege2[0]].moves[0].name+" between 0 and 1";
-                this.add_eq_text(s1,s2);
+                this.add_eq_text(s1,s2,cmp);
                 cmp=cmp+1;
                 
             }
@@ -999,7 +1001,7 @@ GTE = (function(parentModule) {
             this.equilibrium[2][cmp]=new GTE.Marker(cmp,Number(point[0][i][0]),Number(3*this.height/2),"#00ff00");
             var s2=GTE.tree.matrix.strategies[2][this.strat[1][1]].moves[0].name+" with probability "+this.pos_to_prob(0,point[0][i][0]);
             var s1=GTE.tree.matrix.strategies[1][dege2[0]].moves[0].name+" between 0 and 1";
-            this.add_eq_text(s1,s2);
+            this.add_eq_text(s1,s2,cmp);
             cmp=cmp+1;
             
         }
@@ -1051,13 +1053,13 @@ GTE = (function(parentModule) {
                             this.equilibrium[2][cmp]=new GTE.Marker(cmp,x1,Number(x2/2+this.intersect[1][0].getPosx()/2+this.margin),"#00ff00");
                             var s2=GTE.tree.matrix.strategies[2][this.strat[1][1]].moves[0].name+" with probability "+this.pos_to_prob(0,x1);
                             var s1=GTE.tree.matrix.strategies[1][this.strat[0][1]].moves[0].name+" between 0 and "+this.pos_to_prob(1,this.intersect[1][0].getPosx());
-                            this.add_eq_text(s1,s2);
+                            this.add_eq_text(s1,s2,cmp);
                         }
                         else {
                             this.equilibrium[2][cmp]=new GTE.Marker(cmp,x1,Number(x2+this.margin),"#00ff00");
                             var s2=GTE.tree.matrix.strategies[2][this.strat[1][1]].moves[0].name+" with probability "+this.pos_to_prob(0,x1);
                             var s1=GTE.tree.matrix.strategies[1][this.strat[0][1]].moves[0].name+" with probability "+this.pos_to_prob(1,x2);
-                            this.add_eq_text(s1,s2);
+                            this.add_eq_text(s1,s2,cmp);
                         }
                     }
                     else{
@@ -1069,19 +1071,19 @@ GTE = (function(parentModule) {
                                 this.equilibrium[2][cmp]=new GTE.Marker(cmp,x1,Number(this.intersect[1][0].getPosx()/2+this.margin/2+this.width+this.margin),"#00ff00");
                                 var s2=GTE.tree.matrix.strategies[2][this.strat[1][1]].moves[0].name+" with probability "+this.pos_to_prob(0,x1);
                                 var s1=GTE.tree.matrix.strategies[1][this.strat[0][1]].moves[0].name+" between 0 and "+this.pos_to_prob(1,this.intersect[1][0].getPosx());
-                                this.add_eq_text(s1,s2);
+                                this.add_eq_text(s1,s2,cmp);
                             }else{
                                 this.equilibrium[2][cmp]=new GTE.Marker(cmp,x1,Number(x2+this.margin),"#00ff00");
                                 var s2=GTE.tree.matrix.strategies[2][this.strat[1][1]].moves[0].name+" with probability "+this.pos_to_prob(0,x1);
                                 var s1=GTE.tree.matrix.strategies[1][this.strat[0][1]].moves[0].name+" with probability "+this.pos_to_prob(1,x2);
-                                this.add_eq_text(s1,s2);
+                                this.add_eq_text(s1,s2,cmp);
                             }
                         }else {
                             this.equilibrium[1][cmp]=new GTE.Marker(cmp,x2,Number(this.height+this.margin),"#00ff00");
                             this.equilibrium[2][cmp]=new GTE.Marker(cmp,x1,Number(x2+this.margin),"#00ff00");
                             var s2=GTE.tree.matrix.strategies[2][this.strat[1][1]].moves[0].name+" with probability "+this.pos_to_prob(0,x1);
                             var s1=GTE.tree.matrix.strategies[1][this.strat[0][1]].moves[0].name+" with probability "+this.pos_to_prob(1,x2);
-                            this.add_eq_text(s1,s2);
+                            this.add_eq_text(s1,s2,cmp);
                         }
                     }
                 }
