@@ -142,9 +142,9 @@ GTE.TREE = (function(parentModule) {
                     // Removes all blankspaces. Substitutes &nbsp; characters
                     // with spaces and then trims the text so that there are no
                     // spaces both at the begin and end of the text
-                    console.log(GTE.tree)
+                   // console.log(GTE.tree)
                     var text = this.getCleanedText();
-                    console.log(text);
+                    //console.log(text);
                     if (text === "") {
                     window.alert("Player name should not be empty.");
                     } else {
@@ -165,14 +165,14 @@ GTE.TREE = (function(parentModule) {
                     // with spaces and then trims the text so that there are no
                     // spaces both at the begin and end of the text
                     var text = this.getCleanedText();
-                    console.log(text);
+                    //console.log(text);
                     if (text === "") {
                     window.alert("Player name should not be empty.");
                     } else {
                     GTE.tree.matrix.players[2].changeName(text);
                     }
                     
-                    console.log(text);
+                    //console.log(text);
                     // Redraw all content editables that represent this Player
                     // across the tree
                     GTE.tree.updatePlayerNames(GTE.tree.matrix.players[2]);

@@ -962,12 +962,14 @@ GTE = (function(parentModule) {
             }
             if(dege2.length>0){
                 this.equilibrium[0][cmp]=new GTE.Marker(cmp,point[0][i][0],Number(this.height+this.margin),"#00ff00");
+       if (max==2){
                 this.equilibrium[1][cmp]=new GTE.Marker(cmp,Number(2*this.margin+this.width+this.margin),Number(this.height+this.margin),"#00ff00");
                 this.equilibrium[1][cmp].degenerated(Number(2*this.width+this.margin));
                 this.equilibrium[2][cmp]=new GTE.Marker(cmp,Number(point[0][i][0]),Number(3*this.height/2),"#00ff00");
                 var s2=GTE.tree.matrix.strategies[2][this.strat[1][1]].moves[0].name+" with probability "+this.pos_to_prob(0,point[0][i][0]);
                 var s1=GTE.tree.matrix.strategies[1][dege2[0]].moves[0].name+" between 0 and 1";
                 this.add_eq_text(s1,s2,cmp);
+       }
                 cmp=cmp+1;
                 
             }
@@ -996,12 +998,14 @@ GTE = (function(parentModule) {
         }
         if(dege2.length>0){
             this.equilibrium[0][cmp]=new GTE.Marker(cmp,point[0][i][0],Number(this.height+this.margin),"#00ff00");
+       if (max==2){
             this.equilibrium[1][cmp]=new GTE.Marker(cmp,Number(2*this.margin+this.width+this.margin),Number(this.height+this.margin),"#00ff00");
             this.equilibrium[1][cmp].degenerated(Number(2*this.width+this.margin));
             this.equilibrium[2][cmp]=new GTE.Marker(cmp,Number(point[0][i][0]),Number(3*this.height/2),"#00ff00");
             var s2=GTE.tree.matrix.strategies[2][this.strat[1][1]].moves[0].name+" with probability "+this.pos_to_prob(0,point[0][i][0]);
             var s1=GTE.tree.matrix.strategies[1][dege2[0]].moves[0].name+" between 0 and 1";
             this.add_eq_text(s1,s2,cmp);
+       }
             cmp=cmp+1;
             
         }
@@ -1065,14 +1069,21 @@ GTE = (function(parentModule) {
                     else{
                         
                         if (x2==Number(2*this.width+this.margin)){
-                            this.equilibrium[1][cmp]=new GTE.Marker(cmp,x2,Number(this.height+this.margin),"#00ff00");
                             if ((this.payoffs[0][this.strat[0][0]][this.strat[1][0]]== this.payoffs[0][this.strat[0][1]][this.strat[1][0]] && (this.best_response[1][1]==0||this.best_response[1][1]==-1)) ||(this.payoffs[0][this.strat[0][0]][this.strat[1][1]]== this.payoffs[0][this.strat[0][1]][this.strat[1][1]] && (this.best_response[1][1]==1||this.best_response[1][1]==-1))){
-                                this.equilibrium[1][cmp].degenerated(Number(2*this.width+this.margin));
+       if (this.intersect[1][0].getPosx()>Number(2*this.margin+this.width+this.margin) && this.intersect[1][0].getPosx()<Number(2*this.width+this.margin)){
+           this.equilibrium[1][cmp]=new GTE.Marker(cmp,this.intersect[1][0].getPosx(),Number(this.height+this.margin),"#00ff00");
+           }
+           
+           else{
+           this.equilibrium[1][cmp]=new GTE.Marker(cmp,Number(2*this.margin+this.width+this.margin),Number(this.height+this.margin),"#00ff00");}
+                                this.equilibrium[1][cmp].degenerated(x2);
                                 this.equilibrium[2][cmp]=new GTE.Marker(cmp,x1,Number(this.intersect[1][0].getPosx()/2+this.margin/2+this.width+this.margin),"#00ff00");
                                 var s2=GTE.tree.matrix.strategies[2][this.strat[1][1]].moves[0].name+" with probability "+this.pos_to_prob(0,x1);
-                                var s1=GTE.tree.matrix.strategies[1][this.strat[0][1]].moves[0].name+" between 0 and "+this.pos_to_prob(1,this.intersect[1][0].getPosx());
+                                var s1=GTE.tree.matrix.strategies[1][this.strat[0][1]].moves[0].name+" between 0 and 1";
                                 this.add_eq_text(s1,s2,cmp);
                             }else{
+                                
+                                this.equilibrium[1][cmp]=new GTE.Marker(cmp,x2,Number(this.height+this.margin),"#00ff00");
                                 this.equilibrium[2][cmp]=new GTE.Marker(cmp,x1,Number(x2+this.margin),"#00ff00");
                                 var s2=GTE.tree.matrix.strategies[2][this.strat[1][1]].moves[0].name+" with probability "+this.pos_to_prob(0,x1);
                                 var s1=GTE.tree.matrix.strategies[1][this.strat[0][1]].moves[0].name+" with probability "+this.pos_to_prob(1,x2);

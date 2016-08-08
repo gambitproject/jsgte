@@ -126,7 +126,7 @@ GTE.TREE = (function (parentModule) {
     * player name
     */
     Node.prototype.updatePlayerName = function () {
-        this.playerNameText.setText(this.player.name);
+        //this.playerNameText.setText(this.player.name);
     };
 
     /**
