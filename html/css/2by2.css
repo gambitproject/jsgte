@@ -59,6 +59,14 @@ table .player2{
 }
 
 
+/*-------------positioning equilibrium list-------------*/
+
+.eq_list {
+    position: absolute;
+    top: 550px;
+    left: 20px; 
+}
+
 /*-------------Drawing style-------------*/
 #drawing{
   width:70vw;
