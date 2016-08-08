@@ -213,6 +213,9 @@ GTE.TREE = (function (parentModule) {
         }
     }
 
+    /**
+    * Function that adds changes on deleting a single iset
+    */
     Changes.prototype.assignSingletonIsetDeletion = function(iset) {
         this.queue.push(new GTE.TREE.Change(iset.firstNode, GTE.UNDO.ASSIGNISET, iset.firstNode.iset));
         this.pushRemovedIset(iset);
@@ -221,6 +224,10 @@ GTE.TREE = (function (parentModule) {
         this.addChange(GTE.MODES.DELETE, iset.firstNode);
     }
 
+    /**
+    * Function that pushes all the changes needed to undo the effect
+    * of dissolving an iset
+    */
     Changes.prototype.pushChangesBeforeDissolving = function(iset) {
         var nodes = iset.getNodes();
         if(nodes.length <= 1)
@@ -233,10 +240,18 @@ GTE.TREE = (function (parentModule) {
         return true;
     }
 
+    /**
+    * Function that pushes all the changes after a new iset
+    * has been added.
+    */
     Changes.prototype.pushChangesAfterAddingIsets = function(iset) {
         this.queue.push(new GTE.TREE.Change(iset, GTE.UNDO.ADDISET));
     }
 
+    /**
+    * Function that pushes changes of all the isets that have been
+    * added in an event.
+    */
     Changes.prototype.pushChangesAfterAddingIsetsToArray = function(isets) {
         for(var i = 0; i<isets.length; i++) {
             this.pushChangesAfterAddingIsets(isets[i]);
@@ -252,7 +267,7 @@ GTE.TREE = (function (parentModule) {
     }
 
     /**
-    * Function wraps up this particular set of chages
+    * Function wraps up this particular set of changes
     * and pushes them to the queue.
     */
     Changes.prototype.endSetOfChanges = function() {
