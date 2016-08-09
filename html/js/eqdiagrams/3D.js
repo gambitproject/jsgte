@@ -54,23 +54,39 @@ function plan_intersect ([p1,p2,p3],[q1,q2,q3]){
         return "all"
         var dir= cross (p_nor,q_nor);
     var point=[0,0,0];
-    if (equal_num(Number(q_nor[2]*p_nor[1]-p_nor[2]*q_nor[1]),0) && equal_num(Number(q_nor[2]*p_nor[0]-p_nor[2]*q_nor[0]),0)){
-        point[0]=(Number(p_nor[1]*scal(q_nor,p1)-q_nor[1]*scal(p_nor,q1)))/Number(q_nor[0]*p_nor[1]-p_nor[0]*q_nor[1]);
-        if (!equal_num(p_nor[1]*q_nor[1],0))
-            point[1]=Number(p_nor[1]*scal(q_nor,p1)-q_nor[0]*p_nor[1]*point[0])/Number(p_nor[1]*q_nor[1]);
+    /*console.log(equal_num(Number(q_nor[2]*p_nor[1]-p_nor[2]*q_nor[1]),0));
+    console.log(equal_num(Number(q_nor[2]*p_nor[0]-p_nor[2]*q_nor[0]),0));
+    console.log(equal_num(Number(q_nor[0]*p_nor[1]-p_nor[0]*q_nor[1]),0));*/
+    
+    if (!equal_num(Number(q_nor[1]*p_nor[2]-p_nor[1]*q_nor[2]),0) && !equal_num(p_nor[1],0)){
+        point[2]=Number(q_nor[1]*scal(p_nor,p1)-p_nor[1]*scal(q_nor,q1))/Number(q_nor[1]*p_nor[2]-p_nor[1]*q_nor[2]);
+        point[1]=Number(scal(p_nor,p1)-p_nor[2]*point[2])/p_nor[1];
+        return [dir, point];
     }
-    else {
-        
-        if (equal_num(Number(q_nor[2]*p_nor[0]-p_nor[2]*q_nor[0]),0)){
-            point[2]=(Number(p_nor[1]*scal(q_nor,p1)-q_nor[1]*scal(p_nor,q1)))/Number(q_nor[2]*p_nor[1]-p_nor[2]*q_nor[1]);
-            if (!equal_num(p_nor[1]*q_nor[1],0))
-                point[1]=Number(p_nor[1]*scal(q_nor,p1)-q_nor[2]*p_nor[1]*point[2])/Number(p_nor[1]*q_nor[1]);
-            
-        }else{
-            point[2]=(Number(p_nor[0]*scal(q_nor,p1)-q_nor[0]*scal(p_nor,q1)))/Number(q_nor[2]*p_nor[0]-p_nor[2]*q_nor[0]);
-            if (!equal_num(p_nor[0]*q_nor[0],0))
-                point[0]=Number(p_nor[0]*scal(q_nor,p1)-q_nor[2]*p_nor[0]*point[2])/Number(p_nor[0]*q_nor[0]);
-        }
+    if (!equal_num(Number(q_nor[2]*p_nor[1]-p_nor[2]*q_nor[1]),0) && !equal_num(p_nor[2],0)){
+        point[1]=Number(q_nor[2]*scal(p_nor,p1)-p_nor[2]*scal(q_nor,q1))/Number(q_nor[2]*p_nor[1]-p_nor[2]*q_nor[1]);
+        point[2]=Number(scal(p_nor,p1)-p_nor[1]*point[1])/p_nor[2];
+        return [dir, point];
+    }
+    if (!equal_num(Number(q_nor[0]*p_nor[2]-p_nor[0]*q_nor[2]),0) && !equal_num(p_nor[0],0)){
+        point[2]=Number(q_nor[0]*scal(p_nor,p1)-p_nor[0]*scal(q_nor,q1))/Number(q_nor[0]*p_nor[2]-p_nor[0]*q_nor[2]);
+        point[0]=Number(scal(p_nor,p1)-p_nor[2]*point[2])/p_nor[0];
+        return [dir, point];
+    }
+    if (!equal_num(Number(q_nor[2]*p_nor[0]-p_nor[2]*q_nor[0]),0) && !equal_num(p_nor[2],0)){
+        point[0]=Number(q_nor[2]*scal(p_nor,p1)-p_nor[2]*scal(q_nor,q1))/Number(q_nor[2]*p_nor[0]-p_nor[2]*q_nor[0]);
+        point[2]=Number(scal(p_nor,p1)-p_nor[0]*point[0])/p_nor[2];
+        return [dir, point];
+    }
+    if (!equal_num(Number(q_nor[0]*p_nor[1]-p_nor[0]*q_nor[1]),0) && !equal_num(p_nor[0],0)){
+        point[1]=Number(q_nor[0]*scal(p_nor,p1)-p_nor[0]*scal(q_nor,q1))/Number(q_nor[0]*p_nor[1]-p_nor[0]*q_nor[1]);
+        point[0]=Number(scal(p_nor,p1)-p_nor[1]*point[1])/p_nor[0];
+        return [dir, point];
+    }
+    if (!equal_num(Number(q_nor[1]*p_nor[0]-p_nor[1]*q_nor[0]),0) && !equal_num(p_nor[1],0)){
+        point[0]=Number(q_nor[1]*scal(p_nor,p1)-p_nor[1]*scal(q_nor,q1))/Number(q_nor[1]*p_nor[0]-p_nor[1]*q_nor[0]);
+        point[1]=Number(scal(p_nor,p1)-p_nor[0]*point[0])/p_nor[1];
+        return [dir, point];
     }
     return [dir, point];
 }
@@ -101,8 +117,8 @@ function line_plan_intersect ([u,p1],[q1,q2,q3]){ //p1 is a point on the line, u
 function compute_best_reponse(player){
     var nb_strat=GTE.diag.nb_strat[player];
     var payoffs=[];
-    var plan=[[[0,0,0],[0,1,0],[1,0,0]],[[0,0,0],[0,1,0],[0,1,1]],[[0,0,0],[1,0,1],[1,0,0]],[[1,1,1],[0,1,0],[1,0,0]]];
-    for (var i=0;i<0;i++){
+    var plan=[[[0,0,0],[0,1,0],[1,0,0]],[[0,0,0],[0,1,0],[0,1,1]],[[0,0,0],[1,0,1],[1,0,0]],[[0,1,1],[0,1,0],[1,0,0]]];
+    for (var i=0;i<1;i++){
         payoffs.push([]);
         for (var j=0;j<3;j++){
             if (player==0)
@@ -112,6 +128,7 @@ function compute_best_reponse(player){
         }
         plan[i+4]=[[0,0,payoffs[i][0]],[1,0,payoffs[i][1]],[0,1,payoffs[i][2]]];
     }
+    //console.log(plan);
     //computing intersection of all pairs of plans
     var lines=[];
     var line_to_plan=[];
@@ -143,6 +160,7 @@ function compute_best_reponse(player){
             }
         }
     }
+    //console.log(lines);
     //computing intersection of all pairs of lines and plan.
     var points=[];
     var points_to_plan=[];
@@ -206,6 +224,13 @@ function compute_best_reponse(player){
                 u_plan_to_points[points_to_plan[i][k]].push(u_points_to_plan.length-1);
             }
         }
+    }
+    var i=points.length-1;
+    u_points.push(points[i]);
+    u_points_to_plan.push([]);
+    for (var k=0;k<points_to_plan[i].length;k++){
+        u_points_to_plan[u_points_to_plan.length-1].push(points_to_plan[i][k]);
+        u_plan_to_points[points_to_plan[i][k]].push(u_points_to_plan.length-1);
     }
     console.log(u_points);
     
