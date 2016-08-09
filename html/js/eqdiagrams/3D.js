@@ -45,6 +45,11 @@ function is_parallel (vec1,vec2){
     return equal(temp,[0,0,0]);
 }
 
+function normalize (vec){
+    var norm=Math.sqrt(Number(vec[0]*vec[0]+vec[1]*vec[1]+vec[2]*vec[2]));
+    return mul(1/norm,vec);
+}
+
 function plan_intersect ([p1,p2,p3],[q1,q2,q3]){
     var p_nor=cross(sub(p1,p2),sub(p1,p3));
     var q_nor=cross(sub(q1,q2),sub(q1,q3));
@@ -52,7 +57,8 @@ function plan_intersect ([p1,p2,p3],[q1,q2,q3]){
         return null;
     if (is_parallel(p_nor,q_nor))
         return "all"
-        var dir= cross (p_nor,q_nor);
+    var dir= cross (p_nor,q_nor);
+    dir=normalize(dir);
     var point=[0,0,0];
     /*console.log(equal_num(Number(q_nor[2]*p_nor[1]-p_nor[2]*q_nor[1]),0));
     console.log(equal_num(Number(q_nor[2]*p_nor[0]-p_nor[2]*q_nor[0]),0));
@@ -110,15 +116,24 @@ function line_plan_intersect ([u,p1],[q1,q2,q3]){ //p1 is a point on the line, u
         return p1;
     if (equal(p1,q1))
         return q1;
-    var coeff=-scal(q_nor,u)/scal(q_nor,sub(p1,q1));
+    var coeff=-scal(q_nor,sub(p1,q1))/scal(q_nor,u);
     return add(p1,mul(coeff,u));
+}
+
+function is_possible (vec){
+    var eps=0.0001
+    if( vec[0]>Number(1+eps) || vec[0]<Number(0-eps) ||vec[1]>Number(1+eps) || vec[1]<Number(0-eps))
+        return false;
+    if (vec[0]+vec[1]>Number(1+eps))
+        return false;
+    return true;
 }
 
 function compute_best_reponse(player){
     var nb_strat=GTE.diag.nb_strat[player];
     var payoffs=[];
     var plan=[[[0,0,0],[0,1,0],[1,0,0]],[[0,0,0],[0,1,0],[0,1,1]],[[0,0,0],[1,0,1],[1,0,0]],[[0,1,1],[0,1,0],[1,0,0]]];
-    for (var i=0;i<1;i++){
+    for (var i=0;i<nb_strat;i++){
         payoffs.push([]);
         for (var j=0;j<3;j++){
             if (player==0)
@@ -160,7 +175,7 @@ function compute_best_reponse(player){
             }
         }
     }
-    //console.log(lines);
+    console.log(lines);
     //computing intersection of all pairs of lines and plan.
     var points=[];
     var points_to_plan=[];
@@ -200,37 +215,51 @@ function compute_best_reponse(player){
             }
         }
     }
-    //check for unicity
+    console.log(points);
+    //check for unicity and inside points
     var u_points=[];
     var u_points_to_plan=[];
     var u_plan_to_points=[];
     for (var i=0;i<plan.length;i++)
         u_plan_to_points.push([]);
     for (var i=0;i<points.length-1;i++){
-        var test=true;
-        for (var j=i+1;j<points.length;j++){
-            if (equal(points[i],points[j])){
-                for (var k=0;k<points_to_plan[i].length;k++){
-                    points_to_plan[j].push(points_to_plan[i][k]);
+        if (is_possible(points[i])){
+            var test=true;
+            for (var j=i+1;j<points.length;j++){
+                if (equal(points[i],points[j])){
+                    for (var k=0;k<points_to_plan[i].length;k++){
+                        var test2=true;
+                        for (l=0;l<points_to_plan[j].length;l++){
+                            if (points_to_plan[j][l]==points_to_plan[i][k]){
+                                test2=false;
+                                break;
+                            }
+                        }
+                        if(test2)
+                        points_to_plan[j].push(points_to_plan[i][k]);
+                    }
+                    test=false;
                 }
-                test=false;
             }
-        }
-        if (test){
-            u_points.push(points[i]);
-            u_points_to_plan.push([]);
-            for (var k=0;k<points_to_plan[i].length;k++){
-                u_points_to_plan[u_points_to_plan.length-1].push(points_to_plan[i][k]);
-                u_plan_to_points[points_to_plan[i][k]].push(u_points_to_plan.length-1);
+            if (test){
+                u_points.push(points[i]);
+                u_points_to_plan.push([]);
+                for (var k=0;k<points_to_plan[i].length;k++){
+                    u_points_to_plan[u_points_to_plan.length-1].push(points_to_plan[i][k]);
+                    u_plan_to_points[points_to_plan[i][k]].push(u_points_to_plan.length-1);
+                }
             }
         }
     }
+    
     var i=points.length-1;
-    u_points.push(points[i]);
-    u_points_to_plan.push([]);
-    for (var k=0;k<points_to_plan[i].length;k++){
-        u_points_to_plan[u_points_to_plan.length-1].push(points_to_plan[i][k]);
-        u_plan_to_points[points_to_plan[i][k]].push(u_points_to_plan.length-1);
+    if (is_possible(points[i])){
+        u_points.push(points[i]);
+        u_points_to_plan.push([]);
+        for (var k=0;k<points_to_plan[i].length;k++){
+            u_points_to_plan[u_points_to_plan.length-1].push(points_to_plan[i][k]);
+            u_plan_to_points[points_to_plan[i][k]].push(u_points_to_plan.length-1);
+        }
     }
     console.log(u_points);
     
