@@ -1,6 +1,6 @@
 # Strategic form display and file format
 
-Date: 23 May 2016
+Date: 8 June 2016
 
 Part of this extends and re-uses material from
 [INFOS/start_GSOC_2016.md](../INFOS/start_GSOC_2016.md).
