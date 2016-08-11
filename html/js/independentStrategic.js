@@ -23,7 +23,8 @@
     GTE.tree.clear();
 
     document.getElementById("button-new").addEventListener("click", function(){
-        GTE.tools.newTree();
+        GTE.STRATEGICFORMMODE = GTE.STRATEGICFORMMODES.GENERAL;
+        GTE.tools.createIndependentStrategicForm(2, 2);
         return false;
     });
 
