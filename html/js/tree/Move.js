@@ -11,6 +11,7 @@ GTE.TREE = (function (parentModule) {
         this.name = name;
         this.atISet = atISet;
         this.line = {};
+        this.editable = null;
     }
 
     /**
@@ -126,7 +127,7 @@ GTE.TREE = (function (parentModule) {
         var contentEditable = new GTE.UI.Widgets.ContentEditable(
                         middleX, middleY, growingDirectionOfText, this.name, "move")
                         .colour(parent.player.colour);
-
+        this.editable = contentEditable;
         // ChanceMove inherits from Move so in order not to having to rewrite this
         // whole function, create a function with all that needs to be modified
         // by ChanceMove
@@ -154,6 +155,15 @@ GTE.TREE = (function (parentModule) {
                 }
                 GTE.tree.updateMoveNames(thisMove);
         });
+    };
+
+    /**
+     * Changes the text of the editable label
+     * @param {String} text New Move's text
+     */
+    Move.prototype.changeText = function(text) {
+        this.editable.setText(text);
+        this.changeName(text);
     };
 
     /**
