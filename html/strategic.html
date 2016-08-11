@@ -23,9 +23,11 @@
                 <img src="images/horiz8_small.png" class="left ml-10 vertical-centered">
             </div>
             <div>
+            <!-- NEW GAME should not switch to tree -->
                 <ul class="vertical-centered">
                     <li><button id="button-new" class="button button--sacnite button--inverted" alt="New game" title="New game"><i class="icon-file"></i></button></li>
                 </ul>
+            <!-- Not visible but why is it here at all? -->
                 <ul class="vertical-centered">
                     <li><button id="button-tree" class="text-button" alt="Strategic Form" title="Strategic Form">Tree</button></li>
                     <li><button id="button-strategic" class="text-button" alt="Strategic Form" title="Strategic Form">Convert to Strategic</button></li>
@@ -33,16 +35,18 @@
             </div>
             <div>
                 <ul class="vertical-centered">
-                    <li><button id="button-independent-strategic-general" class="text-button" alt="Create Independent Stratgic Form" title="Create Independent Stratgic Form"><span>General</span></button></li>
-                    <li><button id="button-independent-strategic-zerosum" class="text-button" alt="Create Independent Stratgic Form" title="Create Independent Stratgic Form">Zero Sum</button></li>
-                    <li><button id="button-independent-strategic-symmetric" class="text-button" alt="Create Independent Stratgic Form" title="Create Independent Stratgic Form">Symmetric</button></li>
+                    <li><button id="button-independent-strategic-general" class="text-button" alt="Create Strategic Form" title="Create Strategic Form"><span>General</span></button></li>
+                    <li><button id="button-independent-strategic-zerosum" class="text-button" alt="Create Zero-Sum Strategic Form" title="Create Zero-Sum Strategic Form">Zero Sum</button></li>
+                    <li><button id="button-independent-strategic-symmetric" class="text-button" alt="Create Symmetric Strategic Form" title="Create Symmetric Strategic Form">Symmetric</button></li>
                 </ul>
             </div>
             <div>
+                <!-- Add/remove nodes: Not visible but why is it here at all? -->
                 <ul class="vertical-centered">
                     <li><button id="button-add" class="active button button--sacnite button--inverted" alt="Add child node" title="Add child node"><i class="icon-plus-circle"></i></button></li>
                     <li><button id="button-remove" class="button button--sacnite button--inverted" alt="Remove node" title="Remove node"><i class="icon-minus-circle"></i></button></li>
                 </ul>
+                <!-- Add/remove players: Not visible but why is it here at all? -->
                 <ul class="vertical-centered">
                     <div id="player-buttons">
                     </div>
@@ -60,7 +64,7 @@
                     <li><button id="button-solve-lrs" class="text-button" alt="solve lrs">Solve Lrs</button></li>
                 </ul>
             </div>
-        </div>s
+        </div>
         <div id="canvas">
 
         </div>
@@ -70,8 +74,8 @@
             </div>
             <a id="button-matrix-close" title="Close" class="close">X</a>
             <form id="matrix-settings" action="" method="post">
-                    <textarea id="matrix-player-1" rows = "15" cols = "30"></textarea>
-                    <textarea id="matrix-player-2" rows = "15" cols = "30"></textarea><br>
+                    <textarea id="matrix-player-1" rows = "8" cols = "30"></textarea>
+                    <textarea id="matrix-player-2" rows = "8" cols = "30"></textarea><br>
             </form>
             <button id="button-matrix-save" type="submit" name="save">Save</button>
             <button id="button-matrix-reset" name="reset">Reset</button>

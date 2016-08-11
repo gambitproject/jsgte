@@ -19,6 +19,9 @@ GTE.UI.Widgets = (function (parentModule) {
         // a div with the contenteditable attribute on true so that the user can
         // edit the text inside the div as a normal input field.
         this.myforeign = document.createElementNS('http://www.w3.org/2000/svg', 'foreignObject');
+        // BvS looking at
+        // https://www.w3.org/TR/SVG/extend.html#ForeignObjectElement
+        // BvS why is 22px a constant in the next line:
         this.myforeign.setAttribute("height", "22px");
         this.myforeign.classList.add("content-editable-foreign"); //to make div fit text
 
@@ -53,7 +56,7 @@ GTE.UI.Widgets = (function (parentModule) {
         document.getElementsByTagName('svg')[0].appendChild(this.myforeign);
         this.myforeign.appendChild(this.textdiv);
 
-        // The size of the foreign will be dinamically adjusted depending on the
+        // The size of the foreign will be dynamically adjusted depending on the
         // size of the text. This is the only way to achieve text growing to left.
         // The idea is to adjust the width of the foreign and then translate it
         // to the left the same amount it has grown
