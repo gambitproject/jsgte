@@ -127,15 +127,50 @@ GTE.TREE = (function(parentModule) {
     };
 
     Matrix.prototype.drawUtilities = function() {
-        GTE.canvas.line(GTE.CONSTANTS.MATRIX_X -50,
-                GTE.CONSTANTS.MATRIX_Y -50,
-                GTE.CONSTANTS.MATRIX_X,
-                GTE.CONSTANTS.MATRIX_Y)
-            .stroke({ width: parseInt(GTE.STORAGE.settingsLineThickness) });
+        // diagonal corner line outwards
+        GTE.canvas.line(GTE.CONSTANTS.MATRIX_X,
+                GTE.CONSTANTS.MATRIX_Y,
+                GTE.CONSTANTS.MATRIX_X-50,
+                GTE.CONSTANTS.MATRIX_Y-50)
+            //.stroke({ width: parseInt(GTE.STORAGE.settingsLineThickness) });
+            // need own linethickness for matrix, for
+            // now same as linethickness for boxes
+            .stroke({ width: 2 });
+
+        // testing reference points for ContentEditable
+        // with a 30px long line going outwards
+        // player 1, horizontal left
+        // GTE.canvas.line(GTE.CONSTANTS.MATRIX_X-40,
+        //     GTE.CONSTANTS.MATRIX_Y-20,
+        //     GTE.CONSTANTS.MATRIX_X -70,
+        //     GTE.CONSTANTS.MATRIX_Y-20)
+        //     .stroke({ width: 8 }) ;
+        // // player 2, vertical down - testing 22 px
+        // GTE.canvas.line(GTE.CONSTANTS.MATRIX_X-20,
+        //     GTE.CONSTANTS.MATRIX_Y-62,
+        //     GTE.CONSTANTS.MATRIX_X-20,
+        //     GTE.CONSTANTS.MATRIX_Y -40)
+        //     .stroke({ width: 8 }) ;
+        // // player 2, vertical down - testing overlap
+        // GTE.canvas.line(GTE.CONSTANTS.MATRIX_X-10,
+        //     GTE.CONSTANTS.MATRIX_Y-62,
+        //     GTE.CONSTANTS.MATRIX_X-10,
+        //     GTE.CONSTANTS.MATRIX_Y -40)
+        //     .stroke({ width: 1 }) ;
+        // // player 2, vertical down - testing overlap
+        // GTE.canvas.line(GTE.CONSTANTS.MATRIX_X-0,
+        //     GTE.CONSTANTS.MATRIX_Y-62,
+        //     GTE.CONSTANTS.MATRIX_X-0,
+        //     GTE.CONSTANTS.MATRIX_Y -40)
+        //     .stroke({ width: 1 }) ;
 
         this.player1 = new GTE.UI.Widgets.ContentEditable(
-                GTE.CONSTANTS.MATRIX_X - 50, GTE.CONSTANTS.MATRIX_Y,
-                GTE.CONSTANTS.CONTENT_EDITABLE_GROW_TO_RIGHT,
+                // 6+4 is the magic text offset in the box in
+                // guiutils/ContentEditable.js
+                GTE.CONSTANTS.MATRIX_X - 40 + 6,
+                GTE.CONSTANTS.MATRIX_Y - 20,
+                // GTE.CONSTANTS.CONTENT_EDITABLE_GROW_TO_RIGHT,
+                GTE.CONSTANTS.CONTENT_EDITABLE_GROW_TO_LEFT,
                 this.players[1].name, "player 1")
             .colour(this.players[1].colour)
             .onSave(function () {
@@ -156,7 +191,12 @@ GTE.TREE = (function(parentModule) {
                     });
 
         this.player2 = new GTE.UI.Widgets.ContentEditable(
-                GTE.CONSTANTS.MATRIX_X , GTE.CONSTANTS.MATRIX_Y - 50,
+                // 6+4 is the magic text offset in the box in
+                // guiutils/ContentEditable.js
+                GTE.CONSTANTS.MATRIX_X - 20 - 6,
+                // 22 is the magic text height in
+                // guiutils/ContentEditable.js
+                GTE.CONSTANTS.MATRIX_Y - 40 - 22,
                 GTE.CONSTANTS.CONTENT_EDITABLE_GROW_TO_RIGHT,
                 this.players[2].name, "player 2")
             .colour(this.players[2].colour)
@@ -185,9 +225,9 @@ GTE.TREE = (function(parentModule) {
             }
             var thisMatrix=this;
             var str = new GTE.UI.Widgets.ContentEditable(
-                GTE.CONSTANTS.MATRIX_X - 40,
-                GTE.CONSTANTS.MATRIX_Y + 40 + i * GTE.CONSTANTS.MATRIX_SIZE,
-                GTE.CONSTANTS.CONTENT_EDITABLE_GROW_TO_RIGHT,
+                GTE.CONSTANTS.MATRIX_X - 14,
+                GTE.CONSTANTS.MATRIX_Y + 36 + i * GTE.CONSTANTS.MATRIX_SIZE,
+                GTE.CONSTANTS.CONTENT_EDITABLE_GROW_TO_LEFT,
                 string, "player 1")
             .colour(this.players[1].colour)
             .index(i)
