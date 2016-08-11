@@ -9,7 +9,7 @@ repository JSGTE (JavaScript Game Theory Explorer), on
 https://github.com/gambitproject/jsgte/tree/eqdiagrams
 
 where this file resides as 
-![](./amelie.md)
+![./amelie.md](./amelie.md)
 
 ## Goal of the project
 
