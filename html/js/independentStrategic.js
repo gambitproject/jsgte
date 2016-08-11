@@ -165,12 +165,11 @@
         document.getElementById('button-merge').style.display = 'none' ;
         document.getElementById('button-dissolve').style.display = 'none' ;
     };
-    hideButtons();
-
     var matrixPopup = document.getElementById("matrixPopup");
     var matrix_bar = document.getElementById("matrix_bar");
     var offset = { x: 0, y: 0 };
     //initialise the matrix
     GTE.STRATEGICFORMMODE = GTE.STRATEGICFORMMODES.GENERAL;
     GTE.tools.createIndependentStrategicForm(2, 2);
+    hideButtons();
 }());

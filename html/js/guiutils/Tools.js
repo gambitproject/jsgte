@@ -135,9 +135,14 @@ GTE.UI = (function (parentModule) {
         GTE.tree.draw();
         this.switchMode(GTE.MODES.ADD);
         this.toStrategicForm();
+        this.hidePlayerButtons();
     };
 
-
+    Tools.prototype.hidePlayerButtons = function() {
+        document.getElementById('button-player-0').style.display = 'none'
+        document.getElementById('button-player-1').style.display = 'none'
+        document.getElementById('button-player-2').style.display = 'none'
+    }
     /**
     * Function that selects a player
     * @param {Player} player Player to be set as active
