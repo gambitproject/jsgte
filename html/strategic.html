@@ -54,51 +54,27 @@
                     <li><button id="button-dissolve" class="button button--sacnite button--inverted" alt="Dissolve iset"><i class="icon-unlink"></i></button></li>
                 </ul>
                 <ul class="vertical-centered">
-                    <li><button id="button-settings" class="button button--sacnite button--inverted" alt="Settings"><i class="icon-cog"></i></button></li>
+                    <li><button id="button-matrix" class="text-button" alt="Settings">Edit Matrix</button></li>
+                </ul>
+                <ul class="vertical-centered">
+                    <li><button id="button-solve-lrs" class="text-button" alt="solve lrs">Solve Lrs</button></li>
                 </ul>
             </div>
-        </div>
+        </div>s
         <div id="canvas">
 
         </div>
-        <div id="settings">
-            <div id="settings_bar"><i class="icon-cog"></i>
-            &nbsp; &nbsp; &nbsp;
-            Settings &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+        <div id="matrixPopup">
+            <div id="matrix_bar">
+                Matrix
             </div>
-            <a id="button-settings-close" title="Close" class="close">X</a>
-            <form id="form-settings" action="" method="post">
-                <ul>
-                    <li id="orientation">
-                        <label>Orientation</label>
-                        <input type="radio" name="orientation" value="0" orientation="0">Vertical
-                        <input type="radio" name="orientation" value="1" orientation="1">Horizontal
-                    </li>
-                    <li id="chance-colour">
-                        <label>Chance player colour</label>
-                        <input type="color" name="chance-colour">
-                    </li>
-                    <li id="player-colours">
-                        <label>Player colours</label>
-                    </li>
-                    <li>
-                        <label for="stroke-width">Stroke width</label>
-                        <input type="number" name="stroke-width" value="0">
-                    </li>
-                    <li>
-                        <label for="circle-size">Circle size</label>
-                        <input type="number" name="circle-size" value="0">
-                    </li>
-                    <li>
-                        <label for="dist-levels">Distance between levels</label>
-                        <input type="number" name="dist-levels" value="0">
-                    </li>
-                    <li>
-                        <button id="button-settings-reset" type="button" name="clear">Reset</button>
-                        <button id="button-settings-save" type="submit" name="save">Save</button>
-                    </li>
-                </ul>
+            <a id="button-matrix-close" title="Close" class="close">X</a>
+            <form id="matrix-settings" action="" method="post">
+                    <textarea id="matrix-player-1" rows = "15" cols = "30"></textarea>
+                    <textarea id="matrix-player-2" rows = "15" cols = "30"></textarea><br>
             </form>
+            <button id="button-matrix-save" type="submit" name="save">Save</button>
+            <button id="button-matrix-reset" name="reset">Reset</button>
         </div>
         <script src="js/thirdparty/svg.min.js"></script>
         <script src="js/thirdparty/jquery.min.js"></script>
@@ -119,8 +95,7 @@
         <script src="js/strategic/Strategy.js"></script>
         <script src="js/strategic/Matrix.js"></script>
         <script src="js/strategic/StrategicUnit.js"></script>
+        <script src="js/independentStrategic.js"></script>
         <script src="js/servercomm/Communication.js"></script>
-
-        <script src="js/main.js"></script>
     </body>
 </html>

@@ -291,6 +291,29 @@ a {
     cursor: default;
 }
 
+.text-button {
+    color:black;
+}
+
+/* Matrix setting popup */
+#matrixPopup {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: none;
+    width:600px;
+    margin: 100px auto;
+    background-color: #fff;
+    border:1px solid #000;
+    padding:0px;
+    text-align:center;
+    z-index: 1000;
+    box-shadow:10px 10px 5px #888888;
+    vertical-align: center;
+}
+
 /*Settings modal*/
 
 #settings {

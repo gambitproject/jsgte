@@ -6,6 +6,7 @@
     GTE.tools = new GTE.UI.Tools();
     // Initialize settings
     var setSettingsToDefaults = function() {
+        GTE.STORAGE.settingsBlockSize = GTE.CONSTANTS.BLOCK_SIZE;
         GTE.STORAGE.settingsCircleSize = GTE.CONSTANTS.CIRCLE_SIZE;
         GTE.STORAGE.settingsLineThickness = GTE.CONSTANTS.LINE_THICKNESS;
         GTE.STORAGE.settingsDistLevels = GTE.CONSTANTS.DIST_BETWEEN_LEVELS;
@@ -76,6 +77,42 @@
 
     document.getElementById("button-new").addEventListener("click", function(){
         GTE.tools.newTree();
+        return false;
+    });
+
+    document.getElementById("button-strategic").addEventListener("click", function(){
+        if(GTE.tools.isetToolsRan)
+            GTE.tools.toStrategicForm();
+        else
+            alert("first assign payoffs to each player");
+        return false;
+    });
+
+    document.getElementById("button-tree").addEventListener("click", function(){
+        GTE.tree.draw();
+        return false;
+    });
+
+    document.getElementById("button-independent-strategic-general").addEventListener("click", function(){
+        var x = prompt("Enter the number of moves for the first player", "2");
+        var y = prompt("Enter the number of moves for the second player", "2");
+        GTE.STRATEGICFORMMODE = GTE.STRATEGICFORMMODES.GENERAL;
+        GTE.tools.createIndependentStrategicForm(x, y);
+        return false;
+    });
+
+    document.getElementById("button-independent-strategic-zerosum").addEventListener("click", function(){
+        var x = prompt("Enter the number of moves for the first player", "2");
+        var y = prompt("Enter the number of moves for the second player", "2");
+        GTE.STRATEGICFORMMODE = GTE.STRATEGICFORMMODES.ZEROSUM;
+        GTE.tools.createIndependentStrategicForm(x, y);
+        return false;
+    });
+
+    document.getElementById("button-independent-strategic-symmetric").addEventListener("click", function(){
+        var x = prompt("Enter the number of moves for the game", "2");
+        GTE.STRATEGICFORMMODE = GTE.STRATEGICFORMMODES.SYMMETRIC;
+        GTE.tools.createIndependentStrategicForm(x, x);
         return false;
     });
 
