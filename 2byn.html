@@ -1,0 +1,201 @@
+<!doctype html>
+<html class="no-js" lang"">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>N by 2 games</title>
+            
+        <link rel="stylesheet" href="css/normalize.min.css">
+        <link rel="stylesheet" href="css/main.css">
+        <link rel="stylesheet" href="css/svg-styles.css">
+        <link rel="stylesheet" href="css/widgets-styles.css">
+        <link rel="stylesheet" href="css/font.css">
+        <link rel="stylesheet" href="css/2by2.css">
+    </head>
+</script>
+<body>
+        <!--[if lt IE 8]>
+            <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+
+ <!-- Table for user to update payoff and strategies' names.-->
+ 
+ <div id="toolbar" class="full-width darker">
+     <div>
+         <img src="images/horiz8_small.png" class="left ml-10 vertical-centered">
+    </div>
+     <div>
+         <ul class="vertical-centered">
+             <li><button id="button-new" class="button button--sacnite button--inverted" alt="New game" title="New game"><i class="icon-file"></i></button></li>
+         </ul>
+         <ul class="vertical-centered">
+             <li><button id="button-tree" class="text-button" alt="Strategic Form" title="Strategic Form">Tree</button></li>
+             <li><button id="button-strategic" class="text-button" alt="Strategic Form" title="Strategic Form">Convert to Strategic</button></li>
+         </ul>
+     </div>
+     <div>
+         <ul class="vertical-centered">
+             <li><button id="button-independent-strategic-general"
+                 class="text-button" alt="Create Strategic Form"
+                 title="Create Strategic Form"><span>General</span></button></li>
+             <li><button id="button-independent-strategic-zerosum"
+                 class="text-button" alt="Create Zero-Sum Strategic Form"
+                 title="Create  Zero-Sum Strategic Form">Zero Sum</button></li>
+             <li><button id="button-independent-strategic-symmetric"
+                 class="text-button" alt="Create Symmetric Strategic Form"
+                 title="Create Symmetric Strategic Form">Symmetric</button></li>
+         </ul>
+     </div>
+     <div>
+         <ul class="vertical-centered">
+             <li><button id="button-add" class="active button button--sacnite button--inverted" alt="Add child node" title="Add child node"><i class="icon-plus-circle"></i></button></li>
+             <li><button id="button-remove" class="button button--sacnite button--inverted" alt="Remove node" title="Remove node"><i class="icon-minus-circle"></i></button></li>
+         </ul>
+         <ul class="vertical-centered">
+             <div id="player-buttons">
+             </div>
+             <li><button id="button-player-more" class="button button--sacnite button--inverted" alt="More players" title="More players"><i class="icon-user-plus"></i></button></li>
+             <li><button id="button-player-less" class="button button--sacnite button--inverted" alt="Less players" title="Less players"><i class="icon-user-less"></i></button></li>
+         </ul>
+         <ul class="vertical-centered">
+             <li><button id="button-merge" class="button button--sacnite button--inverted" alt="Merge isets"><i class="icon-link"></i></button></li>
+             <li><button id="button-dissolve" class="button button--sacnite button--inverted" alt="Dissolve iset"><i class="icon-unlink"></i></button></li>
+         </ul>
+         <ul class="vertical-centered">
+             <li><button id="button-matrix" class="text-button" alt="Settings">Edit Matrix</button></li>
+         </ul>
+         <ul class="vertical-centered">
+             <li><button id="button-solve-lrs" class="text-button" alt="solve lrs">Solve Lrs</button></li>
+         </ul>
+     </div>
+  </div>
+ </div>
+ <div id="canvas">
+     
+     <label>Precision : </label>
+     <input class="precision" type="text" id="precision" onchange="GTE.diag.redraw()" value="1"/>
+ </div>
+
+ <div id="matrixPopup">
+     <div id="matrix_bar">
+         Matrix
+     </div>
+     <a id="button-matrix-close" title="Close" class="close">X</a>
+     <form id="matrix-settings" action="" method="post">
+         <textarea id="matrix-player-1" rows = "15" cols = "30"></textarea>
+         <textarea id="matrix-player-2" rows = "15" cols = "30"></textarea><br>
+     </form>
+     <button id="button-matrix-save" type="submit" name="save">Save</button>
+     <button id="button-matrix-reset" name="reset">Reset</button>
+ </div>
+
+ <div>
+        <svg id="drawing" version="1.1" currentScale="1" viewBox="0 0 700 750" xmlns="http://www.w3.org/2000/svg"> <!-- viewBox="0 0 700 750" --><!-- height="750" width="700"-->
+            <marker id="triangle_left"
+                viewBox="0 0 10 10" refX="0" refY="0"
+                markerUnits="strokeWidth"
+                markerWidth="10" markerHeight="10"
+                orient="auto">
+                <path d="M 0 0 L 10 5 L 10 -5 z" />
+            </marker>
+            <marker id="triangle_down"
+                viewBox="0 0 10 10" refX="0" refY="4"
+                markerUnits="strokeWidth"
+                markerWidth="10" markerHeight="10"
+                orient="auto">
+                <path d="M 0 0 L 10 4 L 0 8 z" />
+            </marker>
+            
+            
+            
+            <!--mixed equilibrium--->
+           <rect class="br m5 bottom" x="40" y="490" width="20" height="20" fill="green"/>
+            <rect class="br m1 bottom" x="40" y="490" width="20" height="20" fill="green" />
+            <rect class="br m2 bottom" x="40" y="490" width="20" height="20" fill="green"/>
+            <rect class="br m3 bottom" x="40" y="490" width="20" height="20" fill="green"/>
+            <rect class="br m4 bottom" x="40" y="490" width="20" height="20" fill="green"/>
+            <!-- Drawing the contour-->
+            <polyline class="contour bottom" points="50,500 50,700 250,700, 250,500, 50,500"/>
+            <!-- Best player1 --->
+            <polyline  class="brline line1 bottom" points="50,500 50,700 250,700, 250,500"/>
+            <!-- Best player2 --->
+            <polyline class="brline line2 bottom" points="50,500 50,700 250,700, 250,500"/>
+            <!--pure equilibrium--->
+            <!--<circle class="br p1 bottom" cx="50" cy="500" r="10"  draggable="false" fill="green" />
+            <circle class="br p2 bottom" cx="250" cy="500" r="10" draggable="false" fill="green"/>
+            <circle class="br p3 bottom" cx="250" cy="700" r="10"  draggable="false" fill="green"/>
+            <circle class="br p4 bottom" cx="50" cy="700" r="10" draggable="false" fill="green"/>-->
+            
+            <!--legend -->
+            <line class="line2 bottom" x1="50" y1="450" x2="250" y2="450"/>
+            <line class="stick bottom" x1="50" y1="445" x2="50" y2="455"/>
+            <line class="stick bottom" x1="250" y1="445" x2="250" y2="455"/>
+            <line class="line2 interstick1 bottom" x1="50" y1="445" x2="50" y2="455"/>
+            <text class="player2 strat_right strat11_0 change bottom" x="40" y="455">S2=0 </text>
+            <text class="player2 strat_left strat10_0 change bottom" x="260" y="455">S1=0 </text>
+            <text class="player1 strat_right strat00 change bottom" x="35" y="505">S1 </text>
+            <text class="player1 strat_right strat01 change bottom" x="35" y="705">S2 </text>
+            <text class="player2 strat strat10 change bottom" x="50" y="720">S1 </text>
+            <text class="player2 strat strat11 change bottom" x="250" y="720">S2 </text>
+            
+            <text class="player2 strat strat11 change middle22 bottom" x="35" y="430">S2 </text>
+            <text class="player2 strat strat10 change middle21 bottom" x="265" y="430">S1 </text>
+            <text class="player1 strat strat01 change middle12 bottom" x="435" y="430">S2 </text>
+            <text class="player1 strat strat00 change middle11 bottom" x="665" y="430">S1 </text>
+            
+            <line class="line1 bottom" x1="450" y1="450" x2="650" y2="450"/>
+            <line class="stick bottom" x1="450" y1="445" x2="450" y2="455"/>
+            <line class="stick bottom" x1="650" y1="445" x2="650" y2="455"/>
+            <line class="line1 interstick2 bottom" x1="450" y1="445" x2="450" y2="455"/>
+            <text class="player1 strat_right strat01_0 change bottom" x="440" y="455">S2=0 </text>
+            <text class="player1 strat_left strat00_0 change bottom" x="660" y="455">S1=0 </text>
+            
+            <line class="stick bottom" x1="50" y1="460" x2="50" y2="480" marker-end="url(#triangle_down)"/>
+            <line class="stick bottom" x1="250" y1="460" x2="250" y2="480" marker-end="url(#triangle_down)"/>
+            <line class="stick player1 bottom" x1="250" y1="460" x2="250" y2="480" marker-end="url(#triangle_down)"/>
+            <path class="arc bottom" d="M450,460 A40,40 0 0,1 410,500"/>
+            <path class="arc bottom" d="M650,460 A240,240 0 0,1 410,700"/>
+            <path class="arc player2 bottom" d="M650,460 A240,240 0 0,1 410,700"/>
+            <line class="stick bottom" x1="410" y1="500" x2="280" y2="500" marker-end="url(#triangle_down)"/>
+            <line class="stick bottom" x1="410" y1="700" x2="280" y2="700" marker-end="url(#triangle_down)"/>
+            <line class="stick player2 bottom" x1="410" y1="700" x2="280" y2="700" marker-end="url(#triangle_down)"/>
+            
+        </svg>
+
+        </div>
+ 
+ <div class="eq_list" id="eq_list">
+     
+ </div>
+ 
+        <script src="js/thirdparty/svg.min.js"></script>
+        <script src="js/thirdparty/jquery.min.js"></script>
+        <script src="js/structure.js"></script>
+        <script src="js/guiutils/Tools.js"></script>
+        <script src="js/guiutils/ContentEditable.js"></script>
+        <script src="js/guiutils/MultiAction.js"></script>
+        <script src="js/guiutils/Block.js"></script>
+        <script src="js/tree/Utils.js"></script>
+        <script src="js/tree/ISet.js"></script>
+        <script src="js/tree/Move.js"></script>
+        <script src="js/tree/ChanceMove.js"></script>
+        <script src="js/tree/Payoff.js"></script>
+        <script src="js/tree/Player.js"></script>
+        <script src="js/tree/Tree.js"></script>
+        <script src="js/tree/Node.js"></script>
+        <script src="js/strategic/StrategyBlock.js"></script>
+        <script src="js/strategic/Strategy.js"></script>
+        <script src="js/strategic/Matrix.js"></script>
+        <script src="js/strategic/StrategicUnit.js"></script>
+        <script src="js/eqdiagrams/Marker.js"></script>
+        <script src="js/eqdiagrams/Endpoint.js"></script>
+        <script src="js/eqdiagrams/Envelope.js"></script>
+        <script src="js/eqdiagrams/Line.js"></script>
+        <script src="js/eqdiagrams/Diagram.js"></script>
+        <script src="js/eqdiagrams/3D.js"></script>
+        <script src="js/eqdiagrams/Intersection.js"></script>
+        <script src="js/eqdiagrams.js"></script>
+        <script src="js/servercomm/Communication.js"></script>
+                                                                    
+</body>
+</html>

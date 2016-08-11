@@ -26,6 +26,17 @@
                 <ul class="vertical-centered">
                     <li><button id="button-new" class="button button--sacnite button--inverted" alt="New game" title="New game"><i class="icon-file"></i></button></li>
                 </ul>
+                <ul class="vertical-centered">
+                    <li><button id="button-tree" class="text-button" alt="Strategic Form" title="Strategic Form">Tree</button></li>
+                    <li><button id="button-strategic" class="text-button" alt="Strategic Form" title="Strategic Form">Convert to Strategic</button></li>
+                </ul>
+            </div>
+            <div>
+                <ul class="vertical-centered">
+                    <li><button id="button-independent-strategic-general" class="text-button" alt="Create Independent Stratgic Form" title="Create Independent Stratgic Form"><span>General</span></button></li>
+                    <li><button id="button-independent-strategic-zerosum" class="text-button" alt="Create Independent Stratgic Form" title="Create Independent Stratgic Form">Zero Sum</button></li>
+                    <li><button id="button-independent-strategic-symmetric" class="text-button" alt="Create Independent Stratgic Form" title="Create Independent Stratgic Form">Symmetric</button></li>
+                </ul>
             </div>
             <div>
                 <ul class="vertical-centered">
@@ -90,10 +101,12 @@
             </form>
         </div>
         <script src="js/thirdparty/svg.min.js"></script>
+        <script src="js/thirdparty/jquery.min.js"></script>
         <script src="js/structure.js"></script>
         <script src="js/guiutils/Tools.js"></script>
         <script src="js/guiutils/ContentEditable.js"></script>
         <script src="js/guiutils/MultiAction.js"></script>
+        <script src="js/guiutils/Block.js"></script>
         <script src="js/tree/Utils.js"></script>
         <script src="js/tree/ISet.js"></script>
         <script src="js/tree/Move.js"></script>
@@ -102,6 +115,12 @@
         <script src="js/tree/Player.js"></script>
         <script src="js/tree/Tree.js"></script>
         <script src="js/tree/Node.js"></script>
+        <script src="js/strategic/StrategyBlock.js"></script>
+        <script src="js/strategic/Strategy.js"></script>
+        <script src="js/strategic/Matrix.js"></script>
+        <script src="js/strategic/StrategicUnit.js"></script>
+        <script src="js/servercomm/Communication.js"></script>
+
         <script src="js/main.js"></script>
     </body>
 </html>

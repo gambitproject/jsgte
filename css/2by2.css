@@ -1,12 +1,229 @@
-.player1{
-    color:red
+document{
+overflow: hidden;
+zoom: 1;
 }
 
-.player2{
-    color:blue
+text{
+   font-family:Arial;
+   text-align: center;
+}
+
+label{
+   font-family:Arial;
+   text-align: center;
+} 
+
+.prev_table{
+    float:left;
+    margin :0;
+    width:15vw;
+box-sizing: border-box;
+}
+
+
+#canvas{
+    float:left;
+    /*margin :0;*/
+    padding : 0;
+    width:28vw;
+    display:block;
+box-sizing: border-box;
+}
+
+/*-------------Table style-------------*/
+table td{
+    margin:0;
+padding :0;
 }
 
 input{
-    width: 50px;
+   width: 6vw;
+    margin :0;
    text-align: center;
+   font-size:0.8em;
 }
+
+table{
+
+    margin :0;
+}
+
+/* player color */
+
+table .player1{
+    color:red;
+}
+
+table .player2{
+    color:blue;
+}
+
+
+/*-------------positioning equilibrium list-------------*/
+
+.eq_list {
+    position: absolute;
+    top: 550px;
+    left: 20px; 
+}
+
+/*-------------Drawing style-------------*/
+#drawing{
+  width:70vw;
+  /*height:100vh;*/
+  float:right;
+  margin:0;
+box-sizing: border-box;
+}
+
+#drawing text{
+    text-anchor:middle;
+}
+
+
+/*contour */
+#drawing .contour{
+    fill:none;
+    stroke:black;
+    stroke-width:2px;
+}
+
+/*upper envelop */
+#drawing polygon{
+    stroke-width:0px;
+}
+
+/* player color */
+
+#drawing .player1{
+    fill:red;
+}
+#drawing .player1{
+    color:red;
+}
+
+#drawing .line1{
+    stroke:red;
+}
+
+#drawing .player2{
+    fill:blue;
+}
+
+#drawing .player2{
+    color:blue;
+}
+
+#drawing .strat_left{
+    text-anchor:start;
+    font-style: italic;
+   font-weight: bold;
+   font-family:Roman;
+}
+
+#drawing .align_left{
+   text-align: center;
+    text-anchor:start;
+}
+
+#drawing .align_right{
+   text-align: center;
+    text-anchor:end;
+}
+#drawing .strat_right{
+    text-anchor:end;
+    font-style: italic;
+   font-weight: bold;
+   font-family:Roman;
+}
+
+#drawing .line2{
+    stroke:blue;
+}
+
+#drawing #envelope1{
+    fill:#ff8888;
+}
+
+#drawing #envelope2{
+    fill:#8888ff;
+}
+
+/* lines*/
+#drawing line{
+    stroke-width:0.2em;
+}
+#drawing polyline{
+    fill:none;
+    stroke:black;
+    stroke-width:0.2em;
+}
+
+#drawing .line_trans{
+    stroke:rgba(255, 0, 0, 0.0);
+    stroke-width:1em;
+}
+
+/* legend */
+
+#drawing .legendh{
+    font-size:1em;
+}
+
+#drawing .legendv.player2{
+font-style: italic;
+   font-weight: bold;
+   font-family:Roman;}
+
+#drawing .legendv.player1{
+font-style: italic;
+   font-weight: bold;
+   font-family:Roman;}
+
+#drawing .legendv{
+    font-size:1em;
+}
+
+#drawing .title{
+    font-size:2em;
+}
+
+/* sticks' properties*/
+#drawing .sticklabel{
+    fill:black;
+    font-size:1em;
+}
+
+#drawing .stick{
+    stroke:black;
+    stroke-width:0.1em;
+}
+
+
+/* end points */
+#drawing .pay{
+     fill:yellow;
+}
+
+
+#drawing .arc {
+    fill:none;
+    stroke-width:0.1em;
+     stroke:black;
+}
+
+/* Mixed strategy point */
+#drawing .inter{
+     fill:orange;
+     stroke:black;
+     stroke-width:1;
+}
+
+
+[class*="strat"]{
+   font-style: italic;
+   font-weight: bold;
+   font-family:Roman;
+}
+
+

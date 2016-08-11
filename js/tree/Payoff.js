@@ -27,21 +27,62 @@ GTE.TREE = (function(parentModule) {
     /**
      * Draws the editable label
      */
-    Payoff.prototype.draw = function() {
+    Payoff.prototype.draw = function(x1, y1, orientation) {
+        var x = x1 || this.leaf.x;
+        var y = y1 || this.leaf.y + (this.player.id * 20);
+        orientation = orientation || GTE.CONSTANTS.CONTENT_EDITABLE_GROW_TO_RIGHT;
         var thisPayoff = this;
         this.editable = new GTE.UI.Widgets.ContentEditable(
-                this.leaf.x, this.leaf.y + (this.player.id * 20),
-                GTE.CONSTANTS.CONTENT_EDITABLE_GROW_TO_RIGHT,
+                x, y,
+                orientation,
                 this.text, "payoff")
             .colour(this.player.colour)
             .onSave(
                 function() {
-                    var text = this.getCleanedText();
-                    if (text === "") {
-                        window.alert("Payoff should not be empty.");
-                    } else {
-                        thisPayoff.changeText(text);
-                    }
+                    switch (GTE.STRATEGICFORMMODE) {
+                        case GTE.STRATEGICFORMMODES.TREE:
+                            var text = this.getCleanedText();
+                            if (text === "") {
+                                window.alert("Payoff should not be empty.");
+                            } else {
+                                thisPayoff.changeText(text);
+                            }
+                            break;
+                        case GTE.STRATEGICFORMMODES.GENERAL:
+                            var text = this.getCleanedText();
+                            if (text === "") {
+                                window.alert("Payoff should not be empty.");
+                            } else {
+                                thisPayoff.changeText(text);
+                            }
+                            break;
+                        case GTE.STRATEGICFORMMODES.ZEROSUM:
+                            var text = this.getCleanedText();
+                            if (text === "") {
+                                window.alert("Payoff should not be empty.");
+                            } else {
+                                thisPayoff.changeText(text);
+                                if(text[0]!='-') {
+                                    //it is a negative number
+                                    thisPayoff.partner.changeText("-"+text);
+                                } else {
+                                    //it is a positive number
+                                    thisPayoff.partner.changeText(text.substr(1));
+                                }
+                            }
+                            break;
+                        case GTE.STRATEGICFORMMODES.SYMMETRIC:
+                            var text = this.getCleanedText();
+                            if (text === "") {
+                                window.alert("Payoff should not be empty.");
+                            } else {
+                                thisPayoff.changeText(text);
+                                thisPayoff.partner.changeText(text);
+                            }
+                            break;
+                        default:
+                            break;
+                }
                 });
     };
 

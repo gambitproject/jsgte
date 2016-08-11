@@ -10,7 +10,7 @@ GTE.UI.Widgets = (function (parentModule) {
     * @param {String} text          Widget's text
     * @param {String} cssClass      Widget's cssClass
     */
-    function ContentEditable(x, y, growingOfText, text, cssClass) {
+    function ContentEditable(x, y, growingOfText, text, cssClass, nb_svg=0) {
         this.x = x;
         this.y = y;
         this.growingOfText = growingOfText;
@@ -50,7 +50,7 @@ GTE.UI.Widgets = (function (parentModule) {
         }
         // Translate the foreign and append it to the svg
         this.translate();
-        document.getElementsByTagName('svg')[0].appendChild(this.myforeign);
+        document.getElementsByTagName('svg')[nb_svg].appendChild(this.myforeign);
         this.myforeign.appendChild(this.textdiv);
 
         // The size of the foreign will be dinamically adjusted depending on the
@@ -101,9 +101,16 @@ GTE.UI.Widgets = (function (parentModule) {
 
         // blur event is used to detect when the contenteditable loses focus
         this.textdiv.addEventListener('blur', function(e) {
-            if (thisContentEditable.functionOnSave !== null){
+            if (thisContentEditable.functionOnSave != null){
                 // Run functionOnSave
                 thisContentEditable.functionOnSave();
+            }
+        });
+
+        this.textdiv.addEventListener('focus', function(e) {
+            if (thisContentEditable.functionOnSave != null){
+                //Select the div completely
+                document.execCommand('selectAll',false,null);
             }
         });
 
@@ -243,6 +250,11 @@ GTE.UI.Widgets = (function (parentModule) {
         this.textdiv.style.color = colour;
         this.colour = colour;
         return this;
+    };
+                  
+    ContentEditable.prototype.index = function (i) {
+        this.index = i;
+    return this;
     };
 
     if (parentModule === undefined) {
