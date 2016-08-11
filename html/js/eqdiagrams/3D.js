@@ -397,7 +397,7 @@ function Dcompute_best_response(player){ //main function uses all previous funct
             u_plan_to_points[points_to_plan[i][k]].push(points[i]);
         }
     }
-    for (var i=0;i<u_plan_to_points.length; i++){
+    for (var i=4;i<u_plan_to_points.length; i++){
         draw_envelope(u_plan_to_points[i],player);
     }
 }

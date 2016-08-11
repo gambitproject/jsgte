@@ -57,7 +57,7 @@ GTE = (function(parentModule) {
     }
     
     Diagram.prototype.ini_html = function (max){
-        var x_shift = Number(2*this.margin+this.width);
+       var x_shift = Number(2*this.margin+this.width);
         var temp= GTE.svg.getElementsByClassName("up").length;
         for( var k=0;k<temp;k++){
             GTE.svg.removeChild(GTE.svg.getElementsByClassName("up")[0]);
@@ -332,16 +332,6 @@ GTE = (function(parentModule) {
         else {
             var max=1;}
         
-        for( var i=0;i<this.nb_strat[0];i++){
-            for (var j=0;j<this.nb_strat[1];j++){
-                this.payoffs[0][i][j]=(Math.round(GTE.tree.matrix.matrix[Number(i*this.nb_strat[1]+j)].strategy.payoffs[0].value*GTE.diag.precision)/GTE.diag.precision);
-                GTE.tree.matrix.matrix[Number(i*this.nb_strat[1]+j)].strategy.payoffs[0].value=this.payoffs[0][i][j];;
-                this.payoffs[1][i][j]=(Math.round(GTE.tree.matrix.matrix[Number(i*this.nb_strat[1]+j)].strategy.payoffs[1].value*GTE.diag.precision)/GTE.diag.precision);
-                GTE.tree.matrix.matrix[Number(i*this.nb_strat[1]+j)].strategy.payoffs[1].value=this.payoffs[1][i][j];
-                
-            }
-        }
-        
         /* for (var i=0;i<max;i++){
          var strat11= new GTE.UI.Widgets.ContentEditable(x[Number(2*i)],390,GTE.CONSTANTS.CONTENT_EDITABLE_GROW_TO_RIGHT, GTE.tree.matrix.strategies[p[i]][GTE.diag.strat[p[i]-1][1]].moves[0].name, "player"+Number(p[i])+" legendh align_left",1)
          .index(p[i]-1)
@@ -411,6 +401,15 @@ GTE = (function(parentModule) {
             if (this.nb_strat[0]==3 &&this.nb_strat[1]==3){
                 this.clear();
                 this.ini();
+       for( var i=0;i<this.nb_strat[0];i++){
+       for (var j=0;j<this.nb_strat[1];j++){
+       this.payoffs[0][i][j]=(Math.round(GTE.tree.matrix.matrix[Number(i*this.nb_strat[1]+j)].strategy.payoffs[0].value*GTE.diag.precision)/GTE.diag.precision);
+       GTE.tree.matrix.matrix[Number(i*this.nb_strat[1]+j)].strategy.payoffs[0].value=this.payoffs[0][i][j];;
+       this.payoffs[1][i][j]=(Math.round(GTE.tree.matrix.matrix[Number(i*this.nb_strat[1]+j)].strategy.payoffs[1].value*GTE.diag.precision)/GTE.diag.precision);
+       GTE.tree.matrix.matrix[Number(i*this.nb_strat[1]+j)].strategy.payoffs[1].value=this.payoffs[1][i][j];
+       
+       }
+       }
                 Dcompute_best_response(0);
                Dcompute_best_response(1);
             }
@@ -418,6 +417,15 @@ GTE = (function(parentModule) {
             if (this.nb_strat[0]==3){
                 this.clear();
                 this.ini();
+       for( var i=0;i<this.nb_strat[0];i++){
+       for (var j=0;j<this.nb_strat[1];j++){
+       this.payoffs[0][i][j]=(Math.round(GTE.tree.matrix.matrix[Number(i*this.nb_strat[1]+j)].strategy.payoffs[0].value*GTE.diag.precision)/GTE.diag.precision);
+       GTE.tree.matrix.matrix[Number(i*this.nb_strat[1]+j)].strategy.payoffs[0].value=this.payoffs[0][i][j];;
+       this.payoffs[1][i][j]=(Math.round(GTE.tree.matrix.matrix[Number(i*this.nb_strat[1]+j)].strategy.payoffs[1].value*GTE.diag.precision)/GTE.diag.precision);
+       GTE.tree.matrix.matrix[Number(i*this.nb_strat[1]+j)].strategy.payoffs[1].value=this.payoffs[1][i][j];
+       
+       }
+       }
                 Dcompute_best_response(1);
             }
             }
@@ -1821,6 +1829,10 @@ GTE = (function(parentModule) {
             var envelope2=document.getElementById("envelope2");
             if (envelope2!=null)
             envelope2.setAttributeNS(null,"points", "450,50, 450,350, 650,350,  650,50");}
+       var temp= GTE.svg.getElementsByClassName("up").length;
+       for( var k=0;k<temp;k++){
+       GTE.svg.removeChild(GTE.svg.getElementsByClassName("up")[0]);
+       }
         this.cleanForeign();
         
     }
