@@ -39,10 +39,19 @@ GTE = (function(parentModule) {
             this.assignIntersections(2);
         }
         else {
-            this.ini_html(1);
-            this.assignEndpoints(1);
-            this.assignLines(1);
-            this.assignIntersections(1);
+            if (this.nb_strat[0]==2){
+               this.ini_html(1);
+               this.assignEndpoints(1);
+               this.assignLines(1);
+               this.assignIntersections(1);
+            }
+            if (this.nb_strat[0]==3){
+                
+                draw_canvas(1);
+            }
+            if (this.nb_strat[1]==3){
+                draw_canvas(0);
+            }
         }
         this.ini_arrays();
     }
@@ -322,6 +331,17 @@ GTE = (function(parentModule) {
         }
         else {
             var max=1;}
+        
+        for( var i=0;i<this.nb_strat[0];i++){
+            for (var j=0;j<this.nb_strat[1];j++){
+                this.payoffs[0][i][j]=(Math.round(GTE.tree.matrix.matrix[Number(i*this.nb_strat[1]+j)].strategy.payoffs[0].value*GTE.diag.precision)/GTE.diag.precision);
+                GTE.tree.matrix.matrix[Number(i*this.nb_strat[1]+j)].strategy.payoffs[0].value=this.payoffs[0][i][j];;
+                this.payoffs[1][i][j]=(Math.round(GTE.tree.matrix.matrix[Number(i*this.nb_strat[1]+j)].strategy.payoffs[1].value*GTE.diag.precision)/GTE.diag.precision);
+                GTE.tree.matrix.matrix[Number(i*this.nb_strat[1]+j)].strategy.payoffs[1].value=this.payoffs[1][i][j];
+                
+            }
+        }
+        
         /* for (var i=0;i<max;i++){
          var strat11= new GTE.UI.Widgets.ContentEditable(x[Number(2*i)],390,GTE.CONSTANTS.CONTENT_EDITABLE_GROW_TO_RIGHT, GTE.tree.matrix.strategies[p[i]][GTE.diag.strat[p[i]-1][1]].moves[0].name, "player"+Number(p[i])+" legendh align_left",1)
          .index(p[i]-1)
@@ -378,15 +398,29 @@ GTE = (function(parentModule) {
          GTE.diag.cleanForeign();
          GTE.diag.redraw();    });
          }*/
-        this.compute_best_response(this.strat[0][0],this.strat[0][1],this.strat[1][0],this.strat[1][1],max);
-        if (max >1){
+        
+        
+        if (this.nb_strat[0]==2 && this.nb_strat[1]==2){
+            this.compute_best_response(this.strat[0][0],this.strat[0][1],this.strat[1][0],this.strat[1][1],max);
             this.draw_square_down(this.strat[0][0],this.strat[0][1],this.strat[1][0],this.strat[1][1]);
         }
         else {
-            if (GTE.svg.getElementsByTagName("svg").length >0){
-                GTE.svg.removeChild(GTE.svg.getElementsByTagName("svg")[0]);}
-            //init();
-            //animate();
+            if (this.nb_strat[1]==2){
+                this.compute_best_response(this.strat[0][0],this.strat[0][1],this.strat[1][0],this.strat[1][1],max);
+            }
+            if (this.nb_strat[0]==3 &&this.nb_strat[1]==3){
+                this.clear();
+                this.ini();
+                Dcompute_best_response(0);
+               Dcompute_best_response(1);
+            }
+            else {
+            if (this.nb_strat[0]==3){
+                this.clear();
+                this.ini();
+                Dcompute_best_response(1);
+            }
+            }
         }
     };
     
@@ -401,15 +435,7 @@ GTE = (function(parentModule) {
             this.endpoints[1][Number(i*2+1)].strat_matrix=Number(strat12*this.nb_strat[1]+i);
         }
         
-        for( var i=0;i<this.nb_strat[0];i++){
-            for (var j=0;j<this.nb_strat[1];j++){
-                this.payoffs[0][i][j]=(Math.round(GTE.tree.matrix.matrix[Number(i*this.nb_strat[1]+j)].strategy.payoffs[0].value*GTE.diag.precision)/GTE.diag.precision);
-                GTE.tree.matrix.matrix[Number(i*this.nb_strat[1]+j)].strategy.payoffs[0].value=this.payoffs[0][i][j];;
-                this.payoffs[1][i][j]=(Math.round(GTE.tree.matrix.matrix[Number(i*this.nb_strat[1]+j)].strategy.payoffs[1].value*GTE.diag.precision)/GTE.diag.precision);
-                GTE.tree.matrix.matrix[Number(i*this.nb_strat[1]+j)].strategy.payoffs[1].value=this.payoffs[1][i][j];
-                
-            }
-        }
+
         
         for (var i=0;i<this.nb_strat[0];i++){
             this.endpoints[0][i*2].move(this.height-this.margin-this.payoffs[0][i][strat21]*this.step);
@@ -1789,9 +1815,11 @@ GTE = (function(parentModule) {
         }
         this.intersect=[];
         var envelope1=document.getElementById("envelope1");
+        if (envelope1!=null)
         envelope1.setAttributeNS(null,"points", "50,50, 50,350, 250,350, 250,50");
         if (this.nb_strat[0]==2 && this.nb_strat[1]==2 ){
             var envelope2=document.getElementById("envelope2");
+            if (envelope2!=null)
             envelope2.setAttributeNS(null,"points", "450,50, 450,350, 650,350,  650,50");}
         this.cleanForeign();
         
