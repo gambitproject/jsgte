@@ -42,6 +42,8 @@ GTE.UI = (function (parentModule) {
         var importer = new GTE.TREE.XmlImporter(xml);
         importer.parseXmlToJson();
         importer.loadTree();
+        GTE.UNDOQUEUE = [];
+        GTE.REDOQUEUE = [];
     };
 
     /**
