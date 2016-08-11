@@ -26,7 +26,7 @@ a square. The best responses themselves are derived from
 payoff diagrams above and point with arrows to the square.
 
 This follows the specification at
-![](./INFOS/eqdiagrams.md)
+![./INFOS/eqdiagrams.md](./INFOS/eqdiagrams.md)
 
 ## How to start the program
 
