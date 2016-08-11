@@ -1,6 +1,6 @@
 # Work by Amélie Heliou for GSoC 2016
 
-I was a Google Summer of Code 2016 for the project
+I am a Google Summer of Code 2016 student for the project
 Gambit - Software Tools for Game Theory.
 
 My work is on the branch "eqdiagrams" in the project
@@ -34,6 +34,6 @@ This follows the specification at
 
 ## Extension to mx2 games
 
-## Extension to game with 3 strategies
+## Extension to games with 3 strategies
 
 
