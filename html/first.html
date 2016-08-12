@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+Enter the number of players: <input type="text" id="numberOfPlayers" value="2">
+
+<button onclick="setNames()" id="namesButton"> Continue </button>  
+
+<script src="./NormalForm.js"></script>
+<script src="./Player.js"></script>
+<script src="./Strategy.js"></script>
+<script src="./StrategyProfile.js"></script>
+
+<script>
+
+//global variable with the number of players
+var num = 0;
+var Normal = new NormalForm();
+var generalHelper;
+// adds a text Box with a specific ID under the document body
+function addTextBox (id) { 
+    var newDiv = document.createElement("div"); 
+    var newBox = document.createElement("input");
+    newBox.setAttribute("type", "text");
+    newBox.setAttribute("id", id);
+    newDiv.appendChild(newBox);
+    //var currentDiv = document.getElementById(anchor); 
+    //document.body.insertBefore(newDiv, currentDiv); 
+    document.body.appendChild(newBox);
+}
+
+//function that allows the user to input the names of the players
+function setNames() {
+    var newDiv = document.createElement("div"); 
+    var newText = document.createTextNode("Enter the player names:");
+    newDiv.appendChild(newText);
+    document.body.appendChild(newDiv);
+    num = document.getElementById("numberOfPlayers").value;
+    Normal.numberOfPlayers = num;
+    for (var i = 1; i <=num; i++) {
+  		name = "player" + i;
+  		//window.alert(name);
+  		addTextBox(name);
+  	}
+  	var newDiv2 = document.createElement("div");
+  	var newText2 = document.createTextNode("Press 'Set Strategies' when done");
+  	newDiv2.appendChild(newText2);
+  	document.body.appendChild(newDiv2);
+  	var text = "Set Strategies";
+  	var click = "setStrategies()";
+  	addButton(text, click);
+}
+
+//function that adds a button wiht a given text and a link to a function when clicked
+function addButton (text, click) {
+	var newButton = document.createElement("button");
+	buttonText = document.createTextNode(text);
+	newButton.appendChild(buttonText);
+	newButton.setAttribute("onclick", click);
+	document.body.appendChild(newButton);
+}
+
+//function that sets the number of strategies and calls the function to set the names
+function setStrategies() {
+	var allNames = true;
+	for (var i = 1; i <=num; i++) {
+  		id = "player" + i;
+  		value = document.getElementById(id).value;
+  		//window.alert(typeof(value));
+  		if (value === undefined) {
+  			window.alert("Hola");
+  			window.alert("Please enter a valid string name for" + " " + id);
+  			allNames = false;
+  		}
+  	}
+  	if (allNames === true) {
+	  	var newDiv = document.createElement("div"); 
+	    var newText = document.createTextNode("How many strategies does each player have?");
+	    newDiv.appendChild(newText);
+	    document.body.appendChild(newDiv);
+	    for (var i = 1; i <=num; i++) {
+	  		number = "numberOfStrategies" + i;
+	  		//window.alert(name);
+	  		addTextBox(number);
+	  	}
+	  	var text = "Set Strategy Names";
+	  	var click = "setStrategiesNames()";
+	  	addButton(text, click);
+  	}
+
+}
+
+//function that sets the strategy names provided that a given number of strategies has been input
+//function creates new player objects adds them to NormalForma and assigns the correct names
+function setStrategiesNames () {
+	var allNames = true;
+	for (var i = 1; i <=num; i++) {
+  		id = "numberOfStrategies" + i;
+  		value = document.getElementById(id).value;
+  		//window.alert(typeof(value));
+  		if (value === null) {
+  			window.alert("Please enter a valid number of strategies for player" + " " + i);
+  			allNames = false;
+  		}
+  	}
+  	if (allNames === true) {
+  		var number;
+  		for (var i = 1; i<=num; i++) {
+  			var newDiv = document.createElement("div"); 
+		    var newText = document.createTextNode("Enter the strategy names for Player: " + i);
+		    newDiv.appendChild(newText);
+		    document.body.appendChild(newDiv);
+		    var name = "numberOfStrategies" + i;
+		    number = document.getElementById(name).value;
+  			var newPlayer = new Player(i, number);
+  			namePlayer = document.getElementById("player" + i).value;
+  			Normal.addPlayer(newPlayer);
+  			Normal.players[i-1].changeName(namePlayer);
+		    for (var j=0; j<number; j++) {
+		    	idstrat = "player" + i + "strat" + j;
+		    	addTextBox(idstrat);
+		    }
+  		}
+  	}
+  	var newDiv2 = document.createElement("div");
+  	var newText2 = document.createTextNode("Press 'Display Strategy Profiles' when done");
+  	newDiv2.appendChild(newText2);
+  	document.body.appendChild(newDiv2);
+  	var text = "Display Strategy Profiles";
+  	var click = "displayStrategyProfiles()";
+  	addButton(text, click);
+
+}
+
+//learn how to compare to NULL
+//learn how to clean the screen but preserve the information
+//maybe simply generate the strategyProfiles and ask for the payoff vector input???
+//input all the information correctly in the structure
+//how to know if the object has been clicked only once
+function displayStrategyProfiles () {
+	for (var i=1; i<=num; i++) {
+		var number = Normal.players[i-1].numberOfStrategies;
+		for (var j=0; j<number; j++) {
+			idstrat = "player" + i + "strat" + j;
+			var name = document.getElementById(idstrat).value;
+			if (name === null) {
+				window.alert("Please enter the name for " + idstrat);
+				break;
+			}
+			var strat = new Strategy(j, name, i);
+			Normal.players[i-1].addStrategy(strat); 
+		}
+	}
+	document.body.innerHTML = "";
+	generateSF();
+	var newDiv = document.createElement("div");
+  	var newText = document.createTextNode("Enter the payoff vector for each strategy profile as comma separated values (i.e. 1, 2, 3 for 3 players) ");
+  	document.body.appendChild(newDiv);
+  	newDiv.appendChild(newText);
+	var newDiv2 = document.createElement("div");
+  	var newText2 = document.createTextNode("Press 'Find Nash Equilibria' when done");
+  	newDiv2.appendChild(newText2);
+  	document.body.appendChild(newDiv2);
+  	var text = "Find Nash Equilibria";
+  	var click = "FindNE()";
+  	addButton(text, click);
+}
+
+// function that inputs the Strategy Profiles and creates the new objects as well as finding the NE
+function FindNE() {
+	var input = Normal.generateStrategiesToCombine();
+	var result = Normal.getAllCombinations(input); 
+	for (var i=0; i<result.length; i++) {
+		var stratProfileId = result[i].toString();
+		console.log("Payoff" + stratProfileId);
+		var payoffVector = document.getElementById("Payoff" + stratProfileId).value;
+		var stratProfile = new StrategyProfile(stratProfileId, payoffVector);
+		Normal.addStrategyProfile(stratProfile);
+	}
+	Normal.generateBestResponses();
+	console.log(Normal.strategyProfiles);
+	var Nash = Normal.findNE();
+	if (Nash.length === 0) {
+	    var newDiv = document.createElement("div"); 
+	    var newText = document.createTextNode("There are no pure strategy Nash Equilibrium");
+	    newDiv.appendChild(newText);
+	    document.body.appendChild(newDiv);		
+	}
+	else {
+		for (var i=0; i<Nash.length; i++) {
+		    var newDiv = document.createElement("div"); 
+		    var newText = document.createTextNode("Strategy profile payoff vector of Nash Equilibrium " + i + ": " + "( " + Nash[i].payoffVector + " )");
+		    newDiv.appendChild(newText);
+		    document.body.appendChild(newDiv);	
+		}	
+	}	
+}
+
+
+function generateSF () {
+	if (Normal.numberOfPlayers>2) {
+		var last = Normal.getAllCombinations(Normal.generateStrategiesToCombineSet(1));
+		var first = Normal.getAllCombinations(Normal.generateStrategiesToCombineSet(0));
+		var payoffs;
+		var id;
+		for (var i=0; i<last.length; i++) {
+			payoffs = [];
+			for (var j=0; j<first.length; j++) {
+				id = first[j].toString() + "," + last[i].toString();
+				payoffs.push("Payoff" + id);
+			}
+			console.log(payoffs);
+			generateTableInputs(Normal.players[0].numberOfStrategies, Normal.players[1].numberOfStrategies, payoffs, last[i]);
+		}
+	}
+	else
+	{
+		var first = Normal.getAllCombinations(Normal.generateStrategiesToCombineSet(0));
+		var payoffs = [];
+		var id;
+			for (var j=0; j<first.length; j++) {
+				id = first[j].toString();
+				payoffs.push("Payoff" + id);
+			}
+			console.log(payoffs);
+			generateTableInputs(Normal.players[0].numberOfStrategies, Normal.players[1].numberOfStrategies, payoffs, 0);
+	}
+}
+
+function generateTableInputs(rows, columns, inputVector, last) {
+    var body = document.getElementsByTagName("body")[0];
+    var tbl = document.createElement("table");
+    var tblBody = document.createElement("tbody");
+    console.log(last);
+    if (Normal.numberOfPlayers>2) {
+	    var header = document.createElement("TH");
+	    var textHead = " ";
+	    for (var i=2; i<Normal.numberOfPlayers; i++) {
+	    	var j = Normal.players[i].name;
+	    	textHead = textHead + j;
+	    	textHead = textHead + " plays: " + Normal.findStrategyName(i,last[i-2]);
+	    	textHead = textHead + ", ";
+	    }
+	    textH = document.createTextNode(textHead);
+	    header.appendChild(textH);
+		document.body.appendChild(header);
+	}
+
+    var row0=document.createElement("tr");
+    var cell0=document.createElement("td");
+    var text0=document.createTextNode(Normal.players[0].name + " / " + Normal.players[1].name);
+    cell0.appendChild(text0);
+    row0.appendChild(cell0);
+    for (var i=0; i<Normal.players[1].numberOfStrategies; i++) {
+    	var cell = document.createElement("td");
+    	var text = document.createTextNode(Normal.players[1].strategies[i].name);
+    	cell.appendChild(text);
+    	row0.appendChild(cell);
+    }
+    tblBody.appendChild(row0);
+    var aux = 0;
+    for (var j = 0; j<rows; j++) {
+        var row = document.createElement("tr");
+        for (var i = 0; i<=columns; i++) {
+            var profile = document.createElement("td");
+        	if (i===0) {
+        		var cell = document.createElement("td");
+        		var text = document.createTextNode(Normal.players[0].strategies[j].name);
+				cell.appendChild(text);
+				row.appendChild(cell);        		
+        	} 
+        	else
+        	{
+	            var text = inputVector[aux];   
+	            console.log(inputVector[aux]);
+	            var vector = document.createElement("input"); 
+	            vector.setAttribute("id", text);
+	            vector.setAttribute("type", "text");
+	            profile.appendChild(vector);
+	            row.appendChild(profile);
+	            aux++;
+	        }
+        }
+        tblBody.appendChild(row);
+    }
+    tbl.appendChild(tblBody);
+    body.appendChild(tbl);
+    tbl.setAttribute("border", "2");
+}
+
+
+
+</script>
+
+</body>
+</html>
