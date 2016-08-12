@@ -17,6 +17,7 @@ GTE = (function (parentModule) {
     
     Marker.prototype.add_marker = function(i,x,y,color) {
        var temp;
+       
         switch(i){
             case 0:
                 temp=document.createElementNS("http://www.w3.org/2000/svg", "circle");
@@ -71,6 +72,7 @@ GTE = (function (parentModule) {
         }
        this.html.push(temp);
        GTE.svg.appendChild(temp);
+       
     };
     
     

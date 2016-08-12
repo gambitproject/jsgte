@@ -254,6 +254,7 @@ GTE = (function(parentModule) {
             for (var j=0;j<this.nb_strat[i];j++){
                 var temp= GTE.svg.getElementsByClassName("strat"+""+i+""+j);
                 for ( var l=0;l<temp.length;l++){
+                    if (temp[l].textContent!="")
                     temp[l].textContent=GTE.tree.matrix.strategies[i+1][j].moves[0].name;
                 }
             }
@@ -509,6 +510,11 @@ GTE = (function(parentModule) {
                 if (this.nb_strat[0]==3){
                     D3delete_faces();
                     D3compute_best_response(1);
+                }
+                
+                if (this.nb_strat[1]==3){
+                    D3delete_faces();
+                    D3compute_best_response(0);
                 }
             }
         }
@@ -1754,9 +1760,10 @@ GTE = (function(parentModule) {
             stick[i].setAttributeNS(null, "x1",Number(inter[1][0]));
             stick[i].setAttributeNS(null, "x2",Number(inter[1][0]));
         }
-        var pos1=Number((inter[0][0]+Number(Number(this.margin)))/2);
+        /*var pos1=Number((inter[0][0]+Number(Number(this.margin)))/2);
         var pos2=Number((inter[0][0]+Number(Number(this.margin+this.side)))/2);
         var middle=Number(this.margin+(this.width-2*this.margin)/2);
+
         if (this.best_response[0][0]==0){
             GTE.svg.getElementsByClassName("middle11")[0].setAttributeNS(null, "x", pos1);
             GTE.svg.getElementsByClassName("middle12")[0].setAttributeNS(null, "x", pos2);
@@ -1790,6 +1797,7 @@ GTE = (function(parentModule) {
                 
             }
         }
+
         
         pos1=Number((inter[1][0]+3*this.margin+this.width)/2);
         pos2=Number((inter[1][0]+this.margin+2*this.width)/2);
@@ -1827,7 +1835,7 @@ GTE = (function(parentModule) {
                 
             }
         }
-        
+        */
         
         if (inter[1][0]>450 && inter[1][0] <650){
             var t1=Number(inter[1][0])-Number(410);
@@ -1869,6 +1877,8 @@ GTE = (function(parentModule) {
                     temp=this.lines[i][j].html_element[1];
                     GTE.svg.removeChild(temp);
                     temp=this.lines[i][j].txt;
+                    GTE.svg.removeChild(temp);
+                    temp=this.lines[i][j].txt2;
                     GTE.svg.removeChild(temp);
                 }
             }
