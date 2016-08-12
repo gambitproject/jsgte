@@ -189,7 +189,7 @@ function FindNE() {
 	else {
 		for (var i=0; i<Nash.length; i++) {
 		    var newDiv = document.createElement("div"); 
-		    var newText = document.createTextNode("Strategy profile payoff vector of Nash Equilibrium " + i + ": " + "( " + Nash[i].payoffVector + " )");
+		    var newText = document.createTextNode("Payoff vector of Nash Equilibrium " + i + ": " + "( " + Nash[i].payoffVector + " )");
 		    newDiv.appendChild(newText);
 		    document.body.appendChild(newDiv);	
 		}	
