@@ -36,13 +36,32 @@ function D3draw_canvas(i){ //draw the canvas of the 3D drawing for player i
     temp.setAttribute("y",372);
     GTE.svg.appendChild(temp);
     
-    
-    
     temp = document.createElementNS("http://www.w3.org/2000/svg", "text");
     temp.textContent="d";
     temp.setAttribute("class", "canvas"+i+" player"+j+" strat"+Number(j-1)+"2 before"+i+" legendh up");
     temp.setAttribute("x",Number(i*x_shift+150));
     temp.setAttribute("y",272);
+    GTE.svg.appendChild(temp);
+    
+    temp = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    temp.textContent="d";
+    temp.setAttribute("class", "canvas"+i+" player"+j+" strat"+Number(j-1)+"0 legendh up");
+    temp.setAttribute("x",Number(i*x_shift+50));
+    temp.setAttribute("y",602);
+    GTE.svg.appendChild(temp);
+    
+    temp = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    temp.textContent="d";
+    temp.setAttribute("class", "canvas"+i+" player"+j+" strat"+Number(j-1)+"1 legendh up");
+    temp.setAttribute("x",Number(i*x_shift+250));
+    temp.setAttribute("y",602);
+    GTE.svg.appendChild(temp);
+    
+    temp = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    temp.textContent="d";
+    temp.setAttribute("class", "canvas"+i+" player"+j+" strat"+Number(j-1)+"2 legendh up");
+    temp.setAttribute("x",Number(i*x_shift+150));
+    temp.setAttribute("y",395);
     GTE.svg.appendChild(temp);
     
     temp = document.createElementNS("http://www.w3.org/2000/svg", "polyline");
@@ -139,10 +158,10 @@ function projection(vector,i) { //from theory to reality
 function projection_triangle(vector,i) { //from theory to reality
     var shift=Number(2*this.margin+this.width);
     var vec0=[200,0,0];
-    var vec1=[100,100];
+    var vec1=[100,173];
     var temp=add(mul(vector[0],vec0),mul(vector[1],vec1));
     
-    return [Number(temp[0]+GTE.diag.margin+i*(2*GTE.diag.margin+GTE.diag.width)),Number(GTE.diag.margin+450-temp[1])];
+    return [Number(temp[0]+GTE.diag.margin+i*(2*GTE.diag.margin+GTE.diag.width)),Number(GTE.diag.margin+530-temp[1])];
 }
 
 function add(vec1, vec2){
@@ -414,6 +433,8 @@ function D3compute_best_response(player){ //main function uses all previous func
 }
 
 function draw_envelope(points3D,player,strat){ //draw the faces of the upper envelope. Based on the graham algorithm
+    console.log(points3D);
+    console.log(player+" "+strat);
     var points=[];
     var points2=[];
     var center=[0,0];
@@ -428,6 +449,11 @@ function draw_envelope(points3D,player,strat){ //draw the faces of the upper env
     for (var i=0;i<points.length;i++){
         if(points[i][0]<points[left_point][0])
             left_point=i;
+        else{
+            if(points[i][0]==points[left_point][0] &&points[i][1]>points[left_point][1]){
+            left_point=i;
+            }
+        }
     }
     var s=points[left_point][0]+","+points[left_point][1]+" ";
     var s2=points2[left_point][0]+","+points2[left_point][1]+" ";
@@ -466,7 +492,7 @@ function draw_envelope(points3D,player,strat){ //draw the faces of the upper env
     }
     while (!test){
         var increase_rate=-100000;
-        var y_coor=0;
+        var y_coor=350;
         var new_point=-1;
         for (var i=0;i<points.length;i++){
             if(i!=last_point && points[i][0]<points[last_point][0]-eps){
@@ -479,7 +505,8 @@ function draw_envelope(points3D,player,strat){ //draw the faces of the upper env
         
         for (var i=0;i<points.length;i++){
             if(i!=last_point && equal_num(points[i][0],points[last_point][0])){
-                if (points[i][1]>y_coor-eps && points[i][1]<points[last_point][1]+eps){
+                console.log(points[i][1]+" "+y_coor+" "+points[last_point][1]);
+                if (points[i][1]<y_coor+eps && points[i][1]>points[last_point][1]-eps){
                     y_coor=points[i][1]
                     new_point=i;
                 }
@@ -495,9 +522,9 @@ function draw_envelope(points3D,player,strat){ //draw the faces of the upper env
         last_point=new_point;
         
     }
-    
+    console.log(s2);
     var temp = document.createElementNS("http://www.w3.org/2000/svg", "polyline");
-    temp.setAttribute("class","canvas"+player+" player"+Number(player+1)+" face contour up");
+    temp.setAttribute("class","canvas"+player+" project"+Number(player+1)+" face contour up");
     temp.setAttribute("points", s);
     GTE.svg.appendChild(temp);
     var temp2=GTE.svg.getElementsByClassName("before"+player)[0];
