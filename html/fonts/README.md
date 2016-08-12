@@ -1,3 +1,40 @@
+# Font changes
+
+12 August 2016, BvS
+
+I followed the instructions below following "Icomoon" step 1.,
+and selected 15 icons from
+https://icomoon.io/app/#/select/image
+
+(these seem to be non-permanent fonts as 
+"plus-circle" and "minus-circle" are not longer there and I had
+to use "plus" and "minus" instead)
+
+by clicking them.
+
+To download: (bottom-right)
+"Generate Font" which generates icomoon.zip
+and (bottom-left) "Generate SVG and more" which generates 
+icomoon_15_icons.zip but that I did not use.
+The selected glyphs I printed in glyphs.pdf
+(also shown in the demo.html when unzipping icomoon.zip;
+see also the file "Read Me.txt" there)
+
+The files 
+
+    icomoon.eot 
+    icomoon.ttf
+    icomoon.svg 
+    icomoon.woff 
+
+have to reside in the current folder
+
+    jsgte/html/fonts
+
+and the codes are changed in
+
+    jsgte/html/css/fonts.css
+
 Icomoon
 =======
 [Icomoon](https://icomoon.io/) is a service that lets developers create custom icon fonts by choosing icons from their 4000+ free vector icons database.

@@ -24,50 +24,50 @@
 }
 
 .icon-user:before {
-	content: "\f007";
+	content: "\e971";
 }
 .icon-plus-circle:before {
-	content: "\f055";
+	content: "\ea0a";
 }
 .icon-minus-circle:before {
-	content: "\f056";
+	content: "\ea0b";
 }
 .icon-chain:before {
-	content: "\f0c1";
+	content: "\e9cb";
 }
 .icon-link:before {
-	content: "\f0c1";
+	content: "\e9cb";
 }
 .icon-chain-broken:before {
-	content: "\f127";
+	content: "\e98b";
 }
 .icon-unlink:before {
-	content: "\f127";
+	content: "\e98b";
 }
 .icon-file:before {
-	content: "\f15b";
+	content: "\e924";
 }
 .icon-user-plus:before {
-	content: "\f234";
+	content: "\e973";
 }
 .icon-user-less:before {
-	content: "\f235";
+	content: "\e974";
 }
 .icon-dice:before {
-	content: "\e600";
+	content: "\e915";
 }
 .icon-cog:before {
-	content: "\e900";
+	content: "\e994";
 }
 .icon-undo:before {
-	content: "\f0e2";
+	content: "\e965";
  }
  .icon-redo:before {
-	content: "\f064";
+	content: "\e966";
  }
 .icon-save:before {
-	content: "\f15b";
+	content: "\e9c7";
 }
 .icon-load:before {
-	content: "\f15b	";
+	content: "\e9c8	";
 }
