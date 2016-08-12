@@ -151,6 +151,14 @@ box-sizing: border-box;
     fill:#8888ff;
 }
 
+#drawing .project1{
+    fill:#ff8888;
+}
+
+#drawing .project2{
+    fill:#8888ff;
+}
+
 /* lines*/
 #drawing line{
     stroke-width:0.2em;

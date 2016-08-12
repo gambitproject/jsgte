@@ -46,6 +46,43 @@ GTE = (function(parentModule) {
                 this.assignLines(1);
                 this.assignIntersections(1);
                 this.ini_arrays();
+                if (this.nb_strat[0]==3){
+                    var temp= GTE.svg.getElementsByClassName("bottom");
+                    for (var k=0;k<temp.length;k++){
+                        temp[k].setAttribute("visibility","hidden");
+                    }
+                    for (var j=0;j<this.equilibrium.length;j++){
+                        for (var i=0;i<this.equilibrium[j].length;i++){
+                            this.equilibrium[j][i].clear();
+                        }
+                    }
+                    this.equilibrium=[[],[],[]];
+                    var div=document.getElementById("eq_list");
+                    temp= div.children.length;
+                    for (var i=0;i<temp;i++){
+                        div.removeChild(div.children[0]);}
+                    this.ini_arrays();
+                    D3draw_canvas(1);
+                }
+                
+                if (this.nb_strat[0]>3){
+                    var temp= GTE.svg.getElementsByClassName("bottom");
+                    for (var k=0;k<temp.length;k++){
+                        temp[k].setAttribute("visibility","hidden");
+                    }
+                    for (var j=0;j<this.equilibrium.length;j++){
+                        for (var i=0;i<this.equilibrium[j].length;i++){
+                            this.equilibrium[j][i].clear();
+                        }
+                    }
+                    this.equilibrium=[[],[],[]];
+                    var div=document.getElementById("eq_list");
+                    temp= div.children.length;
+                    for (var i=0;i<temp;i++){
+                        div.removeChild(div.children[0]);}
+                    this.ini_arrays();
+                    D3delete_canvas(1);
+                }
             }
             
             if (this.nb_strat[1]==3){
@@ -69,44 +106,15 @@ GTE = (function(parentModule) {
                 for (var i=0;i<temp;i++){
                     div.removeChild(div.children[0]);}
                 this.ini_arrays();
-                D3draw_canvas(0);
-            }
-            if (this.nb_strat[0]==3){
-                var temp= GTE.svg.getElementsByClassName("bottom");
-                for (var k=0;k<temp.length;k++){
-                    temp[k].setAttribute("visibility","hidden");
+                if ( this.nb_strat[0]==3){
+                   D3draw_canvas(0);
+                   D3draw_canvas(1);
                 }
-                for (var j=0;j<this.equilibrium.length;j++){
-                    for (var i=0;i<this.equilibrium[j].length;i++){
-                        this.equilibrium[j][i].clear();
-                    }
+                if (this.nb_strat[0]>3){
+                    D3draw_canvas(0);
+                    D3delete_canvas(1);
+                    
                 }
-                this.equilibrium=[[],[],[]];
-                var div=document.getElementById("eq_list");
-                temp= div.children.length;
-                for (var i=0;i<temp;i++){
-                    div.removeChild(div.children[0]);}
-                this.ini_arrays();
-                D3draw_canvas(1);
-            }
-            
-            if (this.nb_strat[0]>3){
-                var temp= GTE.svg.getElementsByClassName("bottom");
-                for (var k=0;k<temp.length;k++){
-                    temp[k].setAttribute("visibility","hidden");
-                }
-                for (var j=0;j<this.equilibrium.length;j++){
-                    for (var i=0;i<this.equilibrium[j].length;i++){
-                        this.equilibrium[j][i].clear();
-                    }
-                }
-                this.equilibrium=[[],[],[]];
-                var div=document.getElementById("eq_list");
-                temp= div.children.length;
-                for (var i=0;i<temp;i++){
-                    div.removeChild(div.children[0]);}
-                this.ini_arrays();
-                D3delete_canvas(1);
             }
         }
     }
@@ -504,6 +512,8 @@ GTE = (function(parentModule) {
                 }
             }
         }
+        
+        this.update_from_matrix();
     };
     
     Diagram.prototype.compute_best_response = function(strat11=0, strat12=1, strat21=0, strat22=1, max) {

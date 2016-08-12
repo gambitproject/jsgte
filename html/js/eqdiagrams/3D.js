@@ -36,9 +36,11 @@ function D3draw_canvas(i){ //draw the canvas of the 3D drawing for player i
     temp.setAttribute("y",372);
     GTE.svg.appendChild(temp);
     
+    
+    
     temp = document.createElementNS("http://www.w3.org/2000/svg", "text");
     temp.textContent="d";
-    temp.setAttribute("class", "canvas"+i+" player"+j+" strat"+Number(j-1)+"2 legendh up");
+    temp.setAttribute("class", "canvas"+i+" player"+j+" strat"+Number(j-1)+"2 before"+i+" legendh up");
     temp.setAttribute("x",Number(i*x_shift+150));
     temp.setAttribute("y",272);
     GTE.svg.appendChild(temp);
@@ -116,7 +118,7 @@ function draw_plan([p1,p2,p3],i){ //draw the payoff plan for player i strategy y
     var q3=projection(p3,i);
     
     var temp = document.createElementNS("http://www.w3.org/2000/svg", "polyline");
-    temp.setAttribute("class","line"+Number(i+1)+" noface contour up");
+    temp.setAttribute("class","line"+Number(i+1)+" face contour up");
     temp.setAttribute("points", Number(q1[0])+", "+Number(q1[1])+" "+Number(q2[0])+", "+Number(q2[1])+" "+Number(q3[0])+", "+Number(q3[1])+" "+Number(q1[0])+", "+Number(q1[1]));
     
     GTE.svg.appendChild(temp);
@@ -132,6 +134,15 @@ function projection(vector,i) { //from theory to reality
     var temp=add(add(mul(vector[0],vec0),mul(vector[1],vec1)),mul(vector[2],vec2));
     
     return [Number(temp[0]+GTE.diag.margin+i*(2*GTE.diag.margin+GTE.diag.width)),Number(GTE.diag.margin+300-temp[1])];
+}
+
+function projection_triangle(vector,i) { //from theory to reality
+    var shift=Number(2*this.margin+this.width);
+    var vec0=[200,0,0];
+    var vec1=[100,100];
+    var temp=add(mul(vector[0],vec0),mul(vector[1],vec1));
+    
+    return [Number(temp[0]+GTE.diag.margin+i*(2*GTE.diag.margin+GTE.diag.width)),Number(GTE.diag.margin+450-temp[1])];
 }
 
 function add(vec1, vec2){
@@ -398,14 +409,18 @@ function D3compute_best_response(player){ //main function uses all previous func
         }
     }
     for (var i=4;i<u_plan_to_points.length; i++){
-        draw_envelope(u_plan_to_points[i],player);
+        draw_envelope(u_plan_to_points[i],player,Number(i-4));
     }
 }
 
-function draw_envelope(points3D,player){ //draw the faces of the upper envelope. Based on the graham algorithm
+function draw_envelope(points3D,player,strat){ //draw the faces of the upper envelope. Based on the graham algorithm
     var points=[];
+    var points2=[];
+    var center=[0,0];
+    var nb_points=0;
     for (var i=0;i<points3D.length;i++){
         points.push(projection(points3D[i],player));
+        points2.push(projection_triangle(points3D[i],player));
     }
     if (points.length <2)
         return;
@@ -415,6 +430,7 @@ function draw_envelope(points3D,player){ //draw the faces of the upper envelope.
             left_point=i;
     }
     var s=points[left_point][0]+","+points[left_point][1]+" ";
+    var s2=points2[left_point][0]+","+points2[left_point][1]+" ";
     var test=true;
     var last_point=left_point;
     while (test){
@@ -441,6 +457,10 @@ function draw_envelope(points3D,player){ //draw the faces of the upper envelope.
             test=false;
         else{
             s=s+points[new_point][0]+","+points[new_point][1]+" ";
+            s2=s2+points2[new_point][0]+","+points2[new_point][1]+" ";
+            center[0]=center[0]+points2[new_point][0];
+            center[1]=center[1]+points2[new_point][1];
+            nb_points=nb_points+1;
             last_point=new_point;
         }
     }
@@ -468,14 +488,35 @@ function draw_envelope(points3D,player){ //draw the faces of the upper envelope.
         if (equal_num(new_point,left_point))
             test=true;
         s=s+points[new_point][0]+","+points[new_point][1]+" ";
+        s2=s2+points2[new_point][0]+","+points2[new_point][1]+" ";
+        center[0]=center[0]+points2[new_point][0];
+        center[1]=center[1]+points2[new_point][1];
+        nb_points=nb_points+1;
         last_point=new_point;
         
     }
     
     var temp = document.createElementNS("http://www.w3.org/2000/svg", "polyline");
-    temp.setAttribute("class","player"+Number(player+1)+" face contour up");
+    temp.setAttribute("class","canvas"+player+" player"+Number(player+1)+" face contour up");
     temp.setAttribute("points", s);
     GTE.svg.appendChild(temp);
+    var temp2=GTE.svg.getElementsByClassName("before"+player)[0];
+    GTE.svg.insertBefore(temp2,temp);
+    GTE.svg.insertBefore(temp,temp2);
+    
+    temp = document.createElementNS("http://www.w3.org/2000/svg", "polyline");
+    temp.setAttribute("class","canvas"+player+" project"+Number(player+1)+" face contour up");
+    temp.setAttribute("points", s2);
+    GTE.svg.appendChild(temp);
+    
+    if (nb_points>2){
+    temp = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    temp.textContent="d";
+    temp.setAttribute("class", "canvas"+player+" player"+Number(player+1)+" strat"+Number(player)+""+strat+" legendh up");
+    temp.setAttribute("x",Number(center[0]/nb_points));
+    temp.setAttribute("y",Number(center[1]/nb_points));
+    GTE.svg.appendChild(temp);
+    }
 }
 
 function D3delete_faces(){
