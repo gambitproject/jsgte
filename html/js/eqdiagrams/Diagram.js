@@ -33,31 +33,86 @@ GTE = (function(parentModule) {
         this.strat=[[0,1],[0,1]];
         this.nb_strat=[GTE.tree.matrix.strategies[1].length,GTE.tree.matrix.strategies[2].length];
         if (this.nb_strat[0]==2 && this.nb_strat[1]==2){
-            this.ini_html(2);
+            this.ini_html2(2);
             this.assignEndpoints(2);
             this.assignLines(2);
             this.assignIntersections(2);
+            this.ini_arrays();
         }
         else {
-            if (this.nb_strat[0]==2){
-               this.ini_html(1);
-               this.assignEndpoints(1);
-               this.assignLines(1);
-               this.assignIntersections(1);
+            if (this.nb_strat[1]==2){
+                this.ini_html2(1);
+                this.assignEndpoints(1);
+                this.assignLines(1);
+                this.assignIntersections(1);
+                this.ini_arrays();
+            }
+            
+            if (this.nb_strat[1]==3){
+                var temp= GTE.svg.getElementsByClassName("bottom");
+                for (var k=0;k<temp.length;k++){
+                    temp[k].setAttribute("visibility","hidden");
+                    
+                }
+                var temp= GTE.svg.getElementsByClassName("line_down").length;
+                for (var k=0;k<temp;k++){
+                    GTE.svg.removeChild(GTE.svg.getElementsByClassName("line_down")[0]);
+                }
+                for (var j=0;j<this.equilibrium.length;j++){
+                    for (var i=0;i<this.equilibrium[j].length;i++){
+                        this.equilibrium[j][i].clear();
+                    }
+                }
+                this.equilibrium=[[],[],[]];
+                var div=document.getElementById("eq_list");
+                temp= div.children.length;
+                for (var i=0;i<temp;i++){
+                    div.removeChild(div.children[0]);}
+                this.ini_arrays();
+                D3draw_canvas(0);
             }
             if (this.nb_strat[0]==3){
-                
-                draw_canvas(1);
+                var temp= GTE.svg.getElementsByClassName("bottom");
+                for (var k=0;k<temp.length;k++){
+                    temp[k].setAttribute("visibility","hidden");
+                }
+                for (var j=0;j<this.equilibrium.length;j++){
+                    for (var i=0;i<this.equilibrium[j].length;i++){
+                        this.equilibrium[j][i].clear();
+                    }
+                }
+                this.equilibrium=[[],[],[]];
+                var div=document.getElementById("eq_list");
+                temp= div.children.length;
+                for (var i=0;i<temp;i++){
+                    div.removeChild(div.children[0]);}
+                this.ini_arrays();
+                D3draw_canvas(1);
             }
-            if (this.nb_strat[1]==3){
-                draw_canvas(0);
+            
+            if (this.nb_strat[0]>3){
+                var temp= GTE.svg.getElementsByClassName("bottom");
+                for (var k=0;k<temp.length;k++){
+                    temp[k].setAttribute("visibility","hidden");
+                }
+                for (var j=0;j<this.equilibrium.length;j++){
+                    for (var i=0;i<this.equilibrium[j].length;i++){
+                        this.equilibrium[j][i].clear();
+                    }
+                }
+                this.equilibrium=[[],[],[]];
+                var div=document.getElementById("eq_list");
+                temp= div.children.length;
+                for (var i=0;i<temp;i++){
+                    div.removeChild(div.children[0]);}
+                this.ini_arrays();
+                D3delete_canvas(1);
             }
         }
-        this.ini_arrays();
     }
     
-    Diagram.prototype.ini_html = function (max){
-       var x_shift = Number(2*this.margin+this.width);
+    Diagram.prototype.ini_html2 = function (max){
+        var x_shift = Number(2*this.margin+this.width);
         var temp= GTE.svg.getElementsByClassName("up").length;
         for( var k=0;k<temp;k++){
             GTE.svg.removeChild(GTE.svg.getElementsByClassName("up")[0]);
@@ -168,6 +223,52 @@ GTE = (function(parentModule) {
         
     }
     
+    Diagram.prototype.update_from_matrix = function (){
+        if (Number(document.getElementById("precision").value) >0){
+            GTE.diag.precision=1/Number(document.getElementById("precision").value);
+            document.getElementById("precision").value=Number(document.getElementById("precision").value);
+        }
+        else{
+            document.getElementById("precision").value=1/GTE.diag.precision;
+        }
+        this.nb_strat=[GTE.tree.matrix.strategies[1].length,GTE.tree.matrix.strategies[2].length];
+        for( var i=0;i<this.nb_strat[0];i++){
+            for (var j=0;j<this.nb_strat[1];j++){
+                this.payoffs[0][i][j]=(Math.round(GTE.tree.matrix.matrix[Number(i*this.nb_strat[1]+j)].strategy.payoffs[0].value*GTE.diag.precision)/GTE.diag.precision);
+                GTE.tree.matrix.matrix[Number(i*this.nb_strat[1]+j)].strategy.payoffs[0].value=this.payoffs[0][i][j];;
+                this.payoffs[1][i][j]=(Math.round(GTE.tree.matrix.matrix[Number(i*this.nb_strat[1]+j)].strategy.payoffs[1].value*GTE.diag.precision)/GTE.diag.precision);
+                GTE.tree.matrix.matrix[Number(i*this.nb_strat[1]+j)].strategy.payoffs[1].value=this.payoffs[1][i][j];
+                
+            }
+        }
+        
+        for (var i=0;i<2;i++){
+            for (var j=0;j<this.nb_strat[i];j++){
+                var temp= GTE.svg.getElementsByClassName("strat"+""+i+""+j);
+                for ( var l=0;l<temp.length;l++){
+                    temp[l].textContent=GTE.tree.matrix.strategies[i+1][j].moves[0].name;
+                }
+            }
+        }
+        
+        //upates player's names
+        var name_player=GTE.svg.getElementsByClassName("player1_name");
+        for (var i=0;i<name_player.length;i++){
+            name_player[i].textContent=GTE.tree.matrix.players[1].name;
+        }
+        var name_player=GTE.svg.getElementsByClassName("player1_title");
+        for (var i=0;i<name_player.length;i++){
+            name_player[i].textContent="Payoff to "+GTE.tree.matrix.players[1].name;
+        }
+        name_player=GTE.svg.getElementsByClassName("player2_name");
+        for (var i=0;i<name_player.length;i++)
+        name_player[i].textContent=GTE.tree.matrix.players[2].name;
+        name_player=GTE.svg.getElementsByClassName("player2_title");
+        for (var i=0;i<name_player.length;i++)
+        name_player[i].textContent="Payoff to "+GTE.tree.matrix.players[2].name;
+        
+        
+    };
     
     Diagram.prototype.assignEndpoints = function(max) {
         var table_x=[[50,250],[450,650]];
@@ -312,18 +413,12 @@ GTE = (function(parentModule) {
     
     
     Diagram.prototype.redraw = function (){
-        if (Number(document.getElementById("precision").value) >0){
-            GTE.diag.precision=1/Number(document.getElementById("precision").value);
-            document.getElementById("precision").value=Number(document.getElementById("precision").value);
-        }
-        else{
-            document.getElementById("precision").value=1/GTE.diag.precision;
-        }
-        this.nb_strat=[GTE.tree.matrix.strategies[1].length,GTE.tree.matrix.strategies[2].length];
+        
         GTE.tree.clear();
         document.getElementById('matrix-player-1').value = GTE.tree.matrix.getMatrixInStringFormat(0);
         document.getElementById('matrix-player-2').value = GTE.tree.matrix.getMatrixInStringFormat(1);
         GTE.tree.matrix.drawMatrix();
+        this.update_from_matrix();
         var x=[196,225,596,625];
         var p=[2,1];
         if (this.nb_strat[0]==2 && this.nb_strat[1]==2){
@@ -389,7 +484,6 @@ GTE = (function(parentModule) {
          GTE.diag.redraw();    });
          }*/
         
-        
         if (this.nb_strat[0]==2 && this.nb_strat[1]==2){
             this.compute_best_response(this.strat[0][0],this.strat[0][1],this.strat[1][0],this.strat[1][1],max);
             this.draw_square_down(this.strat[0][0],this.strat[0][1],this.strat[1][0],this.strat[1][1]);
@@ -399,35 +493,15 @@ GTE = (function(parentModule) {
                 this.compute_best_response(this.strat[0][0],this.strat[0][1],this.strat[1][0],this.strat[1][1],max);
             }
             if (this.nb_strat[0]==3 &&this.nb_strat[1]==3){
-                this.clear();
-                this.ini();
-       for( var i=0;i<this.nb_strat[0];i++){
-       for (var j=0;j<this.nb_strat[1];j++){
-       this.payoffs[0][i][j]=(Math.round(GTE.tree.matrix.matrix[Number(i*this.nb_strat[1]+j)].strategy.payoffs[0].value*GTE.diag.precision)/GTE.diag.precision);
-       GTE.tree.matrix.matrix[Number(i*this.nb_strat[1]+j)].strategy.payoffs[0].value=this.payoffs[0][i][j];;
-       this.payoffs[1][i][j]=(Math.round(GTE.tree.matrix.matrix[Number(i*this.nb_strat[1]+j)].strategy.payoffs[1].value*GTE.diag.precision)/GTE.diag.precision);
-       GTE.tree.matrix.matrix[Number(i*this.nb_strat[1]+j)].strategy.payoffs[1].value=this.payoffs[1][i][j];
-       
-       }
-       }
-                Dcompute_best_response(0);
-               Dcompute_best_response(1);
+                D3delete_faces();
+                D3compute_best_response(0);
+                D3compute_best_response(1);
             }
             else {
-            if (this.nb_strat[0]==3){
-                this.clear();
-                this.ini();
-       for( var i=0;i<this.nb_strat[0];i++){
-       for (var j=0;j<this.nb_strat[1];j++){
-       this.payoffs[0][i][j]=(Math.round(GTE.tree.matrix.matrix[Number(i*this.nb_strat[1]+j)].strategy.payoffs[0].value*GTE.diag.precision)/GTE.diag.precision);
-       GTE.tree.matrix.matrix[Number(i*this.nb_strat[1]+j)].strategy.payoffs[0].value=this.payoffs[0][i][j];;
-       this.payoffs[1][i][j]=(Math.round(GTE.tree.matrix.matrix[Number(i*this.nb_strat[1]+j)].strategy.payoffs[1].value*GTE.diag.precision)/GTE.diag.precision);
-       GTE.tree.matrix.matrix[Number(i*this.nb_strat[1]+j)].strategy.payoffs[1].value=this.payoffs[1][i][j];
-       
-       }
-       }
-                Dcompute_best_response(1);
-            }
+                if (this.nb_strat[0]==3){
+                    D3delete_faces();
+                    D3compute_best_response(1);
+                }
             }
         }
     };
@@ -443,7 +517,7 @@ GTE = (function(parentModule) {
             this.endpoints[1][Number(i*2+1)].strat_matrix=Number(strat12*this.nb_strat[1]+i);
         }
         
-
+        
         
         for (var i=0;i<this.nb_strat[0];i++){
             this.endpoints[0][i*2].move(this.height-this.margin-this.payoffs[0][i][strat21]*this.step);
@@ -461,14 +535,7 @@ GTE = (function(parentModule) {
         var Y12; //right extremity of the first line
         var Y21; //left extremity of the second line
         var Y22; //right extremity of the second line
-        for (var i=0;i<2;i++){
-            for (var j=0;j<this.nb_strat[i];j++){
-                var temp= GTE.svg.getElementsByClassName("strat"+""+i+""+j);
-                for ( var l=0;l<temp.length;l++){
-                    temp[l].textContent=GTE.tree.matrix.strategies[i+1][j].moves[0].name;
-                }
-            }
-        }
+
         for (var i=0;i<2;i++){
             for (var j=0; j< this.nb_strat[i]-1;j++){
                 for (var k=j+1 ; k<this.nb_strat[i];k++){
@@ -631,23 +698,6 @@ GTE = (function(parentModule) {
         }
         
         this.computeEnvelope(strat11, strat12, strat21, strat22,max);
-        //upates player's names
-        var name_player=GTE.svg.getElementsByClassName("player1_name");
-        for (var i=0;i<name_player.length;i++){
-            name_player[i].textContent=GTE.tree.matrix.players[1].name;
-        }
-        var name_player=GTE.svg.getElementsByClassName("player1_title");
-        for (var i=0;i<name_player.length;i++){
-            name_player[i].textContent="Payoff to "+GTE.tree.matrix.players[1].name;
-        }
-        name_player=GTE.svg.getElementsByClassName("player2_name");
-        for (var i=0;i<name_player.length;i++)
-        name_player[i].textContent=GTE.tree.matrix.players[2].name;
-        name_player=GTE.svg.getElementsByClassName("player2_title");
-        for (var i=0;i<name_player.length;i++)
-        name_player[i].textContent="Payoff to "+GTE.tree.matrix.players[2].name;
-        
-        
     }
     
     
@@ -1015,10 +1065,10 @@ GTE = (function(parentModule) {
                         var s1=GTE.tree.matrix.strategies[1][dege2[0][0]].moves[0].name;
                     }
                     else{
-                    this.equilibrium[1][cmp]=new GTE.Marker(cmp,Number(2*this.margin+this.width+this.margin),Number(this.height+this.margin),"#00ff00");
+                        this.equilibrium[1][cmp]=new GTE.Marker(cmp,Number(2*this.margin+this.width+this.margin),Number(this.height+this.margin),"#00ff00");
                         this.equilibrium[1][cmp].degenerated(Number(2*this.width+this.margin));
                         var s1=GTE.tree.matrix.strategies[1][dege2[0][0]].moves[0].name+" between 0 and 1";
-                    
+                        
                     }
                     var s2=GTE.tree.matrix.strategies[2][dege2[0][1]].moves[0].name;
                     this.add_eq_text(s1,s2,cmp);
@@ -1412,7 +1462,8 @@ GTE = (function(parentModule) {
                             temp[5].setAttributeNS(null, "height", Number(this.side+2*this.rad));
                             temp[5].setAttributeNS(null, "width", Number(this.side+2*this.rad));
                             temp[5].setAttributeNS(null, "fill", "cyan");
-                            //GTE.svg.insertBefore(temp[5],temp[8]);
+                            var temp1=GTE.svg.getElementsByClassName("mixed")[0];
+                            GTE.svg.insertBefore(temp[5],temp1);
                         }
                         else {
                             temp[7].setAttributeNS(null, "x", Number(this.margin-this.rad));
@@ -1420,7 +1471,9 @@ GTE = (function(parentModule) {
                             temp[7].setAttributeNS(null, "height", Number(this.side+2*this.rad));
                             temp[7].setAttributeNS(null, "width", Number(this.side+2*this.rad));
                             temp[7].setAttributeNS(null, "fill", "cyan");
-                            //  GTE.svg.insertBefore(temp[7],temp[8]);
+                            
+                            var temp1=GTE.svg.getElementsByClassName("mixed")[0];
+                            GTE.svg.insertBefore(temp[7],temp1);
                         }
                     }
                 }
@@ -1510,7 +1563,9 @@ GTE = (function(parentModule) {
                                 temp[4].setAttributeNS(null, "x", Number(this.margin-this.rad));
                                 temp[4].setAttributeNS(null, "y", Number(2*this.margin+this.height-this.rad));
                                 temp[4].setAttributeNS(null, "fill", "pink");
-                                //GTE.svg.insertBefore(temp[4],temp[8]);
+                                
+                                var temp1=GTE.svg.getElementsByClassName("mixed")[0];
+                                GTE.svg.insertBefore(temp[4],temp1);
                             }
                         }
                         if (this.best_response[0][0]==-1 && this.best_response[0][1]>-1){
@@ -1568,7 +1623,9 @@ GTE = (function(parentModule) {
                                 temp[4].setAttributeNS(null, "x", Number(this.margin-this.rad));
                                 temp[4].setAttributeNS(null, "y", Number(2*this.margin+this.height-this.rad));
                                 temp[4].setAttributeNS(null, "fill", "pink");
-                                // GTE.svg.insertBefore(temp[4],temp[8]);
+                                
+                                var temp1=GTE.svg.getElementsByClassName("mixed")[0];
+                                GTE.svg.insertBefore(temp[4],temp1);
                             }
                         }
                     }
@@ -1593,7 +1650,9 @@ GTE = (function(parentModule) {
                                 temp[4].setAttributeNS(null, "x", Number(this.margin-this.rad));
                                 temp[4].setAttributeNS(null, "y", Number(2*this.margin+this.height-this.rad));
                                 temp[4].setAttributeNS(null, "fill", "pink");
-                                //GTE.svg.insertBefore(temp[4],temp[8]);
+                                
+                                var temp1=GTE.svg.getElementsByClassName("mixed")[0];
+                                GTE.svg.insertBefore(temp[4],temp1);
                             }
                         }
                         if (this.best_response[0][0]==-1 && this.best_response[0][1]>-1){
@@ -1651,7 +1710,9 @@ GTE = (function(parentModule) {
                                 temp[4].setAttributeNS(null, "x", Number(this.margin-this.rad));
                                 temp[4].setAttributeNS(null, "y", Number(2*this.margin+this.height-this.rad));
                                 temp[4].setAttributeNS(null, "fill", "pink");
-                                //GTE.svg.insertBefore(temp[4],temp[8]);
+                                
+                                var temp1=GTE.svg.getElementsByClassName("mixed")[0];
+                                GTE.svg.insertBefore(temp[4],temp1);
                             }
                         }
                     }
@@ -1829,10 +1890,10 @@ GTE = (function(parentModule) {
             var envelope2=document.getElementById("envelope2");
             if (envelope2!=null)
             envelope2.setAttributeNS(null,"points", "450,50, 450,350, 650,350,  650,50");}
-       var temp= GTE.svg.getElementsByClassName("up").length;
-       for( var k=0;k<temp;k++){
-       GTE.svg.removeChild(GTE.svg.getElementsByClassName("up")[0]);
-       }
+        var temp= GTE.svg.getElementsByClassName("up").length;
+        for( var k=0;k<temp;k++){
+            GTE.svg.removeChild(GTE.svg.getElementsByClassName("up")[0]);
+        }
         this.cleanForeign();
         
     }

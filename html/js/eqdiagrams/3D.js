@@ -3,7 +3,7 @@ var eps=0.0001; //error to zero;
 var x_shift=400;
 
 
-function draw_canvas(i){ //draw the canvas of the 3D drawing for player i
+function D3draw_canvas(i){ //draw the canvas of the 3D drawing for player i
     
     temp = document.createElementNS("http://www.w3.org/2000/svg", "text");
     if (i==0){
@@ -11,7 +11,7 @@ function draw_canvas(i){ //draw the canvas of the 3D drawing for player i
     }else{
         temp.textContent="Payoff to II";
     }
-    temp.setAttribute("class", "player"+Number(i+1)+" player"+Number(i+1)+"_title title up");
+    temp.setAttribute("class", "canvas"+i+" player"+Number(i+1)+" player"+Number(i+1)+"_title title up");
     temp.setAttribute("x",Number(i*x_shift+150));
     temp.setAttribute("y",40);
     GTE.svg.appendChild(temp);
@@ -24,33 +24,33 @@ function draw_canvas(i){ //draw the canvas of the 3D drawing for player i
     else{
         var j=1;}
     temp.textContent="d";
-    temp.setAttribute("class", "player"+j+" strat"+Number(j-1)+"0 legendh up");
+    temp.setAttribute("class", "canvas"+i+" player"+j+" strat"+Number(j-1)+"0 legendh up");
     temp.setAttribute("x",Number(i*x_shift+50));
     temp.setAttribute("y",372);
     GTE.svg.appendChild(temp);
     
     temp = document.createElementNS("http://www.w3.org/2000/svg", "text");
     temp.textContent="d";
-    temp.setAttribute("class", "player"+j+" strat"+Number(j-1)+"1 legendh up");
+    temp.setAttribute("class", "canvas"+i+" player"+j+" strat"+Number(j-1)+"1 legendh up");
     temp.setAttribute("x",Number(i*x_shift+250));
     temp.setAttribute("y",372);
     GTE.svg.appendChild(temp);
     
     temp = document.createElementNS("http://www.w3.org/2000/svg", "text");
     temp.textContent="d";
-    temp.setAttribute("class", "player"+j+" strat"+Number(j-1)+"2 legendh up");
+    temp.setAttribute("class", "canvas"+i+" player"+j+" strat"+Number(j-1)+"2 legendh up");
     temp.setAttribute("x",Number(i*x_shift+150));
     temp.setAttribute("y",272);
     GTE.svg.appendChild(temp);
     
     temp = document.createElementNS("http://www.w3.org/2000/svg", "polyline");
-    temp.setAttribute("class","contour up");
+    temp.setAttribute("class","canvas"+i+" contour up");
     temp.setAttribute("points", Number(GTE.diag.margin+i*x_shift)+", "+Number(GTE.diag.height-GTE.diag.margin)+" "+Number(GTE.diag.margin+i*x_shift+100)+", "+Number(GTE.diag.height-GTE.diag.margin-100)+" "+Number(GTE.diag.margin+i*x_shift+200)+","+Number(GTE.diag.height-GTE.diag.margin)+" "+Number(GTE.diag.margin+i*x_shift)+","+Number(GTE.diag.height-GTE.diag.margin));
     
     GTE.svg.appendChild(temp);
 
     temp = document.createElementNS("http://www.w3.org/2000/svg", "line");
-    temp.setAttribute("class","contour up");
+    temp.setAttribute("class","canvas"+i+" contour up");
     temp.setAttribute("x1", Number(GTE.diag.margin+i*x_shift));
     temp.setAttribute("y1",Number(GTE.diag.margin+100));
     temp.setAttribute("x2", Number(GTE.diag.margin+i*x_shift));
@@ -58,7 +58,7 @@ function draw_canvas(i){ //draw the canvas of the 3D drawing for player i
     GTE.svg.appendChild(temp);
     
     temp = document.createElementNS("http://www.w3.org/2000/svg", "line");
-    temp.setAttribute("class","contour up");
+    temp.setAttribute("class","canvas"+i+" contour up");
     temp.setAttribute("x1", Number(GTE.diag.margin+i*x_shift+100));
     temp.setAttribute("y1",Number(GTE.diag.margin));
     temp.setAttribute("x2", Number(GTE.diag.margin+i*x_shift+100));
@@ -66,7 +66,7 @@ function draw_canvas(i){ //draw the canvas of the 3D drawing for player i
     GTE.svg.appendChild(temp);
     
     temp = document.createElementNS("http://www.w3.org/2000/svg", "line");
-    temp.setAttribute("class","contour up");
+    temp.setAttribute("class","canvas"+i+" contour up");
     temp.setAttribute("x1", Number(GTE.diag.margin+i*x_shift+200));
     temp.setAttribute("y1",Number(GTE.diag.margin+100));
     temp.setAttribute("x2", Number(GTE.diag.margin+i*x_shift+200));
@@ -75,33 +75,33 @@ function draw_canvas(i){ //draw the canvas of the 3D drawing for player i
     
     for (var k=0;k<9;k++){
         temp = document.createElementNS("http://www.w3.org/2000/svg", "line");
-        temp.setAttribute("class", "stick up");
+        temp.setAttribute("class", "canvas"+i+" stick up");
         temp.setAttribute("x1",Number(i*x_shift+50));
         temp.setAttribute("x2",Number(i*x_shift+45));
         temp.setAttribute("y1",Number(170+k*20));
         temp.setAttribute("y2",Number(170+k*20));
         GTE.svg.appendChild(temp);
         temp = document.createElementNS("http://www.w3.org/2000/svg", "text");
-        temp.setAttribute("class", "sticklabel up");
+        temp.setAttribute("class", "canvas"+i+" sticklabel up");
         temp.setAttribute("x",Number(i*x_shift+35));
         temp.setAttribute("y",Number(175+k*20));
         temp.textContent=Number(9-k);
         GTE.svg.appendChild(temp);
         temp = document.createElementNS("http://www.w3.org/2000/svg", "line");
-        temp.setAttribute("class", "stick up");
+        temp.setAttribute("class", "canvas"+i+" stick up");
         temp.setAttribute("x1",Number(i*x_shift+250));
         temp.setAttribute("x2",Number(i*x_shift+255));
         temp.setAttribute("y1",Number(170+k*20));
         temp.setAttribute("y2",Number(170+k*20));
         GTE.svg.appendChild(temp);
         temp = document.createElementNS("http://www.w3.org/2000/svg", "text");
-        temp.setAttribute("class", "sticklabel up");
+        temp.setAttribute("class", "canvas"+i+" sticklabel up");
         temp.setAttribute("x",Number(i*x_shift+35+230));
         temp.setAttribute("y",Number(175+k*20));
         temp.textContent=Number(9-k);
         GTE.svg.appendChild(temp);
         temp = document.createElementNS("http://www.w3.org/2000/svg", "line");
-        temp.setAttribute("class", "stick up");
+        temp.setAttribute("class", "canvas"+i+" stick up");
         temp.setAttribute("x1",Number(i*x_shift+145));
         temp.setAttribute("x2",Number(i*x_shift+155));
         temp.setAttribute("y1",Number(70+k*20));
@@ -266,7 +266,7 @@ function is_possible (vec,plan){ //check if vec is a point in the convex envelop
     return true;
 }
 
-function Dcompute_best_response(player){ //main function uses all previous functions
+function D3compute_best_response(player){ //main function uses all previous functions
     //draw_canvas(player);
     var nb_strat=GTE.diag.nb_strat[player];
     var payoffs=[];
@@ -476,4 +476,17 @@ function draw_envelope(points3D,player){ //draw the faces of the upper envelope.
     temp.setAttribute("class","player"+Number(player+1)+" face contour up");
     temp.setAttribute("points", s);
     GTE.svg.appendChild(temp);
+}
+
+function D3delete_faces(){
+    var temp=document.getElementsByClassName("face").length;
+    for (var i=0;i<temp;i++)
+        GTE.svg.removeChild(document.getElementsByClassName("face")[0]);
+    
+}
+
+function D3delete_canvas(player){
+    var temp=document.getElementsByClassName("canvas"+player).length;
+    for (var i=0;i<temp;i++)
+        GTE.svg.removeChild(document.getElementsByClassName("canvas"+player)[0]);
 }
