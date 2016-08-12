@@ -1,6 +1,7 @@
 var eps=0.0001; //error to zero;
 //var color=["#ff8888", "#33ff88", "#6666ff","#f9e796", "#28fcff", "#f6085", "#ddb860"]; //strategy's color
 var x_shift=400;
+var moving_point;
 
 
 function D3draw_canvas(i){ //draw the canvas of the 3D drawing for player i
@@ -131,7 +132,7 @@ function D3draw_canvas(i){ //draw the canvas of the 3D drawing for player i
     }
 }
 
-function draw_plan([p1,p2,p3],i){ //draw the payoff plan for player i strategy y
+function draw_plan([p1,p2,p3],i,y){ //draw the payoff plan for player i strategy y
     var q1=projection(p1,i);
     var q2=projection(p2,i);
     var q3=projection(p3,i);
@@ -141,9 +142,83 @@ function draw_plan([p1,p2,p3],i){ //draw the payoff plan for player i strategy y
     temp.setAttribute("points", Number(q1[0])+", "+Number(q1[1])+" "+Number(q2[0])+", "+Number(q2[1])+" "+Number(q3[0])+", "+Number(q3[1])+" "+Number(q1[0])+", "+Number(q1[1]));
     
     GTE.svg.appendChild(temp);
-    
-    
+    if (y>=0){
+    if (i==0){
+        var strat0=Number(GTE.diag.nb_strat[1]*0+y);
+        var strat1=Number(GTE.diag.nb_strat[1]*1+y);
+        var strat2=Number(GTE.diag.nb_strat[1]*2+y);
+    }
+    else{
+        var strat0=Number(GTE.diag.nb_strat[1]*y+0);
+        var strat1=Number(GTE.diag.nb_strat[1]*y+1);
+        var strat2=Number(GTE.diag.nb_strat[1]*y+2);
+        
+    }
+    var e=document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    e.setAttribute("cx",q1[0]);
+    e.setAttribute("cy",q1[1]);
+    e.setAttribute("r",GTE.POINT_RADIUS);
+    e.setAttribute("class","canvas"+i+" pay line"+Number(i+1));
+    e.setAttribute("strat",strat0);
+    e.setAttribute("player",i);
+    e.addEventListener("mousedown", D3MouseDownEndpoint);
+    GTE.svg.appendChild(e);
+    var e=document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    e.setAttribute("cx",q2[0]);
+    e.setAttribute("cy",q2[1]);
+    e.setAttribute("r",GTE.POINT_RADIUS);
+    e.setAttribute("class","canvas"+i+" pay line"+Number(i+1));
+    e.setAttribute("strat",strat1);
+    e.setAttribute("player",i);
+    e.addEventListener("mousedown", D3MouseDownEndpoint);
+    GTE.svg.appendChild(e);
+    var e=document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    e.setAttribute("cx",q3[0]);
+    e.setAttribute("cy",q3[1]);
+    e.setAttribute("r",GTE.POINT_RADIUS);
+    e.setAttribute("class","canvas"+i+" pay line"+Number(i+1));
+    e.setAttribute("strat",strat2);
+    e.setAttribute("player",i);
+    e.addEventListener("mousedown", D3MouseDownEndpoint);
+    GTE.svg.appendChild(e);
+    }
 }
+
+function D3MouseDownEndpoint (event) {
+    moving_point=event.currentTarget;
+    document.addEventListener("mousemove", D3MouseMoveEndpoint);
+    document.addEventListener("mouseup", D3MouseupEndpoint);
+    event.currentTarget.removeEventListener("mousedown", D3MouseDownEndpoint);
+};
+
+function D3MouseMoveEndpoint (event) {
+    
+    var mousePosition = GTE.getMousePosition(event);
+    var svgPosition = GTE.svg.getBoundingClientRect();
+    var strat=moving_point.getAttribute("strat");
+    var player=moving_point.getAttribute("player");
+    console.log(moving_point);
+    if (strat<2){
+        var newPos=Math.round((2*GTE.diag.height/(svgPosition.bottom-svgPosition.top)*(-mousePosition.y+svgPosition.top)+GTE.diag.height-GTE.diag.margin-100)/20*GTE.diag.precision)/GTE.diag.precision;}
+    else{
+        var newPos=Math.round((2*GTE.diag.height/(svgPosition.bottom-svgPosition.top)*(-mousePosition.y+svgPosition.top)+GTE.diag.height-GTE.diag.margin)/20*GTE.diag.precision)/GTE.diag.precision;
+    }
+    if (Number(newPos)<GTE.diag.min) newPos=GTE.diag.min;
+    if (Number(newPos)>GTE.diag.max) newPos=GTE.diag.max;
+    if( (Number(newPos)-moving_point.getAttribute("cy"))*(Number(newPos)-moving_point.getAttribute("cy"))>0.005){
+        GTE.tree.matrix.matrix[strat].strategy.payoffs[player].value=newPos;
+        GTE.tree.matrix.matrix[strat].strategy.payoffs[player].text=newPos;
+        GTE.diag.redraw();
+    }
+};
+
+function D3MouseupEndpoint (event) {
+    var mousePosition = GTE.getMousePosition(event)
+    document.removeEventListener("mousemove", D3MouseMoveEndpoint);
+    document.removeEventListener("mouseup", D3MouseupEndpoint);
+    moving_point.addEventListener("mousedown", D3MouseDownEndpoint);
+    moving_point=null;
+};
 
 function projection(vector,i) { //from theory to reality
     var shift=Number(2*this.margin+this.width);
@@ -310,7 +385,7 @@ function D3compute_best_response(player){ //main function uses all previous func
                 payoffs[i].push(GTE.diag.payoffs[1][j][i]);
         }
         plan[i+4]=[[0,0,payoffs[i][0]],[1,0,payoffs[i][1]],[0,1,payoffs[i][2]]];
-        draw_plan(plan[i+4],player);
+        draw_plan(plan[i+4],player,i);
     }
     //computing intersection of all pairs of plans
     var lines=[];
@@ -433,8 +508,8 @@ function D3compute_best_response(player){ //main function uses all previous func
 }
 
 function draw_envelope(points3D,player,strat){ //draw the faces of the upper envelope. Based on the graham algorithm
-    console.log(points3D);
-    console.log(player+" "+strat);
+    //console.log(points3D);
+    //console.log(player+" "+strat);
     var points=[];
     var points2=[];
     var center=[0,0];
@@ -505,7 +580,7 @@ function draw_envelope(points3D,player,strat){ //draw the faces of the upper env
         
         for (var i=0;i<points.length;i++){
             if(i!=last_point && equal_num(points[i][0],points[last_point][0])){
-                console.log(points[i][1]+" "+y_coor+" "+points[last_point][1]);
+                //console.log(points[i][1]+" "+y_coor+" "+points[last_point][1]);
                 if (points[i][1]<y_coor+eps && points[i][1]>points[last_point][1]-eps){
                     y_coor=points[i][1]
                     new_point=i;
@@ -522,7 +597,7 @@ function draw_envelope(points3D,player,strat){ //draw the faces of the upper env
         last_point=new_point;
         
     }
-    console.log(s2);
+    //console.log(s2);
     var temp = document.createElementNS("http://www.w3.org/2000/svg", "polyline");
     temp.setAttribute("class","canvas"+player+" project"+Number(player+1)+" face contour up");
     temp.setAttribute("points", s);
