@@ -144,14 +144,14 @@ function draw_plan([p1,p2,p3],i,y){ //draw the payoff plan for player i strategy
     GTE.svg.appendChild(temp);
     if (y>=0){
     if (i==0){
-        var strat0=Number(GTE.diag.nb_strat[1]*0+y);
-        var strat1=Number(GTE.diag.nb_strat[1]*1+y);
-        var strat2=Number(GTE.diag.nb_strat[1]*2+y);
-    }
-    else{
         var strat0=Number(GTE.diag.nb_strat[1]*y+0);
         var strat1=Number(GTE.diag.nb_strat[1]*y+1);
         var strat2=Number(GTE.diag.nb_strat[1]*y+2);
+    }
+    else{
+        var strat0=Number(GTE.diag.nb_strat[1]*0+y);
+        var strat1=Number(GTE.diag.nb_strat[1]*1+y);
+        var strat2=Number(GTE.diag.nb_strat[1]*2+y);
         
     }
     var e=document.createElementNS("http://www.w3.org/2000/svg", "circle");
@@ -205,9 +205,11 @@ function D3MouseMoveEndpoint (event) {
     }
     if (Number(newPos)<GTE.diag.min) newPos=GTE.diag.min;
     if (Number(newPos)>GTE.diag.max) newPos=GTE.diag.max;
-    if( (Number(newPos)-moving_point.getAttribute("cy"))*(Number(newPos)-moving_point.getAttribute("cy"))>0.005){
+    if( (Number(newPos)-moving_point.getAttribute("cy"))*(Number(newPos)-moving_point.getAttribute("cy"))>GTE.diag.precision*GTE.diag.precision*20){
         GTE.tree.matrix.matrix[strat].strategy.payoffs[player].value=newPos;
         GTE.tree.matrix.matrix[strat].strategy.payoffs[player].text=newPos;
+        D3delete_canvas(player);
+        D3draw_canvas(player);
         GTE.diag.redraw();
     }
 };
