@@ -1,57 +1,45 @@
-# html/ - HTML directory for the GTE webpage
+This directory has .js routines for 
+the strategic form:
 
-This directory will contain the webpage for GTE as 
+- display of strategic form
 
-./index.html
+- GUI input
 
-with JavaScript (JS) scripts in ./js/ and subdirectories.
+- setting player names (not existing yet)
 
-Documentation in .md files, which we store at the
-proper level of the code.  
+- setting number and names of strategies
 
-## JS issues
+Elements of a game in strategic form are:
 
-We list here a few main decisions about JS
-that we need to make
-for the whole project.
+- players
+- strategies (list for each player)
+- payoffs
 
-### JS modules
+- Q: how to index payoffs? Via multidimensional array or
+  single-dim array indexed with strings that are strategy
+  profiles (JS uses string-indexed arrays anyway).
+  Suggestion: single-dim
+  (will be independent data structure anyhow)
 
-Alfonso suggested to use a standard package
-[require.js](http://requirejs.org)
-which provides Asynchronous Module Definition that allows to
-load .js files only where needed.
+Functionality:
 
-Alfonso wrote Mon, 26 Jan 2015 16:13:57 :
-    For example, I found this one to be quite clear:
-    http://www.sitepoint.com/understanding-requirejs-for-effective-javascript-module-loading/
-    (ignore the "Managing the order of dependent files"
-    section -> it can lead to confusion; that only applies
-    to when using external js libraries with dependencies
-    among them).
+- editing payoffs (tabbing through entries in spreadsheet
+  style)
+- starting equilibrium computation
 
-Given that the whole JS code will fit into a single minified
-file of a few hundred kilobytes, it is unlikely that we will
-need splitting it in that way.
+New functionality (in order of importance) 
 
-In addition, require.js provides ways to express
-dependencies between .js files which will be respected when
-the whole code is minified.
-The dependency is not automatic.
-Without require.js, the .js modules will be listed in
-the .html files (in the right order),
-and functions from these modules called only when the whole
-webpage is loaded, following the `onload` event, as in 
-`<body onload="setupCanvas();">`.
+- showing best response payoffs in boxes 
 
-So, for the moment, no require.js.
+- writing long strategy names (as they may arise from the
+  extensive form) in readable format, especially for the
+  columns so that they fit the column, either vertically or
+  at an angle, or broken across multiple lines
 
-However, we need a uniform pattern for JS modules to provide
-encapsulation.
-Possible reads:
-- http://www.adequatelygood.com/JavaScript-Module-Pattern-In-Depth.html
+- swapping players (permuting for more than two players)
 
-### HTML5/canvas versus SVG
+- swapping / permuting rows or columns
 
-(still to copy from emails)
+- showing strictly dominated strategies 
+
 
