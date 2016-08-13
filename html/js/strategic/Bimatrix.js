@@ -124,11 +124,11 @@ GTE.TREE = (function(parentModule) {
             for(var i = 0; i<this.matrix.length; i++) {
                 this.matrix[i].assignPartners();
             }
-            this.drawBimatrix();
+            this.drawMatrix();
         }
     };
 
-    Bimatrix.prototype.drawBimatrix = function() {
+    Bimatrix.prototype.drawMatrix = function() {
         this.drawUtilities();
         for(var i = 0;i<this.matrix.length; i++) {
             this.matrix[i].draw();
@@ -300,9 +300,9 @@ GTE.TREE = (function(parentModule) {
 
     Bimatrix.prototype.getMatrixInStringFormat = function(playerIn) {
         var str = "";
-        for(var i=0; i<this.strategies[1].length; i++) {
-            for(var j=0; j<this.strategies[2].length; j++) {
-                str += this.matrix[i*this.strategies[2].length+j].strategy.payoffs[playerIn].value;
+        for(var i=0; i<this.strategies[0].length; i++) {
+            for(var j=0; j<this.strategies[1].length; j++) {
+                str += this.matrix[i*this.strategies[1].length+j].strategy.payoffs[playerIn].value;
                 str +=" ";
             }
             str+="\n";
@@ -313,12 +313,12 @@ GTE.TREE = (function(parentModule) {
     Bimatrix.prototype.setMatrixFromStringFormat = function(playerIn, matrixToSet) {
         matrixToSet = matrixToSet.trim();
         matrixToSet = matrixToSet.split("\n");
-        for(var i=0; i<this.strategies[1].length; i++) {
+        for(var i=0; i<this.strategies[0].length; i++) {
             matrixToSet[i] = matrixToSet[i].trim();
             matrixToSet[i] = matrixToSet[i].split(" ");
-            for(var j=0; j<this.strategies[2].length; j++) {
-                this.matrix[i*this.strategies[2].length+j].strategy.payoffs[playerIn].value = parseInt(matrixToSet[i][j]);
-                this.matrix[i*this.strategies[2].length+j].strategy.payoffs[playerIn].text = (matrixToSet[i][j]);
+            for(var j=0; j<this.strategies[1].length; j++) {
+                this.matrix[i*this.strategies[1].length+j].strategy.payoffs[playerIn].value = parseInt(matrixToSet[i][j]);
+                this.matrix[i*this.strategies[1].length+j].strategy.payoffs[playerIn].text = (matrixToSet[i][j]);
             }
         }
     };

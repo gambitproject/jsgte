@@ -140,7 +140,7 @@ GTE.UI = (function (parentModule) {
         GTE.tree.clear();
         GTE.tree.matrix = new GTE.TREE.Bimatrix();
         GTE.tree.matrix.initialise();
-        GTE.tree.matrix.drawBimatrix()
+        GTE.tree.matrix.drawMatrix()
         //this.hidePlayerButtons();
     };
 
