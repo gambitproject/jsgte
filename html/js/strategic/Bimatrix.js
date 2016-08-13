@@ -2,28 +2,28 @@ GTE.TREE = (function(parentModule) {
     "use strict";
 
     /**
-     * Creates a new Matrix Class.
+     * Creates a new Bimatrix Class.
      * @class
      */
-    function Matrix() {
+    function Bimatrix() {
         this.players = [];
         this.isets = []; // multidimensional array containing corresponding isets of players
         this.strategies = []; // a multidimensional array containing strategicUnit objects
         this.matrix = [];
     }
 
-    Matrix.prototype.assignPlayers = function(players) {
+    Bimatrix.prototype.assignPlayers = function(players) {
         this.players = [];
         for(var i=0;i<players.length;i++)
             this.addPlayer(players[i]);
     };
 
-    Matrix.prototype.addPlayer = function(player) {
+    Bimatrix.prototype.addPlayer = function(player) {
         if(this.players.indexOf(player) == -1)
             this.players.push(player);
     };
 
-    Matrix.prototype.assignIsets = function(node) {
+    Bimatrix.prototype.assignIsets = function(node) {
         var playerIndex = this.players.indexOf(node.player);
         if(playerIndex == -1)
             alert("player not present in player array.")
@@ -40,7 +40,7 @@ GTE.TREE = (function(parentModule) {
         }
     };
 
-    Matrix.prototype.getIsets = function(player) {
+    Bimatrix.prototype.getIsets = function(player) {
         if(this.players.indexOf(player) == -1 || this.isets[this.players.indexOf(player)] == undefined)
             return [];
         else {
@@ -51,7 +51,7 @@ GTE.TREE = (function(parentModule) {
         }
     };
 
-    Matrix.prototype.createMovePermutations = function(moves, currentPermutations, player) {
+    Bimatrix.prototype.createMovePermutations = function(moves, currentPermutations, player) {
         if(moves==undefined || moves.length ==0) {
             return currentPermutations;
         } else {
@@ -77,7 +77,7 @@ GTE.TREE = (function(parentModule) {
         }
     };
 
-    Matrix.prototype.createMoves = function(player) {
+    Bimatrix.prototype.createMoves = function(player) {
         var isets = this.getIsets(player)
         if(isets == undefined || isets.length==0)
             return [];
@@ -90,7 +90,7 @@ GTE.TREE = (function(parentModule) {
         }
     };
 
-    Matrix.prototype.initialise = function() {
+    Bimatrix.prototype.initialise = function() {
         this.assignPlayers(GTE.tree.players);
         this.assignIsets(GTE.tree.root);
         for(var i=0; i<this.players.length; i++) {
@@ -98,14 +98,14 @@ GTE.TREE = (function(parentModule) {
             this.strategies.push(currentStrategy);
         }
         var currentPlayers = this.getAllPlayers();
-        var strMatrix = this.createStrategies();
-        for(var i = 0; i< strMatrix.length; i++) {
+        var strBimatrix = this.createStrategies();
+        for(var i = 0; i< strBimatrix.length; i++) {
             if(this.players.length == 3) {
-                var currentStrategyBlock = new GTE.TREE.StrategyBlock(strMatrix[i] , parseInt(i/(this.strategies[2].length)), parseInt(i%(this.strategies[2].length)));
+                var currentStrategyBlock = new GTE.TREE.StrategyBlock(strBimatrix[i] , parseInt(i/(this.strategies[2].length)), parseInt(i%(this.strategies[2].length)));
                 currentStrategyBlock.assignPayoffs();
                 this.matrix.push(currentStrategyBlock);
             } else {
-                var currentStrategyBlock = new GTE.TREE.StrategyBlock(strMatrix[i] , i+1);
+                var currentStrategyBlock = new GTE.TREE.StrategyBlock(strBimatrix[i] , i+1);
                 currentStrategyBlock.assignPayoffs();
                 currentStrategy.draw();
                 this.matrix.push(currentStrategyBlock);
@@ -115,18 +115,18 @@ GTE.TREE = (function(parentModule) {
             for(var i = 0; i<this.matrix.length; i++) {
                 this.matrix[i].assignPartners();
             }
-            this.drawMatrix();
+            this.drawBimatrix();
         }
     };
 
-    Matrix.prototype.drawMatrix = function() {
+    Bimatrix.prototype.drawBimatrix = function() {
         this.drawUtilities();
         for(var i = 0;i<this.matrix.length; i++) {
             this.matrix[i].draw();
         }
     };
 
-    Matrix.prototype.drawUtilities = function() {
+    Bimatrix.prototype.drawUtilities = function() {
         // diagonal corner line outwards
         GTE.canvas.line(GTE.CONSTANTS.MATRIX_X,
                 GTE.CONSTANTS.MATRIX_Y,
@@ -216,7 +216,7 @@ GTE.TREE = (function(parentModule) {
         }
     };
 
-    Matrix.prototype.createStrategiesPermutations = function(strategy, currentPermutations) {
+    Bimatrix.prototype.createStrategiesPermutations = function(strategy, currentPermutations) {
         if(strategy==undefined || strategy.length ==0) {
             return currentPermutations;
         }
@@ -242,7 +242,7 @@ GTE.TREE = (function(parentModule) {
         }
     };
 
-    Matrix.prototype.createStrategies = function() {
+    Bimatrix.prototype.createStrategies = function() {
         var strategies = this.strategies;
         if(strategies == undefined || strategies.length == 0) {
             return [];
@@ -255,7 +255,7 @@ GTE.TREE = (function(parentModule) {
         }
     };
 
-    Matrix.prototype.getAllStrategies = function() {
+    Bimatrix.prototype.getAllStrategies = function() {
         var st = [];
         for(var i = 0; i<this.strategies.length; i++) {
             st.push(this.strategies[i]);
@@ -263,7 +263,7 @@ GTE.TREE = (function(parentModule) {
         return st;
     };
 
-    Matrix.prototype.getAllPlayers = function() {
+    Bimatrix.prototype.getAllPlayers = function() {
         var pl = [];
         for(var i = 0; i<this.players.length; i++) {
             pl.push(this.players[i]);
@@ -271,7 +271,7 @@ GTE.TREE = (function(parentModule) {
         return pl;
     };
 
-    Matrix.prototype.strategiesToString = function() {
+    Bimatrix.prototype.strategiesToString = function() {
         for(var i = 0;i<this.strategies.length;i++) {
             for(var j=0;j<this.strategies[i].length;j++) {
                 var str = "";
@@ -282,7 +282,7 @@ GTE.TREE = (function(parentModule) {
         }
     };
 
-    Matrix.prototype.getMatrixInStringFormat = function(playerIn) {
+    Bimatrix.prototype.getBimatrixInStringFormat = function(playerIn) {
         var str = "";
         for(var i=0; i<this.strategies[1].length; i++) {
             for(var j=0; j<this.strategies[2].length; j++) {
@@ -294,7 +294,7 @@ GTE.TREE = (function(parentModule) {
         return str;
     };
 
-    Matrix.prototype.setMatrixFromStringFormat = function(playerIn, matrixToSet) {
+    Bimatrix.prototype.setBimatrixFromStringFormat = function(playerIn, matrixToSet) {
         matrixToSet = matrixToSet.trim();
         matrixToSet = matrixToSet.split("\n");
         for(var i=0; i<this.strategies[1].length; i++) {
@@ -307,14 +307,14 @@ GTE.TREE = (function(parentModule) {
         }
     };
 
-    Matrix.prototype.getNumberOfStrategies = function(player) {
+    Bimatrix.prototype.getNumberOfStrategies = function(player) {
         var index = this.players.indexOf(player);
         if(index != -1) {
             return this.strategies[index].length;
         }
     };
     // Add class to parent module
-    parentModule.Matrix = Matrix;
+    parentModule.Bimatrix = Bimatrix;
 
     return parentModule;
 }(GTE.TREE)); // Add to GTE.TREE sub-module
