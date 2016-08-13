@@ -51,31 +51,31 @@ GTE.TREE = (function(parentModule) {
 //        }
 //    };
 
-    Bimatrix.prototype.createMovePermutations = function(moves, currentPermutations, player) {
-        if(moves==undefined || moves.length ==0) {
-            return currentPermutations;
-        } else {
-            var permutations = [];
-            if(currentPermutations.length == 0) {
-                for(var i=0;i<moves.length;i++) {
-                    var currentStrategy = new GTE.TREE.StrategicUnit(player);
-                    currentStrategy.addMove(moves[i]);
-                    permutations.push(currentStrategy);
-                }
-            }
-            else {
-                for(var i=0;i<moves.length;i++) {
-                    for(var j = 0; j<currentPermutations.length ; j++) {
-                        var perm = new GTE.TREE.StrategicUnit(player) 
-                        perm.assignMoves(currentPermutations[j].moves);
-                        perm.addMove(moves[i]);
-                        permutations.push(perm);
-                    }
-                }
-            }
-            return permutations;
-        }
-    };
+//    Bimatrix.prototype.createMovePermutations = function(moves, currentPermutations, player) {
+//        if(moves==undefined || moves.length ==0) {
+//            return currentPermutations;
+//        } else {
+//            var permutations = [];
+//            if(currentPermutations.length == 0) {
+//                for(var i=0;i<moves.length;i++) {
+//                    var currentStrategy = new GTE.TREE.StrategicUnit(player);
+//                    currentStrategy.addMove(moves[i]);
+//                    permutations.push(currentStrategy);
+//                }
+//            }
+//            else {
+//                for(var i=0;i<moves.length;i++) {
+//                    for(var j = 0; j<currentPermutations.length ; j++) {
+//                        var perm = new GTE.TREE.StrategicUnit(player) 
+//                        perm.assignMoves(currentPermutations[j].moves);
+//                        perm.addMove(moves[i]);
+//                        permutations.push(perm);
+//                    }
+//                }
+//            }
+//            return permutations;
+//        }
+//    };
 
 //    Bimatrix.prototype.createMoves = function(player) {
 //        var isets = this.getIsets(player)
