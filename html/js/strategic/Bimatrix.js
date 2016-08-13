@@ -91,14 +91,22 @@ GTE.TREE = (function(parentModule) {
 //    };
 
     Bimatrix.prototype.initialise = function() {
+        alert('Made in to  Bimatrix.prototype.initialise');
         this.assignPlayers(GTE.tree.players);
-        // this.assignIsets(GTE.tree.root);
-        for(var i=0; i<this.players.length; i++) {
-            var currentStrategy = [new GTE.Tree.PureStrategy(i,"a"), new GTE.Tree.PureStrategy(i,"b")];
+        //alert('this.player.length');
+        //alert(this.players.length); // THIS IS 5 for some reason
+        //for(var i=0; i<this.players.length; i++) {
+        for(var i=0; i < 2; i++) { // hardwire as 2 for now
+        	alert("i = " + i);
+            var currentStrategy = [new GTE.TREE.PureStrategy(i,"a"), new GTE.TREE.PureStrategy(i,"b")];
             this.strategies.push(currentStrategy);
         }
-        var currentPlayers = this.getAllPlayers();
+        alert(this.strategies);
+        //var currentPlayers = this.getAllPlayers();
+        //alert('currentPlayers' + currentPlayers);
         var strBimatrix = this.createStrategies();
+        alert('WTF');
+        alert('strBimatrix' + strBimatrix);
         for(var i = 0; i< strBimatrix.length; i++) {
             if(this.players.length == 3) {
                 var currentStrategyBlock = new GTE.TREE.StrategyBlock(strBimatrix[i] , parseInt(i/(this.strategies[2].length)), parseInt(i%(this.strategies[2].length)));
@@ -217,6 +225,7 @@ GTE.TREE = (function(parentModule) {
     };
 
     Bimatrix.prototype.createStrategiesPermutations = function(strategy, currentPermutations) {
+        alert('Made in to Bimatrix.prototype.createStrategiesPermutations')
         if(strategy==undefined || strategy.length ==0) {
             return currentPermutations;
         }
