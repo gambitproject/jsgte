@@ -9,10 +9,11 @@ function D3draw_canvas(i){ //draw the canvas of the 3D drawing for player i
     temp = document.createElementNS("http://www.w3.org/2000/svg", "text");
     if (i==0){
         temp.textContent="Payoff to I";
+        temp.setAttribute("class", "canvas0 player1 player1_title title up");
     }else{
         temp.textContent="Payoff to II";
+        temp.setAttribute("class", "canvas1 player2 player2_title title up");
     }
-    temp.setAttribute("class", "canvas"+i+" player"+Number(i+1)+" player"+Number(i+1)+"_title title up");
     temp.setAttribute("x",Number(i*x_shift+150));
     temp.setAttribute("y",40);
     GTE.svg.appendChild(temp);
@@ -160,6 +161,7 @@ function draw_plan([p1,p2,p3],i,y){ //draw the payoff plan for player i strategy
     e.setAttribute("r",GTE.POINT_RADIUS);
     e.setAttribute("class","canvas"+i+" pay line"+Number(i+1));
     e.setAttribute("strat",strat0);
+    e.setAttribute("stratp",0);
     e.setAttribute("player",i);
     e.addEventListener("mousedown", D3MouseDownEndpoint);
     GTE.svg.appendChild(e);
@@ -169,6 +171,7 @@ function draw_plan([p1,p2,p3],i,y){ //draw the payoff plan for player i strategy
     e.setAttribute("r",GTE.POINT_RADIUS);
     e.setAttribute("class","canvas"+i+" pay line"+Number(i+1));
     e.setAttribute("strat",strat1);
+    e.setAttribute("stratp",1);
     e.setAttribute("player",i);
     e.addEventListener("mousedown", D3MouseDownEndpoint);
     GTE.svg.appendChild(e);
@@ -178,6 +181,7 @@ function draw_plan([p1,p2,p3],i,y){ //draw the payoff plan for player i strategy
     e.setAttribute("r",GTE.POINT_RADIUS);
     e.setAttribute("class","canvas"+i+" pay line"+Number(i+1));
     e.setAttribute("strat",strat2);
+    e.setAttribute("stratp",2);
     e.setAttribute("player",i);
     e.addEventListener("mousedown", D3MouseDownEndpoint);
     GTE.svg.appendChild(e);
@@ -195,13 +199,17 @@ function D3MouseMoveEndpoint (event) {
     
     var mousePosition = GTE.getMousePosition(event);
     var svgPosition = GTE.svg.getBoundingClientRect();
+    var stratp=moving_point.getAttribute("stratp");
     var strat=moving_point.getAttribute("strat");
     var player=moving_point.getAttribute("player");
-    console.log(moving_point);
-    if (strat<2){
-        var newPos=Math.round((2*GTE.diag.height/(svgPosition.bottom-svgPosition.top)*(-mousePosition.y+svgPosition.top)+GTE.diag.height-GTE.diag.margin-100)/20*GTE.diag.precision)/GTE.diag.precision;}
+    console.log(stratp+" "+player);
+    var ratio=2*GTE.diag.height/(svgPosition.bottom-svgPosition.top);
+    if (stratp<2){
+        var newPos=Math.round((GTE.diag.height-GTE.diag.margin-ratio*(mousePosition.y-svgPosition.top))/20*GTE.diag.precision)/GTE.diag.precision;
+        console.log(newPos);
+}
     else{
-        var newPos=Math.round((2*GTE.diag.height/(svgPosition.bottom-svgPosition.top)*(-mousePosition.y+svgPosition.top)+GTE.diag.height-GTE.diag.margin)/20*GTE.diag.precision)/GTE.diag.precision;
+        var newPos=Math.round((ratio*(-mousePosition.y+svgPosition.top)+GTE.diag.height-3*GTE.diag.margin)/20*GTE.diag.precision)/GTE.diag.precision;
     }
     if (Number(newPos)<GTE.diag.min) newPos=GTE.diag.min;
     if (Number(newPos)>GTE.diag.max) newPos=GTE.diag.max;
