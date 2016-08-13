@@ -134,7 +134,9 @@ GTE.UI = (function (parentModule) {
         GTE.tree.multiActionLines[0].onClick();
         GTE.tree.draw();
         this.switchMode(GTE.MODES.ADD);
-        this.toStrategicForm();
+        //this.toStrategicForm();
+        GTE.tree.matrix = new GTE.TREE.Bimatrix();
+        GTE.tree.matrix.initialise();
         this.hidePlayerButtons();
     };
 
