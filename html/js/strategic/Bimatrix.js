@@ -7,7 +7,7 @@ GTE.TREE = (function(parentModule) {
      */
     function Bimatrix() {
         this.players = [];
-        this.isets = []; // multidimensional array containing corresponding isets of players
+        // this.isets = []; // multidimensional array containing corresponding isets of players
         this.strategies = []; // a multidimensional array containing strategicUnit objects
         this.matrix = [];
     }
@@ -23,33 +23,33 @@ GTE.TREE = (function(parentModule) {
             this.players.push(player);
     };
 
-    Bimatrix.prototype.assignIsets = function(node) {
-        var playerIndex = this.players.indexOf(node.player);
-        if(playerIndex == -1)
-            alert("player not present in player array.")
-        else {
-            if(this.isets[playerIndex] == undefined)
-                this.isets[playerIndex] = [];
-            if(this.isets[playerIndex].indexOf(node.iset) == -1) {
-                this.isets[playerIndex].push(node.iset);
-            }
-            for(var i=0;i<node.children.length;i++) {
-                if(!node.children[i].isLeaf())
-                    this.assignIsets(node.children[i]);
-            }
-        }
-    };
-
-    Bimatrix.prototype.getIsets = function(player) {
-        if(this.players.indexOf(player) == -1 || this.isets[this.players.indexOf(player)] == undefined)
-            return [];
-        else {
-            var playerIsets = [];
-            for(var i=0;i<this.isets[this.players.indexOf(player)].length;i++)
-                playerIsets.push(this.isets[this.players.indexOf(player)][i]);
-            return playerIsets;
-        }
-    };
+//    Bimatrix.prototype.assignIsets = function(node) {
+//        var playerIndex = this.players.indexOf(node.player);
+//        if(playerIndex == -1)
+//            alert("player not present in player array.")
+//        else {
+//            if(this.isets[playerIndex] == undefined)
+//                this.isets[playerIndex] = [];
+//            if(this.isets[playerIndex].indexOf(node.iset) == -1) {
+//                this.isets[playerIndex].push(node.iset);
+//            }
+//            for(var i=0;i<node.children.length;i++) {
+//                if(!node.children[i].isLeaf())
+//                    this.assignIsets(node.children[i]);
+//            }
+//        }
+//    };
+//
+//    Bimatrix.prototype.getIsets = function(player) {
+//        if(this.players.indexOf(player) == -1 || this.isets[this.players.indexOf(player)] == undefined)
+//            return [];
+//        else {
+//            var playerIsets = [];
+//            for(var i=0;i<this.isets[this.players.indexOf(player)].length;i++)
+//                playerIsets.push(this.isets[this.players.indexOf(player)][i]);
+//            return playerIsets;
+//        }
+//    };
 
     Bimatrix.prototype.createMovePermutations = function(moves, currentPermutations, player) {
         if(moves==undefined || moves.length ==0) {
@@ -77,22 +77,22 @@ GTE.TREE = (function(parentModule) {
         }
     };
 
-    Bimatrix.prototype.createMoves = function(player) {
-        var isets = this.getIsets(player)
-        if(isets == undefined || isets.length==0)
-            return [];
-        else {
-            var permutations = [];
-            for(var i=0;i<isets.length;i++) {
-                permutations = this.createMovePermutations(isets[i].moves, permutations, player)
-            }
-            return permutations;
-        }
-    };
+//    Bimatrix.prototype.createMoves = function(player) {
+//        var isets = this.getIsets(player)
+//        if(isets == undefined || isets.length==0)
+//            return [];
+//        else {
+//            var permutations = [];
+//            for(var i=0;i<isets.length;i++) {
+//                permutations = this.createMovePermutations(isets[i].moves, permutations, player)
+//            }
+//            return permutations;
+//        }
+//    };
 
     Bimatrix.prototype.initialise = function() {
         this.assignPlayers(GTE.tree.players);
-        this.assignIsets(GTE.tree.root);
+        // this.assignIsets(GTE.tree.root);
         for(var i=0; i<this.players.length; i++) {
             var currentStrategy = this.createMoves(this.players[i]);  
             this.strategies.push(currentStrategy);
