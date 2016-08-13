@@ -130,8 +130,8 @@ GTE.UI = (function (parentModule) {
                 //GTE.tree.addChildNodeTo(root.children[i]);
             //}
         //}
-        GTE.tree.draw();
-        // this.switchMode(GTE.MODES.MERGE); // WE CAN'T SWITCH MODE WITHOUT
+        //GTE.tree.draw();
+        //this.switchMode(GTE.MODES.MERGE); // WE CAN'T SWITCH MODE WITHOUT
         // PAYOFFS ASSIGNED
         //GTE.tree.multiActionLines[0].onClick();
         //GTE.tree.draw();

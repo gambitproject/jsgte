@@ -298,7 +298,7 @@ GTE.TREE = (function(parentModule) {
         }
     };
 
-    Bimatrix.prototype.getBimatrixInStringFormat = function(playerIn) {
+    Bimatrix.prototype.getMatrixInStringFormat = function(playerIn) {
         var str = "";
         for(var i=0; i<this.strategies[1].length; i++) {
             for(var j=0; j<this.strategies[2].length; j++) {
@@ -310,7 +310,7 @@ GTE.TREE = (function(parentModule) {
         return str;
     };
 
-    Bimatrix.prototype.setBimatrixFromStringFormat = function(playerIn, matrixToSet) {
+    Bimatrix.prototype.setMatrixFromStringFormat = function(playerIn, matrixToSet) {
         matrixToSet = matrixToSet.trim();
         matrixToSet = matrixToSet.split("\n");
         for(var i=0; i<this.strategies[1].length; i++) {
