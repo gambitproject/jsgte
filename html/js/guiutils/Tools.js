@@ -110,7 +110,7 @@ GTE.UI = (function (parentModule) {
     * of the game tree.
     */
     Tools.prototype.createStrategicForm = function (x, y) {
-        alert('Made in to Tools.prototype.createStrategicForm');
+        //alert('Made in to Tools.prototype.createStrategicForm');
         GTE.tree.clear();
         //this.isetToolsRan = false;
         this.resetPlayers();
