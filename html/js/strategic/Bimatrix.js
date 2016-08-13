@@ -90,20 +90,31 @@ GTE.TREE = (function(parentModule) {
 //        }
 //    };
 
-    Bimatrix.prototype.initialise = function() {
-        //alert('Made in to  Bimatrix.prototype.initialise');
+    Bimatrix.prototype.initialise = function(x, y) {
+        alert('x = ' + x + ' y = ' + y);
         this.assignPlayers(GTE.tree.players);
-        //alert('this.player.length');
-        //alert(this.players.length); // THIS IS 5 for some reason
+
+		//for(var i=0; i < 2; i++) { // hardwire as 2 for now
+            //var currentStrategy = [new GTE.TREE.PureStrategy(i,"a"), new GTE.TREE.PureStrategy(i,"b")];
+            //this.strategies.push(currentStrategy);
+        //}
+
+		var ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+		var alphabet = 'abcdefghijklmnopqrstuvwxyz'.split('');
+		
+		var strategies1 = [];
+		for(var i=0; i < x; i++) { 
+			strategies1.push(new GTE.TREE.PureStrategy(0,ALPHABET[i]));
+		}
+		this.strategies.push(strategies1);
+
+		var strategies2 = [];
+		for(var i=0; i < y; i++) { 
+			strategies2.push(new GTE.TREE.PureStrategy(1,alphabet[i]));
+		}
+		this.strategies.push(strategies2);
+          
         this.players.length = 3 // HACK
-        //for(var i=0; i<this.players.length; i++) {
-        for(var i=0; i < 2; i++) { // hardwire as 2 for now
-            var currentStrategy = [new GTE.TREE.PureStrategy(i,"a"), new GTE.TREE.PureStrategy(i,"b")];
-            this.strategies.push(currentStrategy);
-        }
-        //alert(this.strategies);
-        //var currentPlayers = this.getAllPlayers();
-        //alert('currentPlayers' + currentPlayers);
         var strBimatrix = this.createStrategies();
         for(var i = 0; i< strBimatrix.length; i++) {
             //if(this.players.length == 3) {
