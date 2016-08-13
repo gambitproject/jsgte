@@ -109,6 +109,39 @@ GTE.UI = (function (parentModule) {
     * Function that creates a strategic form independent 
     * of the game tree.
     */
+    Tools.prototype.createStrategicForm = function (x, y) {
+        GTE.tree.clear();
+        this.isetToolsRan = false;
+        this.resetPlayers();
+        this.activePlayer = -1;
+        var root = new GTE.TREE.Node(null);
+        GTE.tree = new GTE.TREE.Tree(root);
+        this.addChancePlayer();
+        this.addPlayer();
+        this.addPlayer();
+        root.assignPlayer(GTE.tree.players[1]);
+        for(var i = 0; i<x; i++) {
+            GTE.tree.addChildNodeTo(root);
+            root.children[i].assignPlayer(GTE.tree.players[2]);
+        }
+        for(var i = 0; i<root.children.length; i++) {
+            for(var j = 0; j<y; j++) {
+                GTE.tree.addChildNodeTo(root.children[i]);
+            }
+        }
+        GTE.tree.draw();
+        this.switchMode(GTE.MODES.MERGE);
+        GTE.tree.multiActionLines[0].onClick();
+        GTE.tree.draw();
+        this.switchMode(GTE.MODES.ADD);
+        this.toStrategicForm();
+        this.hidePlayerButtons();
+    };
+
+    /**
+    * Function that creates a strategic form independent 
+    * of the game tree.
+    */
     Tools.prototype.createIndependentStrategicForm = function (x, y) {
         GTE.tree.clear();
         this.isetToolsRan = false;
