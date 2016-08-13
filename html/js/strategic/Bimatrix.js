@@ -91,7 +91,8 @@ GTE.TREE = (function(parentModule) {
 //    };
 
     Bimatrix.prototype.initialise = function(x, y) {
-        alert('x = ' + x + ' y = ' + y);
+        //alert('x = ' + x + ' y = ' + y);
+
         this.assignPlayers(GTE.tree.players);
 
 		//for(var i=0; i < 2; i++) { // hardwire as 2 for now
