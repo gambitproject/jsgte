@@ -103,7 +103,7 @@ GTE.TREE = (function (parentModule) {
         for (i = 1; i < this.players.length; i++) {
             for (var j = 0; j < newLeaves.length; j++) {
                 this.players[i].payoffs.push(
-                            new GTE.TREE.Payoff(newLeaves[j], this.players[i]));
+                            new GTE.TREE.Payoff(this.players[i], newLeaves[j]));
             }
         }
     };
@@ -510,7 +510,7 @@ GTE.TREE = (function (parentModule) {
         for (var i = 1; i < this.players.length; i++) {
             for (var j = 0; j < this.leaves.length; j++) {
                 this.players[i].payoffs.push(
-                        new GTE.TREE.Payoff(this.leaves[j], this.players[i]));
+                        new GTE.TREE.Payoff(this.players[i],this.leaves[j]));
                 this.leaves[j].iset.payoffs.push(this.players[i].payoffs[j]);
             }
         }
@@ -884,7 +884,7 @@ GTE.TREE = (function (parentModule) {
             // If there are payoffs, add new player payoffs
             if (this.isets.length !== 0) {
                 for (var j = 0; j < this.leaves.length; j++) {
-                    player.payoffs.push(new GTE.TREE.Payoff(this.leaves[j], player));
+                    player.payoffs.push(new GTE.TREE.Payoff(player,this.leaves[j]));
                 }
                 player.drawPayoffs();
             }

@@ -7,7 +7,7 @@ GTE.TREE = (function(parentModule) {
      * @param {Node}   leaf   Leaf where Payoff is attached
      * @param {Player} player Player that gets this payoff
      */
-    function Payoff(leaf, player) {
+    function Payoff(player, leaf) {
         this.value = null;
         this.text = null;
         this.editable = null;
