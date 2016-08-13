@@ -43,9 +43,13 @@
 
     document.getElementById("button-independent-strategic-general").addEventListener("click", function(){
         var x = prompt("Enter the number of moves for the first player", "2");
-        var y = prompt("Enter the number of moves for the second player", "2");
-        GTE.STRATEGICFORMMODE = GTE.STRATEGICFORMMODES.GENERAL;
-        GTE.tools.createIndependentStrategicForm(x, y);
+        if (x) {
+               var y = prompt("Enter the number of moves for the second player", "2");
+               if (y) { 
+                   GTE.STRATEGICFORMMODE = GTE.STRATEGICFORMMODES.GENERAL;
+                   GTE.tools.createIndependentStrategicForm(x, y);
+                   }
+               }
         return false;
     });
 
