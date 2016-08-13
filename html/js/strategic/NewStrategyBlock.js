@@ -16,8 +16,8 @@ GTE.TREE = (function(parentModule) {
         var payoff1 = new GTE.TREE.Payoff(player1); //, leafNode);
         var payoff2 = new GTE.TREE.Payoff(player2); //, leafNode);
 		// WHY DOESN'T payoff1.setValue(1) WORK?
-		payoff1.changeText("1");
-		payoff2.changeText("2");
+		payoff1.changeText("0");
+		payoff2.changeText("0");
         var payoffs = [payoff1, payoff2];
         this.strategy = new GTE.TREE.StrategyProfile(strategyUnits, payoffs);
         //this.strategy = new GTE.TREE.Strategy(strategyUnits);
