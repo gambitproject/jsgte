@@ -94,7 +94,7 @@ GTE.TREE = (function(parentModule) {
         this.assignPlayers(GTE.tree.players);
         // this.assignIsets(GTE.tree.root);
         for(var i=0; i<this.players.length; i++) {
-            var currentStrategy = this.createMoves(this.players[i]);  
+            var currentStrategy = [new GTE.Tree.PureStrategy(i,"a"), new GTE.Tree.PureStrategy(i,"b")];
             this.strategies.push(currentStrategy);
         }
         var currentPlayers = this.getAllPlayers();
