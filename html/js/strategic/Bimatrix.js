@@ -95,7 +95,7 @@ GTE.TREE = (function(parentModule) {
         this.assignPlayers(GTE.tree.players);
         //alert('this.player.length');
         //alert(this.players.length); // THIS IS 5 for some reason
-        this.players.length = 2 // HACK
+        this.players.length = 3 // HACK
         //for(var i=0; i<this.players.length; i++) {
         for(var i=0; i < 2; i++) { // hardwire as 2 for now
             var currentStrategy = [new GTE.TREE.PureStrategy(i,"a"), new GTE.TREE.PureStrategy(i,"b")];
@@ -107,7 +107,7 @@ GTE.TREE = (function(parentModule) {
         var strBimatrix = this.createStrategies();
         for(var i = 0; i< strBimatrix.length; i++) {
             //if(this.players.length == 3) {
-            if(this.players.length == 2) {
+            if(this.players.length == 3) {
                 //var currentStrategyBlock = new GTE.TREE.NewStrategyBlock(strBimatrix[i] , parseInt(i/(this.strategies[2].length)), parseInt(i%(this.strategies[2].length)));
                 // HACK: is 0 the chance player?
                 var currentStrategyBlock = new GTE.TREE.NewStrategyBlock(strBimatrix[i] , parseInt(i/(this.strategies[1].length)), parseInt(i%(this.strategies[1].length)));
@@ -181,7 +181,7 @@ GTE.TREE = (function(parentModule) {
                 // GTE.CONSTANTS.CONTENT_EDITABLE_GROW_TO_RIGHT,
                 GTE.CONSTANTS.CONTENT_EDITABLE_GROW_TO_LEFT,
                 "I", "player 1")
-            .colour(this.players[0].colour)
+            .colour(this.players[1].colour) 
 
         this.player2 = new GTE.UI.Widgets.ContentEditable(
                 // 6+4 is the magic text offset in the box in
@@ -192,7 +192,7 @@ GTE.TREE = (function(parentModule) {
                 GTE.CONSTANTS.MATRIX_Y - 40 - 22,
                 GTE.CONSTANTS.CONTENT_EDITABLE_GROW_TO_RIGHT,
                 "II", "player 2")
-            .colour(this.players[1].colour)
+            .colour(this.players[2].colour) 
 
         //for(var i=0; i<this.strategies[1].length; i++) {
     	// NO CHANCE PLAYER
@@ -201,13 +201,13 @@ GTE.TREE = (function(parentModule) {
             //for(var j = 0; j<this.strategies[1][i].moves.length;j++) {
                 //string+=this.strategies[1][i].moves[j].name
             //}
-            var string = this.strategies[0].name
+            var string = this.strategies[0][i].name;
             var str = new GTE.UI.Widgets.ContentEditable(
                 GTE.CONSTANTS.MATRIX_X - 14,
                 GTE.CONSTANTS.MATRIX_Y + 36 + i * GTE.CONSTANTS.MATRIX_SIZE,
                 GTE.CONSTANTS.CONTENT_EDITABLE_GROW_TO_LEFT,
                 string, "player 1")
-            .colour(this.players[0].colour);
+            .colour(this.players[1].colour);
         }
 
         //for(var i=0; i<this.strategies[1].length; i++) {
@@ -217,13 +217,13 @@ GTE.TREE = (function(parentModule) {
             //for(var j = 0; j<this.strategies[2][i].moves.length;j++) {
                 //string+=this.strategies[2][i].moves[j].name
             //}
-            var string = this.strategies[0].name
+            var string = this.strategies[1][i].name;
             var str = new GTE.UI.Widgets.ContentEditable(
                 GTE.CONSTANTS.MATRIX_X + 35 + i * GTE.CONSTANTS.MATRIX_SIZE,
                 GTE.CONSTANTS.MATRIX_Y - 40 ,
                 GTE.CONSTANTS.CONTENT_EDITABLE_GROW_TO_RIGHT,
                 string, "player 2")
-            .colour(this.players[1].colour);
+            .colour(this.players[2].colour);
         }
         while( GTE.canvas.viewbox().width - GTE.CONSTANTS.MATRIX_X < GTE.tree.matrix.strategies[1].length * GTE.CONSTANTS.MATRIX_SIZE
         ||  GTE.canvas.viewbox().height - GTE.CONSTANTS.MATRIX_Y < GTE.tree.matrix.strategies[0].length * GTE.CONSTANTS.MATRIX_SIZE) {
