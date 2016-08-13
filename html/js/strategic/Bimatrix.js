@@ -120,7 +120,7 @@ GTE.TREE = (function(parentModule) {
                 this.matrix.push(currentStrategyBlock);
             }
         }
-        if(this.players.length == 3) {
+        if(this.players.length == 2) {
             for(var i = 0; i<this.matrix.length; i++) {
                 this.matrix[i].assignPartners();
             }

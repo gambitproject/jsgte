@@ -12,9 +12,9 @@ GTE.TREE = (function(parentModule) {
         // Player: id: 1; name: 1; colour: #FF0000
         var player1 = new GTE.TREE.Player(1, "#FF0000");
         var player2 = new GTE.TREE.Player(2, "#0000FF");
-        var leafNode = new GTE.TREE.Node();
-        var payoff1 = new GTE.TREE.Payoff(player1, leafNode);
-        var payoff2 = new GTE.TREE.Payoff(player2, leafNode);
+        //var leafNode = new GTE.TREE.Node();
+        var payoff1 = new GTE.TREE.Payoff(player1); //, leafNode);
+        var payoff2 = new GTE.TREE.Payoff(player2); //, leafNode);
 		// WHY DOESN'T payoff1.setValue(1) WORK?
 		payoff1.changeText("1");
 		payoff2.changeText("2");
