@@ -118,6 +118,7 @@ GTE.UI = (function (parentModule) {
         GTE.tree.matrix = new GTE.TREE.Bimatrix();
         GTE.tree.matrix.initialise(x, y);
         GTE.tree.matrix.drawMatrix()
+        console.log(GTE.tree.matrix);
     };
 
     /**

@@ -10,6 +10,7 @@ GTE.TREE = (function(parentModule) {
         // this.isets = []; // multidimensional array containing corresponding isets of players
         this.strategies = []; // a multidimensional array containing strategicUnit objects
         this.matrix = [];
+        this.profiles = {}; // object that has strategy profile properties
     }
 
     Bimatrix.prototype.assignPlayers = function(players) {
@@ -105,13 +106,13 @@ GTE.TREE = (function(parentModule) {
 		
 		var strategies1 = [];
 		for(var i=0; i < x; i++) { 
-			strategies1.push(new GTE.TREE.PureStrategy(0,ALPHABET[i]));
+			strategies1.push(new GTE.TREE.PureStrategy(0,ALPHABET[i], i));
 		}
 		this.strategies.push(strategies1);
 
 		var strategies2 = [];
 		for(var i=0; i < y; i++) { 
-			strategies2.push(new GTE.TREE.PureStrategy(1,alphabet[i]));
+			strategies2.push(new GTE.TREE.PureStrategy(1,alphabet[i], i));
 		}
 		this.strategies.push(strategies2);
           
@@ -125,11 +126,13 @@ GTE.TREE = (function(parentModule) {
                 var currentStrategyBlock = new GTE.TREE.NewStrategyBlock(strBimatrix[i] , parseInt(i/(this.strategies[1].length)), parseInt(i%(this.strategies[1].length)));
                 //currentStrategyBlock.assignPayoffs();
                 this.matrix.push(currentStrategyBlock);
+                this.initialiseProfiles(strBimatrix, i, parseInt(i/(this.strategies[1].length)), parseInt(i%(this.strategies[1].length)));
             } else {
                 var currentStrategyBlock = new GTE.TREE.NewStrategyBlock(strBimatrix[i] , i+1);
                 //currentStrategyBlock.assignPayoffs();
                 currentStrategy.draw();
                 this.matrix.push(currentStrategyBlock);
+                this.initialiseProfiles(strBimatrix, i, parseInt(i/(this.strategies[1].length)), parseInt(i%(this.strategies[1].length)));
             }
         }
         if(this.players.length == 2) {
@@ -139,12 +142,71 @@ GTE.TREE = (function(parentModule) {
             this.drawMatrix();
         }
     };
+    // initialises the profiles object and includes correct strategy profiles
+    // problem is they are not affected by the editable functionality
+    Bimatrix.prototype.initialiseProfiles = function (strBimatrix, index, width, height) {
+        var player1 = new GTE.TREE.Player(1, "#FF0000");
+                var player2 = new GTE.TREE.Player(2, "#0000FF");
+                var payoff1 = new GTE.TREE.Payoff(player1); //, leafNode);
+                var payoff2 = new GTE.TREE.Payoff(player2); //, leafNode);
+                // Initialisation of profiles object in Bimatrix constructor, later will be made a function
+                payoff1.changeText("0");
+                payoff2.changeText("0");
+                var payoffs = [payoff1,payoff2];
+                var ID = "";
+                for (var j=0; j<strBimatrix[index].length; j++) {
+                    ID = ID + strBimatrix[index][j].id;
+                    if (j !== (strBimatrix[index].length-1)) ID = ID + ",";
+                }
+                this.profiles[ID] = {id: ID, payoff: payoffs, bestResponse: [], w: width, h: height};
+    };
+
+    Bimatrix.prototype.drawMatrixWithProfiles = function() {
+        //this.drawUtilities();
+        for(var property in this.profiles) {
+            console.log(this.profiles[property]);
+            if (this.profiles.hasOwnProperty(property)) {
+                this.drawProfile(this.profiles[property]);
+            }
+        }
+    };
+
+    Bimatrix.prototype.drawProfile = function(propt) {
+        var x = GTE.CONSTANTS.MATRIX_X;
+        var y = GTE.CONSTANTS.MATRIX_Y;
+        var size = GTE.CONSTANTS.MATRIX_SIZE;
+        if(propt.payoff.length == 2) {
+            //render a 2 player game
+            //this.shape = GTE.canvas.rect(size, size).attr({fill: '#fff', 'fill-opacity': 1, stroke: '#000', 'stroke-width': 2});
+            //this.shape.translate(x + this.width*size, y + size * this.height);
+            propt.payoff[0].draw(x + propt.w*size, y + size * propt.h + size * .7);
+            propt.payoff[1].draw(x + propt.w*size + size*1.06, y + size * propt.h ,GTE.CONSTANTS.CONTENT_EDITABLE_GROW_TO_LEFT);
+            return;
+        }
+        // render a n player game
+        /*
+        for(var i = 0; i<this.strategy.strategicUnits.length;i++) {
+            for(var j = 0;j<this.strategy.strategicUnits[i].moves.length;j++) {
+                this.editable = new GTE.UI.Widgets.ContentEditable(
+                    x+j*20+ i*100, 100*this.height,
+                    GTE.CONSTANTS.CONTENT_EDITABLE_GROW_TO_RIGHT,
+                    this.strategy.strategicUnits[i].moves[j].name , "strategy")
+                .colour(this.strategy.strategicUnits[i].player.colour);
+            }
+        }
+
+        for(var i = 0; i<this.strategy.payoffs.length;i++) {
+            this.strategy.payoffs[i].draw(500 + x + i*100, 100 * this.height);
+        }*/
+    };
 
     Bimatrix.prototype.drawMatrix = function() {
         this.drawUtilities();
         for(var i = 0;i<this.matrix.length; i++) {
             this.matrix[i].draw();
         }
+        // for the payoffs to be drawn with the profiles object
+        this.drawMatrixWithProfiles();
     };
 
     Bimatrix.prototype.drawUtilities = function() {
@@ -266,6 +328,7 @@ GTE.TREE = (function(parentModule) {
                     }
                 }
             }
+            console.log(permutations);
             return permutations;
         }
     };

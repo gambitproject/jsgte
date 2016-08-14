@@ -6,9 +6,10 @@ GTE.TREE = (function(parentModule) {
      * @class
      */
      
-    function PureStrategy(player, name) {
+    function PureStrategy(player, name, id) {
         this.player = player
         this.name = name;
+        this.id = id;
     }
 
 //    pureStrategy.prototype.assignMoves = function(moves) {
