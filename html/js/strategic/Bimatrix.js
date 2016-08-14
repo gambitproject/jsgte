@@ -71,13 +71,12 @@ GTE.TREE = (function(parentModule) {
                     ID = ID + strBimatrix[index][j].id;
                     if (j !== (strBimatrix[index].length-1)) ID = ID + ",";
                 }
-                this.profiles[ID] = {id: ID, payoff: payoffs, bestResponse: [], w: width, h: height};
+                this.profiles[ID] = {id: ID, payoff: payoffs, bestResponse: [], w: width, h: height, shape: null};
     };
 
     Bimatrix.prototype.drawMatrixWithProfiles = function() {
         //this.drawUtilities();
         for(var property in this.profiles) {
-            console.log(this.profiles[property]);
             if (this.profiles.hasOwnProperty(property)) {
                 this.drawProfile(this.profiles[property]);
             }
@@ -90,8 +89,8 @@ GTE.TREE = (function(parentModule) {
         var size = GTE.CONSTANTS.MATRIX_SIZE;
         if(propt.payoff.length == 2) {
             //render a 2 player game
-            //this.shape = GTE.canvas.rect(size, size).attr({fill: '#fff', 'fill-opacity': 1, stroke: '#000', 'stroke-width': 2});
-            //this.shape.translate(x + this.width*size, y + size * this.height);
+            propt.shape = GTE.canvas.rect(size, size).attr({fill: '#fff', 'fill-opacity': 1, stroke: '#000', 'stroke-width': 2});
+            propt.shape.translate(x + propt.w*size, y + size * propt.h);
             propt.payoff[0].draw(x + propt.w*size, y + size * propt.h + size * .7);
             propt.payoff[1].draw(x + propt.w*size + size*1.06, y + size * propt.h ,GTE.CONSTANTS.CONTENT_EDITABLE_GROW_TO_LEFT);
             return;
