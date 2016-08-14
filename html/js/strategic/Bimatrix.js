@@ -7,7 +7,6 @@ GTE.TREE = (function(parentModule) {
      */
     function Bimatrix() {
         this.players = [];
-        // this.isets = []; // multidimensional array containing corresponding isets of players
         this.strategies = []; // a multidimensional array containing strategicUnit objects
         this.matrix = [];
         this.profiles = {}; // object that has strategy profile properties
@@ -16,90 +15,16 @@ GTE.TREE = (function(parentModule) {
     Bimatrix.prototype.assignPlayers = function(players) {
         this.players = [];
         for(var i=0;i<players.length;i++)
-            this.addPlayer(players[i]);
+            this.players.push(players[i]);
     };
-
-    Bimatrix.prototype.addPlayer = function(player) {
-        if(this.players.indexOf(player) == -1)
-            this.players.push(player);
-    };
-
-//    Bimatrix.prototype.assignIsets = function(node) {
-//        var playerIndex = this.players.indexOf(node.player);
-//        if(playerIndex == -1)
-//            alert("player not present in player array.")
-//        else {
-//            if(this.isets[playerIndex] == undefined)
-//                this.isets[playerIndex] = [];
-//            if(this.isets[playerIndex].indexOf(node.iset) == -1) {
-//                this.isets[playerIndex].push(node.iset);
-//            }
-//            for(var i=0;i<node.children.length;i++) {
-//                if(!node.children[i].isLeaf())
-//                    this.assignIsets(node.children[i]);
-//            }
-//        }
-//    };
-//
-//    Bimatrix.prototype.getIsets = function(player) {
-//        if(this.players.indexOf(player) == -1 || this.isets[this.players.indexOf(player)] == undefined)
-//            return [];
-//        else {
-//            var playerIsets = [];
-//            for(var i=0;i<this.isets[this.players.indexOf(player)].length;i++)
-//                playerIsets.push(this.isets[this.players.indexOf(player)][i]);
-//            return playerIsets;
-//        }
-//    };
-
-//    Bimatrix.prototype.createMovePermutations = function(moves, currentPermutations, player) {
-//        if(moves==undefined || moves.length ==0) {
-//            return currentPermutations;
-//        } else {
-//            var permutations = [];
-//            if(currentPermutations.length == 0) {
-//                for(var i=0;i<moves.length;i++) {
-//                    var currentStrategy = new GTE.TREE.StrategicUnit(player);
-//                    currentStrategy.addMove(moves[i]);
-//                    permutations.push(currentStrategy);
-//                }
-//            }
-//            else {
-//                for(var i=0;i<moves.length;i++) {
-//                    for(var j = 0; j<currentPermutations.length ; j++) {
-//                        var perm = new GTE.TREE.StrategicUnit(player) 
-//                        perm.assignMoves(currentPermutations[j].moves);
-//                        perm.addMove(moves[i]);
-//                        permutations.push(perm);
-//                    }
-//                }
-//            }
-//            return permutations;
-//        }
-//    };
-
-//    Bimatrix.prototype.createMoves = function(player) {
-//        var isets = this.getIsets(player)
-//        if(isets == undefined || isets.length==0)
-//            return [];
-//        else {
-//            var permutations = [];
-//            for(var i=0;i<isets.length;i++) {
-//                permutations = this.createMovePermutations(isets[i].moves, permutations, player)
-//            }
-//            return permutations;
-//        }
-//    };
 
     Bimatrix.prototype.initialise = function(x, y) {
         //alert('x = ' + x + ' y = ' + y);
 
-        this.assignPlayers(GTE.tree.players);
-
-		//for(var i=0; i < 2; i++) { // hardwire as 2 for now
-            //var currentStrategy = [new GTE.TREE.PureStrategy(i,"a"), new GTE.TREE.PureStrategy(i,"b")];
-            //this.strategies.push(currentStrategy);
-        //}
+        // alert(GTE.tree.players); 
+        // Here we have 5 players; chance = 0, plus 4 more
+		// We just want players 1 and 2, so we just takes those via slice
+        this.assignPlayers(GTE.tree.players.slice(1,3));
 
 		var ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
 		var alphabet = 'abcdefghijklmnopqrstuvwxyz'.split('');
@@ -116,35 +41,23 @@ GTE.TREE = (function(parentModule) {
 		}
 		this.strategies.push(strategies2);
           
-        this.players.length = 3 // HACK
         var strBimatrix = this.createStrategies();
         for(var i = 0; i< strBimatrix.length; i++) {
-            //if(this.players.length == 3) {
-            if(this.players.length == 3) {
-                //var currentStrategyBlock = new GTE.TREE.NewStrategyBlock(strBimatrix[i] , parseInt(i/(this.strategies[2].length)), parseInt(i%(this.strategies[2].length)));
-                // HACK: is 0 the chance player?
-                var currentStrategyBlock = new GTE.TREE.NewStrategyBlock(strBimatrix[i] , parseInt(i/(this.strategies[1].length)), parseInt(i%(this.strategies[1].length)));
-                //currentStrategyBlock.assignPayoffs();
-                this.matrix.push(currentStrategyBlock);
-                this.initialiseProfiles(strBimatrix, i, parseInt(i/(this.strategies[1].length)), parseInt(i%(this.strategies[1].length)));
-            } else {
-                var currentStrategyBlock = new GTE.TREE.NewStrategyBlock(strBimatrix[i] , i+1);
-                //currentStrategyBlock.assignPayoffs();
-                currentStrategy.draw();
-                this.matrix.push(currentStrategyBlock);
-                this.initialiseProfiles(strBimatrix, i, parseInt(i/(this.strategies[1].length)), parseInt(i%(this.strategies[1].length)));
-            }
+			var currentStrategyBlock = new GTE.TREE.NewStrategyBlock(strBimatrix[i] , parseInt(i/(this.strategies[1].length)), parseInt(i%(this.strategies[1].length)));
+			//currentStrategyBlock.assignPayoffs();
+			this.matrix.push(currentStrategyBlock);
+			this.initialiseProfiles(strBimatrix, i, parseInt(i/(this.strategies[1].length)), parseInt(i%(this.strategies[1].length)));
         }
-        if(this.players.length == 2) {
-            for(var i = 0; i<this.matrix.length; i++) {
-                this.matrix[i].assignPartners();
-            }
-            this.drawMatrix();
-        }
+		for(var i = 0; i<this.matrix.length; i++) {
+			this.matrix[i].assignPartners();
+		}
+		this.drawMatrix();
     };
+      
+      
+    Bimatrix.prototype.initialiseProfiles = function (strBimatrix, index, width, height) {
     // initialises the profiles object and includes correct strategy profiles
     // problem is they are not affected by the editable functionality
-    Bimatrix.prototype.initialiseProfiles = function (strBimatrix, index, width, height) {
         var player1 = new GTE.TREE.Player(1, "#FF0000");
                 var player2 = new GTE.TREE.Player(2, "#0000FF");
                 var payoff1 = new GTE.TREE.Payoff(player1); //, leafNode);
@@ -255,7 +168,7 @@ GTE.TREE = (function(parentModule) {
                 // GTE.CONSTANTS.CONTENT_EDITABLE_GROW_TO_RIGHT,
                 GTE.CONSTANTS.CONTENT_EDITABLE_GROW_TO_LEFT,
                 "I", "player 1")
-            .colour(this.players[1].colour) 
+            .colour(this.players[0].colour) 
 
         this.player2 = new GTE.UI.Widgets.ContentEditable(
                 // 6+4 is the magic text offset in the box in
@@ -266,7 +179,7 @@ GTE.TREE = (function(parentModule) {
                 GTE.CONSTANTS.MATRIX_Y - 40 - 22,
                 GTE.CONSTANTS.CONTENT_EDITABLE_GROW_TO_RIGHT,
                 "II", "player 2")
-            .colour(this.players[2].colour) 
+            .colour(this.players[1].colour) 
 
         //for(var i=0; i<this.strategies[1].length; i++) {
     	// NO CHANCE PLAYER
@@ -281,7 +194,7 @@ GTE.TREE = (function(parentModule) {
                 GTE.CONSTANTS.MATRIX_Y + 36 + i * GTE.CONSTANTS.MATRIX_SIZE,
                 GTE.CONSTANTS.CONTENT_EDITABLE_GROW_TO_LEFT,
                 string, "player 1")
-            .colour(this.players[1].colour);
+            .colour(this.players[0].colour);
         }
 
         //for(var i=0; i<this.strategies[1].length; i++) {
@@ -297,7 +210,7 @@ GTE.TREE = (function(parentModule) {
                 GTE.CONSTANTS.MATRIX_Y - 40 ,
                 GTE.CONSTANTS.CONTENT_EDITABLE_GROW_TO_RIGHT,
                 string, "player 2")
-            .colour(this.players[2].colour);
+            .colour(this.players[1].colour);
         }
         while( GTE.canvas.viewbox().width - GTE.CONSTANTS.MATRIX_X < GTE.tree.matrix.strategies[1].length * GTE.CONSTANTS.MATRIX_SIZE
         ||  GTE.canvas.viewbox().height - GTE.CONSTANTS.MATRIX_Y < GTE.tree.matrix.strategies[0].length * GTE.CONSTANTS.MATRIX_SIZE) {
