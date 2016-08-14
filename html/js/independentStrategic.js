@@ -175,6 +175,6 @@
     //initialise the matrix
     GTE.STRATEGICFORMMODE = GTE.STRATEGICFORMMODES.GENERAL;
     //GTE.tools.createIndependentStrategicForm(2, 2);
-    GTE.tools.createStrategicForm(3, 3);
+    GTE.tools.createStrategicForm(2, 3);
     hideButtons();
 }());

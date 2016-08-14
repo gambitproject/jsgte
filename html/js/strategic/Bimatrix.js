@@ -21,7 +21,7 @@ GTE.TREE = (function(parentModule) {
     Bimatrix.prototype.initialise = function(x, y) {
         //alert('x = ' + x + ' y = ' + y);
 
-        alert(GTE.tree.players); 
+        //alert(GTE.tree.players); 
         // Here we have 5 players; chance = 0, plus 4 more
 		// We just want players 1 and 2, so we just takes those via slice
         this.assignPlayers(GTE.tree.players.slice(1,3));
@@ -43,10 +43,10 @@ GTE.TREE = (function(parentModule) {
           
         var strBimatrix = this.createStrategies();
         for(var i = 0; i< strBimatrix.length; i++) {
-			var currentStrategyBlock = new GTE.TREE.NewStrategyBlock(strBimatrix[i] , parseInt(i/(this.strategies[1].length)), parseInt(i%(this.strategies[1].length)));
+			var currentStrategyBlock = new GTE.TREE.NewStrategyBlock(strBimatrix[i] , parseInt(i/(this.strategies[0].length)), parseInt(i%(this.strategies[0].length)));
 			//currentStrategyBlock.assignPayoffs();
 			this.matrix.push(currentStrategyBlock);
-			this.initialiseProfiles(strBimatrix, i, parseInt(i/(this.strategies[1].length)), parseInt(i%(this.strategies[1].length)));
+			this.initialiseProfiles(strBimatrix, i, parseInt(i/(this.strategies[0].length)), parseInt(i%(this.strategies[0].length)));
         }
 		for(var i = 0; i<this.matrix.length; i++) {
 			this.matrix[i].assignPartners();
@@ -114,9 +114,9 @@ GTE.TREE = (function(parentModule) {
 
     Bimatrix.prototype.drawMatrix = function() {
         this.drawUtilities();
-        for(var i = 0;i<this.matrix.length; i++) {
-            this.matrix[i].draw();
-        }
+        //for(var i = 0;i<this.matrix.length; i++) {
+        //    this.matrix[i].draw();
+        //}
         // for the payoffs to be drawn with the profiles object
         this.drawMatrixWithProfiles();
     };
@@ -182,6 +182,7 @@ GTE.TREE = (function(parentModule) {
 
         //for(var i=0; i<this.strategies[1].length; i++) {
     	// NO CHANCE PLAYER
+        
         for(var i=0; i<this.strategies[0].length; i++) {
            //var string = "";
             //for(var j = 0; j<this.strategies[1][i].moves.length;j++) {
