@@ -290,7 +290,9 @@ GTE.TREE = (function(parentModule) {
         var str = "";
         for(var i=0; i<this.strategies[0].length; i++) {
             for(var j=0; j<this.strategies[1].length; j++) {
-                str += this.matrix[i*this.strategies[1].length+j].strategy.payoffs[playerIn].value;
+                var id = i + "," + j;
+                str += this.profiles[id].payoff[playerIn].value;
+                //str += this.matrix[i*this.strategies[1].length+j].strategy.payoffs[playerIn].value;
                 str +=" ";
             }
             str+="\n";
@@ -305,8 +307,6 @@ GTE.TREE = (function(parentModule) {
             matrixToSet[i] = matrixToSet[i].trim();
             matrixToSet[i] = matrixToSet[i].split(" ");
             for(var j=0; j<this.strategies[1].length; j++) {
-                // correct_profile.payoff.value =  parseInt(matrixToSet[i][j]);
-                // correct_profile.payoff.text = (matrixToSet[i][j]);
                 //alert("i = " + i + " j = " + j)
                 var id = i + "," + j;
                 this.profiles[id].payoff[playerIn].value =  parseInt(matrixToSet[i][j]);
