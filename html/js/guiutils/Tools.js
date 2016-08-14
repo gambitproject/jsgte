@@ -113,6 +113,7 @@ GTE.UI = (function (parentModule) {
         GTE.tree.clear();
         GTE.tree.matrix = new GTE.TREE.Bimatrix();
         GTE.tree.matrix.initialise(x, y);
+        GTE.tree.clear(); // TODO: THIS IS A BIT OF A HACK, WITHOUT IT WE GET OVERLAYED PAYOFFS
         GTE.tree.matrix.drawMatrix()
         console.log(GTE.tree.matrix);
     };
