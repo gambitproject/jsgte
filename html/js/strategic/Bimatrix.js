@@ -306,6 +306,10 @@ GTE.TREE = (function(parentModule) {
             for(var j=0; j<this.strategies[1].length; j++) {
                 // correct_profile.payoff.value =  parseInt(matrixToSet[i][j]);
                 // correct_profile.payoff.text = (matrixToSet[i][j]);
+                //alert("i = " + i + " j = " + j)
+                var id = i + "," + j;
+                this.profiles[id].payoff[playerIn].value =  parseInt(matrixToSet[i][j]);
+                this.profiles[id].payoff[playerIn].text = (matrixToSet[i][j]);
                 this.matrix[i*this.strategies[1].length+j].strategy.payoffs[playerIn].value = parseInt(matrixToSet[i][j]);
                 this.matrix[i*this.strategies[1].length+j].strategy.payoffs[playerIn].text = (matrixToSet[i][j]);
             }
