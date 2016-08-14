@@ -59,19 +59,19 @@ GTE.TREE = (function(parentModule) {
     // initialises the profiles object and includes correct strategy profiles
     // problem is they are not affected by the editable functionality
         var player1 = new GTE.TREE.Player(1, "#FF0000");
-                var player2 = new GTE.TREE.Player(2, "#0000FF");
-                var payoff1 = new GTE.TREE.Payoff(player1); //, leafNode);
-                var payoff2 = new GTE.TREE.Payoff(player2); //, leafNode);
-                // Initialisation of profiles object in Bimatrix constructor, later will be made a function
-                payoff1.changeText("0");
-                payoff2.changeText("0");
-                var payoffs = [payoff1,payoff2];
-                var ID = "";
-                for (var j=0; j<strBimatrix[index].length; j++) {
-                    ID = ID + strBimatrix[index][j].id;
-                    if (j !== (strBimatrix[index].length-1)) ID = ID + ",";
-                }
-                this.profiles[ID] = {id: ID, payoff: payoffs, bestResponse: [], w: width, h: height, shape: null};
+		var player2 = new GTE.TREE.Player(2, "#0000FF");
+		var payoff1 = new GTE.TREE.Payoff(player1); //, leafNode);
+		var payoff2 = new GTE.TREE.Payoff(player2); //, leafNode);
+		// Initialisation of profiles object in Bimatrix constructor, later will be made a function
+		payoff1.changeText("0");
+		payoff2.changeText("0");
+		var payoffs = [payoff1,payoff2];
+		var ID = "";
+		for (var j=0; j<strBimatrix[index].length; j++) {
+			ID = ID + strBimatrix[index][j].id;
+			if (j !== (strBimatrix[index].length-1)) ID = ID + ",";
+		}
+		this.profiles[ID] = {id: ID, payoff: payoffs, bestResponse: [], w: width, h: height, shape: null};
     };
 
     Bimatrix.prototype.drawMatrixWithProfiles = function() {
