@@ -37,7 +37,9 @@ GTE = (function(parentModule) {
             this.assignEndpoints(2);
             this.assignLines(2);
             this.assignIntersections(2);
-            this.ini_arrays();
+       this.ini_arrays();
+       D3delete_canvas(0);
+       D3delete_canvas(1);
         }
         else {
             if (this.nb_strat[1]==2){
@@ -45,7 +47,9 @@ GTE = (function(parentModule) {
                 this.assignEndpoints(1);
                 this.assignLines(1);
                 this.assignIntersections(1);
-                this.ini_arrays();
+       this.ini_arrays();
+       D3delete_canvas(0);
+       D3delete_canvas(1);
                 if (this.nb_strat[0]==3){
                     var temp= GTE.svg.getElementsByClassName("bottom");
                     for (var k=0;k<temp.length;k++){
@@ -61,7 +65,7 @@ GTE = (function(parentModule) {
                     temp= div.children.length;
                     for (var i=0;i<temp;i++){
                         div.removeChild(div.children[0]);}
-                    this.ini_arrays();
+       this.ini_arrays();
                     D3draw_canvas(1);
                 }
                 
@@ -81,7 +85,7 @@ GTE = (function(parentModule) {
                     for (var i=0;i<temp;i++){
                         div.removeChild(div.children[0]);}
                     this.ini_arrays();
-                    D3delete_canvas(1);
+                    D3draw_canvas(0);
                 }
             }
             
@@ -105,14 +109,13 @@ GTE = (function(parentModule) {
                 temp= div.children.length;
                 for (var i=0;i<temp;i++){
                     div.removeChild(div.children[0]);}
-                this.ini_arrays();
+       this.ini_arrays();
                 if ( this.nb_strat[0]==3){
                    D3draw_canvas(0);
                    D3draw_canvas(1);
                 }
                 if (this.nb_strat[0]>3){
                     D3draw_canvas(0);
-                    D3delete_canvas(1);
                     
                 }
             }
@@ -983,12 +986,13 @@ GTE = (function(parentModule) {
         var x1;
         var x2;
         //degenerated equilibrium
-        for (var i=0;i<strat_point[0].length-1;i++){
+        for (var i=0;i<strat_point[0].length;i++){
             var dege=[];
             var dege2=[];
             for (var j=0;j<strat_point[0][i].length;j++){
                 if (this.payoffs[1][strat_point[0][i][j]][this.strat[1][0]]== this.payoffs[1][strat_point[0][i][j]][this.strat[1][1]]){
                     var in_test=false;
+                    if (i<strat_point[0].length-1){
                     for (var k=0;k<strat_point[0][i+1].length;k++){
                         if (strat_point[0][i][j]==strat_point[0][i+1][k]){
                             in_test=false;
@@ -1001,44 +1005,22 @@ GTE = (function(parentModule) {
                                 in_test=true;}
                         }
                     }
-                    if (in_test==false && (this.payoffs[0][this.strat[0][0]][this.strat[1][0]]== this.payoffs[0][this.strat[0][1]][this.strat[1][0]]) ){
+                    }
+       if ((i<strat_point[0].length-1 || this.best_response[0][1]==-1) &&((this.best_response[1][this.strat[0][0]]!=1 &&this.best_response[1][this.strat[0][1]]!=1 && i==0) || (this.best_response[1][this.strat[0][0]]!=0 &&this.best_response[1][this.strat[0][1]]!=0 &&i>0) )){
+                    if (in_test==false && ((point[0][i][0]==50 || point[0][i][0]==250)||(this.payoffs[1][this.strat[0][0]][this.strat[1][0]]== this.payoffs[1][this.strat[0][0]][this.strat[1][1]]&&this.payoffs[1][this.strat[0][1]][this.strat[1][0]]== this.payoffs[1][this.strat[0][1]][this.strat[1][1]]))){
                         for (var l=0;l<dege2.length;l++){
-                            if (dege2[l]==[strat_point[0][i][j],0])
+                            if (dege2[l]==strat_point[0][i][j])
                             in_test=true;
-                        }
-                        for (var l=0;l<dege2.length;l++){
-                            if (dege2[l]==[strat_point[0][i][j],1]){
-                                dege2[l].push(0);
-                                in_test=true;
-                            }
                         }
                         for (var l=0;l<dege.length;l++){
                             if (dege[l]==strat_point[0][i][j])
                             in_test=true;
                         }
                         if (in_test==false){
-                            dege2.push([strat_point[0][i][j],0]);
+                            dege2.push(strat_point[0][i][j]);
                             in_test=true;}
                     }
-                    if (in_test==false && (this.payoffs[0][this.strat[0][0]][this.strat[1][1]]== this.payoffs[0][this.strat[0][1]][this.strat[1][1]]) ){
-                        for (var l=0;l<dege2.length;l++){
-                            if (dege2[l]==[strat_point[0][i][j],1])
-                            in_test=true;
-                        }
-                        for (var l=0;l<dege2.length;l++){
-                            if (dege2[l]==[strat_point[0][i][j],0]){
-                                dege2[l].push(1);
-                                in_test=true;
-                            }
-                        }
-                        for (var l=0;l<dege.length;l++){
-                            if (dege[l]==strat_point[0][i][j])
-                            in_test=true;
-                        }
-                        if (in_test==false){
-                            dege2.push([strat_point[0][i][j],1]);
-                            in_test=true;}
-                    }
+       }
                 }
             }
             if (dege.length>0){
@@ -1066,34 +1048,28 @@ GTE = (function(parentModule) {
                         var s2=GTE.tree.matrix.strategies[2][this.strat[1][1]].moves[0].name+" between "+this.pos_to_prob(0,point[0][i][0])+" and "+this.pos_to_prob(0,point[0][i+1][0]);
                         var s1=GTE.tree.matrix.strategies[1][dege[0]].moves[0].name+" between 0 and 1";
                         this.add_eq_text(s1,s2,cmp);
+       break;
                     }
                 }
-                
                 cmp=cmp+1;
             }
             if(dege2.length>0){
                 this.equilibrium[0][cmp]=new GTE.Marker(cmp,point[0][i][0],Number(this.height+this.margin),"#00ff00");
                 if (max==2){
-                    if (dege2[0].length<3){
-                        this.equilibrium[1][cmp]=new GTE.Marker(cmp,Number(2*this.margin+this.width+this.margin+dege2[0][0]*this.side),Number(this.height+this.margin),"#00ff00");
-                        
-                        this.equilibrium[2][cmp]=new GTE.Marker(cmp,Number(point[0][i][0]),Number(2*this.margin+this.width+this.margin+dege2[0][0]*this.side+this.margin),"#00ff00");
-                        var s1=GTE.tree.matrix.strategies[1][dege2[0][0]].moves[0].name;
-                    }
-                    else{
                         this.equilibrium[1][cmp]=new GTE.Marker(cmp,Number(2*this.margin+this.width+this.margin),Number(this.height+this.margin),"#00ff00");
                         this.equilibrium[1][cmp].degenerated(Number(2*this.width+this.margin));
-                        var s1=GTE.tree.matrix.strategies[1][dege2[0][0]].moves[0].name+" between 0 and 1";
+                        this.equilibrium[2][cmp]=new GTE.Marker(cmp,Number(point[0][i][0]),Number(3*this.margin+3/2*this.width),"#00ff00");
+                        var s1=GTE.tree.matrix.strategies[1][this.strat[0][1]].moves[0].name+" between 0 and 1";
                         
-                    }
-                    var s2=GTE.tree.matrix.strategies[2][dege2[0][1]].moves[0].name;
+                   // }
+                    var s2=GTE.tree.matrix.strategies[2][this.strat[1][1]].moves[0].name+" with pba "+this.pos_to_prob(0,point[0][i][0]);
                     this.add_eq_text(s1,s2,cmp);
                 }
                 cmp=cmp+1;
                 
             }
         }
-        
+        /*
         //degenrated equilibrium of the 2nd player.
         var i= strat_point[0].length-1;
         var dege2=[];
@@ -1146,7 +1122,7 @@ GTE = (function(parentModule) {
                 if (dege2[0].length<3){
                     this.equilibrium[1][cmp]=new GTE.Marker(cmp,Number(2*this.margin+this.width+this.margin+dege2[0][0]*this.side),Number(this.height+this.margin),"#00ff00");
                     
-                    this.equilibrium[2][cmp]=new GTE.Marker(cmp,Number(point[0][i][0]),Number(2*this.margin+this.width+this.margin+dege2[0][0]*this.side+this.margin),"#00ff00");
+                    this.equilibrium[2][cmp]=new GTE.Marker(cmp,Number(point[0][i][0]),Number(4*this.margin+this.height),"#00ff00");
                     var s1=GTE.tree.matrix.strategies[1][dege2[0][0]].moves[0].name;
                 }
                 else{
@@ -1163,7 +1139,8 @@ GTE = (function(parentModule) {
         }
         
         
-        
+        */
+       console.log(this.equilibrium[0].length);
         //Non degenerated equilibrium for the first player.
         for (var i=0;i<strat_point[0].length;i++){
             var test=false;
@@ -1179,6 +1156,16 @@ GTE = (function(parentModule) {
                         
                     }
                 }
+       if (i==0 &&this.best_response[0][1]== strat_point[0][j]&& this.payoffs[1][this.strat[0][0]][this.strat[1][0]]== this.payoffs[1][this.strat[0][0]][this.strat[1][1]]&&this.payoffs[1][this.strat[0][1]][this.strat[1][1]]> this.payoffs[1][this.strat[0][1]][this.strat[1][0]]){
+       test=true;
+       x1=this.margin;
+       if (strat_point[0][i][j]==this.strat[0][1]){
+       x2=Number(2*this.margin+this.width+this.margin);
+       }else{
+       x2=Number(2*this.width+this.margin);
+       
+       }
+       }
                 if (i>0 && i<strat_point[0].length-1 && this.payoffs[1][strat_point[0][i][j]][this.strat[1][0]] > this.payoffs[1][strat_point[0][i][j]][this.strat[1][1]]){
                     for (var k=0;k<strat_point[0][i].length;k++){
                         if (k!=j && this.payoffs[1][strat_point[0][i][k]][this.strat[1][0]] < this.payoffs[1][strat_point[0][i][k]][this.strat[1][1]]){
@@ -1197,14 +1184,25 @@ GTE = (function(parentModule) {
                         x2=Number(2*this.margin+this.width+this.margin);
                     }
                 }
+       
+       if (i==strat_point[0].length-1 &&this.best_response[0][0]== strat_point[0][j]&& this.payoffs[1][this.strat[0][0]][this.strat[1][0]]> this.payoffs[1][this.strat[0][0]][this.strat[1][1]] && this.payoffs[1][this.strat[0][1]][this.strat[1][1]]== this.payoffs[1][this.strat[0][1]][this.strat[1][0]]){
+       test=true;
+       x1=this.width-this.margin;
+       if (strat_point[0][i][j]==this.strat[0][1]){
+       x2=Number(2*this.margin+this.width+this.margin);
+       }else{
+       x2=Number(2*this.width+this.margin);
+       }
+       }
             }
-            
+       
             if (test){
                 this.equilibrium[0][cmp]=new GTE.Marker(cmp,x1,Number(this.height+this.margin),"#00ff00");
                 if (max==2){
                     if (x2==Number(2*this.margin+this.width+this.margin)){
                         this.equilibrium[1][cmp]=new GTE.Marker(cmp,x2,Number(this.height+this.margin),"#00ff00");
-                        if ((this.payoffs[0][this.strat[0][0]][this.strat[1][0]]== this.payoffs[0][this.strat[0][1]][this.strat[1][0]] && (this.best_response[1][0]==0||this.best_response[1][0]==-1)) ||( this.payoffs[0][this.strat[0][0]][this.strat[1][1]]== this.payoffs[0][this.strat[0][1]][this.strat[1][1]] && (this.best_response[1][0]==1||this.best_response[1][0]==-1))){
+                        //if ((this.payoffs[0][this.strat[0][0]][this.strat[1][0]]== this.payoffs[0][this.strat[0][1]][this.strat[1][0]] && (this.best_response[1][0]==0||this.best_response[1][0]==-1)) ||( this.payoffs[0][this.strat[0][0]][this.strat[1][1]]== this.payoffs[0][this.strat[0][1]][this.strat[1][1]] && (this.best_response[1][0]==1||this.best_response[1][0]==-1))){
+       if(this.intersect[1][0].getPosx()>Number(2*this.margin+this.width+this.margin) && this.intersect[1][0].getPosx()>Number(2*this.width+this.margin)){
                             this.equilibrium[1][cmp].degenerated(this.intersect[1][0].getPosx());
                             this.equilibrium[2][cmp]=new GTE.Marker(cmp,x1,Number(x2/2+this.intersect[1][0].getPosx()/2+this.margin),"#00ff00");
                             var s2=GTE.tree.matrix.strategies[2][this.strat[1][1]].moves[0].name+" with probability "+this.pos_to_prob(0,x1);
@@ -1233,8 +1231,8 @@ GTE = (function(parentModule) {
                                 var s2=GTE.tree.matrix.strategies[2][this.strat[1][1]].moves[0].name+" with probability "+this.pos_to_prob(0,x1);
                                 var s1=GTE.tree.matrix.strategies[1][this.strat[0][1]].moves[0].name+" between 0 and 1";
                                 this.add_eq_text(s1,s2,cmp);
-                            }else{
-                                
+       }else{
+       
                                 this.equilibrium[1][cmp]=new GTE.Marker(cmp,x2,Number(this.height+this.margin),"#00ff00");
                                 this.equilibrium[2][cmp]=new GTE.Marker(cmp,x1,Number(x2+this.margin),"#00ff00");
                                 var s2=GTE.tree.matrix.strategies[2][this.strat[1][1]].moves[0].name+" with probability "+this.pos_to_prob(0,x1);
@@ -1322,7 +1320,11 @@ GTE = (function(parentModule) {
                 temp[8].setAttributeNS(null, "height", Number(this.side+2*this.rad));
                 temp[8].setAttributeNS(null, "width", Number(this.side+2*this.rad));
                 temp[8].setAttributeNS(null, "fill", "pink");
-                
+                GTE.svg.insertBefore(temp[8],temp[7]);
+                GTE.svg.insertBefore(temp[6],temp[7]);
+                GTE.svg.insertBefore(temp[5],temp[7]);
+                GTE.svg.insertBefore(temp[4],temp[7]);
+       
                 temp[4].setAttributeNS(null, "x", Number(this.margin-this.rad));
                 temp[4].setAttributeNS(null, "y", Number(2*this.margin+this.height-this.rad));
                 temp[4].setAttributeNS(null, "height", Number(2*this.rad));
@@ -1461,8 +1463,12 @@ GTE = (function(parentModule) {
         if (this.best_response[1][0]==this.best_response[1][1]){
             if (this.best_response[1][1]==-1){
                 path2=Number(this.margin)+","+Number(this.height+2*this.margin)+", "+Number(this.margin+this.side)+","+Number(this.height+2*this.margin)+", "+Number(this.margin+this.side)+","+Number(2*this.margin+this.height+this.side)+", "+Number(this.margin)+","+Number(2*this.margin+this.height+this.side)+", "+Number(this.margin)+","+Number(this.height+2*this.margin);
-                if (this.best_response[0][0]==-1 && this.best_response[0][1]==-1)
-                temp[8].setAttributeNS(null, "fill", "green");
+                if (this.best_response[0][0]==-1 && this.best_response[0][1]==-1){
+                    temp[8].setAttributeNS(null, "fill", "green");
+                    GTE.svg.insertBefore(temp[8],temp[7]);
+                    GTE.svg.insertBefore(temp[6],temp[7]);
+                    GTE.svg.insertBefore(temp[5],temp[7]);
+                    GTE.svg.insertBefore(temp[4],temp[7]);}
                 else {
                     if (temp[8].getAttribute("width")==0){
                         temp[8].setAttributeNS(null, "x", Number(this.margin-this.rad));
@@ -1470,6 +1476,10 @@ GTE = (function(parentModule) {
                         temp[8].setAttributeNS(null, "height", Number(this.side+2*this.rad));
                         temp[8].setAttributeNS(null, "width", Number(this.side+2*this.rad));
                         temp[8].setAttributeNS(null, "fill", "cyan");
+                        GTE.svg.insertBefore(temp[8],temp[7]);
+                        GTE.svg.insertBefore(temp[6],temp[7]);
+                        GTE.svg.insertBefore(temp[5],temp[7]);
+                        GTE.svg.insertBefore(temp[4],temp[7]);
                     }
                     else{
                         if (temp[5].getAttribute("width")==0){
@@ -1478,8 +1488,10 @@ GTE = (function(parentModule) {
                             temp[5].setAttributeNS(null, "height", Number(this.side+2*this.rad));
                             temp[5].setAttributeNS(null, "width", Number(this.side+2*this.rad));
                             temp[5].setAttributeNS(null, "fill", "cyan");
-                            var temp1=GTE.svg.getElementsByClassName("mixed")[0];
-                            GTE.svg.insertBefore(temp[5],temp1);
+                            GTE.svg.insertBefore(temp[5],temp[8]);
+                            GTE.svg.insertBefore(temp[4],temp[8]);
+                            GTE.svg.insertBefore(temp[6],temp[8]);
+                            GTE.svg.insertBefore(temp[7],temp[8]);
                         }
                         else {
                             temp[7].setAttributeNS(null, "x", Number(this.margin-this.rad));
@@ -1487,9 +1499,10 @@ GTE = (function(parentModule) {
                             temp[7].setAttributeNS(null, "height", Number(this.side+2*this.rad));
                             temp[7].setAttributeNS(null, "width", Number(this.side+2*this.rad));
                             temp[7].setAttributeNS(null, "fill", "cyan");
-                            
-                            var temp1=GTE.svg.getElementsByClassName("mixed")[0];
-                            GTE.svg.insertBefore(temp[7],temp1);
+                            GTE.svg.insertBefore(temp[7],temp[8]);
+                            GTE.svg.insertBefore(temp[6],temp[8]);
+                            GTE.svg.insertBefore(temp[5],temp[8]);
+                            GTE.svg.insertBefore(temp[4],temp[8]);
                         }
                     }
                 }
@@ -1579,9 +1592,10 @@ GTE = (function(parentModule) {
                                 temp[4].setAttributeNS(null, "x", Number(this.margin-this.rad));
                                 temp[4].setAttributeNS(null, "y", Number(2*this.margin+this.height-this.rad));
                                 temp[4].setAttributeNS(null, "fill", "pink");
-                                
-                                var temp1=GTE.svg.getElementsByClassName("mixed")[0];
-                                GTE.svg.insertBefore(temp[4],temp1);
+                                GTE.svg.insertBefore(temp[4],temp[7]);
+                                GTE.svg.insertBefore(temp[6],temp[7]);
+                                GTE.svg.insertBefore(temp[5],temp[7]);
+                                GTE.svg.insertBefore(temp[8],temp[7]);
                             }
                         }
                         if (this.best_response[0][0]==-1 && this.best_response[0][1]>-1){
@@ -1639,9 +1653,10 @@ GTE = (function(parentModule) {
                                 temp[4].setAttributeNS(null, "x", Number(this.margin-this.rad));
                                 temp[4].setAttributeNS(null, "y", Number(2*this.margin+this.height-this.rad));
                                 temp[4].setAttributeNS(null, "fill", "pink");
-                                
-                                var temp1=GTE.svg.getElementsByClassName("mixed")[0];
-                                GTE.svg.insertBefore(temp[4],temp1);
+                                GTE.svg.insertBefore(temp[4],temp[7]);
+                                GTE.svg.insertBefore(temp[6],temp[7]);
+                                GTE.svg.insertBefore(temp[5],temp[7]);
+                                GTE.svg.insertBefore(temp[8],temp[7]);
                             }
                         }
                     }
@@ -1666,9 +1681,10 @@ GTE = (function(parentModule) {
                                 temp[4].setAttributeNS(null, "x", Number(this.margin-this.rad));
                                 temp[4].setAttributeNS(null, "y", Number(2*this.margin+this.height-this.rad));
                                 temp[4].setAttributeNS(null, "fill", "pink");
-                                
-                                var temp1=GTE.svg.getElementsByClassName("mixed")[0];
-                                GTE.svg.insertBefore(temp[4],temp1);
+                                GTE.svg.insertBefore(temp[4],temp[7]);
+                                GTE.svg.insertBefore(temp[6],temp[7]);
+                                GTE.svg.insertBefore(temp[5],temp[7]);
+                                GTE.svg.insertBefore(temp[8],temp[7]);
                             }
                         }
                         if (this.best_response[0][0]==-1 && this.best_response[0][1]>-1){
@@ -1726,9 +1742,10 @@ GTE = (function(parentModule) {
                                 temp[4].setAttributeNS(null, "x", Number(this.margin-this.rad));
                                 temp[4].setAttributeNS(null, "y", Number(2*this.margin+this.height-this.rad));
                                 temp[4].setAttributeNS(null, "fill", "pink");
-                                
-                                var temp1=GTE.svg.getElementsByClassName("mixed")[0];
-                                GTE.svg.insertBefore(temp[4],temp1);
+                                GTE.svg.insertBefore(temp[4],temp[7]);
+                                GTE.svg.insertBefore(temp[6],temp[7]);
+                                GTE.svg.insertBefore(temp[5],temp[7]);
+                                GTE.svg.insertBefore(temp[8],temp[7]);
                             }
                         }
                     }
