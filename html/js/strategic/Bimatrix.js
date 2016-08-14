@@ -52,6 +52,7 @@ GTE.TREE = (function(parentModule) {
 			this.matrix[i].assignPartners();
 		}
 		this.drawMatrix();
+        this.generateBestResponses();
     };
       
       
@@ -73,6 +74,20 @@ GTE.TREE = (function(parentModule) {
 		}
 		this.profiles[ID] = {id: ID, payoff: payoffs, bestResponse: [], w: width, h: height, shape: null};
     };
+
+    Bimatrix.prototype.initialiseBestResponseToFalse = function () {
+        for (var property in this.profiles) {
+            for (var i=0; i<this.players.length; i++) {
+                if (this.profiles.hasOwnProperty(property)) {
+                    this.profiles[property].bestResponse.push(false);
+                }
+            }
+        }
+    };
+
+    Bimatrix.prototype.generateBestResponses = function() {
+        this.initialiseBestResponseToFalse();
+    }
 
     Bimatrix.prototype.drawMatrixWithProfiles = function() {
         //this.drawUtilities();
