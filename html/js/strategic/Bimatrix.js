@@ -42,6 +42,7 @@ GTE.TREE = (function(parentModule) {
 		this.strategies.push(strategies2);
           
         var strBimatrix = this.createStrategies();
+        console.log(strBimatrix);
         for(var i = 0; i< strBimatrix.length; i++) {
 			var currentStrategyBlock = new GTE.TREE.NewStrategyBlock(strBimatrix[i] , parseInt(i/(this.strategies[0].length)), parseInt(i%(this.strategies[0].length)));
 			//currentStrategyBlock.assignPayoffs();
@@ -75,11 +76,20 @@ GTE.TREE = (function(parentModule) {
 		this.profiles[ID] = {id: ID, payoff: payoffs, bestResponse: [], w: width, h: height, shape: null};
     };
 
+    // Sets best responses to false false for a 2 or 3 player game
     Bimatrix.prototype.initialiseBestResponseToFalse = function () {
-        for (var property in this.profiles) {
-            for (var i=0; i<this.players.length; i++) {
+        if (this.players.length === 2) {
+            for (var property in this.profiles) { 
                 if (this.profiles.hasOwnProperty(property)) {
-                    this.profiles[property].bestResponse.push(false);
+                    this.profiles[property].bestResponse = [false, false];
+                }
+            }
+        } else {
+            if (this.players.length === 3) {
+                for (var property in this.profiles) { 
+                    if (this.profiles.hasOwnProperty(property)) {
+                        this.profiles[property].bestResponse = [false, false, false];
+                    }
                 }
             }
         }
@@ -87,6 +97,101 @@ GTE.TREE = (function(parentModule) {
 
     Bimatrix.prototype.generateBestResponses = function() {
         this.initialiseBestResponseToFalse();
+        var payoffMax;
+        for (var i=0; i< this.players.length; i++) {
+            var combs = this.partialProfilesCombinations(i);
+            for (var k=0; k<combs.length; k++) {
+                var pfs = [];
+                var profs = [];
+                for (var j=0; j<this.strategies[i].length; j++) {
+                    var comb = combs[k];
+                    comb.splice(i, 0, j);
+                    var id = comb.toString();
+                    combs[k].splice(i,1);
+                    pfs.push(this.profiles[id].payoff[i].value);
+                    profs.push(this.profiles[id]);
+                    if (j === 0) {
+                        payoffMax = pfs[j];
+                    }
+                    else {
+                        if (payoffMax <= pfs[j]) {
+                            payoffMax = pfs[j];
+                        }
+                    } 
+                }
+                for (var l=0; l<pfs.length; l++) {
+                    if (pfs[l] === payoffMax) {
+                        profs[l].bestResponse[i] = true;
+                    }
+                }
+            }
+        }
+    };
+
+    // function that returns all strategy profiles combinations as strings ids in an array
+    Bimatrix.prototype.profilesCombinations = function() {
+        var numplayers = this.players.length;
+        var strategyNumbers = [];
+        var currentprofile = [];
+        var k;
+        for (var i=0; i<this.players.length; i++) {
+            strategyNumbers.push(this.strategies[i].length);
+            currentprofile.push(0);
+        }
+        var profiles = [];
+        while (true) {
+            profiles.push(currentprofile.toString());
+            k = numplayers - 1;
+            while (k >= 0) {
+                currentprofile[k] += 1;
+                if (currentprofile[k] < strategyNumbers[k]) {
+                    break;
+                }
+                currentprofile[k]=0;
+                k = k - 1;
+            }
+            if (k<0) break;
+        }
+        return profiles;
+    };
+
+    // function that returns the profiles combinations without the exceptPlayer
+    Bimatrix.prototype.partialProfilesCombinations = function(exceptPlayer) {
+        var numplayers = this.players.length;
+        var strategyNumbers = [];
+        var currentprofile = [];
+        var k;
+        for (var i=0; i<this.players.length; i++) {
+            strategyNumbers.push(this.strategies[i].length);
+            currentprofile.push(0);
+        }
+        var partprofiles = [];
+        while (true) {
+            var auxprofile = [];
+            for (var i=0; i<currentprofile.length; i++) {
+                if (i !== exceptPlayer) {
+            auxprofile.push(currentprofile[i]);
+                }
+            }
+            partprofiles.push(auxprofile);
+            k = numplayers -1;
+            while (k >= 0) {
+                if (k !== exceptPlayer) {
+                    currentprofile[k] += 1;
+                    if (currentprofile[k] < strategyNumbers[k]) {
+                        break;
+                    }
+                    currentprofile[k] = 0;
+                }
+                k = k - 1;
+            }
+            if (k < 0) break;
+        }
+
+        for (var i=0; i<partprofiles.length; i++) {
+
+        }
+        return partprofiles;
     }
 
     Bimatrix.prototype.drawMatrixWithProfiles = function() {
