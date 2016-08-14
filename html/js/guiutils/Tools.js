@@ -111,10 +111,6 @@ GTE.UI = (function (parentModule) {
     */
     Tools.prototype.createStrategicForm = function (x, y) {
         GTE.tree.clear();
-        this.resetPlayers();
-        this.addPlayer();
-        this.addPlayer();
-        GTE.tree.clear();
         GTE.tree.matrix = new GTE.TREE.Bimatrix();
         GTE.tree.matrix.initialise(x, y);
         GTE.tree.matrix.drawMatrix()

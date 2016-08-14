@@ -21,7 +21,7 @@ GTE.TREE = (function(parentModule) {
     Bimatrix.prototype.initialise = function(x, y) {
         //alert('x = ' + x + ' y = ' + y);
 
-        // alert(GTE.tree.players); 
+        alert(GTE.tree.players); 
         // Here we have 5 players; chance = 0, plus 4 more
 		// We just want players 1 and 2, so we just takes those via slice
         this.assignPlayers(GTE.tree.players.slice(1,3));
