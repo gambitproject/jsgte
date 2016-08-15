@@ -24,7 +24,7 @@ a square. The best responses themselves are derived from
 payoff diagrams above and point with arrows to the square.
 
 This follows the specification at
-![](./INFOS/eqdiagrams.md)
+https://github.com/gambitproject/jsgte/blob/master/INFOS/eqdiagrams.md
 
 ## How to start the program
 The webpage can be load at http://gambitproject.github.io/jsgte/2byn.html
@@ -48,7 +48,7 @@ I aslo added the precision input. The user can choose the precision of payoffs (
 The 2 by 2 game is extended by m by 2 games.
 In this case, the payoffs of player 2 is not represented.
 The display of player 1 can have as many lines(strategies) as wanted.
-![2by2_square](./INFOS/EQDIAG/mby2.png)
+![mby2](./INFOS/EQDIAG/mby2.png)
 
 ## Extension to game with 3 strategies
 A 2D representation is not enought for games with 3 strategies.
@@ -57,14 +57,15 @@ The base is a triangle, each vertex of the triangle corresponds to a pure strate
 This diagram is interactive too. The user can grab endpoint and move them up and down.
 However she cannot do it with lines, as this diagrams can have confusing overlaps due to dimension.
 Subdivided lines are changed by subdivided triangle which are the projection of the upper envelope into the plan (x0y).
-![2by2_square](./INFOS/EQDIAG/3by3.png)
+![3by3](./INFOS/EQDIAG/3by3.png)
 
 Just for the 2 strategies representation, there is an extension when player 1 has more than 3 strategies.
 When this occurs we cannot represent player 2 payoffs. We only display player 1 best reponses.
-![2by2_square](./EQDIAG/mby3.png)
+![mby3](./INFOS/EQDIAG/mby3.png)
 
 ##Things to do next
-*linked best response to equilibria for 3 by 3 and 3 by 2 games.
+
+* linked best response to equilibria for 3 by 3 and 3 by 2 games.
 * Make a real 3D diagram with three.js
 
 
