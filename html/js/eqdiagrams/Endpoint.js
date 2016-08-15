@@ -75,7 +75,7 @@ GTE = (function (parentModule) {
      Return strategy
      */
     Endpoint.prototype.getStrat_mat = function(){
-       return this.strat_matrix;
+        return this.strat_matrix;
     };
     
     /*

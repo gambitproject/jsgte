@@ -71,7 +71,7 @@ function D3draw_canvas(i){ //draw the canvas of the 3D drawing for player i
     temp.setAttribute("points", Number(GTE.diag.margin+i*x_shift)+", "+Number(GTE.diag.height-GTE.diag.margin)+" "+Number(GTE.diag.margin+i*x_shift+100)+", "+Number(GTE.diag.height-GTE.diag.margin-100)+" "+Number(GTE.diag.margin+i*x_shift+200)+","+Number(GTE.diag.height-GTE.diag.margin)+" "+Number(GTE.diag.margin+i*x_shift)+","+Number(GTE.diag.height-GTE.diag.margin));
     
     GTE.svg.appendChild(temp);
-
+    
     temp = document.createElementNS("http://www.w3.org/2000/svg", "line");
     temp.setAttribute("class","canvas"+i+" contour up");
     temp.setAttribute("x1", Number(GTE.diag.margin+i*x_shift));
@@ -144,47 +144,47 @@ function draw_plan([p1,p2,p3],i,y){ //draw the payoff plan for player i strategy
     
     GTE.svg.appendChild(temp);
     if (y>=0){
-    if (i==0){
-        var strat0=Number(GTE.diag.nb_strat[1]*y+0);
-        var strat1=Number(GTE.diag.nb_strat[1]*y+1);
-        var strat2=Number(GTE.diag.nb_strat[1]*y+2);
-    }
-    else{
-        var strat0=Number(GTE.diag.nb_strat[1]*0+y);
-        var strat1=Number(GTE.diag.nb_strat[1]*1+y);
-        var strat2=Number(GTE.diag.nb_strat[1]*2+y);
-        
-    }
-    var e=document.createElementNS("http://www.w3.org/2000/svg", "circle");
-    e.setAttribute("cx",q1[0]);
-    e.setAttribute("cy",q1[1]);
-    e.setAttribute("r",GTE.POINT_RADIUS);
-    e.setAttribute("class","canvas"+i+" pay line"+Number(i+1));
-    e.setAttribute("strat",strat0);
-    e.setAttribute("stratp",0);
-    e.setAttribute("player",i);
-    e.addEventListener("mousedown", D3MouseDownEndpoint);
-    GTE.svg.appendChild(e);
-    var e=document.createElementNS("http://www.w3.org/2000/svg", "circle");
-    e.setAttribute("cx",q2[0]);
-    e.setAttribute("cy",q2[1]);
-    e.setAttribute("r",GTE.POINT_RADIUS);
-    e.setAttribute("class","canvas"+i+" pay line"+Number(i+1));
-    e.setAttribute("strat",strat1);
-    e.setAttribute("stratp",1);
-    e.setAttribute("player",i);
-    e.addEventListener("mousedown", D3MouseDownEndpoint);
-    GTE.svg.appendChild(e);
-    var e=document.createElementNS("http://www.w3.org/2000/svg", "circle");
-    e.setAttribute("cx",q3[0]);
-    e.setAttribute("cy",q3[1]);
-    e.setAttribute("r",GTE.POINT_RADIUS);
-    e.setAttribute("class","canvas"+i+" pay line"+Number(i+1));
-    e.setAttribute("strat",strat2);
-    e.setAttribute("stratp",2);
-    e.setAttribute("player",i);
-    e.addEventListener("mousedown", D3MouseDownEndpoint);
-    GTE.svg.appendChild(e);
+        if (i==0){
+            var strat0=Number(GTE.diag.nb_strat[1]*y+0);
+            var strat1=Number(GTE.diag.nb_strat[1]*y+1);
+            var strat2=Number(GTE.diag.nb_strat[1]*y+2);
+        }
+        else{
+            var strat0=Number(GTE.diag.nb_strat[1]*0+y);
+            var strat1=Number(GTE.diag.nb_strat[1]*1+y);
+            var strat2=Number(GTE.diag.nb_strat[1]*2+y);
+            
+        }
+        var e=document.createElementNS("http://www.w3.org/2000/svg", "circle");
+        e.setAttribute("cx",q1[0]);
+        e.setAttribute("cy",q1[1]);
+        e.setAttribute("r",GTE.POINT_RADIUS);
+        e.setAttribute("class","canvas"+i+" pay line"+Number(i+1));
+        e.setAttribute("strat",strat0);
+        e.setAttribute("stratp",0);
+        e.setAttribute("player",i);
+        e.addEventListener("mousedown", D3MouseDownEndpoint);
+        GTE.svg.appendChild(e);
+        var e=document.createElementNS("http://www.w3.org/2000/svg", "circle");
+        e.setAttribute("cx",q2[0]);
+        e.setAttribute("cy",q2[1]);
+        e.setAttribute("r",GTE.POINT_RADIUS);
+        e.setAttribute("class","canvas"+i+" pay line"+Number(i+1));
+        e.setAttribute("strat",strat1);
+        e.setAttribute("stratp",1);
+        e.setAttribute("player",i);
+        e.addEventListener("mousedown", D3MouseDownEndpoint);
+        GTE.svg.appendChild(e);
+        var e=document.createElementNS("http://www.w3.org/2000/svg", "circle");
+        e.setAttribute("cx",q3[0]);
+        e.setAttribute("cy",q3[1]);
+        e.setAttribute("r",GTE.POINT_RADIUS);
+        e.setAttribute("class","canvas"+i+" pay line"+Number(i+1));
+        e.setAttribute("strat",strat2);
+        e.setAttribute("stratp",2);
+        e.setAttribute("player",i);
+        e.addEventListener("mousedown", D3MouseDownEndpoint);
+        GTE.svg.appendChild(e);
     }
 }
 
@@ -207,7 +207,7 @@ function D3MouseMoveEndpoint (event) {
     if (stratp<2){
         var newPos=Math.round((GTE.diag.height-GTE.diag.margin-ratio*(mousePosition.y-svgPosition.top))/20*GTE.diag.precision)/GTE.diag.precision;
         console.log(newPos);
-}
+    }
     else{
         var newPos=Math.round((ratio*(-mousePosition.y+svgPosition.top)+GTE.diag.height-3*GTE.diag.margin)/20*GTE.diag.precision)/GTE.diag.precision;
     }
@@ -273,14 +273,14 @@ function scal(vec1,vec2){
 function equal (vec1, vec2){
     for (var i=0;i<3;i++){
         if ((vec1[i]-vec2[i])*(vec1[i]-vec2[i])>eps*eps)
-            return false;
+        return false;
     }
     return true;
 }
 
 function equal_num (vec1, vec2){
     if ((vec1-vec2)*(vec1-vec2)>eps*eps)
-        return false;
+    return false;
     return true;
 }
 
@@ -298,9 +298,9 @@ function plan_intersect ([p1,p2,p3],[q1,q2,q3]){ //compute the intersection betw
     var p_nor=cross(sub(p1,p2),sub(p1,p3));
     var q_nor=cross(sub(q1,q2),sub(q1,q3));
     if (is_parallel(p_nor,q_nor) && !equal(p1,q1)) //there is no intersection
-        return null;
+    return null;
     if (is_parallel(p_nor,q_nor)) //plans are equals
-        return "all"
+    return "all"
     var dir= cross (p_nor,q_nor);
     dir=normalize(dir);
     var point=[0,0,0];
@@ -345,18 +345,18 @@ function line_plan_intersect ([u,p1],[q1,q2,q3]){ //p1 is a point on the line, u
         var temp=cross(sub(q1,p1),sub(q1,q3));}
     else {
         if(equal(p1,q3))
-           var temp=cross(sub(q1,p1),sub(q1,q2));
+        var temp=cross(sub(q1,p1),sub(q1,q2));
         if (equal(p1,q1))
-            var temp=cross(sub(q3,p1),sub(q3,q2));
+        var temp=cross(sub(q3,p1),sub(q3,q2));
     }
     if(equal_num(scal(q_nor,u),0) && ! is_parallel(temp,q_nor))
-        return null;
+    return null;
     if(equal_num(scal(q_nor,u),0))
-        return "all";
+    return "all";
     if (is_parallel(temp,q_nor))
-        return p1;
+    return p1;
     if (equal(p1,q1))
-        return q1;
+    return q1;
     var coeff=-scal(q_nor,sub(p1,q1))/scal(q_nor,u);
     return add(p1,mul(coeff,u));
 }
@@ -364,19 +364,19 @@ function line_plan_intersect ([u,p1],[q1,q2,q3]){ //p1 is a point on the line, u
 function z_coor([x,y], [p1,p2,p3]){ //return the z-coordinate of the point (x,y) in the plan [p1,p2,p3]
     var p_nor=cross(sub(p1,p2),sub(p1,p3));
     if (equal_num(p_nor[2],0))
-        return -1; //there is no point with x,y coordinate in this plan
+    return -1; //there is no point with x,y coordinate in this plan
     return Number(scal(p1,p_nor)-x*p_nor[0]-y*p_nor[1])/Number(p_nor[2]);
 }
 
 function is_possible (vec,plan){ //check if vec is a point in the convex envelope.
     if( vec[0]>Number(1+eps) || vec[0]<Number(0-eps) ||vec[1]>Number(1+eps) || vec[1]<Number(0-eps))
-        return false;
+    return false;
     if (vec[0]+vec[1]>Number(1+eps))
-        return false;
+    return false;
     for (var i=0;i<plan.length;i++){
         var temp=z_coor([vec[0],vec[1]],plan[i]);
         if (vec[2]<Number(temp-eps))
-            return false;
+        return false;
     }
     return true;
 }
@@ -390,9 +390,9 @@ function D3compute_best_response(player){ //main function uses all previous func
         payoffs.push([]);
         for (var j=0;j<3;j++){
             if (player==0)
-                payoffs[i].push(GTE.diag.payoffs[0][i][j]);
+            payoffs[i].push(GTE.diag.payoffs[0][i][j]);
             else
-                payoffs[i].push(GTE.diag.payoffs[1][j][i]);
+            payoffs[i].push(GTE.diag.payoffs[1][j][i]);
         }
         plan[i+4]=[[0,0,payoffs[i][0]],[1,0,payoffs[i][1]],[0,1,payoffs[i][2]]];
         draw_plan(plan[i+4],player,i);
@@ -402,7 +402,7 @@ function D3compute_best_response(player){ //main function uses all previous func
     var line_to_plan=[];
     var plan_to_line=[];
     for (var i=0;i<plan.length;i++)
-        plan_to_line.push([]);
+    plan_to_line.push([]);
     var nb_lines=0
     for (var i=0;i<plan.length-1;i++){
         var equals=[];
@@ -410,7 +410,7 @@ function D3compute_best_response(player){ //main function uses all previous func
         for (var j=i+1;j<plan.length;j++){
             var temp=plan_intersect(plan[i],plan[j]);
             if (temp==null)
-                continue;
+            continue;
             if (temp=="all"){
                 equals.push(j);
                 continue;
@@ -433,7 +433,7 @@ function D3compute_best_response(player){ //main function uses all previous func
     var points_to_plan=[];
     var plan_to_points=[];
     for (var i=0;i<plan.length;i++)
-        plan_to_points.push([]);
+    plan_to_points.push([]);
     var nb_points=0;
     for (var i=0;i<lines.length;i++){
         var added_plan=[];
@@ -441,7 +441,7 @@ function D3compute_best_response(player){ //main function uses all previous func
         for (var j=0;j<plan.length;j++){
             var temp=line_plan_intersect(lines[i],plan[j]);
             if (temp==null)
-                continue;
+            continue;
             if (temp=="all"){
                 var test=false;
                 added_plan.push(j);
@@ -472,7 +472,7 @@ function D3compute_best_response(player){ //main function uses all previous func
     var u_points_to_plan=[];
     var u_plan_to_points=[];
     for (var i=0;i<plan.length;i++)
-        u_plan_to_points.push([]);
+    u_plan_to_points.push([]);
     for (var i=0;i<points.length-1;i++){
         if (is_possible(points[i],plan)){
             var test=true;
@@ -531,14 +531,14 @@ function draw_envelope(points3D,player,strat){ //draw the faces of the upper env
         points.push([points3D[i][0],points3D[i][1]]);
     }
     if (points.length <2)
-        return;
+    return;
     var left_point=0;
     for (var i=0;i<points.length;i++){
         if(points[i][0]<points[left_point][0])
-            left_point=i;
+        left_point=i;
         else{
             if(points[i][0]==points[left_point][0] &&points[i][1]>points[left_point][1]){
-            left_point=i;
+                left_point=i;
             }
         }
     }
@@ -567,7 +567,7 @@ function draw_envelope(points3D,player,strat){ //draw the faces of the upper env
             }
         }
         if (equal_num(new_point,-1))
-            test=false;
+        test=false;
         else{
             s=s+points1[new_point][0]+","+points1[new_point][1]+" ";
             s2=s2+points2[new_point][0]+","+points2[new_point][1]+" ";
@@ -600,7 +600,7 @@ function draw_envelope(points3D,player,strat){ //draw the faces of the upper env
             }
         }
         if (equal_num(new_point,left_point))
-            test=true;
+        test=true;
         s=s+points1[new_point][0]+","+points1[new_point][1]+" ";
         s2=s2+points2[new_point][0]+","+points2[new_point][1]+" ";
         center[0]=center[0]+points2[new_point][0];
@@ -625,24 +625,24 @@ function draw_envelope(points3D,player,strat){ //draw the faces of the upper env
     GTE.svg.appendChild(temp);
     
     if (nb_points>2){
-    temp = document.createElementNS("http://www.w3.org/2000/svg", "text");
-    temp.textContent="d";
-    temp.setAttribute("class", "canvas"+player+" player"+Number(player+1)+" strat"+Number(player)+""+strat+" legendh up");
-    temp.setAttribute("x",Number(center[0]/nb_points));
-    temp.setAttribute("y",Number(center[1]/nb_points));
-    GTE.svg.appendChild(temp);
+        temp = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        temp.textContent="d";
+        temp.setAttribute("class", "canvas"+player+" player"+Number(player+1)+" strat"+Number(player)+""+strat+" legendh up");
+        temp.setAttribute("x",Number(center[0]/nb_points));
+        temp.setAttribute("y",Number(center[1]/nb_points));
+        GTE.svg.appendChild(temp);
     }
 }
 
 function D3delete_faces(){
     var temp=document.getElementsByClassName("face").length;
     for (var i=0;i<temp;i++)
-        GTE.svg.removeChild(document.getElementsByClassName("face")[0]);
+    GTE.svg.removeChild(document.getElementsByClassName("face")[0]);
     
 }
 
 function D3delete_canvas(player){
     var temp=document.getElementsByClassName("canvas"+player).length;
     for (var i=0;i<temp;i++)
-        GTE.svg.removeChild(document.getElementsByClassName("canvas"+player)[0]);
+    GTE.svg.removeChild(document.getElementsByClassName("canvas"+player)[0]);
 }
