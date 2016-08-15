@@ -29,8 +29,8 @@ This follows the specification at
 ![](./INFOS/eqdiagrams.md)
 
 ## How to start the program
-
-(what to load, then "just play")
+The webpage can be load at [2byn](http://gambitproject.github.io/jsgte/2byn.html).
+Payoff can be change by clicking on the "Edit matrix" button (not my implementation), by editing the matrix directly clicking on payoffs (not my implementation) or by clicking on endpoints and moving them (my implementation).
 
 ## Extension to mx2 games
 
