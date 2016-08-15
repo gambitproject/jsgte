@@ -11,6 +11,7 @@ GTE.UI.Widgets = (function (parentModule) {
     * @param {String} cssClass      Widget's cssClass
     */
     function ContentEditable(x, y, growingOfText, text, cssClass) {
+
         this.x = x;
         this.y = y;
         this.growingOfText = growingOfText;
@@ -54,16 +55,31 @@ GTE.UI.Widgets = (function (parentModule) {
         }  
 
         // HACK HACK HACK
-        if (cssClass === "payoff") {
+        // TO DO
+        // 1. correct colour for each player DONE
+        // 2. right x,y for player 2
+        // 3. content editable
+        // 4. only if best response
         this.myRectangle = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-        this.myRectangle.setAttribute('x',x + 6);
-        this.myRectangle.setAttribute('y',y + 2);
-        this.myRectangle.setAttribute('width', 17 );
-        this.myRectangle.setAttribute('height', 16);
-        this.myRectangle.setAttribute('fill', 'none');
-        this.myRectangle.setAttribute('stroke', 'black');
-        document.getElementsByTagName('svg')[0].appendChild(this.myRectangle);
+        if (cssClass === "payoff") {
+        //this.rect = GTE.canvas.rect(17, 16).attr({fill: '#fff', 'fill-opacity': 1, stroke: '#000', 'stroke-width': 2});
+        //this.rect.translate(x + 5, y + 1);
+            if (growingOfText === GTE.CONSTANTS.CONTENT_EDITABLE_GROW_TO_LEFT) {
+                this.myRectangle.setAttribute('x',x - 25);
+                this.myRectangle.setAttribute('y',y + 2);
+                this.myRectangle.setAttribute('height', 16);
+                this.myRectangle.setAttribute('fill', 'none');
+                document.getElementsByTagName('svg')[0].appendChild(this.myRectangle); 
+            } else {
+                this.myRectangle.setAttribute('x',x + 5);
+                this.myRectangle.setAttribute('y',y + 2);
+                this.myRectangle.setAttribute('height', 16);
+                this.myRectangle.setAttribute('fill', 'none');
+                document.getElementsByTagName('svg')[0].appendChild(this.myRectangle);
+            }
         }
+
+        this.myRectangle.setAttribute('stroke', this.textdiv.style.color);
         // HACK HACK HACK
 
         // Translate the foreign and append it to the svg
@@ -84,6 +100,7 @@ GTE.UI.Widgets = (function (parentModule) {
         this.previousWidth = GTE.CONSTANTS.CONTENT_EDITABLE_INSIDE_FOREIGN_MIN_WIDTH;
 
         this.myforeign.setAttribute("width", this.width);
+        this.myRectangle.setAttribute("width", this.textdiv.scrollWidth - 12);
         if (growingOfText === GTE.CONSTANTS.CONTENT_EDITABLE_GROW_TO_LEFT) {
             // Calculate how much has the foreign grown
             this.x -= (this.width - this.previousWidth);
@@ -106,12 +123,15 @@ GTE.UI.Widgets = (function (parentModule) {
             thisContentEditable.width = thisContentEditable.textdiv.scrollWidth +
                             GTE.CONSTANTS.CONTENT_EDITABLE_FOREIGN_EXTRA_WIDTH;
             thisContentEditable.myforeign.setAttribute("width", thisContentEditable.width);
+            thisContentEditable.myRectangle.setAttribute("width", thisContentEditable.width - 9);
             if (growingOfText === GTE.CONSTANTS.CONTENT_EDITABLE_GROW_TO_LEFT) {
                 // Calculate how much has the foreign grown
                 thisContentEditable.x -=
                     (thisContentEditable.width - thisContentEditable.previousWidth);
                 // Translate the foreign object that amount to the left
                 thisContentEditable.translate();
+                thisContentEditable.myRectangle.setAttribute("width", thisContentEditable.textdiv.scrollWidth);
+                thisContentEditable.myRectangle.setAttribute("x", x - 25 - thisContentEditable.textdiv.scrollWidth);
             }
             thisContentEditable.previousWidth = thisContentEditable.width;
         });
@@ -264,6 +284,7 @@ GTE.UI.Widgets = (function (parentModule) {
     * @return {ContentEditable} this Returns this instance
     */
     ContentEditable.prototype.colour = function (colour) {
+        this.myRectangle.setAttribute("stroke", colour);
         this.textdiv.style.color = colour;
         this.colour = colour;
         return this;
