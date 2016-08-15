@@ -521,12 +521,14 @@ function draw_envelope(points3D,player,strat){ //draw the faces of the upper env
     //console.log(points3D);
     //console.log(player+" "+strat);
     var points=[];
+    var points1=[];
     var points2=[];
     var center=[0,0];
     var nb_points=0;
     for (var i=0;i<points3D.length;i++){
-        points.push(projection(points3D[i],player));
+        points1.push(projection(points3D[i],player));
         points2.push(projection_triangle(points3D[i],player));
+        points.push([points3D[i][0],points3D[i][1]]);
     }
     if (points.length <2)
         return;
@@ -540,7 +542,7 @@ function draw_envelope(points3D,player,strat){ //draw the faces of the upper env
             }
         }
     }
-    var s=points[left_point][0]+","+points[left_point][1]+" ";
+    var s=points1[left_point][0]+","+points1[left_point][1]+" ";
     var s2=points2[left_point][0]+","+points2[left_point][1]+" ";
     var test=true;
     var last_point=left_point;
@@ -567,7 +569,7 @@ function draw_envelope(points3D,player,strat){ //draw the faces of the upper env
         if (equal_num(new_point,-1))
             test=false;
         else{
-            s=s+points[new_point][0]+","+points[new_point][1]+" ";
+            s=s+points1[new_point][0]+","+points1[new_point][1]+" ";
             s2=s2+points2[new_point][0]+","+points2[new_point][1]+" ";
             center[0]=center[0]+points2[new_point][0];
             center[1]=center[1]+points2[new_point][1];
@@ -599,7 +601,7 @@ function draw_envelope(points3D,player,strat){ //draw the faces of the upper env
         }
         if (equal_num(new_point,left_point))
             test=true;
-        s=s+points[new_point][0]+","+points[new_point][1]+" ";
+        s=s+points1[new_point][0]+","+points1[new_point][1]+" ";
         s2=s2+points2[new_point][0]+","+points2[new_point][1]+" ";
         center[0]=center[0]+points2[new_point][0];
         center[1]=center[1]+points2[new_point][1];
@@ -607,7 +609,7 @@ function draw_envelope(points3D,player,strat){ //draw the faces of the upper env
         last_point=new_point;
         
     }
-    //console.log(s2);
+    console.log(s2);
     var temp = document.createElementNS("http://www.w3.org/2000/svg", "polyline");
     temp.setAttribute("class","canvas"+player+" project"+Number(player+1)+" face contour up");
     temp.setAttribute("points", s);
@@ -615,6 +617,7 @@ function draw_envelope(points3D,player,strat){ //draw the faces of the upper env
     var temp2=GTE.svg.getElementsByClassName("before"+player)[0];
     GTE.svg.insertBefore(temp2,temp);
     GTE.svg.insertBefore(temp,temp2);
+    console.log(s);
     
     temp = document.createElementNS("http://www.w3.org/2000/svg", "polyline");
     temp.setAttribute("class","canvas"+player+" project"+Number(player+1)+" face contour up");
