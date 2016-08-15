@@ -2,7 +2,7 @@
      "use strict";
      //adding some lines that are to be inserted in structure.js
      GTE.PAGE_NAME=window.location.pathname.split('/')[window.location.pathname.split('/').length-1];
-     if (GTE.PAGE_NAME=="2byn.html")
+     if (GTE.PAGE_NAME=="mbyn.html")
      GTE.PAGE_NAME="eqdiagrams.html";
      
      GTE.PUREQ_RADIUS=10;
@@ -49,7 +49,10 @@
          var x=2;
          var y=2;
          x = prompt("Enter the number of moves for the first player", "2");
-         y = prompt("Enter the number of moves for the second player", "2");
+         if ( GTE.PAGE_NAME!="eqdiagrams.html"){
+            y = prompt("Enter the number of moves for the second player, less or equal to "+x, x);
+         }else{
+         y = prompt("Enter the number of moves for the second player", "2");}
          GTE.STRATEGICFORMMODE = GTE.STRATEGICFORMMODES.GENERAL;
          GTE.tools.createIndependentStrategicForm(x, y);
          GTE.diag.clear();
@@ -62,7 +65,10 @@
          var x=2;
          var y=2;
          x = prompt("Enter the number of moves for the first player", "2");
-         y = prompt("Enter the number of moves for the second player", "2");
+         if ( GTE.PAGE_NAME!="eqdiagrams.html"){
+            y = prompt("Enter the number of moves for the second player, less or equal to "+x, x);
+         }else{
+            y = prompt("Enter the number of moves for the second player", "2");}
          GTE.STRATEGICFORMMODE = GTE.STRATEGICFORMMODES.ZEROSUM;
          GTE.tools.createIndependentStrategicForm(x, y);
          GTE.diag.clear();
