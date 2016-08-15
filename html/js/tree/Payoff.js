@@ -14,6 +14,7 @@ GTE.TREE = (function(parentModule) {
         this.changeText("0");
         this.leaf = leaf;
         this.player = player;
+        this.bestResponseBool = false;
     }
 
     /**
@@ -28,6 +29,8 @@ GTE.TREE = (function(parentModule) {
      * Draws the editable label
      */
     Payoff.prototype.draw = function(x1, y1, orientation) {
+        // generate best responses to see if this payoff should be boxed
+        GTE.tree.matrix.generateBestResponses();
         var x = x1 || this.leaf.x;
         var y = y1 || this.leaf.y + (this.player.id * 20);
         orientation = orientation || GTE.CONSTANTS.CONTENT_EDITABLE_GROW_TO_RIGHT;
@@ -35,7 +38,8 @@ GTE.TREE = (function(parentModule) {
         this.editable = new GTE.UI.Widgets.ContentEditable(
                 x, y,
                 orientation,
-                this.text, "payoff")
+                this.text, "payoff",
+                this.bestResponseBool)
             .colour(this.player.colour)
             .onSave(
                 function() {

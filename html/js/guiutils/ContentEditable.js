@@ -10,7 +10,7 @@ GTE.UI.Widgets = (function (parentModule) {
     * @param {String} text          Widget's text
     * @param {String} cssClass      Widget's cssClass
     */
-    function ContentEditable(x, y, growingOfText, text, cssClass) {
+    function ContentEditable(x, y, growingOfText, text, cssClass, bestResponseBool) {
 
         this.x = x;
         this.y = y;
@@ -64,21 +64,25 @@ GTE.UI.Widgets = (function (parentModule) {
         if (cssClass === "payoff") {
         //this.rect = GTE.canvas.rect(17, 16).attr({fill: '#fff', 'fill-opacity': 1, stroke: '#000', 'stroke-width': 2});
         //this.rect.translate(x + 5, y + 1);
-            if (growingOfText === GTE.CONSTANTS.CONTENT_EDITABLE_GROW_TO_LEFT) {
-                this.myRectangle.setAttribute('x',x - 25);
-                this.myRectangle.setAttribute('y',y + 2);
-                this.myRectangle.setAttribute('height', 16);
-                this.myRectangle.setAttribute('fill', 'none');
-                document.getElementsByTagName('svg')[0].appendChild(this.myRectangle); 
-            } else {
-                this.myRectangle.setAttribute('x',x + 5);
-                this.myRectangle.setAttribute('y',y + 2);
-                this.myRectangle.setAttribute('height', 16);
-                this.myRectangle.setAttribute('fill', 'none');
-                document.getElementsByTagName('svg')[0].appendChild(this.myRectangle);
+            if (bestResponseBool === true) {
+                    if (growingOfText === GTE.CONSTANTS.CONTENT_EDITABLE_GROW_TO_LEFT) {
+                        this.myRectangle.setAttribute('x',x - 25);
+                        this.myRectangle.setAttribute('y',y + 2);
+                        this.myRectangle.setAttribute('height', 16);
+                        this.myRectangle.setAttribute('fill', 'none');
+                        document.getElementsByTagName('svg')[0].appendChild(this.myRectangle); 
+                    } else {
+                        this.myRectangle.setAttribute('x',x + 5);
+                        this.myRectangle.setAttribute('y',y + 2);
+                        this.myRectangle.setAttribute('height', 16);
+                        this.myRectangle.setAttribute('fill', 'none');
+                        document.getElementsByTagName('svg')[0].appendChild(this.myRectangle);
+                    }
+            }
+            else {
+                this.myRectangle.remove();
             }
         }
-
         this.myRectangle.setAttribute('stroke', this.textdiv.style.color);
         // HACK HACK HACK
 

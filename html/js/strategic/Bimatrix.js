@@ -82,6 +82,8 @@ GTE.TREE = (function(parentModule) {
             for (var property in this.profiles) { 
                 if (this.profiles.hasOwnProperty(property)) {
                     this.profiles[property].bestResponse = [false, false];
+                    this.profiles[property].payoff[0].bestResponseBool = false;
+                    this.profiles[property].payoff[1].bestResponseBool = false;
                 }
             }
         } else {
@@ -89,6 +91,9 @@ GTE.TREE = (function(parentModule) {
                 for (var property in this.profiles) { 
                     if (this.profiles.hasOwnProperty(property)) {
                         this.profiles[property].bestResponse = [false, false, false];
+                        this.profiles[property].payoff[0].bestResponseBool = false;
+                        this.profiles[property].payoff[1].bestResponseBool = false;
+                        this.profiles[property].payoff[2].bestResponseBool = false;
                     }
                 }
             }
@@ -122,6 +127,7 @@ GTE.TREE = (function(parentModule) {
                 for (var l=0; l<pfs.length; l++) {
                     if (pfs[l] === payoffMax) {
                         profs[l].bestResponse[i] = true;
+                        profs[l].payoff[i].bestResponseBool = true;
                     }
                 }
             }
