@@ -46,24 +46,24 @@ function D3draw_canvas(i){ //draw the canvas of the 3D drawing for player i
     GTE.svg.appendChild(temp);
     
     temp = document.createElementNS("http://www.w3.org/2000/svg", "text");
-    temp.textContent="d";
-    temp.setAttribute("class", "canvas"+i+" player"+j+" strat"+Number(j-1)+"0 legendh up");
-    temp.setAttribute("x",Number(i*x_shift+50));
-    temp.setAttribute("y",602);
-    GTE.svg.appendChild(temp);
-    
-    temp = document.createElementNS("http://www.w3.org/2000/svg", "text");
-    temp.textContent="d";
-    temp.setAttribute("class", "canvas"+i+" player"+j+" strat"+Number(j-1)+"1 legendh up");
-    temp.setAttribute("x",Number(i*x_shift+250));
-    temp.setAttribute("y",602);
-    GTE.svg.appendChild(temp);
-    
-    temp = document.createElementNS("http://www.w3.org/2000/svg", "text");
-    temp.textContent="d";
-    temp.setAttribute("class", "canvas"+i+" player"+j+" strat"+Number(j-1)+"2 legendh up");
+    temp.textContent="C=0";
+    temp.setAttribute("class", "canvas"+i+" player"+j+" strat"+Number(j-1)+"2_0 change legendh up");
     temp.setAttribute("x",Number(i*x_shift+150));
-    temp.setAttribute("y",395);
+    temp.setAttribute("y",602);
+    GTE.svg.appendChild(temp);
+    
+    temp = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    temp.textContent="d";
+    temp.setAttribute("class", "canvas"+i+" player"+j+" strat"+Number(j-1)+"1_0 change legendh up");
+    temp.setAttribute("x",Number(i*x_shift+70));
+    temp.setAttribute("y",500);
+    GTE.svg.appendChild(temp);
+    
+    temp = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    temp.textContent="d";
+    temp.setAttribute("class", "canvas"+i+" player"+j+" strat"+Number(j-1)+"0_0 change legendh up");
+    temp.setAttribute("x",Number(i*x_shift+230));
+    temp.setAttribute("y",500);
     GTE.svg.appendChild(temp);
     
     temp = document.createElementNS("http://www.w3.org/2000/svg", "polyline");

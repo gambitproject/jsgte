@@ -278,8 +278,24 @@ GTE = (function(parentModule) {
         name_player=GTE.svg.getElementsByClassName("player2_title");
         for (var i=0;i<name_player.length;i++)
         name_player[i].textContent="Payoff to "+GTE.tree.matrix.players[2].name;
-        
-        
+       
+       //update strategies name
+       for (var i=0;i<2;i++){
+       for (var j=0;j<this.nb_strat[i];j++){
+       var temp=GTE.svg.getElementsByClassName("strat"+i+""+j+" change");
+       for (var k=0;k<temp.length;k++)
+       temp[k].textContent=GTE.tree.matrix.strategies[Number(i+1)][j].moves[0].name;
+       }
+       }
+       for (var i=0;i<2;i++){
+       for (var j=0;j<this.nb_strat[i];j++){
+       var temp=GTE.svg.getElementsByClassName("strat"+i+""+j+"_0 change");
+       for (var k=0;k<temp.length;k++)
+       temp[k].textContent=GTE.tree.matrix.strategies[Number(i+1)][j].moves[0].name+"=0";
+       }
+       }
+       
+       
     };
     
     Diagram.prototype.assignEndpoints = function(max) {
