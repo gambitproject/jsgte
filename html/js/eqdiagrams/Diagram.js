@@ -85,7 +85,6 @@ GTE = (function(parentModule) {
                     for (var i=0;i<temp;i++){
                         div.removeChild(div.children[0]);}
                     this.ini_arrays();
-                    D3draw_canvas(0);
                 }
             }
             
