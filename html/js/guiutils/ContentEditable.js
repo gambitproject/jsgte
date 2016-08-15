@@ -40,6 +40,7 @@ GTE.UI.Widgets = (function (parentModule) {
         }
         this.textdiv.setAttribute("contenteditable", "true");
         this.textdiv.setAttribute("width", "auto");
+        this.textdiv.setAttribute("fill", "#95B3D7");
         //to make div fit text
         this.textdiv.classList.add("content-editable-inside-foreign");
 
@@ -50,12 +51,25 @@ GTE.UI.Widgets = (function (parentModule) {
             this.x -= GTE.CONSTANTS.CONTENT_EDITABLE_OFFSET_LEFT;
         } else {
             this.x += GTE.CONSTANTS.CONTENT_EDITABLE_OFFSET_RIGHT;
+        }  
+
+        // HACK HACK HACK
+        if (cssClass === "payoff") {
+        this.myRectangle = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+        this.myRectangle.setAttribute('x',x + 6);
+        this.myRectangle.setAttribute('y',y + 2);
+        this.myRectangle.setAttribute('width', 17 );
+        this.myRectangle.setAttribute('height', 16);
+        this.myRectangle.setAttribute('fill', 'none');
+        this.myRectangle.setAttribute('stroke', 'black');
+        document.getElementsByTagName('svg')[0].appendChild(this.myRectangle);
         }
+        // HACK HACK HACK
+
         // Translate the foreign and append it to the svg
         this.translate();
         document.getElementsByTagName('svg')[0].appendChild(this.myforeign);
         this.myforeign.appendChild(this.textdiv);
-
         // The size of the foreign will be dynamically adjusted depending on the
         // size of the text. This is the only way to achieve text growing to left.
         // The idea is to adjust the width of the foreign and then translate it
