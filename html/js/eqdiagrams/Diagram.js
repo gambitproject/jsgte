@@ -37,9 +37,9 @@ GTE = (function(parentModule) {
             this.assignEndpoints(2);
             this.assignLines(2);
             this.assignIntersections(2);
-       this.ini_arrays();
-       D3delete_canvas(0);
-       D3delete_canvas(1);
+            this.ini_arrays();
+            D3delete_canvas(0);
+            D3delete_canvas(1);
         }
         else {
             if (this.nb_strat[1]==2){
@@ -47,9 +47,9 @@ GTE = (function(parentModule) {
                 this.assignEndpoints(1);
                 this.assignLines(1);
                 this.assignIntersections(1);
-       this.ini_arrays();
-       D3delete_canvas(0);
-       D3delete_canvas(1);
+                this.ini_arrays();
+                D3delete_canvas(0);
+                D3delete_canvas(1);
                 if (this.nb_strat[0]==3){
                     var temp= GTE.svg.getElementsByClassName("bottom");
                     for (var k=0;k<temp.length;k++){
@@ -65,7 +65,7 @@ GTE = (function(parentModule) {
                     temp= div.children.length;
                     for (var i=0;i<temp;i++){
                         div.removeChild(div.children[0]);}
-       this.ini_arrays();
+                    this.ini_arrays();
                     D3draw_canvas(1);
                 }
                 
@@ -109,10 +109,10 @@ GTE = (function(parentModule) {
                 temp= div.children.length;
                 for (var i=0;i<temp;i++){
                     div.removeChild(div.children[0]);}
-       this.ini_arrays();
+                this.ini_arrays();
                 if ( this.nb_strat[0]==3){
-                   D3draw_canvas(0);
-                   D3draw_canvas(1);
+                    D3draw_canvas(0);
+                    D3draw_canvas(1);
                 }
                 if (this.nb_strat[0]>3){
                     D3draw_canvas(0);
@@ -554,7 +554,7 @@ GTE = (function(parentModule) {
         var Y12; //right extremity of the first line
         var Y21; //left extremity of the second line
         var Y22; //right extremity of the second line
-
+        
         for (var i=0;i<2;i++){
             for (var j=0; j< this.nb_strat[i]-1;j++){
                 for (var k=j+1 ; k<this.nb_strat[i];k++){
@@ -993,34 +993,34 @@ GTE = (function(parentModule) {
                 if (this.payoffs[1][strat_point[0][i][j]][this.strat[1][0]]== this.payoffs[1][strat_point[0][i][j]][this.strat[1][1]]){
                     var in_test=false;
                     if (i<strat_point[0].length-1){
-                    for (var k=0;k<strat_point[0][i+1].length;k++){
-                        if (strat_point[0][i][j]==strat_point[0][i+1][k]){
-                            in_test=false;
+                        for (var k=0;k<strat_point[0][i+1].length;k++){
+                            if (strat_point[0][i][j]==strat_point[0][i+1][k]){
+                                in_test=false;
+                                for (var l=0;l<dege.length;l++){
+                                    if (dege[l]==strat_point[0][i][j])
+                                    in_test=true;
+                                }
+                                if (in_test==false){
+                                    dege.push(strat_point[0][i][j]);
+                                    in_test=true;}
+                            }
+                        }
+                    }
+                    if ((i<strat_point[0].length-1 || this.best_response[0][1]==-1) &&((this.best_response[1][this.strat[0][0]]!=1 &&this.best_response[1][this.strat[0][1]]!=1 && i==0) || (this.best_response[1][this.strat[0][0]]!=0 &&this.best_response[1][this.strat[0][1]]!=0 &&i>0) )){
+                        if (in_test==false && ((point[0][i][0]==50 || point[0][i][0]==250)||(this.payoffs[1][this.strat[0][0]][this.strat[1][0]]== this.payoffs[1][this.strat[0][0]][this.strat[1][1]]&&this.payoffs[1][this.strat[0][1]][this.strat[1][0]]== this.payoffs[1][this.strat[0][1]][this.strat[1][1]]))){
+                            for (var l=0;l<dege2.length;l++){
+                                if (dege2[l]==strat_point[0][i][j])
+                                in_test=true;
+                            }
                             for (var l=0;l<dege.length;l++){
                                 if (dege[l]==strat_point[0][i][j])
                                 in_test=true;
                             }
                             if (in_test==false){
-                                dege.push(strat_point[0][i][j]);
+                                dege2.push(strat_point[0][i][j]);
                                 in_test=true;}
                         }
                     }
-                    }
-       if ((i<strat_point[0].length-1 || this.best_response[0][1]==-1) &&((this.best_response[1][this.strat[0][0]]!=1 &&this.best_response[1][this.strat[0][1]]!=1 && i==0) || (this.best_response[1][this.strat[0][0]]!=0 &&this.best_response[1][this.strat[0][1]]!=0 &&i>0) )){
-                    if (in_test==false && ((point[0][i][0]==50 || point[0][i][0]==250)||(this.payoffs[1][this.strat[0][0]][this.strat[1][0]]== this.payoffs[1][this.strat[0][0]][this.strat[1][1]]&&this.payoffs[1][this.strat[0][1]][this.strat[1][0]]== this.payoffs[1][this.strat[0][1]][this.strat[1][1]]))){
-                        for (var l=0;l<dege2.length;l++){
-                            if (dege2[l]==strat_point[0][i][j])
-                            in_test=true;
-                        }
-                        for (var l=0;l<dege.length;l++){
-                            if (dege[l]==strat_point[0][i][j])
-                            in_test=true;
-                        }
-                        if (in_test==false){
-                            dege2.push(strat_point[0][i][j]);
-                            in_test=true;}
-                    }
-       }
                 }
             }
             if (dege.length>0){
@@ -1048,7 +1048,7 @@ GTE = (function(parentModule) {
                         var s2=GTE.tree.matrix.strategies[2][this.strat[1][1]].moves[0].name+" between "+this.pos_to_prob(0,point[0][i][0])+" and "+this.pos_to_prob(0,point[0][i+1][0]);
                         var s1=GTE.tree.matrix.strategies[1][dege[0]].moves[0].name+" between 0 and 1";
                         this.add_eq_text(s1,s2,cmp);
-       break;
+                        break;
                     }
                 }
                 cmp=cmp+1;
@@ -1056,117 +1056,69 @@ GTE = (function(parentModule) {
             if(dege2.length>0){
                 this.equilibrium[0][cmp]=new GTE.Marker(cmp,point[0][i][0],Number(this.height+this.margin),"#00ff00");
                 if (max==2){
-                        this.equilibrium[1][cmp]=new GTE.Marker(cmp,Number(2*this.margin+this.width+this.margin),Number(this.height+this.margin),"#00ff00");
-                        this.equilibrium[1][cmp].degenerated(Number(2*this.width+this.margin));
-                        this.equilibrium[2][cmp]=new GTE.Marker(cmp,Number(point[0][i][0]),Number(3*this.margin+3/2*this.width),"#00ff00");
-                        var s1=GTE.tree.matrix.strategies[1][this.strat[0][1]].moves[0].name+" between 0 and 1";
-                        
-                   // }
-                    var s2=GTE.tree.matrix.strategies[2][this.strat[1][1]].moves[0].name+" with pba "+this.pos_to_prob(0,point[0][i][0]);
+                    this.equilibrium[1][cmp]=new GTE.Marker(cmp,Number(2*this.margin+this.width+this.margin),Number(this.height+this.margin),"#00ff00");
+                    this.equilibrium[1][cmp].degenerated(Number(2*this.width+this.margin));
+                    this.equilibrium[2][cmp]=new GTE.Marker(cmp,Number(point[0][i][0]),Number(3*this.margin+3/2*this.width),"#00ff00");
+                    var s1=GTE.tree.matrix.strategies[1][this.strat[0][1]].moves[0].name+" between 0 and 1";
+                    
+                    // }
+                    var s2=GTE.tree.matrix.strategies[2][this.strat[1][1]].moves[0].name+" with probability "+this.pos_to_prob(0,point[0][i][0]);
                     this.add_eq_text(s1,s2,cmp);
                 }
                 cmp=cmp+1;
                 
             }
         }
-        /*
-        //degenrated equilibrium of the 2nd player.
-        var i= strat_point[0].length-1;
-        var dege2=[];
-        for (var j=0;j<strat_point[0][i].length;j++){
-            if (this.payoffs[1][strat_point[0][i][j]][this.strat[1][0]]== this.payoffs[1][strat_point[0][i][j]][this.strat[1][1]]){
-                var in_test=false;
-                if (in_test==false && (this.payoffs[0][this.strat[0][0]][this.strat[1][0]]== this.payoffs[0][this.strat[0][1]][this.strat[1][0]]) ){
-                    for (var l=0;l<dege2.length;l++){
-                        if (dege2[l]==[strat_point[0][i][j],0])
-                        in_test=true;
-                    }
-                    for (var l=0;l<dege2.length;l++){
-                        if (dege2[l]==[strat_point[0][i][j],1]){
-                            dege2[l].push(0);
-                            in_test=true;
-                        }
-                    }
-                    for (var l=0;l<dege.length;l++){
-                        if (dege[l]==strat_point[0][i][j])
-                        in_test=true;
-                    }
-                    if (in_test==false){
-                        dege2.push([strat_point[0][i][j],0]);
-                        in_test=true;}
-                }
-                if (in_test==false && (this.payoffs[0][this.strat[0][0]][this.strat[1][1]]== this.payoffs[0][this.strat[0][1]][this.strat[1][1]]) ){
-                    for (var l=0;l<dege2.length;l++){
-                        if (dege2[l]==[strat_point[0][i][j],1])
-                        in_test=true;
-                    }
-                    for (var l=0;l<dege2.length;l++){
-                        if (dege2[l]==[strat_point[0][i][j],0]){
-                            dege2[l].push(1);
-                            in_test=true;
-                        }
-                    }
-                    for (var l=0;l<dege.length;l++){
-                        if (dege[l]==strat_point[0][i][j])
-                        in_test=true;
-                    }
-                    if (in_test==false){
-                        dege2.push([strat_point[0][i][j],1]);
-                        in_test=true;}
-                }
-            }
-        }
-        if(dege2.length>0){
-            this.equilibrium[0][cmp]=new GTE.Marker(cmp,point[0][i][0],Number(this.height+this.margin),"#00ff00");
-            if (max==2){
-                if (dege2[0].length<3){
-                    this.equilibrium[1][cmp]=new GTE.Marker(cmp,Number(2*this.margin+this.width+this.margin+dege2[0][0]*this.side),Number(this.height+this.margin),"#00ff00");
-                    
-                    this.equilibrium[2][cmp]=new GTE.Marker(cmp,Number(point[0][i][0]),Number(4*this.margin+this.height),"#00ff00");
-                    var s1=GTE.tree.matrix.strategies[1][dege2[0][0]].moves[0].name;
-                }
-                else{
-                    this.equilibrium[1][cmp]=new GTE.Marker(cmp,Number(2*this.margin+this.width+this.margin),Number(this.height+this.margin),"#00ff00");
-                    this.equilibrium[1][cmp].degenerated(Number(2*this.width+this.margin));
-                    var s1=GTE.tree.matrix.strategies[1][dege2[0][0]].moves[0].name+" between 0 and 1";
-                    
-                }
-                var s2=GTE.tree.matrix.strategies[2][dege2[0][1]].moves[0].name;
-                this.add_eq_text(s1,s2,cmp);
-            }
+        
+        //Adding the sible case not dealed
+        if( this.best_response[0][0]==-1 && this.best_response[0][1]==1 && this.best_response[1][0]==0 && (this.best_response[1][1]==-1 || this.best_response[1][1]==0)){
+            this.equilibrium[0][cmp]=new GTE.Marker(cmp,this.margin,Number(this.height+this.margin),"#00ff00");
+            this.equilibrium[1][cmp]=new GTE.Marker(cmp,Number(2*this.margin+this.width+this.margin),Number(this.height+this.margin),"#00ff00");
+            this.equilibrium[1][cmp].degenerated(Number(2*this.width+this.margin));
+            this.equilibrium[2][cmp]=new GTE.Marker(cmp,Number(this.margin),Number(3*this.margin+3/2*this.width),"#00ff00");
+            var s1=GTE.tree.matrix.strategies[1][this.strat[0][1]].moves[0].name+" between 0 and 1";
+            var s2=GTE.tree.matrix.strategies[2][this.strat[1][1]].moves[0].name+" with probabilty 0 ";
+            this.add_eq_text(s1,s2,cmp);
             cmp=cmp+1;
-            
         }
-        
-        
-        */
-       console.log(this.equilibrium[0].length);
+
+        console.log(this.equilibrium[0].length);
         //Non degenerated equilibrium for the first player.
         for (var i=0;i<strat_point[0].length;i++){
             var test=false;
             var dege=false;
             for (var j=0;j<strat_point[0][i].length;j++){
-                if (i==0 && this.payoffs[1][strat_point[0][i][j]][this.strat[1][0]]> this.payoffs[1][strat_point[0][i][j]][this.strat[1][1]]){
+                if (i==0&&strat_point[0][i].length==1 && this.payoffs[1][strat_point[0][i][j]][this.strat[1][0]]> this.payoffs[1][strat_point[0][i][j]][this.strat[1][1]]){
+                test=true;
+                x1=this.margin;
+                if (strat_point[0][i][j]==this.strat[0][1]){
+                    x2=Number(2*this.width+this.margin);
+                }else{
+                    x2=Number(2*this.margin+this.width+this.margin);
+                    
+                 }
+                }
+                if (i==0 &&strat_point[0][i].length>1&&this.best_response[0][1]== strat_point[0][i][j]&& this.payoffs[1][this.strat[0][0]][this.strat[1][0]]== this.payoffs[1][this.strat[0][0]][this.strat[1][1]]&&this.payoffs[1][this.strat[0][1]][this.strat[1][1]]> this.payoffs[1][this.strat[0][1]][this.strat[1][0]]){
+                    test=true;
+                    x1=this.margin;
+                    if (strat_point[0][i][j]==this.strat[0][1]){
+                        x2=Number(2*this.margin+this.width+this.margin);
+                    }else{
+                        test=false;
+                        
+                    }
+                }
+                if (i==0&&strat_point[0][i].length>1 &&this.best_response[0][1]!= strat_point[0][i][j]&&this.best_response[0][1]!= -1 && this.payoffs[1][this.strat[0][0]][this.strat[1][0]]<this.payoffs[1][this.strat[0][0]][this.strat[1][1]]&&this.payoffs[1][this.strat[0][1]][this.strat[1][1]]== this.payoffs[1][this.strat[0][1]][this.strat[1][0]]){
                     test=true;
                     x1=this.margin;
                     if (strat_point[0][i][j]==this.strat[0][1]){
                         x2=Number(2*this.width+this.margin);
                     }else{
-                        x2=Number(2*this.margin+this.width+this.margin);
+                        test=false;
                         
                     }
                 }
-       if (i==0 &&this.best_response[0][1]== strat_point[0][j]&& this.payoffs[1][this.strat[0][0]][this.strat[1][0]]== this.payoffs[1][this.strat[0][0]][this.strat[1][1]]&&this.payoffs[1][this.strat[0][1]][this.strat[1][1]]> this.payoffs[1][this.strat[0][1]][this.strat[1][0]]){
-       test=true;
-       x1=this.margin;
-       if (strat_point[0][i][j]==this.strat[0][1]){
-       x2=Number(2*this.margin+this.width+this.margin);
-       }else{
-       x2=Number(2*this.width+this.margin);
-       
-       }
-       }
-                if (i>0 && i<strat_point[0].length-1 && this.payoffs[1][strat_point[0][i][j]][this.strat[1][0]] > this.payoffs[1][strat_point[0][i][j]][this.strat[1][1]]){
+                if (i>0 && i<strat_point[0].length-1&& this.payoffs[1][strat_point[0][i][j]][this.strat[1][0]] > this.payoffs[1][strat_point[0][i][j]][this.strat[1][1]]){
                     for (var k=0;k<strat_point[0][i].length;k++){
                         if (k!=j && this.payoffs[1][strat_point[0][i][k]][this.strat[1][0]] < this.payoffs[1][strat_point[0][i][k]][this.strat[1][1]]){
                             test=true;
@@ -1175,34 +1127,47 @@ GTE = (function(parentModule) {
                         }
                     }
                 }
-                if (i==strat_point[0].length-1 && this.payoffs[1][strat_point[0][i][j]][this.strat[1][0]]< this.payoffs[1][strat_point[0][i][j]][this.strat[1][1]]){
+                if (i==strat_point[0].length-1&&strat_point[0][i].length==1  && this.payoffs[1][strat_point[0][i][j]][this.strat[1][0]]< this.payoffs[1][strat_point[0][i][j]][this.strat[1][1]]){
                     test=true;
                     x1=this.width-this.margin;
                     if (strat_point[0][i][j]==this.strat[0][1]){
-                        x2=Number(2*this.width+this.margin);
+                       x2=Number(2*this.width+this.margin);
                     }else{
-                        x2=Number(2*this.margin+this.width+this.margin);
+                       x2=Number(2*this.margin+this.width+this.margin);
                     }
                 }
-       
-       if (i==strat_point[0].length-1 &&this.best_response[0][0]== strat_point[0][j]&& this.payoffs[1][this.strat[0][0]][this.strat[1][0]]> this.payoffs[1][this.strat[0][0]][this.strat[1][1]] && this.payoffs[1][this.strat[0][1]][this.strat[1][1]]== this.payoffs[1][this.strat[0][1]][this.strat[1][0]]){
-       test=true;
-       x1=this.width-this.margin;
-       if (strat_point[0][i][j]==this.strat[0][1]){
-       x2=Number(2*this.margin+this.width+this.margin);
-       }else{
-       x2=Number(2*this.width+this.margin);
-       }
-       }
+                
+                if (i==strat_point[0].length-1&&strat_point[0][i].length>1 &&this.best_response[0][0]== strat_point[0][i][j]&& this.payoffs[1][this.strat[0][0]][this.strat[1][0]]> this.payoffs[1][this.strat[0][0]][this.strat[1][1]] && this.payoffs[1][this.strat[0][1]][this.strat[1][1]]== this.payoffs[1][this.strat[0][1]][this.strat[1][0]]){
+                    test=true;
+                    x1=this.width-this.margin;
+                    if (strat_point[0][i][j]==this.strat[0][1]){
+                        //x2=Number(2*this.margin+this.width+this.margin);
+                        test=false;
+                    }else{
+                        x2=Number(2*this.width+this.margin);
+                    }
+                }
+                
+                if (i==strat_point[0].length-1&&strat_point[0][i].length>1 &&this.best_response[0][0]!= strat_point[0][i][j]&&this.best_response[0][0]!= -1&& this.payoffs[1][this.strat[0][0]][this.strat[1][0]]== this.payoffs[1][this.strat[0][0]][this.strat[1][1]] && this.payoffs[1][this.strat[0][1]][this.strat[1][1]]< this.payoffs[1][this.strat[0][1]][this.strat[1][0]]){
+                    test=true;
+                    x1=this.width-this.margin;
+                    if (strat_point[0][i][j]==this.strat[0][0]){
+                        //x2=Number(2*this.width+this.margin);
+                        x2=Number(2*this.margin+this.width+this.margin);
+                        
+                    }else{
+                        test=false;
+                    }
+                }
             }
-       
+            
             if (test){
                 this.equilibrium[0][cmp]=new GTE.Marker(cmp,x1,Number(this.height+this.margin),"#00ff00");
                 if (max==2){
                     if (x2==Number(2*this.margin+this.width+this.margin)){
                         this.equilibrium[1][cmp]=new GTE.Marker(cmp,x2,Number(this.height+this.margin),"#00ff00");
-                        //if ((this.payoffs[0][this.strat[0][0]][this.strat[1][0]]== this.payoffs[0][this.strat[0][1]][this.strat[1][0]] && (this.best_response[1][0]==0||this.best_response[1][0]==-1)) ||( this.payoffs[0][this.strat[0][0]][this.strat[1][1]]== this.payoffs[0][this.strat[0][1]][this.strat[1][1]] && (this.best_response[1][0]==1||this.best_response[1][0]==-1))){
-       if(this.intersect[1][0].getPosx()>Number(2*this.margin+this.width+this.margin) && this.intersect[1][0].getPosx()>Number(2*this.width+this.margin)){
+                        if ((this.payoffs[0][this.strat[0][0]][this.strat[1][0]]== this.payoffs[0][this.strat[0][1]][this.strat[1][0]] && (this.best_response[1][0]==0||this.best_response[1][0]==-1)) ||( this.payoffs[0][this.strat[0][0]][this.strat[1][1]]== this.payoffs[0][this.strat[0][1]][this.strat[1][1]] && (this.best_response[1][0]==1||this.best_response[1][0]==-1))){
+                        //if(this.intersect[1][0].getPosx()>Number(2*this.margin+this.width+this.margin) && this.intersect[1][0].getPosx()>Number(2*this.width+this.margin)){
                             this.equilibrium[1][cmp].degenerated(this.intersect[1][0].getPosx());
                             this.equilibrium[2][cmp]=new GTE.Marker(cmp,x1,Number(x2/2+this.intersect[1][0].getPosx()/2+this.margin),"#00ff00");
                             var s2=GTE.tree.matrix.strategies[2][this.strat[1][1]].moves[0].name+" with probability "+this.pos_to_prob(0,x1);
@@ -1231,8 +1196,8 @@ GTE = (function(parentModule) {
                                 var s2=GTE.tree.matrix.strategies[2][this.strat[1][1]].moves[0].name+" with probability "+this.pos_to_prob(0,x1);
                                 var s1=GTE.tree.matrix.strategies[1][this.strat[0][1]].moves[0].name+" between 0 and 1";
                                 this.add_eq_text(s1,s2,cmp);
-       }else{
-       
+                            }else{
+                                
                                 this.equilibrium[1][cmp]=new GTE.Marker(cmp,x2,Number(this.height+this.margin),"#00ff00");
                                 this.equilibrium[2][cmp]=new GTE.Marker(cmp,x1,Number(x2+this.margin),"#00ff00");
                                 var s2=GTE.tree.matrix.strategies[2][this.strat[1][1]].moves[0].name+" with probability "+this.pos_to_prob(0,x1);
@@ -1324,7 +1289,7 @@ GTE = (function(parentModule) {
                 GTE.svg.insertBefore(temp[6],temp[7]);
                 GTE.svg.insertBefore(temp[5],temp[7]);
                 GTE.svg.insertBefore(temp[4],temp[7]);
-       
+                
                 temp[4].setAttributeNS(null, "x", Number(this.margin-this.rad));
                 temp[4].setAttributeNS(null, "y", Number(2*this.margin+this.height-this.rad));
                 temp[4].setAttributeNS(null, "height", Number(2*this.rad));
@@ -1777,82 +1742,7 @@ GTE = (function(parentModule) {
             stick[i].setAttributeNS(null, "x1",Number(inter[1][0]));
             stick[i].setAttributeNS(null, "x2",Number(inter[1][0]));
         }
-        /*var pos1=Number((inter[0][0]+Number(Number(this.margin)))/2);
-        var pos2=Number((inter[0][0]+Number(Number(this.margin+this.side)))/2);
-        var middle=Number(this.margin+(this.width-2*this.margin)/2);
 
-        if (this.best_response[0][0]==0){
-            GTE.svg.getElementsByClassName("middle11")[0].setAttributeNS(null, "x", pos1);
-            GTE.svg.getElementsByClassName("middle12")[0].setAttributeNS(null, "x", pos2);
-            if (this.best_response[0][1]!=1)
-            GTE.svg.getElementsByClassName("middle12")[0].textContent="";
-            if (this.best_response[0][1]==0)
-            GTE.svg.getElementsByClassName("middle11")[0].setAttributeNS(null, "x", middle);
-        }
-        else {
-            if (this.best_response[0][0]==1){
-                GTE.svg.getElementsByClassName("middle11")[0].setAttributeNS(null, "x", pos2);
-                GTE.svg.getElementsByClassName("middle12")[0].setAttributeNS(null, "x", pos1);
-                if (this.best_response[0][1]!=0)
-                GTE.svg.getElementsByClassName("middle11")[0].textContent="";
-                if (this.best_response[0][1]==1)
-                GTE.svg.getElementsByClassName("middle11")[0].setAttributeNS(null, "x", middle);
-            }
-            else {
-                if (this.best_response[0][1]==0){
-                    GTE.svg.getElementsByClassName("middle11")[0].setAttributeNS(null, "x", middle);
-                    GTE.svg.getElementsByClassName("middle12")[0].textContent="";
-                }
-                if (this.best_response[0][1]==1){
-                    GTE.svg.getElementsByClassName("middle12")[0].setAttributeNS(null, "x", middle);
-                    GTE.svg.getElementsByClassName("middle11")[0].textContent="";
-                }
-                if (this.best_response[0][1]==-1){
-                    GTE.svg.getElementsByClassName("middle11")[0].setAttributeNS(null, "x", Number(this.margin+(this.width-2*this.margin)/3));
-                    GTE.svg.getElementsByClassName("middle12")[0].setAttributeNS(null, "x", Number(this.margin+2*(this.width-2*this.margin)/3));
-                }
-                
-            }
-        }
-
-        
-        pos1=Number((inter[1][0]+3*this.margin+this.width)/2);
-        pos2=Number((inter[1][0]+this.margin+2*this.width)/2);
-        middle=Number(3*this.margin+this.width+(this.width-2*this.margin)/2);
-        if (this.best_response[1][0]==0){
-            GTE.svg.getElementsByClassName("middle21")[0].setAttributeNS(null, "x", pos1);
-            GTE.svg.getElementsByClassName("middle22")[0].setAttributeNS(null, "x", pos2);
-            if (this.best_response[1][1]!=1)
-            GTE.svg.getElementsByClassName("middle22")[0].textContent="";
-            if (this.best_response[1][1]==0)
-            GTE.svg.getElementsByClassName("middle21")[0].setAttributeNS(null, "x", middle);
-        }
-        else {
-            if (this.best_response[1][0]==1){
-                GTE.svg.getElementsByClassName("middle21")[0].setAttributeNS(null, "x", pos2);
-                GTE.svg.getElementsByClassName("middle22")[0].setAttributeNS(null, "x", pos1);
-                if (this.best_response[1][1]!=0)
-                GTE.svg.getElementsByClassName("middle21")[0].textContent="";
-                if (this.best_response[1][1]==1)
-                GTE.svg.getElementsByClassName("middle21")[0].setAttributeNS(null, "x", middle);
-            }
-            else {
-                if (this.best_response[1][1]==0){
-                    GTE.svg.getElementsByClassName("middle21")[0].setAttributeNS(null, "x", middle);
-                    GTE.svg.getElementsByClassName("middle22")[0].textContent="";
-                }
-                if (this.best_response[1][1]==1){
-                    GTE.svg.getElementsByClassName("middle22")[0].setAttributeNS(null, "x", middle);
-                    GTE.svg.getElementsByClassName("middle21")[0].textContent="";
-                }
-                if (this.best_response[1][1]==-1){
-                    GTE.svg.getElementsByClassName("middle21")[0].setAttributeNS(null, "x", Number(this.width+3*this.margin+(this.width-2*this.margin)/3));
-                    GTE.svg.getElementsByClassName("middle22")[0].setAttributeNS(null, "x", Number(this.width+3*this.margin+2*(this.width-2*this.margin)/3));
-                }
-                
-            }
-        }
-        */
         
         if (inter[1][0]>450 && inter[1][0] <650){
             var t1=Number(inter[1][0])-Number(410);
