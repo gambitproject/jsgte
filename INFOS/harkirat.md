@@ -17,15 +17,17 @@ Previously in JSGTE, you could only create tree games. There was no functionalit
 
 Work on the first two features can be found here : https://github.com/gambitproject/jsgte/tree/strategic-form .
 
+
 ### This marks the work completed till the mid term evaluation.
+
 
 ## 3. Adding undo and redo feature to the tree games.
 
-The feature involved adding feature to undo and redo moves in the JSGTE. Each button and unit click is considered as an undoable event. The global variables GTE.UNDOQUEUE and GTE.REDOQUEUE are used to access the list of events executed.
+This feature involved adding undo and redo to events in JSGTE. Each button and unit click is considered as an undoable event. The global variables GTE.UNDOQUEUE and GTE.REDOQUEUE are used to access the list of events executed.
 
 ## 4. Adding functionality to load an xml tree game and export a game to xml format.
 
-This feature allows user to export a tree in xml format which can be later used to import the same tree in both JSGTE and GTE, the previous version of JSGTE.
+This feature allows the user to export a tree in xml format which can be later used to import the same tree in both JSGTE and GTE, the previous version of JSGTE.
 
 
 ![Sever Comm](./images/tree-1.png)
@@ -33,4 +35,4 @@ This feature allows user to export a tree in xml format which can be later used 
 ![Sever Comm](./images/tree-2.png)
 [Tree in Xml](https://github.com/gambitproject/jsgte/blob/master/INFOS/images/tree-2.xml)
 
-Work on features 2 and three can be found in the undo-redo-load-save branch of the jsgte repository (https://github.com/gambitproject/jsgte/tree/undo-redo-load-save).
+Work on features 2 and three can be found in the undo-redo-load-save branch of the JSGTE repository (https://github.com/gambitproject/jsgte/tree/undo-redo-load-save).
