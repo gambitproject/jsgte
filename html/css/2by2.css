@@ -98,6 +98,7 @@ box-sizing: border-box;
 #drawing .player1{
     fill:red;
 }
+
 #drawing .player1{
     color:red;
 }
@@ -113,6 +114,7 @@ box-sizing: border-box;
 #drawing .player2{
     color:blue;
 }
+
 
 #drawing .strat_left{
     text-anchor:start;
@@ -146,6 +148,14 @@ box-sizing: border-box;
 }
 
 #drawing #envelope2{
+    fill:#8888ff;
+}
+
+#drawing .project1{
+    fill:#ff8888;
+}
+
+#drawing .project2{
     fill:#8888ff;
 }
 
