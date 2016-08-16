@@ -15,7 +15,7 @@ GTE = (function (parentModule) {
         this.label = null; // label on the x axis.
         this.point = null; // html circle.
         this.stick = null; // stick on the x axis.
-       if (i==0 || max>1)
+        if (i==0 || max>1)
         this.draw();
     };
     
@@ -41,6 +41,15 @@ GTE = (function (parentModule) {
             GTE.svg.appendChild(this.stick);
             GTE.svg.insertBefore(this.stick,env[17]);
             GTE.svg.insertBefore(env[17],this.stick);
+            
+            this.stick2=document.createElementNS("http://www.w3.org/2000/svg", "line");
+            this.stick2.setAttribute("x1",this.x);
+            this.stick2.setAttribute("y1",455);
+            this.stick2.setAttribute("x2",this.x);
+            this.stick2.setAttribute("y2",445);
+            this.stick2.setAttribute("class","line2");
+            GTE.svg.appendChild(this.stick2);
+            
             this.label =document.createElementNS("http://www.w3.org/2000/svg", "text");
             this.label.setAttribute("x",this.x);
             this.label.setAttribute("y",Number(GTE.diag.height-GTE.diag.margin+GTE.diag.rad+17));
@@ -72,6 +81,14 @@ GTE = (function (parentModule) {
             GTE.svg.appendChild(this.stick);
             GTE.svg.insertBefore(this.stick,env[35]);
             GTE.svg.insertBefore(env[35],this.stick);
+            this.stick2=document.createElementNS("http://www.w3.org/2000/svg", "line");
+            this.stick2.setAttribute("x1",this.x);
+            this.stick2.setAttribute("y1",455);
+            this.stick2.setAttribute("x2",this.x);
+            this.stick2.setAttribute("y2",445);
+            this.stick2.setAttribute("class","line1");
+            GTE.svg.appendChild(this.stick2);
+            
             this.label =document.createElementNS("http://www.w3.org/2000/svg", "text");
             this.label.setAttribute("x",this.x);
             this.label.setAttribute("y",Number(GTE.diag.height)-Number(GTE.diag.margin)+Number(GTE.diag.rad)+17);
@@ -95,6 +112,7 @@ GTE = (function (parentModule) {
         GTE.svg.removeChild(this.label);
         GTE.svg.removeChild(this.point);
         GTE.svg.removeChild(this.stick);
+        GTE.svg.removeChild(this.stick2);
     }
     
     
@@ -147,28 +165,33 @@ GTE = (function (parentModule) {
         if (this.player==0)
         this.label.textContent=Math.round(new_pos*100)/100;
         else
-       this.label.textContent=Math.round(Number((Number(new_x)-3*Number(GTE.diag.margin)-Number(GTE.diag.width))/(Number(GTE.diag.width)-2*Number(GTE.diag.margin))*100))/100;
+        this.label.textContent=Math.round(Number((Number(new_x)-3*Number(GTE.diag.margin)-Number(GTE.diag.width))/(Number(GTE.diag.width)-2*Number(GTE.diag.margin))*100))/100;
         this.stick.setAttributeNS(null, "x1", new_x);
         this.stick.setAttributeNS(null, "x2", new_x);
+        this.stick2.setAttributeNS(null, "x1", new_x);
+        this.stick2.setAttributeNS(null, "x2", new_x);
     };
-       
-       /**
-        * hide
-        */
-       Intersection.prototype.hide = function () {
-       this.point.setAttributeNS(null, "visibility", "hidden");
-       this.label.setAttributeNS(null,  "visibility", "hidden");
-       this.stick.setAttributeNS(null, "visibility", "hidden");
-       };
-       
-       /**
-        * show
-        */
-       Intersection.prototype.show = function () {
-       this.point.setAttributeNS(null, "visibility", "visible");
-       this.label.setAttributeNS(null,  "visibility", "visible");
-       this.stick.setAttributeNS(null, "visibility", "visible");
-       };
+    
+    /**
+     * hide
+     */
+    Intersection.prototype.hide = function () {
+        this.point.setAttributeNS(null, "visibility", "hidden");
+        this.label.setAttributeNS(null,  "visibility", "hidden");
+        this.stick.setAttributeNS(null, "visibility", "hidden");
+        this.stick2.setAttributeNS(null, "visibility", "hidden");
+    };
+    
+    /**
+     * show
+     */
+    Intersection.prototype.show = function () {
+        this.point.setAttributeNS(null, "visibility", "visible");
+        this.label.setAttributeNS(null,  "visibility", "visible");
+        this.stick.setAttributeNS(null, "visibility", "visible");
+        this.stick2.setAttributeNS(null, "visibility", "visible");
+        
+    };
     
     
     // Add class to parent module
