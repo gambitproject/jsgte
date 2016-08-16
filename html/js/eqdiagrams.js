@@ -49,8 +49,11 @@
         var x=2;
         var y=2;
         x = prompt("Enter the number of moves for the first player", "2");
-        if ( GTE.PAGE_NAME!="eqdiagrams.html"){
-            y = prompt("Enter the number of moves for the second player, less or equal to "+x, x);
+        if ( GTE.PAGE_NAME=="eqdiagrams.html"){
+            y = prompt("Enter the number of moves for the second player (2 or 3)", "2");
+            while (y!=2 && y!=3){
+               y = prompt("The number of moves for the second player has to be 2 or 3", "2");
+            }
         }else{
             y = prompt("Enter the number of moves for the second player", "2");}
         GTE.STRATEGICFORMMODE = GTE.STRATEGICFORMMODES.GENERAL;
@@ -65,8 +68,11 @@
         var x=2;
         var y=2;
         x = prompt("Enter the number of moves for the first player", "2");
-        if ( GTE.PAGE_NAME!="eqdiagrams.html"){
-            y = prompt("Enter the number of moves for the second player, less or equal to "+x, x);
+        if ( GTE.PAGE_NAME=="eqdiagrams.html"){
+           y = prompt("Enter the number of moves for the second player (2 or 3)", "2");
+           while (y!=2 && y!=3){
+              y = prompt("The number of moves for the second player has to be 2 or 3", "2");
+           }
         }else{
             y = prompt("Enter the number of moves for the second player", "2");}
         GTE.STRATEGICFORMMODE = GTE.STRATEGICFORMMODES.ZEROSUM;
@@ -79,7 +85,7 @@
     
     document.getElementById("button-independent-strategic-symmetric").addEventListener("click", function(){
         var x=2;
-        if ( GTE.PAGE_NAME!="eqdiagrams.html"){
+        if ( GTE.PAGE_NAME=="eqdiagrams.html"){
             x = prompt("Enter the number of moves for the first player", "2");
         }
         GTE.STRATEGICFORMMODE = GTE.STRATEGICFORMMODES.SYMMETRIC;
