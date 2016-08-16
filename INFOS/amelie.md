@@ -6,7 +6,7 @@ Gambit - Software Tools for Game Theory.
 My work is on the branch "eqdiagrams" in the project
 repository JSGTE (JavaScript Game Theory Explorer), on 
 
-https://github.com/gambitproject/jsgte/tree/eqdiagrams
+https://github.com/gambitproject/jsgte/commits?author=amelieH
 
 ## Goal of the project
 
@@ -36,18 +36,18 @@ I aslo added the precision input. The user can choose the precision of payoffs (
 
 ###Features
 * The two colored diagrams show (y-axis) the payoffs that each player receive according to the strategy they choose (line) and the mixture of strategies that the opponent choose (x-axis). The upper envelope shows the best-response of each player.
-![2by2_envelope](./INFOS/EQDIAG/2by2_envelope.png)
+![2by2_envelope](./EQDIAG/2by2_envelope.png)
 
 * Each diagram has a subdivided line below. This subdivided lines summarize the best-response choice.
 * Square of equilibria, best responses of each player are link to form equilibrium. An equilibrium is defined by a symbol that also appears in the subdivided lines
 * List of equilibria on the bottom right of the screen a list of all equlibria is displayed.
-![2by2_square](./INFOS/EQDIAG/2by2_square.png)
+![2by2_square](./EQDIAG/2by2_square.png)
 
 ## Extension to mx2 games
 The 2 by 2 game is extended by m by 2 games.
 In this case, the payoffs of player 2 is not represented.
 The display of player 1 can have as many lines(strategies) as wanted.
-![mby2](./INFOS/EQDIAG/mby2.png)
+![mby2](./EQDIAG/mby2.png)
 
 ## Extension to game with 3 strategies
 A 2D representation is not enought for games with 3 strategies.
@@ -56,11 +56,11 @@ The base is a triangle, each vertex of the triangle corresponds to a pure strate
 This diagram is interactive too. The user can grab endpoint and move them up and down.
 However she cannot do it with lines, as this diagrams can have confusing overlaps due to dimension.
 Subdivided lines are changed by subdivided triangle which are the projection of the upper envelope into the plan (x0y).
-![3by3](./INFOS/EQDIAG/3by3.png)
+![3by3](./EQDIAG/3by3.png)
 
 Just for the 2 strategies representation, there is an extension when player 1 has more than 3 strategies.
 When this occurs we cannot represent player 2 payoffs. We only display player 1 best reponses.
-![mby3](./INFOS/EQDIAG/mby3.png)
+![mby3](./EQDIAG/mby3.png)
 
 ##Things to do next
 
