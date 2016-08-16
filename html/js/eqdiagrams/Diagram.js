@@ -426,6 +426,7 @@ GTE = (function(parentModule) {
         document.getElementById('matrix-player-1').value = GTE.tree.matrix.getMatrixInStringFormat(0);
         document.getElementById('matrix-player-2').value = GTE.tree.matrix.getMatrixInStringFormat(1);
         GTE.tree.matrix.drawMatrix();
+        this.ini();
         this.update_from_matrix();
         var x=[196,225,596,625];
         var p=[2,1];

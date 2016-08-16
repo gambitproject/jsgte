@@ -59,7 +59,7 @@
         GTE.STRATEGICFORMMODE = GTE.STRATEGICFORMMODES.GENERAL;
         GTE.tools.createIndependentStrategicForm(x, y);
         GTE.diag.clear();
-        GTE.diag.ini();
+        //GTE.diag.ini();
         GTE.diag.redraw();
         return false;
     });
@@ -78,7 +78,7 @@
         GTE.STRATEGICFORMMODE = GTE.STRATEGICFORMMODES.ZEROSUM;
         GTE.tools.createIndependentStrategicForm(x, y);
         GTE.diag.clear();
-        GTE.diag.ini();
+        //GTE.diag.ini();
         GTE.diag.redraw();
         return false;
     });
@@ -91,7 +91,7 @@
         GTE.STRATEGICFORMMODE = GTE.STRATEGICFORMMODES.SYMMETRIC;
         GTE.tools.createIndependentStrategicForm(x, x);
         GTE.diag.clear();
-        GTE.diag.ini();
+        //GTE.diag.ini();
         GTE.diag.redraw();
         return false;
     });
