@@ -61,25 +61,35 @@ GTE.UI.Widgets = (function (parentModule) {
         // 3. content editable
         // 4. only if best response
         this.myRectangle = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+        this.myRectangle.setAttribute("contenteditable", "true");
+        this.myRectangle.classList.add("content-editable-inside-foreign");
         if (cssClass === "payoff") {
         //this.rect = GTE.canvas.rect(17, 16).attr({fill: '#fff', 'fill-opacity': 1, stroke: '#000', 'stroke-width': 2});
         //this.rect.translate(x + 5, y + 1);
+
             if (bestResponseBool === true) {
                     if (growingOfText === GTE.CONSTANTS.CONTENT_EDITABLE_GROW_TO_LEFT) {
+                        this.rect = GTE.canvas.rect(17, 16).attr({fill: '#fff', 'fill-opacity': 1, stroke: 'black', 'stroke-width': 1});
+                        this.rect.translate(x -25, y + 2);
+                        /*
                         this.myRectangle.setAttribute('x',x - 25);
                         this.myRectangle.setAttribute('y',y + 2);
                         this.myRectangle.setAttribute('height', 16);
                         this.myRectangle.setAttribute('fill', 'none');
-                        document.getElementsByTagName('svg')[0].appendChild(this.myRectangle); 
+                        document.getElementsByTagName('svg')[0].appendChild(this.myRectangle); */
                     } else {
+                        this.rect = GTE.canvas.rect(17, 16).attr({fill: '#fff', 'fill-opacity': 1, stroke: 'black', 'stroke-width': 1});
+                        this.rect.translate(x+6, y + 2); 
+                        /*
                         this.myRectangle.setAttribute('x',x + 5);
                         this.myRectangle.setAttribute('y',y + 2);
                         this.myRectangle.setAttribute('height', 16);
                         this.myRectangle.setAttribute('fill', 'none');
-                        document.getElementsByTagName('svg')[0].appendChild(this.myRectangle);
+                        document.getElementsByTagName('svg')[0].appendChild(this.myRectangle); */
                     }
             }
-            else {
+            else 
+            {
                 this.myRectangle.remove();
             }
         }
@@ -134,8 +144,14 @@ GTE.UI.Widgets = (function (parentModule) {
                     (thisContentEditable.width - thisContentEditable.previousWidth);
                 // Translate the foreign object that amount to the left
                 thisContentEditable.translate();
-                thisContentEditable.myRectangle.setAttribute("width", thisContentEditable.textdiv.scrollWidth);
-                thisContentEditable.myRectangle.setAttribute("x", x - 25 - thisContentEditable.textdiv.scrollWidth);
+                //thisContentEditable.myRectangle.setAttribute("width", thisContentEditable.textdiv.scrollWidth);
+                //thisContentEditable.myRectangle.setAttribute("x", x - 25 - thisContentEditable.textdiv.scrollWidth);
+                this.rect = GTE.canvas.rect(17, 16).attr({fill: '#fff', 'fill-opacity': 1, stroke: 'black', 'stroke-width': 1});
+                this.rect.translate(x - 25 - thisContentEditable.textdiv.scrollWidth, y+2);     
+                if (thisContentEditable.width < thisContentEditable.previousWidth) {
+                    this.rect.remove();
+                }
+
             }
             thisContentEditable.previousWidth = thisContentEditable.width;
         });

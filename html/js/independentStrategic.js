@@ -22,6 +22,14 @@
     GTE.tools.newTree();
     GTE.tree.clear();
 
+    document.getElementById("button-best-response").addEventListener("click", function () {
+        GTE.tree.matrix.generateBestResponses();
+        var c = document.getElementById("SvgjsSvg1000");
+        GTE.tree.clear();
+        GTE.tree.matrix.drawMatrix()
+
+    })
+
     document.getElementById("button-new").addEventListener("click", function(){
         GTE.STRATEGICFORMMODE = GTE.STRATEGICFORMMODES.GENERAL;
         GTE.tools.createStrategicForm(2, 2);
