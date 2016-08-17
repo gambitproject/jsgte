@@ -202,11 +202,11 @@ function D3MouseMoveEndpoint (event) {
     var stratp=moving_point.getAttribute("stratp");
     var strat=moving_point.getAttribute("strat");
     var player=moving_point.getAttribute("player");
-    console.log(stratp+" "+player);
+    //console.log(stratp+" "+player);
     var ratio=2*GTE.diag.height/(svgPosition.bottom-svgPosition.top);
     if (stratp<2){
         var newPos=Math.round((GTE.diag.height-GTE.diag.margin-ratio*(mousePosition.y-svgPosition.top))/20*GTE.diag.precision)/GTE.diag.precision;
-        console.log(newPos);
+        //console.log(newPos);
     }
     else{
         var newPos=Math.round((ratio*(-mousePosition.y+svgPosition.top)+GTE.diag.height-3*GTE.diag.margin)/20*GTE.diag.precision)/GTE.diag.precision;
@@ -609,7 +609,7 @@ function draw_envelope(points3D,player,strat){ //draw the faces of the upper env
         last_point=new_point;
         
     }
-    console.log(s2);
+    //console.log(s2);
     var temp = document.createElementNS("http://www.w3.org/2000/svg", "polyline");
     temp.setAttribute("class","canvas"+player+" project"+Number(player+1)+" face contour up");
     temp.setAttribute("points", s);
@@ -617,7 +617,7 @@ function draw_envelope(points3D,player,strat){ //draw the faces of the upper env
     var temp2=GTE.svg.getElementsByClassName("before"+player)[0];
     GTE.svg.insertBefore(temp2,temp);
     GTE.svg.insertBefore(temp,temp2);
-    console.log(s);
+    //console.log(s);
     
     temp = document.createElementNS("http://www.w3.org/2000/svg", "polyline");
     temp.setAttribute("class","canvas"+player+" project"+Number(player+1)+" face contour up");
