@@ -38,6 +38,6 @@ This feature allows the user to export a tree in xml format which can be later u
 ![Tree](./images/tree-2.png)
 [Tree in Xml](https://github.com/gambitproject/jsgte/blob/master/INFOS/images/tree-2.xml)
 
-Work on features three and four can be found in the undo-redo-load-save branch of the JSGTE repository. (Link)[https://github.com/gambitproject/jsgte/tree/undo-redo-load-save].
+Work on features three and four can be found in the undo-redo-load-save branch of the JSGTE repository. [Link](https://github.com/gambitproject/jsgte/tree/undo-redo-load-save).
 
-A live demo of these changes can be found (here)[hkirat.github.io/jsgte/html].
+A live demo of these changes can be found [here](hkirat.github.io/jsgte/html).
