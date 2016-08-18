@@ -15,6 +15,7 @@
         this.players = [];
         this.numberOfPlayers;
         this.strategyProfiles = []; // list of strategy profiles as comma separated strategy.id ("2,1")
+        this.profiles = {}; // strategy profiles objects
     }
 
     //function to see if it works!
@@ -52,7 +53,7 @@
             id = strategies[i].id + " ";
         }
         var strProfile = new StrategyProfile(id, strategies, payoffs);
-
+        this.profiles[id] = {ID: id, payoff: payoffs, bestResponse: []};
         return this.addStrategyProfile(strProfile);
     };
 
@@ -106,6 +107,13 @@
                 this.strategyProfiles[i].bestResponse.push(bool);
             }
         }
+        for (var propt in this.profiles) {
+            if (this.profiles.hasOwnProperty(propt)) {
+                for (var i=0; i<this.numberOfPlayers; i++) {
+                    this.profiles[propt].bestResponse.push(false);
+                }
+            }
+        }
 
     };
 
@@ -127,20 +135,31 @@
 
     // function that finds the payoff for a given player in a payoff vector
     NormalForm.prototype.playerPayoff = function(player, payoffVector) {
-        var str;
-        var number = player;
-        if (number === 1) {
-            str = payoffVector[number - 1]; 
-        }
-        else {
-            if (number === 2) {
-                str = payoffVector[number];
+        var pp;
+        var comaCount = 0;
+        for (var i = 0; i<payoffVector.length; i++) {
+            if (player === 1) {
+                if (payoffVector[i]===',') {
+                    break;
+                }
+                else {
+                    pp += payoffVector[i];
+                }
             }
             else {
-                str = payoffVector[number*2 - 2];
+                if (comaCount === player -1) {
+                    if (payoffVector[i] === ',') {
+                        break;
+                    }
+                    else {
+                        pp += payoffVector[i];                        
+                    }
+                }
+                if (payoffVector[i]=== ',') comaCount++;
+
             }
         }
-        return str;
+        return pp;
     };
 
     // Finds the BR and fills the strategy profiles BR vector with either False or True values
@@ -181,6 +200,7 @@
                 for (var l=0; l<payoff.length; l++) {
                     if (payoff[l] === payoffMax) {
                         profiles[l].bestResponse[i - 1] = true;
+                        this.profiles[profiles[l].id].bestResponse[i -1] = true; 
                     }
                 }
             }

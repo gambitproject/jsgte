@@ -6,10 +6,10 @@ Enter the number of players: <input type="text" id="numberOfPlayers" value="2">
 
 <button onclick="setNames()" id="namesButton"> Continue </button>  
 
-<script src="./NormalForm.js"></script>
-<script src="./Player.js"></script>
-<script src="./Strategy.js"></script>
-<script src="./StrategyProfile.js"></script>
+<script src="./js/jaumestrategic/NormalForm.js"></script>
+<script src="./js/jaumestrategic/Player.js"></script>
+<script src="./js/jaumestrategic/Strategy.js"></script>
+<script src="./js/jaumestrategic/StrategyProfile.js"></script>
 
 <script>
 
@@ -175,6 +175,7 @@ function FindNE() {
 		console.log("Payoff" + stratProfileId);
 		var payoffVector = document.getElementById("Payoff" + stratProfileId).value;
 		var stratProfile = new StrategyProfile(stratProfileId, payoffVector);
+		Normal.profiles[stratProfileId] = {id: stratProfileId, payoff: payoffVector, bestResponse: []};
 		Normal.addStrategyProfile(stratProfile);
 	}
 	Normal.generateBestResponses();
@@ -193,7 +194,8 @@ function FindNE() {
 		    newDiv.appendChild(newText);
 		    document.body.appendChild(newDiv);	
 		}	
-	}	
+	}
+	console.log(Normal.profiles);	
 }
 
 
