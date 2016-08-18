@@ -1,4 +1,4 @@
-# This document outlines the changes made by [Harkirat Singh](hkirat.github.io) to GTE during GSoC 2016.
+# This document outlines the changes made by [Harkirat Singh](//hkirat.github.io) to GTE during GSoC 2016.
 
 Four Features were added during the duration of the program.
 
