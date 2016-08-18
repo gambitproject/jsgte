@@ -32,14 +32,15 @@ GTE = (function(parentModule) {
     Diagram.prototype.ini =function (){
         this.strat=[[0,1],[0,1]];
         this.nb_strat=[GTE.tree.matrix.strategies[1].length,GTE.tree.matrix.strategies[2].length];
+       
+       D3delete_canvas(0);
+       D3delete_canvas(1);
         if (this.nb_strat[0]==2 && this.nb_strat[1]==2){
             this.ini_html2(2);
             this.assignEndpoints(2);
             this.assignLines(2);
             this.assignIntersections(2);
             this.ini_arrays();
-            D3delete_canvas(0);
-            D3delete_canvas(1);
         }
         else {
             if (this.nb_strat[1]==2){
@@ -48,43 +49,23 @@ GTE = (function(parentModule) {
                 this.assignLines(1);
                 this.assignIntersections(1);
                 this.ini_arrays();
-                D3delete_canvas(0);
-                D3delete_canvas(1);
-                if (this.nb_strat[0]==3){
-                    var temp= GTE.svg.getElementsByClassName("bottom");
-                    for (var k=0;k<temp.length;k++){
-                        temp[k].setAttribute("visibility","hidden");
-                    }
-                    for (var j=0;j<this.equilibrium.length;j++){
-                        for (var i=0;i<this.equilibrium[j].length;i++){
-                            this.equilibrium[j][i].clear();
-                        }
-                    }
-                    this.equilibrium=[[],[],[]];
-                    var div=document.getElementById("eq_list");
-                    temp= div.children.length;
-                    for (var i=0;i<temp;i++){
-                        div.removeChild(div.children[0]);}
-                    this.ini_arrays();
-                    D3draw_canvas(1);
+       
+                var temp= GTE.svg.getElementsByClassName("bottom");
+                for (var k=0;k<temp.length;k++){
+                    temp[k].setAttribute("visibility","hidden");
                 }
-                
-                if (this.nb_strat[0]>3){
-                    var temp= GTE.svg.getElementsByClassName("bottom");
-                    for (var k=0;k<temp.length;k++){
-                        temp[k].setAttribute("visibility","hidden");
+                for (var j=0;j<this.equilibrium.length;j++){
+                    for (var i=0;i<this.equilibrium[j].length;i++){
+                        this.equilibrium[j][i].clear();
                     }
-                    for (var j=0;j<this.equilibrium.length;j++){
-                        for (var i=0;i<this.equilibrium[j].length;i++){
-                            this.equilibrium[j][i].clear();
-                        }
-                    }
-                    this.equilibrium=[[],[],[]];
-                    var div=document.getElementById("eq_list");
-                    temp= div.children.length;
-                    for (var i=0;i<temp;i++){
-                        div.removeChild(div.children[0]);}
-                    this.ini_arrays();
+                }
+                this.equilibrium=[[],[],[]];
+                var div=document.getElementById("eq_list");
+                temp= div.children.length;
+                for (var i=0;i<temp;i++){
+                   div.removeChild(div.children[0]);}
+                if (this.nb_strat[0]==3){
+                    D3draw_canvas(1);
                 }
             }
             
@@ -113,7 +94,7 @@ GTE = (function(parentModule) {
                     D3draw_canvas(0);
                     D3draw_canvas(1);
                 }
-                if (this.nb_strat[0]>3){
+                if (this.nb_strat[0]>3 || this.nb_strat[0]<3){
                     D3draw_canvas(0);
                     
                 }
@@ -445,6 +426,7 @@ GTE = (function(parentModule) {
         document.getElementById('matrix-player-1').value = GTE.tree.matrix.getMatrixInStringFormat(0);
         document.getElementById('matrix-player-2').value = GTE.tree.matrix.getMatrixInStringFormat(1);
         GTE.tree.matrix.drawMatrix();
+        this.ini();
         this.update_from_matrix();
         var x=[196,225,596,625];
         var p=[2,1];
