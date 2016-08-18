@@ -40,4 +40,4 @@ This feature allows the user to export a tree in xml format which can be later u
 
 Work on features three and four can be found in the undo-redo-load-save branch of the JSGTE repository. [Link](https://github.com/gambitproject/jsgte/tree/undo-redo-load-save).
 
-A live demo of these changes can be found [here](hkirat.github.io/jsgte/html).
+A live demo of these changes can be found [here](//hkirat.github.io/jsgte/html).
