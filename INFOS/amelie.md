@@ -29,13 +29,13 @@ https://github.com/gambitproject/jsgte/blob/master/INFOS/eqdiagrams.md
 The webpage can be load at http://gambitproject.github.io/jsgte/2byn.html
 
 ###Interactive display
-There are for ways of specifying the payoffs of each players. I implemented 2 of them.
+There are four ways of specifying the payoffs of each players. I implemented 2 of them.
 Payoff can be change by clicking on the "Edit matrix" button (not my implementation), by editing the matrix directly clicking on payoffs (not my implementation).
 I implemented the interactive display of payoffs. The user can grab an endpoint or a line an move it up and down. The matrix is automatically updated.
-I aslo added the precision input. The user can choose the precision of payoffs (1, 0.1 , ...).
+I also added the precision input. The user can choose the precision of payoffs (1, 0.1 , ...).
 
 ###Features
-* The two colored diagrams show (y-axis) the payoffs that each player receive according to the strategy they choose (line) and the mixture of strategies that the opponent choose (x-axis). The upper envelope shows the best-response of each player.
+* The two colored diagrams show (y-axis) the payoffs that each player receives according to the strategy they choose (line) and the mixture of strategies that the opponent choose (x-axis). The upper envelope shows the best-response of each player.
 ![2by2_envelope](./EQDIAG/2by2_envelope.png)
 
 * Each diagram has a subdivided line below. This subdivided lines summarize the best-response choice.
@@ -45,8 +45,8 @@ I aslo added the precision input. The user can choose the precision of payoffs (
 
 ## Extension to mx2 games
 The 2 by 2 game is extended by m by 2 games.
-In this case, the payoffs of player 2 is not represented.
-The display of player 1 can have as many lines(strategies) as wanted.
+In this case, the payoffs of player 2 are not represented.
+The display of player 1 can have as many lines (strategies) as wanted.
 ![mby2](./EQDIAG/mby2.png)
 
 ## Extension to game with 3 strategies
@@ -58,8 +58,8 @@ However she cannot do it with lines, as this diagrams can have confusing overlap
 Subdivided lines are changed by subdivided triangle which are the projection of the upper envelope into the plan (x0y).
 ![3by3](./EQDIAG/3by3.png)
 
-Just for the 2 strategies representation, there is an extension when player 1 has more than 3 strategies.
-When this occurs we cannot represent player 2 payoffs. We only display player 1 best reponses.
+Like for the 2 strategies representation, there is an extension when player 1 has more than 3 strategies.
+When this occurs we cannot represent player 2's payoffs. We only display player 1 best reponses.
 ![mby3](./EQDIAG/mby3.png)
 
 ##Things to do next
