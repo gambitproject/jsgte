@@ -1,5 +1,3 @@
-Welcome to StackEdit!
-===================
 
 #  Documentation of the work done by Jaume Vives 
 
@@ -9,6 +7,8 @@ During the Google Summer of Code  2016 I participated in the project *Gambit - S
 > 2. Creation of a javascript program to compute best responses and display the strategic form of n-player games with finite strategies
 > 3. Implement a function to identify whether an extensive form game has *perfect recall*
 
+The work that I have done can be found here: [](https://github.com/gambitproject/jsgte/tree/jaume-strategic)
+As I worked by updating and modifying the previous code using the SVG display please refer to the *jaumestrategic* and *strategic* folders to analyse my contribution. As well as strategic.html and first.html for the output, a Demo will be provided later on.
 
 ## Strategic Form and GTE
 
