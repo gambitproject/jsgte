@@ -36,3 +36,13 @@ On Linux you can install ghp-import via
 10. Run "node server.js" (Make sure you are in the server directory)
 11. localhost:3000/tree for tree games
 12. localhost:3000/strategic for independent games
+13. 
+
+# New Strategic Form Structure
+
+This file also contains the new strategic form structure and implementation by Jaume Vives
+Features include:
+
+  - BR finder and box creator (around the payoffs)
+  - Edit and set dimension functionalities working
+  - Correct Strategy Profiles structure
