@@ -7,7 +7,7 @@ During the Google Summer of Code  2016 I participated in the project *Gambit - S
 > 2. Creation of a javascript program to compute best responses and display the strategic form of n-player games with finite strategies
 > 3. Implement a function to identify whether an extensive form game has *perfect recall*
 
-The work that I have done can be found here: [](https://github.com/gambitproject/jsgte/tree/jaume-strategic)
+[The work that I have done can be found here](https://github.com/gambitproject/jsgte/tree/jaume-strategic)
 As I worked by updating and modifying the previous code using the SVG display please refer to the *jaumestrategic* and *strategic* folders to analyse my contribution. As well as strategic.html and first.html for the output, a Demo will be provided later on.
 
 ## Strategic Form and GTE
@@ -34,7 +34,11 @@ code:
 		profiles[ID] = {id: ID, payoff: payoffs, bestResponse: []}
 
 
-Where ID is the l	ist of coma separated strategy ids for each player, payoffs is an array containing the payoff (an integer) for each player and bestResponse is an boolean array with true or false values for each player. Specifically, if the strategy of a given player is a best response (i.e. maximises the players’ payoff given the other players strategies in that profile) then the bestResponse array will have a true value in the position corresponding to that player. If all positions in the array have value true then that collection of strategies defines a pure strategy Nash Equilibrium. More on how the best responses are found will be detailed later on.
+Where ID is the list of coma separated strategy ids for each player, payoffs is an array containing the payoff (an integer) for each player and bestResponse is an boolean array with true or false values for each player. Specifically, if the strategy of a given player is a best response (i.e. maximises the players’ payoff given the other players strategies in that profile) then the bestResponse array will have a true value in the position corresponding to that player. If all positions in the array have value true then that collection of strategies defines a pure strategy Nash Equilibrium. The following figures show how the BR are displayed:
+
+<img src="https://raw.githubusercontent.com/gambitproject/jsgte/master/INFOS/images/Screen%20Shot%202016-08-20%20at%2021.27.02.png" width="300" height="200" />
+
+Currently the BR box generator only works for integers 0-9, as the content-editable features of the payoff text doesn't allow the square to change size dynamically in a visually appealing way.
 
 The remaining information is organised in one main constructor * Normal Form * that contains properties: number of players (an integer), players (an array containing the player objects) and the profiles object. From there, each player constructor has a player id (an integer), a player name (a string), the number of strategies for that player and an array containing all the strategy objects for that player. Finally, the strategy constructor has a strategy id (a number 0,…,n where n is the number of strategies for a player), a player id and a strategy name. The actual code follows for completeness:
 
