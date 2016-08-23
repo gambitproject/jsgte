@@ -7,7 +7,7 @@ During the Google Summer of Code  2016 I participated in the project *Gambit - S
 > 2. Creation of a javascript program to compute best responses and display the strategic form of n-player games with finite strategies
 
 
-[The work that I have done can be found [here](https://github.com/gambitproject/jsgte/tree/jaume-strategic).
+The work that I have done can be found [here](https://github.com/gambitproject/jsgte/tree/jaume-strategic).
 As I worked by updating and modifying the previous code using the SVG display please refer to the *jaumestrategic* and *strategic* folders to analyse my contribution. As well as strategic.html and first.html for the output, a Demo will be provided later on.
 
 A list to the commits is [here](https://github.com/jvivesb?tab=activity). As I worked independently, I pushed the commits towards the end of the program.
@@ -67,7 +67,7 @@ This description of the strategic form is independent of the extensive form and 
 
 Using the above description I adapted the current strategic form code to use the desired information structure and compute the best responses efficiently. 
 
-Here you can find a link to the demo __ LINK
+Here you can find a link to the [demo](https://jvivesb.github.io/jsgte/strategic.html).
 
 Instructions are simple:
 
@@ -85,9 +85,11 @@ I also worked on an algorithm to find the BR for N-player games with finite stra
 1. Generates the Best Responses for N-player games with finite strategies
 2. Displays correctly the strategic form of N-player games with finite strategies
 
-By a correct display we mean a display according to the specifications of the [program] (https://github.com/gambitproject/jsgte/blob/master/INFOS/start_GSOC_2016.md) that only table for player I and II are shown and additional panels for each strategy combinations of the other players. For instance, if we have 3 players and player 3 has 2 strategies A and B then we would display 2 panels, one for strategy A of player 3 and the other for strategy B of player 3.
+By a correct display we mean a display according to the specifications of the [program](https://github.com/gambitproject/jsgte/blob/master/INFOS/start_GSOC_2016.md) that only table for player I and II are shown and additional panels for each strategy combinations of the other players. For instance, if we have 3 players and player 3 has 2 strategies A and B then we would display 2 panels, one for strategy A of player 3 and the other for strategy B of player 3. For players Max and Claudia and Ben's strategies A and B we generate the following display:
 
-A demo can be found here LINK.
+<img src="https://raw.githubusercontent.com/gambitproject/jsgte/master/INFOS/images/3playerEg.png" width="400" height="250" />
+
+A demo can be found [here](https://jvivesb.github.io/jsgte/first.html).
 
 The UI is very basic as the focus of this part of the project was to have functioning algorithms, not a complete SVG display. Part of these algorithms are then implemented in the previous section in the Strategic Form SVG display (the previous demo) for 2 players. 
 A brief overview of how to work with the demo is given here:
