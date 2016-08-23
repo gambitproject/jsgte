@@ -11,6 +11,8 @@ GTE.TREE = (function(parentModule) {
         this.matrix = [];
         this.profiles = {}; // object that has strategy profile properties
     }
+    // number of times payoffs are drawn
+    var num = 0;
 
     Bimatrix.prototype.assignPlayers = function(players) {
         this.players = [];
@@ -52,8 +54,8 @@ GTE.TREE = (function(parentModule) {
 		for(var i = 0; i<this.matrix.length; i++) {
 			this.matrix[i].assignPartners();
 		}
-		this.drawMatrix();
-        this.generateBestResponses();
+		//this.drawMatrix();
+        //this.generateBestResponses();
     };
       
       
@@ -202,6 +204,16 @@ GTE.TREE = (function(parentModule) {
 
     Bimatrix.prototype.drawMatrixWithProfiles = function() {
         //this.drawUtilities();
+        console.log("this is: " + num);
+        if (num === 0) {
+                GTE.tree.matrix.initialiseBestResponseToFalse();
+                num++;
+            }
+        else 
+        {
+                GTE.tree.matrix.generateBestResponses();
+        }
+            
         for(var property in this.profiles) {
             if (this.profiles.hasOwnProperty(property)) {
                 this.drawProfile(this.profiles[property]);

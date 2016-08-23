@@ -29,8 +29,6 @@ GTE.TREE = (function(parentModule) {
      * Draws the editable label
      */
     Payoff.prototype.draw = function(x1, y1, orientation) {
-        // generate best responses to see if this payoff should be boxed
-        GTE.tree.matrix.generateBestResponses();
         var x = x1 || this.leaf.x;
         var y = y1 || this.leaf.y + (this.player.id * 20);
         orientation = orientation || GTE.CONSTANTS.CONTENT_EDITABLE_GROW_TO_RIGHT;
