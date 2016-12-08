@@ -40,9 +40,10 @@ open terminal
 change to your desktop, which should be a directory
 named (here with my name stengel)
 
-/home/stengel/Desktop
+    /home/stengel/Desktop
 
 with 
+
     cd /home/stengel
     ls
     cd Desktop
