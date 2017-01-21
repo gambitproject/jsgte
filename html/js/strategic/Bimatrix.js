@@ -10,6 +10,7 @@ GTE.TREE = (function(parentModule) {
         this.strategies = []; // a multidimensional array containing strategicUnit objects
         this.matrix = [];
         this.profiles = {}; // object that has strategy profile properties
+        this.cycles = []
     }
     // number of times payoffs are drawn
     var num = 0;
@@ -136,6 +137,139 @@ GTE.TREE = (function(parentModule) {
         }
     };
 
+    // gets the BR for a player given another player strategy, returns the profile not the strategy
+    Bimatrix.prototype.getIndividualBR = function(player, strategy){
+        var profiles = []
+        var otherPlayer = Math.abs(player - 1)
+        for(var property in this.profiles) {
+            if (this.profiles.hasOwnProperty(property)) {
+                var strat = property[player]
+                if (player === 1) {
+                    strat = property[2]
+                }
+                if (strat === strategy) {
+                    //console.log(strat, strategy)
+                    if (this.profiles[property].bestResponse[otherPlayer] === true) {
+                        profiles.push(property)
+                        return property
+                        //console.log(property)
+                    }
+                }
+            }
+        }
+        //return profiles
+    };
+    Bimatrix.prototype.genCycles = function() {
+        var possibleCycles = new Set([]);
+        for(var property in this.profiles) {
+            if (this.profiles.hasOwnProperty(property)) {
+                possibleCycles.add(property);
+            }
+        }
+        console.log(possibleCycles)
+
+    };
+
+
+    Bimatrix.prototype.generateCycles = function() {
+        var possibleCycles = new Set([]);
+        for(var property in this.profiles) {
+            if (this.profiles.hasOwnProperty(property)) {
+                possibleCycles.add(property);
+            }
+        }
+        var iter = Array.from(possibleCycles)
+        while (true) {
+            var iter2 = Array.from(possibleCycles);
+            if (iter2.length === 0) {
+                break;
+            }
+            else 
+            {   
+                var cycle = []
+                var profile = iter2[0]
+                //console.log(profile)
+                possibleCycles.delete(profile)
+                iter2 = Array.from(possibleCycles)
+                var response = this.profiles[profile].bestResponse
+                if (response === [1,1]) {
+                    this.cycles.push(profile)
+                }
+                else
+                {   
+                    cycle.push(profile)
+                    var count = 0
+                    while(true) {
+                        // HACK need to think about optimal stopping rule
+                        if (count === iter.length) {
+                            break;
+                        }
+                        //optimal stopping rule
+                        if (iter2.length < 1) {
+                            break;
+                        }
+                        var response = this.profiles[profile].bestResponse.toString()
+                        if (response == [true,false].toString()) {
+                            for (var i=0; i<iter2.length; i++) {
+                                if (iter2[i][0] === profile[0]) {
+                                    var response2 = this.profiles[iter2[i]].bestResponse[1];
+                                    if (response2 === true) {
+                                        profile = iter2[i]
+                                        possibleCycles.delete(profile)
+                                        cycle.push(profile)
+                                        iter2 = Array.from(possibleCycles)
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+
+                        if (response == [false,true].toString()) {
+                            for (var i=0; i<iter2.length; i++) {
+                                if (iter2[i][1] === profile[1]) {
+                                    var response2 = this.profiles[iter2[i]].bestResponse[0]
+                                    if (response2 === true){
+                                        profile = iter2[i]
+                                        possibleCycles.delete(profile)
+                                        cycle.push(profile)
+                                        iter2 = Array.from(possibleCycles)
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        var coordOne = 10, coordTwo = 10
+                        if (response == [false,false].toString()) {
+                            var player1Best = GTE.tree.matrix.getIndividualBR(1, profile[2])
+                            var player2Best = GTE.tree.matrix.getIndividualBR(0, profile[0])
+                            coordOne = player1Best[0]
+                            coordTwo = player2Best[2]
+                            profile = coordOne + "," + coordTwo
+                            //console.log(profile)
+                            possibleCycles.delete(profile)
+                            var alreadyIn = false
+                            for (var i = 0; i<cycle.length; i++) {
+                                if (cycle[i] === profile) {
+                                    alreadyIn = true
+                                    break;
+                                }
+                            }
+                            if (alreadyIn === true){
+                                break;
+                            }
+                            cycle.push(profile)
+                            iter2 = Array.from(possibleCycles)
+                        }
+                        count = count + 1
+                    }
+                    this.cycles.push(cycle)
+                } 
+            }
+        }
+    console.log("Cycles")
+    console.log(this.cycles)
+    };
+
     // function that returns all strategy profiles combinations as strings ids in an array
     Bimatrix.prototype.profilesCombinations = function() {
         var numplayers = this.players.length;
@@ -219,6 +353,26 @@ GTE.TREE = (function(parentModule) {
                 this.drawProfile(this.profiles[property]);
             }
         }
+    };
+
+    Bimatrix.prototype.drawCycles = function() {
+        var colors = ["#FFA500", "#8FBC8F", "#7B68EE", "#87CEEB", "#F08080", "#FF0000", "#0000FF", "#00FF00", "#F5DEB3", "#1E90FF", "#5F9EA0"]
+        for (var i = 0; i<this.cycles.length; i++){
+            for (var j = 0; j<this.cycles[i].length; j++){
+                this.drawCycle(this.profiles[this.cycles[i][j]], colors[i])
+            }
+        }
+        this.cycles = []
+    };
+
+    Bimatrix.prototype.drawCycle = function(propt, color) {
+        var x = GTE.CONSTANTS.MATRIX_X;
+        var y = GTE.CONSTANTS.MATRIX_Y;
+        var size = GTE.CONSTANTS.MATRIX_SIZE;
+        propt.shape = GTE.canvas.rect(10, 10).attr({fill: color, 'fill-opacity': 0.3});
+        //propt.shape = GTE.canvas.fillText("Hello", 10, 50)
+        propt.shape.translate(x + propt.w*100 +10, y + propt.h*100 +10);
+        return;       
     };
 
     Bimatrix.prototype.drawProfile = function(propt) {

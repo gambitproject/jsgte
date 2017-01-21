@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<body onload="initBallAndEnvironment()">
+
+<script>
+
+var ball;
+var svg;
+var svgCircle;
+
+function initBallAndEnvironment() {
+    svg = document.getElementById("SVG");
+    svgCircle = document.getElementById("SVGCircle");
+    ball = {    x:svgCircle.getAttributeNS(null, "cx"), 
+                y:svgCircle.getAttributeNS(null, "cy"), 
+                radius:svgCircle.getAttributeNS(null, "r"), 
+                color:svgCircle.getAttributeNS(null, "fill")};
+
+    drawBall();
+
+    // Hooking up events to mouse
+    svgCircle.addEventListener("mousedown", doMouseDown);
+    svg.addEventListener("mouseup", doMouseUp);
+}
+
+function getMousePosition(e) {
+    var svgPosition = svg.getBoundingClientRect();
+
+    return {
+        x: e.clientX - svgPosition.left,
+        y: e.clientY - svgPosition.top
+    };
+}
+
+function drawBall() {
+    //svgCircle.cx.baseVal.value = ball.x;
+    svgCircle.setAttributeNS(null, "cx", ball.x);
+    svgCircle.setAttributeNS(null, "cy", ball.y);
+    svgCircle.setAttributeNS(null, "r", ball.radius);
+    svgCircle.setAttributeNS(null, "fill", ball.color);
+    svgCircle.setAttributeNS(null, "draggable", "false");
+}
+
+function doMouseMove(event) {
+    var mousePosition = getMousePosition(event)
+    
+    ball.x = mousePosition.x;
+    ball.y = mousePosition.y;
+      
+    drawBall()
+
+    console.log("Moving: X = " + mousePosition.x + ", Y = " + mousePosition.y);
+}
+
+function doMouseDown(event) {
+    event.preventDefault();
+
+    var mousePosition = getMousePosition(event)
+
+    svg.addEventListener("mousemove", doMouseMove);
+
+    console.log("Pressing: X = " + mousePosition.x + ", Y = " + mousePosition.y);
+}
+
+function doMouseUp(event) {
+    var mousePosition = getMousePosition(event)
+     
+    svg.removeEventListener("mousemove", doMouseMove);
+
+    console.log("Releasing: X = " + mousePosition.x + ", Y = " + mousePosition.y);
+}
+
+</script>
+
+<svg id="SVG" version="1.1" width="500" height="500" draggable="false">
+    <circle id="SVGCircle" cx="100" cy="100" r="10" fill="blue" draggable="false" ondragstart="doMouseDown()"/>
+</svg>
+
+</body>
+</html>
