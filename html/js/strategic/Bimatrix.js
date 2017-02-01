@@ -199,34 +199,51 @@ GTE.TREE = (function(parentModule) {
                 {   
                     cycle.push(profile)
                     var count = 0
+                    console.log("START OF NEW CYCLE")
                     while(true) {
                         // HACK need to think about optimal stopping rule
                         if (count === iter.length) {
                             break;
                         }
+
                         //optimal stopping rule
                         if (iter2.length < 1) {
                             break;
                         }
+                        var end = false
                         var response = this.profiles[profile].bestResponse.toString()
+                        console.log(iter2)
+                        console.log(profile)
+
                         if (response == [true,false].toString()) {
+                        	var previousProfile = profile.toString()
                             for (var i=0; i<iter2.length; i++) {
+                            	console.log(iter2[i])
                                 if (iter2[i][0] === profile[0]) {
                                     var response2 = this.profiles[iter2[i]].bestResponse[1];
                                     if (response2 === true) {
+                                    	console.log(profile)
                                         profile = iter2[i]
                                         possibleCycles.delete(profile)
-                                        cycle.push(profile)
+                                        cycle.push(profile)                                       
                                         iter2 = Array.from(possibleCycles)
                                         break;
-                                    }
+                                    }                                  
                                 }
                             }
+                            console.log("tf")
+                            console.log(previousProfile, profile)
+                            if (previousProfile[0] !== profile[0]) {
+                            	if (previousProfile[2] !== profile[2]){
+                            		end = true
+                            	}
+                            }                            
                         }
 
                         if (response == [false,true].toString()) {
+                        	var previousProfile = profile.toString()
                             for (var i=0; i<iter2.length; i++) {
-                                if (iter2[i][1] === profile[1]) {
+                                if (iter2[i][2] === profile[2]) {
                                     var response2 = this.profiles[iter2[i]].bestResponse[0]
                                     if (response2 === true){
                                         profile = iter2[i]
@@ -237,8 +254,16 @@ GTE.TREE = (function(parentModule) {
                                     }
                                 }
                             }
+                            console.log("ft")
+                            console.log(previousProfile, profile)
+                            if (previousProfile[2] !== profile[2]) {
+                            	if (previousProfile[0] !== profile[0]) {
+                               		end = true                            		
+                            	}
+                            }
                         }
-                        var coordOne = 10, coordTwo = 10
+
+                        var coordOne, coordTwo
                         if (response == [false,false].toString()) {
                             var player1Best = GTE.tree.matrix.getIndividualBR(1, profile[2])
                             var player2Best = GTE.tree.matrix.getIndividualBR(0, profile[0])
@@ -261,6 +286,13 @@ GTE.TREE = (function(parentModule) {
                             iter2 = Array.from(possibleCycles)
                         }
                         count = count + 1
+                        console.log(end)
+                        if (end === true) {
+                        	var element = cycle.pop()
+                        	possibleCycles.add(element)
+                        	iter2 = Array.from(possibleCycles)
+                        	break;
+                        }
                     }
                     this.cycles.push(cycle)
                 } 
@@ -357,22 +389,35 @@ GTE.TREE = (function(parentModule) {
 
     Bimatrix.prototype.drawCycles = function() {
         var colors = ["#FFA500", "#8FBC8F", "#7B68EE", "#87CEEB", "#F08080", "#FF0000", "#0000FF", "#00FF00", "#F5DEB3", "#1E90FF", "#5F9EA0"]
+        var letters = 'CDEFGHIJKLMNOP'
         for (var i = 0; i<this.cycles.length; i++){
             for (var j = 0; j<this.cycles[i].length; j++){
-                this.drawCycle(this.profiles[this.cycles[i][j]], colors[i])
+                this.drawCycle(this.profiles[this.cycles[i][j]], colors[i], j+1, letters[i])
             }
         }
         this.cycles = []
     };
 
-    Bimatrix.prototype.drawCycle = function(propt, color) {
+    Bimatrix.prototype.drawCycle = function(propt, color, text, letter) {
         var x = GTE.CONSTANTS.MATRIX_X;
         var y = GTE.CONSTANTS.MATRIX_Y;
         var size = GTE.CONSTANTS.MATRIX_SIZE;
-        propt.shape = GTE.canvas.rect(10, 10).attr({fill: color, 'fill-opacity': 0.3});
+        //propt.shape = GTE.canvas.rect(10, 10).attr({fill: color, 'fill-opacity': 0.3});
         //propt.shape = GTE.canvas.fillText("Hello", 10, 50)
-        propt.shape.translate(x + propt.w*100 +10, y + propt.h*100 +10);
-        return;       
+        //propt.shape.translate(x + propt.w*100 + 43, y + propt.h*100 +43);
+        new GTE.UI.Widgets.ContentEditable(
+                x + propt.w*100 +45,  y + propt.h*100 +45,
+                GTE.CONSTANTS.CONTENT_EDITABLE_GROW_TO_RIGHT,
+                text, "")
+            .colour(color)
+            .onSave();  
+        new GTE.UI.Widgets.ContentEditable(
+                x + propt.w*100 +35,  y + propt.h*100 +35,
+                GTE.CONSTANTS.CONTENT_EDITABLE_GROW_TO_RIGHT,
+                letter, "")
+            .colour(color)
+            .onSave();    
+        return;  
     };
 
     Bimatrix.prototype.drawProfile = function(propt) {
