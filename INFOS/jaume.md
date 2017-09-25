@@ -108,7 +108,7 @@ It is quite straightforward to desing an algorithm that finds the BR cycles of a
 
 An straightforward example is displayed below:
 
-<img src="jsgte/INFOS/images/Screen Shot 2017-09-25 at 15.40.13.png" width="300" height="300" />
+<img src="https://raw.githubusercontent.com/gambitproject/jsgte/master/INFOS/images/Screen%Shot%2017-09-25%at%15.40.13.png" width="300" height="300" />
 
 As you can see this 5x5 generic game has 3 cycles with the largest cycle having 12 profiles (the max possible according to Ahn's upperbound).
 
