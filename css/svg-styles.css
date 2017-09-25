@@ -1,0 +1,17 @@
+.node:hover {
+    fill: #808080;
+}
+.node.selected {
+    fill: #14A520;
+}
+
+.iset {
+    fill: none;
+    pointer-events: all;
+}
+.iset:hover {
+    fill: #CACACA;
+}
+.iset.selected {
+    stroke: #14A520;
+}

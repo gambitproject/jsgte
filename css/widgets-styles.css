@@ -1,0 +1,30 @@
+.content-editable-foreign {
+    text-align: left;
+    height: 22px;
+}
+.content-editable-inside-foreign {
+    display: inline-block;
+    min-width: 30px;
+    overflow: hidden;
+    white-space: nowrap;
+}
+.content-editable.grow-to-left {
+    text-align: right;
+}
+[contenteditable="true"]:active, [contenteditable="true"]:focus {
+    border: none;
+    outline: none;
+}
+.multiaction-rect {
+    visibility: hidden;
+    pointer-events:all;
+}
+.multiaction-line {
+    visibility: hidden;
+}
+.multiaction-rect.display {
+    visibility: visible;
+}
+/*.multiaction-rect:hover {
+    visibility: visible;
+}*/
