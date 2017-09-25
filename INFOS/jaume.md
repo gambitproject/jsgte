@@ -112,4 +112,4 @@ An straightforward example is displayed below:
 
 As you can see this 5x5 generic game has 3 cycles with the largest cycle having 12 profiles (the max possible according to Ahn's upperbound).
 
-If you want to create your own generic game and find the BR cycles you can find a demo [here](https://jvivesb.github.io/jsgte/html/strategic.html)
+If you want to create your own generic game and find the BR cycles you can find a demo [here](https://github.com/jvivesb/jsgte/blob/jaume-strategic/html/strategic.html)
