@@ -100,3 +100,16 @@ A brief overview of how to work with the demo is given here:
 
 The Demo offers little interactivity as it is aimed at simply showing how the algorithms work and not how they integrate with an SVG display. 
 
+# Finding and Displaying the Best Responses Cycles
+
+As proposed in [Ahn 2006](https://eml.berkeley.edu/~dahn/AHN_cycle.pdf) there is bound on the number of cycles that can exists for generic two player games. A game is generic when each BR for all players is singleton valued. The most trivial example is the Matching Pennies game in which no pure strategy Nash Equilibrium exists. 
+
+It is quite straightforward to desing an algorithm that finds the BR cycles of a generic 2 player game. Since each strategy profile only has 1 BR for each player, we can easily follow the BR path accross the strategy profiles by keeping a Set() of the profiles we have visited and queu for each cycle present in the game. For each profile that we add to the cycle queu we remove it from the set. Once all profiles in a cylce have been visited the algorithm simply picks another profile from the set and repeats the same procedure for that cycle. Since all profiles in a generic game are part of the cycle, the algorithm explores all profiles in linear time. 
+
+An straightforward example is displayed below:
+
+<img src="jsgte/INFOS/images/Screen Shot 2017-09-25 at 15.40.13.png" width="300" height="300" />
+
+As you can see this 5x5 generic game has 3 cycles with the largest cycle having 12 profiles (the max possible according to Ahn's upperbound).
+
+If you want to create your own generic game and find the BR cycles you can find a demo [here](https://jvivesb.github.io/jsgte/html/strategic.html)
