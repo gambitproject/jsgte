@@ -67,7 +67,7 @@ This description of the strategic form is independent of the extensive form and 
 
 Using the above description I adapted the current strategic form code to use the desired information structure and compute the best responses efficiently. 
 
-Here you can find a link to the [demo](https://jvivesb.github.io/jsgte/strategic.html).
+Here you can find a link to the [demo](https://jvivesb.github.io/jsgte/strategic.html). Please open it with Mozilla Firefox.
 
 Instructions are simple:
 
@@ -112,4 +112,4 @@ An straightforward example is displayed below:
 
 As you can see this 5x5 generic game has 3 cycles with the largest cycle having 12 profiles (the max possible according to Ahn's upperbound).
 
-If you want to create your own generic game and find the BR cycles you can find the [here](https://github.com/jvivesb/jsgte/blob/jaume-strategic/html/strategic.html) and full [DEMO](https://jvivesb.github.io/jsgte/blob/jaume-strategic/html/strategic.html).
+If you want to create your own generic game and find the BR cycles you can find the [here](https://github.com/jvivesb/jsgte/blob/jaume-strategic/html/strategic.html) and full [DEMO](http://htmlpreview.github.io/?https://github.com/gambitproject/jsgte/blob/jaume-strategic/html/strategic.html). Please open the Demo with Mozilla Firefox as other browsers might not be supported.
