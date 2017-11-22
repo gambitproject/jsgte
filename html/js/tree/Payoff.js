@@ -117,7 +117,7 @@ GTE.TREE = (function(parentModule) {
         } else {
             window.alert("Payoff should be a number.");
             // In order to get the previous text back, change text to current this.text
-            this.changeText(this.text);
+            this.editable.setText(this.text);
         }
         return this.value;
     };
