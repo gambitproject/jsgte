@@ -761,7 +761,7 @@ GTE.TREE = (function (parentModule) {
         } else if (this.iSetsSharePathFromRoot(a, b)) {
             window.alert("Couldn't merge the information sets." +
             "Please select two information sets that do not share a path from root.");
-        } else if (a.firstNode === this.root && b.firstNode === this.root) {
+        } else if (a.firstNode === this.root || b.firstNode === this.root) {
             window.alert("Couldn't merge the information sets." +
             "Please select two information sets that do not share a path from root.");
         }else {
