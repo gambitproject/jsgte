@@ -30,6 +30,8 @@ GTE.UI = (function (parentModule) {
         // Create a node and draw it
         GTE.tree.draw();
         this.switchMode(GTE.MODES.ADD);
+
+        this.isetToolsRan = false;
     };
 
     /**
