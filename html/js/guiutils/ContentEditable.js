@@ -53,7 +53,7 @@ GTE.UI.Widgets = (function (parentModule) {
         document.getElementsByTagName('svg')[nb_svg].appendChild(this.myforeign);
         this.myforeign.appendChild(this.textdiv);
 
-        // The size of the foreign will be dinamically adjusted depending on the
+        // The size of the foreign will be dynamically adjusted depending on the
         // size of the text. This is the only way to achieve text growing to left.
         // The idea is to adjust the width of the foreign and then translate it
         // to the left the same amount it has grown
